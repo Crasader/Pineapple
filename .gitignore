@@ -30,3 +30,5 @@
 # Compiled outputs
 bin/**
 
+# Mac OSX crap
+**/.DS_Store
