@@ -23,6 +23,7 @@
 		405CBEBC1C7D1A5A004AB5A0 /* PFInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */; };
 		405CBEBD1C7D1A5A004AB5A0 /* PFRopeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */; };
 		405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */; };
+		405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
@@ -128,6 +129,7 @@
 		405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFInputController.cpp; sourceTree = "<group>"; };
 		405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameRoot.h; sourceTree = "<group>"; };
 		405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameRoot.cpp; sourceTree = "<group>"; };
+		405CBEBF1C7D1CF7004AB5A0 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				405CBEBF1C7D1CF7004AB5A0 /* sounds */,
 				EB24EB8F1C5B0EAB0069DBBE /* textures */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 			);
@@ -507,6 +510,7 @@
 			files = (
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
+				405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
