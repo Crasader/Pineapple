@@ -473,7 +473,7 @@ void GameController::populate() {
     
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
-    SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
+    ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
 }
 
 /**
@@ -528,7 +528,7 @@ void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
         Sound* source = _assets->get<Sound>(WIN_MUSIC);
-        SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+        ////SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _winnode->setVisible(true);
         _countdown = EXIT_COUNT;
     } else {
@@ -548,7 +548,7 @@ void GameController::setFailure(bool value) {
     _failed = value;
     if (value) {
         Sound* source = _assets->get<Sound>(LOSE_MUSIC);
-        SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+        //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _losenode->setVisible(true);
         _countdown = EXIT_COUNT;
     } else {
@@ -585,7 +585,7 @@ void GameController::update(float dt) {
 
     if (_avatar->isJumping()) {
         Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-        SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
 
     // Turn the physics engine crank.
@@ -648,7 +648,7 @@ void GameController::createBullet() {
     addObstacle(bullet,5);
     
     Sound* source = _assets->get<Sound>(PEW_EFFECT);
-    SoundEngine::getInstance()->playEffect(PEW_EFFECT,source, false, EFFECT_VOLUME, true);
+    //SoundEngine::getInstance()->playEffect(PEW_EFFECT,source, false, EFFECT_VOLUME, true);
 }
 
 /**
@@ -662,7 +662,7 @@ void GameController::removeBullet(Obstacle* bullet) {
     bullet->markRemoved(true);
     
     Sound* source = _assets->get<Sound>(POP_EFFECT);
-    SoundEngine::getInstance()->playEffect(POP_EFFECT,source,false,EFFECT_VOLUME, true);
+    //SoundEngine::getInstance()->playEffect(POP_EFFECT,source,false,EFFECT_VOLUME, true);
 }
 
 
