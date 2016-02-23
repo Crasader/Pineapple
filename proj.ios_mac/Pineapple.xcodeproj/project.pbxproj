@@ -11,6 +11,12 @@
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		405CBEB31C7D14DF004AB5A0 /* PFGameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */; };
+		405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */; };
+		405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */; };
+		405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */; };
+		405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */; };
+		405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		46880B8A19C43A87006E1F66 /* HelloWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8619C43A87006E1F66 /* HelloWorld.cpp */; };
@@ -106,6 +112,18 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Pineapple-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pineapple-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameController.cpp; sourceTree = "<group>"; };
+		405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFRopeBridge.cpp; sourceTree = "<group>"; };
+		405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFSpinner.cpp; sourceTree = "<group>"; };
+		405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFDudeModel.cpp; sourceTree = "<group>"; };
+		405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFDudeModel.h; sourceTree = "<group>"; };
+		405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameController.h; sourceTree = "<group>"; };
+		405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFSpinner.h; sourceTree = "<group>"; };
+		405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFRopeBridge.h; sourceTree = "<group>"; };
+		405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFInputController.h; sourceTree = "<group>"; };
+		405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFInputController.cpp; sourceTree = "<group>"; };
+		405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameRoot.h; sourceTree = "<group>"; };
+		405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameRoot.cpp; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		46880B8619C43A87006E1F66 /* HelloWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorld.cpp; sourceTree = "<group>"; };
@@ -296,6 +314,18 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
+				405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */,
+				405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */,
+				405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */,
+				405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */,
+				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
+				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
+				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
+				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
+				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
+				405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */,
+				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
 				46880B8619C43A87006E1F66 /* HelloWorld.cpp */,
@@ -515,9 +545,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */,
+				405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */,
+				405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */,
+				405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				46880B8A19C43A87006E1F66 /* HelloWorld.cpp in Sources */,
+				405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
+				405CBEB31C7D14DF004AB5A0 /* PFGameController.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
