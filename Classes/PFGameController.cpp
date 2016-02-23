@@ -166,15 +166,13 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
  * This allows us to use a controller without a heap pointer.
  */
 GameController::GameController() :
-_rootnode(nullptr),
-_worldnode(nullptr),
-_debugnode(nullptr),
-_world(nullptr),
-_avatar(nullptr),
-_active(false),
-_debug(false)
-{
-}
+    _rootnode(nullptr),
+    _worldnode(nullptr),
+    _debugnode(nullptr),
+    _world(nullptr),
+    _avatar(nullptr),
+    _active(false),
+    _debug(false){}
 
 /**
  * Initializes the controller contents, and starts the game
