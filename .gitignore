@@ -1,4 +1,9 @@
 
+#Cocos2D project files
+proj.android/
+proj.ios_mac/
+proj.win10/
+proj.win32/
 
 # Compiled outputs
 bin/**

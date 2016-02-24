@@ -1,15 +1,26 @@
 //
-//  HelloWorld.h
-//  HelloWorld
+//  PFGameRoot.h
+//  PlatformerDemo
 //
 //  This is the root class for a single game scene.  It shows how to subclass RootLayer to
 //  make a new game.  This is a standard design pattern that we have used in all our samples.
+//  You may find that you want more than one scene in your game, but that is not always
+//  necessary.  You may find it easier to work with a single scene.
 //
-#ifndef __HELLO_WORLD_H__
-#define __HELLO_WORLD_H__
+//  This file is based on the CS 3152 PhysicsDemo Lab by Don Holden, 2007
+//
+//  Author: Walker White
+//  Version: 1/15/15
+//
+#ifndef __PF_GAME_ROOT_H__
+#define __PF_GAME_ROOT_H__
 
 #include <cocos2d.h>
-#include <cornell/CURootLayer.h>
+#include <cornell.h>
+#include "PFGameController.h"
+
+
+using namespace cocos2d;
 
 /**
  * Class represents the root node for the game scene.
@@ -23,7 +34,26 @@
  * game engine.  However, from this point onward, we obey MVC separation as much
  * as possible.
  */
-class HelloWorld : public cocos2d::RootLayer {
+class PlatformRoot : public RootLayer {
+protected:
+    // CONTROLLERS
+    /** The primary controller for the game world */
+    GameController _gameplay;
+    
+    /** Whether or not we have finished preloading all assets */
+    bool _preloaded;
+    
+    /**
+     * Builds the scene graph for the loading screen.
+     *
+     * The loading screen is what we run while we are waiting for the asynchronous
+     * loader for finish with the textures.  Right now, the loading screen is just
+     * the word "Loading...".  We do this because the loading screen can only use
+     * assets that have been loaded already, and the font is the only thing that
+     * is guaranteed to be loaded at start.
+     */
+    void displayLoader();
+    
     
 public:
     /**
@@ -53,15 +83,6 @@ public:
      * to release any objects that you have retained.
      */
     void stop() override;
-    
-    /**
-     * Callback function for the UI widgit in this demo.
-     *
-     * This function is called when the close button is pressed.  It quits the application.
-     *
-     * @param  pSender the widgit issuing the command.
-     */
-    void menuCloseCallback(Ref* pSender);
 };
 
-#endif // __HELLO_WORLD_H__
+#endif /* defined(__PF_GAME_ROOT_H__) */

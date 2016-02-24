@@ -12,7 +12,7 @@
 //  Version: 12/10/15
 //
 #include "AppDelegate.h"
-#include "HelloWorld.h"
+#include "PFGameRoot.h"
 #include <cornell/CUSoundEngine.h>
 #include <cornell/CUAssetManager.h>
 
@@ -23,6 +23,8 @@ static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 576);
 static cocos2d::Size smallResolutionSize  = cocos2d::Size(480, 270);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize  = cocos2d::Size(2048, 1536);
+
+static cocos2d::Size testResolutionSize = cocos2d::Size(1920, 1080);
 
 /**
  * Constructs a new AppDelegate
@@ -42,7 +44,7 @@ AppDelegate::AppDelegate() {
 AppDelegate::~AppDelegate() {
     // If you started sound or an asset manager, it must be stopped here
     AssetManager::shutdown();
-    //SoundEngine::stop();
+    SoundEngine::stop();
 }
 
 /**
@@ -100,11 +102,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
     
     // Start any global asset managers (Sound, etc...)
-    //SoundEngine::start();
+    SoundEngine::start();
     AssetManager::init();
     
     // MODIFY this line to use your root class
-    auto scene = GameRoot::createScene<HelloWorld>();
+    auto scene = GameRoot::createScene<PlatformRoot>();
 
     // Run the game
     director->runWithScene(scene);
@@ -125,7 +127,7 @@ void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
 
     // if you use SoundEngine, it must be paused here
-    //SoundEngine::getInstance()->pauseAll();
+    SoundEngine::getInstance()->pauseAll();
 }
 
 /**
@@ -141,5 +143,5 @@ void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
 
     // if you use SoundEngine, it must resume here
-    //SoundEngine::getInstance()->resumeAll();
+    SoundEngine::getInstance()->resumeAll();
 }
