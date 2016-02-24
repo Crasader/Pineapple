@@ -24,6 +24,8 @@
 		405CBEBD1C7D1A5A004AB5A0 /* PFRopeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */; };
 		405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */; };
 		405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
+		4070BDD91C7E7289008AE7AF /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
+		4070BDDA1C7E7289008AE7AF /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
@@ -130,6 +132,8 @@
 		405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameRoot.h; sourceTree = "<group>"; };
 		405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameRoot.cpp; sourceTree = "<group>"; };
 		405CBEBF1C7D1CF7004AB5A0 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		4070BDD71C7E7289008AE7AF /* KidModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KidModel.cpp; sourceTree = "<group>"; };
+		4070BDD81C7E7289008AE7AF /* KidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KidModel.h; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
@@ -333,6 +337,8 @@
 				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
 				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
 				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
+				4070BDD71C7E7289008AE7AF /* KidModel.cpp */,
+				4070BDD81C7E7289008AE7AF /* KidModel.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -550,6 +556,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */,
+				4070BDD91C7E7289008AE7AF /* KidModel.cpp in Sources */,
 				405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */,
 				405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */,
 				405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */,
@@ -570,6 +577,7 @@
 				405CBEBC1C7D1A5A004AB5A0 /* PFInputController.cpp in Sources */,
 				405CBEB91C7D1A56004AB5A0 /* PFDudeModel.cpp in Sources */,
 				405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */,
+				4070BDDA1C7E7289008AE7AF /* KidModel.cpp in Sources */,
 				405CBEBA1C7D1A5A004AB5A0 /* PFGameController.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
