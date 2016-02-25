@@ -128,11 +128,11 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 /** The font for victory/failure messages */
 #define MESSAGE_FONT    "retro"
 /** The message for winning the game */
-#define WIN_MESSAGE     "VICTORY!"
+#define WIN_MESSAGE     "VICTORY"
 /** The color of the win message */
 #define WIN_COLOR       Color3B::YELLOW
 /** The message for losing the game */
-#define LOSE_MESSAGE    "BLENDED!"
+#define LOSE_MESSAGE    "BLENDED"
 /** The color of the lose message */
 #define LOSE_COLOR      Color3B::RED
 /** The key the basic game music */
