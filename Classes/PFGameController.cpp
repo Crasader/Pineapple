@@ -42,7 +42,7 @@ using namespace std;
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH   32.0f
 /** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT  18.0f
+#define DEFAULT_HEIGHT  12.0f
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
@@ -52,40 +52,29 @@ using namespace std;
 #define WALL_COUNT  2
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-    {16.0f, 18.0f, 16.0f, 17.0f,  1.0f, 17.0f,
-      1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 18.0f},
-    {32.0f, 18.0f, 32.0f,  0.0f, 31.0f,  0.0f,
-     31.0f, 17.0f, 16.0f, 17.0f, 16.0f, 18.0f}
+    {10.0f, 12.0f, 10.0f, 11.0f,  1.0f, 11.0f,
+      1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 12.0f},
+    {32.0f, 12.0f, 32.0f,  0.0f, 31.0f,  0.0f,
+     31.0f, 11.0f, 10.0f, 11.0f, 10.0f, 12.0f}
 };
 
 /** The number of platforms */
 #define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  10
+#define PLATFORM_COUNT  2
 
 /** The outlines of all of the platforms */
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-    { 1.0f, 3.0f, 6.0f, 3.0f, 6.0f, 2.5f, 1.0f, 2.5f},
-    { 6.0f, 4.0f, 9.0f, 4.0f, 9.0f, 2.5f, 6.0f, 2.5f},
-    {23.0f, 4.0f,31.0f, 4.0f,31.0f, 2.5f,23.0f, 2.5f},
-    {26.0f, 5.5f,28.0f, 5.5f,28.0f, 5.0f,26.0f, 5.0f},
-    {29.0f, 7.0f,31.0f, 7.0f,31.0f, 6.5f,29.0f, 6.5f},
-    {24.0f, 8.5f,27.0f, 8.5f,27.0f, 8.0f,24.0f, 8.0f},
-    {29.0f,10.0f,31.0f,10.0f,31.0f, 9.5f,29.0f, 9.5f},
-    {23.0f,11.5f,27.0f,11.5f,27.0f,11.0f,23.0f,11.0f},
-    {19.0f,12.5f,23.0f,12.5f,23.0f,12.0f,19.0f,12.0f},
-    { 1.0f,12.5f, 7.0f,12.5f, 7.0f,12.0f, 1.0f,12.0f}
+    { 1.0f, 3.0f, 9.0f, 3.0f, 9.0f, 2.5f, 1.0f, 2.5f},
+    {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f}
 };
 
 
 /** The goal door position */
-float GOAL_POS[] = { 4.0f,14.0f};
+float GOAL_POS[] = { 4.0f, 8.0f};
 /** The position of the spinning barrier */
-float SPIN_POS[] = {13.0f,12.5f};
+float SPIN_POS[] = {13.0f, 6.5f};
 /** The initial position of the dude */
 float DUDE_POS[] = { 2.5f, 5.0f};
-/** The position of the rope bridge */
-float BRIDGE_POS[] = {9.0f, 3.8f};
-
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -99,8 +88,6 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 #define BASIC_FRICTION  0.4f
 /** The restitution for all physics objects */
 #define BASIC_RESTITUTION   0.1f
-/** The width of the rope bridge */
-#define BRIDGE_WIDTH    14.0f
 /** Offset for bullet when firing */
 #define BULLET_OFFSET   0.5f
 /** The speed of the bullet after firing */
@@ -440,19 +427,6 @@ void GameController::populate() {
     _spinner->setDebugNode(draw);
     addObstacle(_spinner, 2);
 
-#pragma mark : Rope Bridge
-    Vec2 bridgeStart = BRIDGE_POS;
-    Vec2 bridgeEnd   = bridgeStart;
-    bridgeEnd.x += BRIDGE_WIDTH;
-    _ropebridge = RopeBridge::create(bridgeStart,bridgeEnd,_scale);
-    node = Node::create();
-    draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    _ropebridge->setSceneNode(node);
-    _ropebridge->setDebugNode(draw);
-    addObstacle(_ropebridge, 3);
-
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
     image  = _assets->get<Texture2D>(DUDE_TEXTURE);
@@ -761,7 +735,6 @@ void GameController::preload() {
     tloader->loadAsync(EARTH_TEXTURE,   "textures/earthtile.png", params);
     tloader->loadAsync(DUDE_TEXTURE,    "textures/dude.png");
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
-    tloader->loadAsync(BRIDGE_TEXTURE,  "textures/ropebridge.png");
     tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
     tloader->loadAsync(GOAL_TEXTURE,    "textures/goaldoor.png");
     _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
