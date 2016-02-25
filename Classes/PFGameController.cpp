@@ -29,6 +29,7 @@
 #include "PFGameController.h"
 #include "PFInputController.h"
 #include "PFDudeModel.h"
+#include "KidModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
 
@@ -68,13 +69,16 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
     {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f}
 };
 
-
 /** The goal door position */
 float GOAL_POS[] = { 4.0f, 8.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {13.0f, 6.5f};
 /** The initial position of the dude */
 float DUDE_POS[] = { 2.5f, 5.0f};
+/** The kid positions */
+float KID_POS[2][2] = {{2.0f, 5.0f}, {1.5f, 5.0f}};
+/** The position of the rope bridge */
+float BRIDGE_POS[] = {9.0f, 3.8f};
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -445,6 +449,23 @@ void GameController::populate() {
     _avatar->setDebugNode(draw);
     addObstacle(_avatar, 4); // Put this at the very front
     
+#pragma mark : Kids
+    for (int i = 0; i < KID_COUNT; i++) {
+        Vec2 kidPos = KID_POS[i];
+        image = _assets->get<Texture2D>(KID_TEXTURE);
+        sprite = PolygonNode::createWithTexture(image);
+        _kids[i] = KidModel::create(kidPos,_scale);
+        _kids[i]->setDrawScale(_scale);
+        
+        sprite = PolygonNode::createWithTexture(image);
+        sprite->setScale(cscale);
+        _kids[i]->setSceneNode(sprite);
+        draw = WireNode::create();
+        draw->setColor(DEBUG_COLOR);
+        draw->setOpacity(DEBUG_OPACITY);
+        _kids[i]->setDebugNode(draw);
+        addObstacle(_kids[i], 4);
+    }
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
     ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
@@ -544,6 +565,12 @@ void GameController::setFailure(bool value) {
  */
 void GameController::update(float dt) {
     _input.update(dt);
+    
+    // Process kids
+    for(int i = 0; i < KID_COUNT; i++) {
+        _kids[i]->setMovement(_kids[i]->getForce());
+        _kids[i]->applyForce();
+    }
     
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
@@ -679,6 +706,16 @@ void GameController::beginContact(b2Contact* contact) {
         _sensorFixtures.emplace(_avatar == bd1 ? fix2 : fix1);
     }
     
+    // See if a kid has landed on the ground.
+    for(int i = 0; i < KID_COUNT; i++) {
+        if ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
+            (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2)) {
+            _kids[i]->setGrounded(true);
+            // Could have more than one ground
+            _sensorFixtures.emplace(_kids[i] == bd1 ? fix2 : fix1);
+        }
+    }
+    
     // If we hit the "win" door, we are done
     if((bd1 == _avatar   && bd2 == _goalDoor) ||
        (bd1 == _goalDoor && bd2 == _avatar)) {
@@ -714,6 +751,17 @@ void GameController::endContact(b2Contact* contact) {
             _avatar->setGrounded(false);
         }
     }
+    
+    // See if a kid has left the ground.
+    for(int i = 0; i < KID_COUNT; i++) {
+        if ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
+            (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2)) {
+            _sensorFixtures.erase(_kids[i] == bd1 ? fix2 : fix1);
+            if (_sensorFixtures.empty()) {
+                _kids[i]->setGrounded(false);
+            }
+        }
+    }
 }
 
 
@@ -734,6 +782,7 @@ void GameController::preload() {
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
     tloader->loadAsync(EARTH_TEXTURE,   "textures/earthtile.png", params);
     tloader->loadAsync(DUDE_TEXTURE,    "textures/dude.png");
+    tloader->loadAsync(KID_TEXTURE,     "textures/pineapple.png");
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
     tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
     tloader->loadAsync(GOAL_TEXTURE,    "textures/goaldoor.png");
