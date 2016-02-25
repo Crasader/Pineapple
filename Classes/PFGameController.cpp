@@ -72,7 +72,7 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
 };
 
 /** The goal door position */
-float GOAL_POS[] = { 4.0f, 8.0f};
+float GOAL_POS[] = {29.0f, 3.5f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 3.0f};
 /** The initial position of the dude */
@@ -104,8 +104,8 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 
 #pragma mark -
 #pragma mark Asset Constants
-/** The key for the earth texture in the asset manager */
-#define EARTH_TEXTURE   "earth"
+/** The key for the tile tile texture in the asset manager */
+#define TILE_TEXTURE   "tile"
 /** The key for the win door texture in the asset manager */
 #define GOAL_TEXTURE    "goal"
 /** The key for the win door texture in the asset manager */
@@ -363,7 +363,7 @@ void GameController::populate() {
     
 #pragma mark : Walls
     // All walls and platforms share the same texture
-    image  = _assets->get<Texture2D>(EARTH_TEXTURE);
+    image  = _assets->get<Texture2D>(TILE_TEXTURE);
     string wname = "wall";
     for (int ii = 0; ii < WALL_COUNT; ii++) {
         PolygonObstacle* wallobj;
@@ -782,12 +782,12 @@ void GameController::preload() {
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
-    tloader->loadAsync(EARTH_TEXTURE,   "textures/earthtile.png", params);
+    tloader->loadAsync(TILE_TEXTURE,   "textures/tiling.png", params);
     tloader->loadAsync(DUDE_TEXTURE,    "textures/dude.png");
     tloader->loadAsync(KID_TEXTURE,     "textures/pineapple.png");
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
     tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
-    tloader->loadAsync(GOAL_TEXTURE,    "textures/goaldoor.png");
+    tloader->loadAsync(GOAL_TEXTURE,    "textures/goal.png");
     _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
     _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
     _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");
