@@ -628,6 +628,18 @@ void GameController::update(float dt) {
         setFailure(true);
     }
     
+    if(! _failed) {
+        bool kid_alive = false;
+        for (int i = 0; i < KID_COUNT; i++) {
+            if (_kids[i]->getY() > 0) {
+                kid_alive = true;
+            }
+        }
+        if(!kid_alive) {
+            setFailure(true);
+        }
+    }
+    
     // Reset the game if we win or lose.
     if (_countdown > 0) {
         _countdown--;
@@ -737,10 +749,12 @@ void GameController::beginContact(b2Contact* contact) {
         }
     }
     
-    // If we hit the "win" door, we are done
-    if((bd1 == _avatar   && bd2 == _goalDoor) ||
-       (bd1 == _goalDoor && bd2 == _avatar)) {
-        setComplete(true);
+    // If a kid hits the "win" door, we are done
+    for(int i = 0; i < KID_COUNT; i++) {
+        if((bd1 == _kids[i]   && bd2 == _goalDoor) ||
+           (bd1 == _goalDoor && bd2 == _kids[i])) {
+            setComplete(true);
+        }
     }
 }
 

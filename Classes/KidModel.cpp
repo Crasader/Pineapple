@@ -23,7 +23,7 @@
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.1f
 /** The density of the character */
-#define KID_DENSITY    .05f
+#define KID_DENSITY    .15f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
