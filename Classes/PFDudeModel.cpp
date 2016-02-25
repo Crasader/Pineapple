@@ -65,7 +65,7 @@
 /** The density of the character */
 #define DUDE_DENSITY    0.5f
 /** The impulse for the character jump */
-#define DUDE_JUMP       100.0f
+#define DUDE_JUMP       50.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
