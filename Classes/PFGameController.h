@@ -33,22 +33,25 @@
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
 namespace cocos2d {
-class RootLayer;
-class WorldController;
-class ComplexObstacle;
-class ObstacleSelector;
-class SceneManager;
+    class RootLayer;
+    class WorldController;
+    class ComplexObstacle;
+    class ObstacleSelector;
+    class SceneManager;
 }
 
 // These forward declarations are in the project
 class InputController;
 class DudeModel;
+class KidModel;
 class RopeBridge;
 class Spinner;
 
-
 using namespace cocos2d;
 using namespace std;
+
+/** The number of kids */
+#define KID_COUNT 2
 
 #pragma mark -
 #pragma mark GameController
@@ -90,6 +93,8 @@ protected:
     BoxObstacle*    _goalDoor;
     /** Reference to the player avatar */
     DudeModel*      _avatar;
+    /** References to the kid avatars */
+    KidModel*     _kids[KID_COUNT];
     /** Reference to the spinning barrier */
     Spinner*        _spinner;
     /** Reference to the rope bridge */
