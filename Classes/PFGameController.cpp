@@ -72,7 +72,7 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
 };
 
 /** The goal door position */
-float GOAL_POS[] = {29.0f, 3.5f};
+float GOAL_POS[] = {29.0f, 3.7f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 3.0f};
 /** The initial position of the dude */
