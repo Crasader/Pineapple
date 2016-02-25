@@ -782,7 +782,7 @@ void GameController::preload() {
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
-    tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png");
+    tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png", params);
     tloader->loadAsync(DUDE_TEXTURE,    "textures/william_smaller.png");
     tloader->loadAsync(KID_TEXTURE,     "textures/kid_smaller.png");
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
