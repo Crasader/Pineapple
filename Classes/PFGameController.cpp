@@ -76,9 +76,9 @@ float GOAL_POS[] = {29.0f, 3.5f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 3.0f};
 /** The initial position of the dude */
-float DUDE_POS[] = { 2.5f, 5.0f};
+float DUDE_POS[] = { 7.5f, 5.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{2.0f, 5.0f}, {1.5f, 5.0f}};
+float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -466,6 +466,7 @@ void GameController::populate() {
         draw->setColor(DEBUG_COLOR);
         draw->setOpacity(DEBUG_OPACITY);
         _kids[i]->setDebugNode(draw);
+        _kids[i]->setMovement(_kids[i]->getForce());
         addObstacle(_kids[i], 4);
     }
     // Play the background music on a loop.
@@ -570,7 +571,6 @@ void GameController::update(float dt) {
     
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
-        _kids[i]->setMovement(_kids[i]->getForce());
         _kids[i]->applyForce();
     }
     
@@ -782,9 +782,9 @@ void GameController::preload() {
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
-    tloader->loadAsync(TILE_TEXTURE,   "textures/tiling.png", params);
-    tloader->loadAsync(DUDE_TEXTURE,    "textures/dude.png");
-    tloader->loadAsync(KID_TEXTURE,     "textures/pineapple.png");
+    tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png");
+    tloader->loadAsync(DUDE_TEXTURE,    "textures/william_smaller.png");
+    tloader->loadAsync(KID_TEXTURE,     "textures/kid_smaller.png");
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
     tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
     tloader->loadAsync(GOAL_TEXTURE,    "textures/goal.png");

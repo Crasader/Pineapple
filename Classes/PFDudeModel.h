@@ -55,13 +55,13 @@ using namespace cocos2d;
 /** The texture for the character avatar */
 #define DUDE_TEXTURE    "dude"
 /** Identifier to allow us to track the sensor in ContactListener */
-#define SENSOR_NAME     "dudesensor"
+#define DUDE_SENSOR     "dudesensor"
 
 
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define DUDE_FORCE      20.0f
+#define DUDE_FORCE      50.0f
 /** The amount to slow the character down */
 #define DUDE_DAMPING    10.0f
 /** The maximum character speed */
@@ -310,7 +310,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the dude values beyond
      * the defaults.  To use a DudeModel, you must call init().
      */
-    DudeModel() : CapsuleObstacle(), _sensorName(SENSOR_NAME) { }
+    DudeModel() : CapsuleObstacle(), _sensorName(DUDE_SENSOR) { }
 
     /**
      * Initializes a new dude at the origin.
