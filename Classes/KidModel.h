@@ -24,7 +24,7 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define KID_FORCE      20.0f
+#define KID_FORCE      10.0f
 /** The amount to slow the character down */
 #define KID_DAMPING    5.0f
 /** The maximum character speed */
