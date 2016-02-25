@@ -466,6 +466,7 @@ void GameController::populate() {
         draw->setColor(DEBUG_COLOR);
         draw->setOpacity(DEBUG_OPACITY);
         _kids[i]->setDebugNode(draw);
+        _kids[i]->setMovement(_kids[i]->getForce());
         addObstacle(_kids[i], 4);
     }
     // Play the background music on a loop.
@@ -570,7 +571,6 @@ void GameController::update(float dt) {
     
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
-        _kids[i]->setMovement(_kids[i]->getForce());
         _kids[i]->applyForce();
     }
     

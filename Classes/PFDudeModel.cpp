@@ -61,11 +61,11 @@
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define DUDE_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.1f
+#define SENSOR_HEIGHT   0.05f
 /** The density of the character */
-#define DUDE_DENSITY    1.0f
+#define DUDE_DENSITY    0.5f
 /** The impulse for the character jump */
-#define DUDE_JUMP       4.0f
+#define DUDE_JUMP       100.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
