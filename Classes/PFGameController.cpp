@@ -123,7 +123,7 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 /** The color of the win message */
 #define WIN_COLOR       Color3B::YELLOW
 /** The message for losing the game */
-#define LOSE_MESSAGE    "FAILURE!"
+#define LOSE_MESSAGE    "BLENDED!"
 /** The color of the lose message */
 #define LOSE_COLOR      Color3B::RED
 /** The key the basic game music */
