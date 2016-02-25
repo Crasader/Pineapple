@@ -61,18 +61,20 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 
 /** The number of platforms */
 #define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  2
+#define PLATFORM_COUNT  4
 
 /** The outlines of all of the platforms */
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-    { 1.0f, 3.0f, 9.0f, 3.0f, 9.0f, 2.5f, 1.0f, 2.5f},
-    {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f}
+    { 1.0f, 3.0f, 12.0f, 3.0f, 12.0f, 2.5f, 1.0f, 2.5f},
+    {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f},
+    {17.0f, 2.8f,19.0f, 2.8f,19.0f, 2.5f,17.0f, 2.5f},
+    {12.0f, 2.8f,13.0f, 2.8f,13.0f, 2.5f,12.0f, 2.5f}
 };
 
 /** The goal door position */
 float GOAL_POS[] = { 4.0f, 8.0f};
 /** The position of the spinning barrier */
-float SPIN_POS[] = {13.0f, 6.5f};
+float SPIN_POS[] = {16.0f, 3.0f};
 /** The initial position of the dude */
 float DUDE_POS[] = { 2.5f, 5.0f};
 /** The kid positions */
@@ -429,7 +431,7 @@ void GameController::populate() {
     draw->setOpacity(DEBUG_OPACITY);
     _spinner->setSceneNode(node);
     _spinner->setDebugNode(draw);
-    addObstacle(_spinner, 2);
+    addObstacle(_spinner, 1.5f);
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;

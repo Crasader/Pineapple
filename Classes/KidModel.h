@@ -28,7 +28,7 @@ using namespace cocos2d;
 /** The amount to slow the character down */
 #define KID_DAMPING    10.0f
 /** The maximum character speed */
-#define KID_MAXSPEED   5.0f
+#define KID_MAXSPEED   2.5f
 
 #pragma mark -
 #pragma mark Dude Model

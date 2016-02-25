@@ -152,6 +152,7 @@ bool Spinner::init(const Vec2& pos, const Vec2& scale) {
     body->retain();
     body->setDensity(HEAVY_DENSITY);
     body->setDrawScale(_drawScale);
+    body->setAngle(-35.0f);
     _bodies.push_back(body);
     
     // Create the pin
