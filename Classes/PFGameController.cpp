@@ -74,13 +74,22 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
 /** The goal door position */
 float GOAL_POS[] = {29.0f, 3.7f};
 /** The position of the spinning barrier */
-float SPIN_POS[] = {16.0f, 3.0f};
+float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
 float DUDE_POS[] = { 7.5f, 5.0f};
 /** The kid positions */
 float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
+
+#pragma mark -
+#pragma mark Collision Constants
+
+#define DUDE_MASK 0x0002
+#define DUDE_COLLIDES_WITH 0xFFFB //All but 0x0004
+
+#define KID_MASK 0x0004
+#define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -448,8 +457,13 @@ void GameController::populate() {
     draw = WireNode::create();
     draw->setColor(DEBUG_COLOR);
     draw->setOpacity(DEBUG_OPACITY);
+    
+    b2Filter b = b2Filter();
+    b.categoryBits = DUDE_MASK;
+    b.maskBits = DUDE_COLLIDES_WITH;
+    _avatar->setFilterData(b);
     _avatar->setDebugNode(draw);
-    addObstacle(_avatar, 4); // Put this at the very front
+    addObstacle(_avatar, 5);
     
 #pragma mark : Kids
     for (int i = 0; i < KID_COUNT; i++) {
@@ -467,6 +481,11 @@ void GameController::populate() {
         draw->setOpacity(DEBUG_OPACITY);
         _kids[i]->setDebugNode(draw);
         _kids[i]->setMovement(_kids[i]->getForce());
+        
+        b = b2Filter();
+        b.categoryBits = KID_MASK;
+        b.maskBits = KID_COLLIDES_WITH;
+        _kids[i]->setFilterData(b);
         addObstacle(_kids[i], 4);
     }
     // Play the background music on a loop.
