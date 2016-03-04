@@ -14,6 +14,15 @@
 * 2. Altered source versions must be plainly marked as such, and must not be
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* ALTERATION:
+* This block allocator is unsafe and does not follow proper C++ guidelines
+* as set out in Effective C++.  It is unsafe to refer to the static arrays
+* outside of the allocator initializer. We have added instance references
+* to make it safe to reference them.
+*
+* Walker M. White
+* February 11, 2016
 */
 
 #ifndef B2_BLOCK_ALLOCATOR_H
@@ -53,6 +62,10 @@ private:
 	int32 m_chunkSpace;
 
 	b2Block* m_freeLists[b2_blockSizes];
+
+	// Alteration to statify C++ coding standards
+	int32* m_blockSizes;
+	uint8* m_blockSizeLookup;
 
 	static int32 s_blockSizes[b2_blockSizes];
 	static uint8 s_blockSizeLookup[b2_maxBlockSize + 1];
