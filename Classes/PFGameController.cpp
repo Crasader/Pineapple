@@ -29,6 +29,7 @@
 #include "PFGameController.h"
 #include "PFInputController.h"
 #include "PFDudeModel.h"
+#include "PFBlenderModel.h"
 #include "KidModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
@@ -79,6 +80,8 @@ float SPIN_POS[] = {16.0f, 2.85f};
 float DUDE_POS[] = { 7.5f, 5.0f};
 /** The kid positions */
 float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
+/** The initial position of the blender */
+float BLENDER_POS[] = { 0.0f, 5.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -92,7 +95,7 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 #define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
 
 #define BLENDER_MASK 0x0008
-#define BLENDER_COLLIDES_WITH = 0x006 //Only kid and dude
+#define BLENDER_COLLIDES_WITH 0x006 //Only kid and dude
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -491,6 +494,31 @@ void GameController::populate() {
         _kids[i]->setFilterData(b);
         addObstacle(_kids[i], 4);
     }
+
+#pragma mark : Blender
+    Vec2 blenderPos = BLENDER_POS;
+    image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
+    sprite = PolygonNode::createWithTexture(image);
+    _blender = BlenderModel::create(blenderPos,_scale);
+    _blender->setDrawScale(_scale);
+    
+    // Add the scene graph nodes to this object
+    sprite = PolygonNode::createWithTexture(image);
+    sprite->setScale(cscale);
+    _blender->setSceneNode(sprite);
+    
+    draw = WireNode::create();
+    draw->setColor(DEBUG_COLOR);
+    draw->setOpacity(DEBUG_OPACITY);
+    
+    b = b2Filter();
+    b.categoryBits = BLENDER_MASK;
+    b.maskBits = BLENDER_COLLIDES_WITH;
+    _blender->setFilterData(b);
+    _blender->setDebugNode(draw);
+    _blender->setGravityScale(0);
+    addObstacle(_blender, 3);
+
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
     ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
@@ -821,14 +849,15 @@ void GameController::preload() {
     tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png", params);
     tloader->loadAsync(DUDE_TEXTURE,    "textures/william_smaller.png");
     tloader->loadAsync(KID_TEXTURE,     "textures/kid_smaller.png");
+    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
     tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
     tloader->loadAsync(GOAL_TEXTURE,    "textures/goal.png");
-    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
-    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
-    _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");
-    _assets->loadAsync<Sound>(JUMP_EFFECT,  "sounds/jump.mp3");
-    _assets->loadAsync<Sound>(PEW_EFFECT,   "sounds/pew.mp3");
-    _assets->loadAsync<Sound>(POP_EFFECT,   "sounds/plop.mp3");
+//    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
+//    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
+//    _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");
+//    _assets->loadAsync<Sound>(JUMP_EFFECT,  "sounds/jump.mp3");
+//    _assets->loadAsync<Sound>(PEW_EFFECT,   "sounds/pew.mp3");
+//    _assets->loadAsync<Sound>(POP_EFFECT,   "sounds/plop.mp3");
     _assets->loadAsync<TTFont>(MESSAGE_FONT,"fonts/RetroGame.ttf");
 }
