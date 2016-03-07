@@ -14,15 +14,23 @@
 * 2. Altered source versions must be plainly marked as such, and must not be
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* ALTERATION:
+* This block allocator is unsafe and does not follow proper C++ guidelines
+* as set out in Effective C++.  It is unsafe to refer to the static arrays
+* outside of the allocator initializer. We have added instance references
+* to make it safe to reference them.
+*
+* Walker M. White
+* February 11, 2016
 */
-
 #include <Box2D/Common/b2BlockAllocator.h>
 #include <limits.h>
 #include <memory.h>
 #include <stddef.h>
 #include <string.h>
 
-int32 b2BlockAllocator::s_blockSizes[b2_blockSizes] = 
+int32 b2BlockAllocator::s_blockSizes[b2_blockSizes] =
 {
 	16,		// 0
 	32,		// 1
@@ -60,7 +68,7 @@ b2BlockAllocator::b2BlockAllocator()
 	m_chunkSpace = b2_chunkArrayIncrement;
 	m_chunkCount = 0;
 	m_chunks = (b2Chunk*)b2Alloc(m_chunkSpace * sizeof(b2Chunk));
-	
+
 	memset(m_chunks, 0, m_chunkSpace * sizeof(b2Chunk));
 	memset(m_freeLists, 0, sizeof(m_freeLists));
 
@@ -83,6 +91,10 @@ b2BlockAllocator::b2BlockAllocator()
 
 		s_blockSizeLookupInitialized = true;
 	}
+
+	// Alteration to make references safe
+	m_blockSizeLookup = &(s_blockSizeLookup[0]);
+	m_blockSizes = &(s_blockSizes[0]);
 }
 
 b2BlockAllocator::~b2BlockAllocator()
@@ -107,7 +119,7 @@ void* b2BlockAllocator::Allocate(int32 size)
 		return b2Alloc(size);
 	}
 
-	int32 index = s_blockSizeLookup[size];
+	int32 index = m_blockSizeLookup[size];
 	b2Assert(0 <= index && index < b2_blockSizes);
 
 	if (m_freeLists[index])
@@ -133,7 +145,7 @@ void* b2BlockAllocator::Allocate(int32 size)
 #if defined(_DEBUG)
 		memset(chunk->blocks, 0xcd, b2_chunkSize);
 #endif
-		int32 blockSize = s_blockSizes[index];
+		int32 blockSize = m_blockSizes[index];
 		chunk->blockSize = blockSize;
 		int32 blockCount = b2_chunkSize / blockSize;
 		b2Assert(blockCount * blockSize <= b2_chunkSize);
@@ -168,20 +180,20 @@ void b2BlockAllocator::Free(void* p, int32 size)
 		return;
 	}
 
-	int32 index = s_blockSizeLookup[size];
+	int32 index = m_blockSizeLookup[size];
 	b2Assert(0 <= index && index < b2_blockSizes);
 
 #ifdef _DEBUG
 	// Verify the memory address and size is valid.
-	int32 blockSize = s_blockSizes[index];
+	int32 blockSize = m_blockSizes[index];
 	bool found = false;
 	for (int32 i = 0; i < m_chunkCount; ++i)
 	{
 		b2Chunk* chunk = m_chunks + i;
 		if (chunk->blockSize != blockSize)
 		{
-			b2Assert(	(int8*)p + blockSize <= (int8*)chunk->blocks ||
-						(int8*)chunk->blocks + b2_chunkSize <= (int8*)p);
+			b2Assert((int8*)p + blockSize <= (int8*)chunk->blocks ||
+				(int8*)chunk->blocks + b2_chunkSize <= (int8*)p);
 		}
 		else
 		{
