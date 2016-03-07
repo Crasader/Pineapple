@@ -65,7 +65,7 @@ using namespace cocos2d;
 /** The amount to slow the character down */
 #define BLENDER_DAMPING    10.0f
 /** The maximum character speed */
-#define BLENDER_MAXSPEED   5.0f
+#define BLENDER_MAXSPEED   1.0f
 
 
 #pragma mark -
@@ -85,18 +85,6 @@ private:
 protected:
     /** The current horizontal movement of the character */
     float _movement;
-    /** Which direction is the character facing */
-    bool _faceRight;
-    /** How long until we can jump again */
-    int  _jumpCooldown;
-    /** Whether we are actively jumping */
-    bool _isJumping;
-    /** How long until we can shoot again */
-    int  _shootCooldown;
-    /** Whether our feet are on the ground */
-    bool _isGrounded;
-    /** Whether we are actively shooting */
-    bool _isShooting;
     /** Ground sensor to represent our feet */
     b2Fixture*  _sensorFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
@@ -183,48 +171,6 @@ public:
     void setMovement(float value);
     
     /**
-     * Returns true if the blender is actively firing.
-     *
-     * @return true if the blender is actively firing.
-     */
-    bool isShooting() const { return _isShooting && _shootCooldown <= 0; }
-    
-    /**
-     * Sets whether the blender is actively firing.
-     *
-     * @param value whether the blender is actively firing.
-     */
-    void setShooting(bool value) { _isShooting = value; }
-    
-    /**
-     * Returns true if the blender is actively jumping.
-     *
-     * @return true if the blender is actively jumping.
-     */
-    bool isJumping() const { return _isJumping && _jumpCooldown <= 0; }
-    
-    /**
-     * Sets whether the blender is actively jumping.
-     *
-     * @param value whether the blender is actively jumping.
-     */
-    void setJumping(bool value) { _isJumping = value; }
-    
-    /**
-     * Returns true if the blender is on the ground.
-     *
-     * @return true if the blender is on the ground.
-     */
-    bool isGrounded() const { return _isGrounded; }
-    
-    /**
-     * Sets whether the blender is on the ground.
-     *
-     * @param value whether the blender is on the ground.
-     */
-    void setGrounded(bool value) { _isGrounded = value; }
-    
-    /**
      * Returns how much force to apply to get the blender moving
      *
      * Multiply this by the input to get the movement value.
@@ -257,13 +203,6 @@ public:
      * @return the name of the ground sensor
      */
     std::string* getSensorName() { return &_sensorName; }
-    
-    /**
-     * Returns true if this character is facing right
-     *
-     * @return true if this character is facing right
-     */
-    bool isFacingRight() const { return _faceRight; }
     
     
 #pragma mark Physics Methods

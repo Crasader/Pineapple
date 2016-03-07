@@ -179,13 +179,6 @@ bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
-        _isGrounded = false;
-        _isShooting = false;
-        _isJumping  = false;
-        _faceRight  = true;
-        
-        _shootCooldown = 0;
-        _jumpCooldown  = 0;
         return true;
     }
     return false;
@@ -204,17 +197,6 @@ bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
  */
 void BlenderModel::setMovement(float value) {
     _movement = value;
-    bool face = _movement > 0;
-    if (_movement == 0 || _faceRight == face) {
-        return;
-    }
-    
-    // Change facing
-    TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
-    if (image != nullptr) {
-        image->flipHorizontal(!image->isFlipHorizontal());
-    }
-    _faceRight = (_movement > 0);
 }
 
 
@@ -294,12 +276,6 @@ void BlenderModel::applyForce() {
         b2Vec2 force(getMovement(),0);
         _body->ApplyForce(force,_body->GetPosition(),true);
     }
-    
-    // Jump!
-    if (isJumping() && isGrounded()) {
-        b2Vec2 force(0, BLENDER_JUMP);
-        _body->ApplyLinearImpulse(force,_body->GetPosition(),true);
-    }
 }
 
 /**
@@ -310,20 +286,6 @@ void BlenderModel::applyForce() {
  * @param delta Number of seconds since last animation frame
  */
 void BlenderModel::update(float dt) {
-    // Apply cooldowns
-    if (isJumping()) {
-        _jumpCooldown = JUMP_COOLDOWN;
-    } else {
-        // Only cooldown while grounded
-        _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown-1 : 0);
-    }
-    
-    if (isShooting()) {
-        _shootCooldown = SHOOT_COOLDOWN;
-    } else {
-        _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
-    }
-    
     CapsuleObstacle::update(dt);
 }
 

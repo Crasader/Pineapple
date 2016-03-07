@@ -91,6 +91,9 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 #define KID_MASK 0x0004
 #define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
 
+#define BLENDER_MASK 0x0008
+#define BLENDER_COLLIDES_WITH = 0x006 //Only kid and dude
+
 #pragma mark -
 #pragma mark Physics Constants
 /** The new heavier gravity for this world (so it is not so floaty) */
