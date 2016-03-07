@@ -520,7 +520,7 @@ void GameController::populate() {
     _blender->setMovement(_blender->getForce());
     _blender->setRestitution(0);
     _blender->setMass(BLENDER_MASS);
-    addObstacle(_blender, 3);
+    //addObstacle(_blender, 3);
 
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
@@ -628,8 +628,8 @@ void GameController::update(float dt) {
     }
     
     //Blender moves
-    _blender->applyForce();
-    _blender->setPosition(_blender->getX(), _blender->getHeight()/2);
+    //_blender->applyForce();
+    //_blender->setPosition(_blender->getX(), _blender->getHeight()/2);
     
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
