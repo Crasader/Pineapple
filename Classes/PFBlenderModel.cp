@@ -55,9 +55,9 @@
 /** Cooldown (in animation frames) for shooting */
 #define SHOOT_COOLDOWN  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define BLENDER_VSHRINK  0.95f
+#define BLENDER_VSHRINK  1.0f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define BLENDER_HSHRINK  0.7f
+#define BLENDER_HSHRINK  1.0f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define BLENDER_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
@@ -173,7 +173,7 @@ bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
     
     nsize.width  *= BLENDER_HSHRINK/scale.x;
     nsize.height *= BLENDER_VSHRINK/scale.y;
-    if (CapsuleObstacle::init(pos,nsize)) {
+    if (BoxObstacle::init(pos,nsize)) {
         setDensity(BLENDER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
@@ -212,7 +212,7 @@ void BlenderModel::createFixtures() {
         return;
     }
 
-    CapsuleObstacle::createFixtures();
+    BoxObstacle::createFixtures();
     b2FixtureDef sensorDef;
     sensorDef.density = BLENDER_DENSITY;
     sensorDef.isSensor = true;
@@ -246,7 +246,7 @@ void BlenderModel::releaseFixtures() {
         return;
     }
     
-    CapsuleObstacle::releaseFixtures();
+    BoxObstacle::releaseFixtures();
     if (_sensorFixture != nullptr) {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
@@ -286,7 +286,7 @@ void BlenderModel::applyForce() {
  * @param delta Number of seconds since last animation frame
  */
 void BlenderModel::update(float dt) {
-    CapsuleObstacle::update(dt);
+    BoxObstacle::update(dt);
 }
 
 
@@ -301,7 +301,7 @@ void BlenderModel::update(float dt) {
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void BlenderModel::resetDebugNode() {
-    CapsuleObstacle::resetDebugNode();
+    BoxObstacle::resetDebugNode();
     float w = BLENDER_SSHRINK*_dimension.width*_drawScale.x;
     float h = SENSOR_HEIGHT*_drawScale.y;
     Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));

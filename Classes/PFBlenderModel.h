@@ -44,7 +44,6 @@
 #ifndef __PF_BLENDER_MODEL_H__
 #define __PF_BLENDER_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
-#include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
 
 
@@ -77,7 +76,7 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class BlenderModel : public CapsuleObstacle {
+class BlenderModel : public BoxObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
@@ -249,7 +248,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the blender values beyond
      * the defaults.  To use a BlenderModel, you must call init().
      */
-    BlenderModel() : CapsuleObstacle(), _sensorName(BLENDER_SENSOR) { }
+    BlenderModel() : BoxObstacle(), _sensorName(BLENDER_SENSOR) { }
 
     /**
      * Initializes a new blender at the origin.
