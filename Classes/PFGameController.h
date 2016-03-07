@@ -44,6 +44,7 @@ namespace cocos2d {
 class InputController;
 class DudeModel;
 class KidModel;
+class BlenderModel;
 class RopeBridge;
 class Spinner;
 
@@ -95,6 +96,8 @@ protected:
     DudeModel*      _avatar;
     /** References to the kid avatars */
     KidModel*     _kids[KID_COUNT];
+    /** Reference to the blender avatar */
+    BlenderModel* _blender;
     /** Reference to the spinning barrier */
     Spinner*        _spinner;
     /** Reference to the rope bridge */
