@@ -44,35 +44,33 @@ using namespace std;
 #define DEFAULT_WIDTH   32.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
+/** Length of level in Box2d units */
+#define LEVEL_LENGTH    64.0f
+/** Half-width of scrolling window in Box2d units */
+#define WINDOW_SIZE     5.0f
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
-#define WALL_VERTS 12
-#define WALL_COUNT  2
+#define WALL_VERTS  8
+#define WALL_COUNT  1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-    {10.0f, 12.0f, 10.0f, 11.0f,  1.0f, 11.0f,
-      1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 12.0f},
-    {32.0f, 12.0f, 32.0f,  0.0f, 31.0f,  0.0f,
-     31.0f, 11.0f, 10.0f, 11.0f, 10.0f, 12.0f}
+	{ 0.0f, 0.0f, 64.0f, 0.0f, 64.0f, 2.0f, 0.0f, 2.0f }
 };
 
 /** The number of platforms */
 #define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  4
+#define PLATFORM_COUNT  1
 
 /** The outlines of all of the platforms */
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-    { 1.0f, 3.0f, 12.0f, 3.0f, 12.0f, 2.5f, 1.0f, 2.5f},
-    {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f},
-    {17.0f, 2.8f,19.0f, 2.8f,19.0f, 2.5f,17.0f, 2.5f},
-    {12.0f, 2.8f,13.0f, 2.8f,13.0f, 2.5f,12.0f, 2.5f}
+	{ 0.0f, 2.0f, 64.0f, 2.0f, 64.0f, 2.5f, 0.0f, 2.5f }
 };
 
 /** The goal door position */
-float GOAL_POS[] = {29.0f, 3.7f};
+float GOAL_POS[] = {61.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
@@ -464,6 +462,10 @@ void GameController::populate() {
     _avatar->setFilterData(b);
     _avatar->setDebugNode(draw);
     addObstacle(_avatar, 5);
+
+	// Set level offset and distance to center
+	_levelOffset = 0.0f;
+	_dist2center = 0.5f*DEFAULT_WIDTH - _avatar->getPosition().x;
     
 #pragma mark : Kids
     for (int i = 0; i < KID_COUNT; i++) {
@@ -610,8 +612,11 @@ void GameController::update(float dt) {
         //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
 
-    // Turn the physics engine crank.
+    // Turn the physics engine crank
     _world->update(dt);
+
+	// Scroll the screen if necessary
+	handleScrolling();
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
@@ -697,6 +702,13 @@ void GameController::removeBullet(Obstacle* bullet) {
     
     Sound* source = _assets->get<Sound>(POP_EFFECT);
     //SoundEngine::getInstance()->playEffect(POP_EFFECT,source,false,EFFECT_VOLUME, true);
+}
+
+/**
+* Compute offsets for horizontal scrolling.
+*/
+void GameController::handleScrolling() {
+	
 }
 
 
