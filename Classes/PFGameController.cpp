@@ -81,7 +81,7 @@ float DUDE_POS[] = { 7.5f, 5.0f};
 /** The kid positions */
 float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = { 0.0f, 5.0f};
+float BLENDER_POS[] = {0.0f, 5.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -517,6 +517,9 @@ void GameController::populate() {
     _blender->setFilterData(b);
     _blender->setDebugNode(draw);
     _blender->setGravityScale(0);
+    _blender->setMovement(_blender->getForce());
+    _blender->setRestitution(0);
+    _blender->setMass(BLENDER_MASS);
     addObstacle(_blender, 3);
 
     // Play the background music on a loop.
@@ -624,6 +627,10 @@ void GameController::update(float dt) {
         _kids[i]->applyForce();
     }
     
+    //Blender moves
+    _blender->applyForce();
+    _blender->setPosition(_blender->getX(), _blender->getHeight()/2);
+    
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
     if (_input.didReset()) { reset(); }
@@ -640,6 +647,7 @@ void GameController::update(float dt) {
         Sound* source = _assets->get<Sound>(JUMP_EFFECT);
         //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
+    
 
     // Turn the physics engine crank.
     _world->update(dt);

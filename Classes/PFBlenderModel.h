@@ -64,7 +64,9 @@ using namespace cocos2d;
 /** The amount to slow the character down */
 #define BLENDER_DAMPING    10.0f
 /** The maximum character speed */
-#define BLENDER_MAXSPEED   1.0f
+#define BLENDER_MAXSPEED   0.5f
+/** Blender Mass, for collisions */
+#define BLENDER_MASS 1000000
 
 
 #pragma mark -
