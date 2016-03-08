@@ -54,6 +54,10 @@ private:
     bool  _keyExit;
     bool  _keyLeft;
     bool  _keyRight;
+    /** Whether the grow key is down */
+    bool  _keyGrow;
+    /** whether the shrink key is down */
+    bool  _keyShrink;
 
     
 protected:
@@ -77,6 +81,10 @@ protected:
     bool _jumpPressed;
     /** How much did we move horizontally? */
     float _horizontal;
+    /** Whether the grow action was chosen */
+    bool _growPressed;
+    /** Whether the shrink action was chosen */
+    bool _shrinkPressed;
 
     
 #pragma mark Internal Touch Management   
@@ -255,6 +263,13 @@ public:
      * @return the amount of sideways movement.
      */
     float getHorizontal() const { return _horizontal; }
+    
+    /** returns if the shrink button was pressed */
+    bool didShrink() const { return _shrinkPressed; }
+    
+    /** returns if the grow button was pressed
+     */
+    bool didGrow() const { return _growPressed; }
     
     /**
      * Returns if the jump button was pressed.

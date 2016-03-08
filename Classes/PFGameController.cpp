@@ -602,6 +602,13 @@ void GameController::update(float dt) {
     
     // Process the movement
     _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
+    if (_input.didGrow()) {
+        _avatar->grow();
+    }
+    if (_input.didShrink()) {
+        _avatar->shrink();
+    }
+    _avatar->updateSize(dt);
     _avatar->setJumping( _input.didJump());
     _avatar->applyForce();
 

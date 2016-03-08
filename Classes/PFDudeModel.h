@@ -66,6 +66,12 @@ using namespace cocos2d;
 #define DUDE_DAMPING    10.0f
 /** The maximum character speed */
 #define DUDE_MAXSPEED   5.0f
+/** The maximum duration of pineapple size */
+#define PINEAPPLE_MAX_SIZE_DURATION 1.0f
+/** The relative size of enlarged pineapple */
+#define PINEAPPLE_GROW_SCALE 1.5f
+/** The relative size of smaller pineapple */
+#define PINEAPPLE_SHRINK_SCALE .5f
 
 
 #pragma mark -
@@ -87,6 +93,11 @@ protected:
     float _movement;
     /** Which direction is the character facing */
     bool _faceRight;
+    bool _isLarge = false;
+    bool _isSmall = false;
+    Size* _normalSize = new Size();
+    /** Duration since last grow or shrink, 0 if currently normal size */
+    float _durationSinceGrowOrShrink = 0.0f;
     /** How long until we can jump again */
     int  _jumpCooldown;
     /** Whether we are actively jumping */
@@ -162,6 +173,74 @@ public:
      */
     static DudeModel* create(const Vec2& pos, const Vec2& scale);
 
+    void updateSize(float dt) {
+        if (_isLarge || _isSmall) {
+            _durationSinceGrowOrShrink += dt;
+        }
+        if (_durationSinceGrowOrShrink > PINEAPPLE_MAX_SIZE_DURATION) {
+            _isLarge = false;
+            _isSmall = false;
+            _durationSinceGrowOrShrink = 0.0f;
+            transitionToNormalSize();
+        }
+        std::cout<<_durationSinceGrowOrShrink<<"\n";
+    }
+    
+    void transitionToNormalSize() {
+        if (_normalSize) {
+            std::cout << "normalizing...\n";
+            std::cout << "current width: " << this->getDimension().width;
+            std::cout << "new width: " << _normalSize->width;
+            this->setDimension(*_normalSize);
+            std::cout << "normalized";
+        } else {
+            std::cout << "\n\n_normalSize is NULL\n\n";
+        }
+    }
+    
+    bool isLarge() const {
+        return _isLarge;
+    }
+    
+    /**
+     * Setter for _isLarge
+     */
+    void setIsLarge(bool isLarge) {
+        this->_durationSinceGrowOrShrink = 0.0f;
+        this->_isLarge = isLarge;
+    }
+    
+    /**
+     * Grows the pineapple
+     */
+    void grow() {
+        if (!this->_isLarge  && !this->_isSmall) {
+            this->setDimension(*this->_normalSize * PINEAPPLE_GROW_SCALE);
+            this->setIsLarge(true);
+        }
+    }
+    
+    /**
+     * Shrinks the pineapple
+     */
+    void shrink() {
+        if (!this->_isLarge && !this->_isSmall) {
+            this->setDimension(*this->_normalSize * PINEAPPLE_SHRINK_SCALE);
+            this->setIsSmall(true);
+        }
+    }
+    
+    bool isSmall() const {
+        return _isSmall;
+    }
+    
+    /**
+     * Setter for _isLarge
+     */
+    void setIsSmall(bool isSmall) {
+        this->_durationSinceGrowOrShrink = 0.0f;
+        this->_isSmall = isSmall;
+    }
     
 #pragma mark Attribute Properties
     /**
@@ -311,6 +390,9 @@ CC_CONSTRUCTOR_ACCESS:
      * the defaults.  To use a DudeModel, you must call init().
      */
     DudeModel() : CapsuleObstacle(), _sensorName(DUDE_SENSOR) { }
+    ~DudeModel() {
+        delete _normalSize;
+    }
 
     /**
      * Initializes a new dude at the origin.

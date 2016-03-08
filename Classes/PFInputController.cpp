@@ -27,6 +27,10 @@
 #define FIRE_KEY EventKeyboard::KeyCode::KEY_SPACE
 /** The key for jumping up */
 #define JUMP_KEY EventKeyboard::KeyCode::KEY_UP_ARROW
+/** The key for grow is A */
+#define GROW_KEY EventKeyboard::KeyCode::KEY_A
+/** The key for shrink is S */
+#define SHRINK_KEY EventKeyboard::KeyCode::KEY_S
 
 /** How fast a double click must be in milliseconds */
 #define EVENT_DOUBLE_CLICK  400
@@ -78,6 +82,7 @@ _touchListener(nullptr)
     _horizontal = 0.0f;
     _keyFire  = false;
     _keyJump  = false;
+    _keyGrow = false;
     
     // Initialize the touch values.
     _ltouch.touchid = -1;
@@ -200,6 +205,8 @@ void InputController::update(float dt) {
     
     _keyFire   = keys->keyPressed(FIRE_KEY);
     _keyJump   = keys->keyPressed(JUMP_KEY);
+    _keyGrow   = keys->keyPressed(GROW_KEY);
+    _keyShrink = keys->keyPressed(SHRINK_KEY);
     
     _keyLeft  = keys->keyDown(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
     _keyRight = keys->keyDown(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
@@ -207,11 +214,13 @@ void InputController::update(float dt) {
     // Nothing to do for MOBILE CONTROLS
 
     // Capture the current state
-    _resetPressed = _keyReset;
-    _debugPressed = _keyDebug;
-    _exitPressed  = _keyExit;
-    _firePressed  = _keyFire;
-    _jumpPressed  = _keyJump;
+    _resetPressed  = _keyReset;
+    _debugPressed  = _keyDebug;
+    _exitPressed   = _keyExit;
+    _firePressed   = _keyFire;
+    _jumpPressed   = _keyJump;
+    _growPressed   = _keyGrow;
+    _shrinkPressed = _keyShrink;
     
     // Directional controls
     _horizontal = 0.0f;
@@ -224,11 +233,13 @@ void InputController::update(float dt) {
   
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     // Need to clear keys in the mobile state
-    _keyDebug = false;
-    _keyReset = false;
-    _keyExit  = false;
-    _keyJump  = false;
-    _keyFire  = false;
+    _keyDebug  = false;
+    _keyReset  = false;
+    _keyExit   = false;
+    _keyJump   = false;
+    _keyFire   = false;
+    _keyGrow   = false;
+    _keyShrink = false;
 #endif
 }
 

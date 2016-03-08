@@ -174,6 +174,7 @@ bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
     nsize.width  *= DUDE_HSHRINK/scale.x;
     nsize.height *= DUDE_VSHRINK/scale.y;
     if (CapsuleObstacle::init(pos,nsize)) {
+        *_normalSize = nsize;
         setDensity(DUDE_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
@@ -190,7 +191,6 @@ bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
     }
     return false;
 }
-
 
 #pragma mark -
 #pragma mark Attribute Properties
@@ -216,7 +216,6 @@ void DudeModel::setMovement(float value) {
     }
     _faceRight = (_movement > 0);
 }
-
 
 #pragma mark -
 #pragma mark Physics Methods
@@ -246,12 +245,12 @@ void DudeModel::createFixtures() {
     corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
     corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
     
-    b2PolygonShape sensorShape;
-    sensorShape.Set(corners,4);
+    //b2PolygonShape sensorShape;
+    //sensorShape.Set(corners,4);
     
-    sensorDef.shape = &sensorShape;
-    _sensorFixture = _body->CreateFixture(&sensorDef);
-    _sensorFixture->SetUserData(getSensorName());
+    //sensorDef.shape = &sensorShape;
+    //_sensorFixture = _body->CreateFixture(&sensorDef);
+    //_sensorFixture->SetUserData(getSensorName());
 }
 
 /**
