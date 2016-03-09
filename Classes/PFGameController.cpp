@@ -62,12 +62,14 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 };
 
 /** The number of platforms */
-#define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  1
+#define PLATFORM_VERTS  24
+#define PLATFORM_COUNT  3
 
 /** The outlines of all of the platforms */
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-	{ 0.0f, 2.0f, 64.0f, 2.0f, 64.0f, 2.5f, 0.0f, 2.5f }
+	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
+	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
+	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
 };
 
 /** The goal door position */
@@ -342,6 +344,8 @@ void GameController::populate() {
     // This was set as the design resolution in AppDelegate
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
+	_levelOffset = 0.0f;
+	_worldnode->setPositionX(0.0f);
     
 #pragma mark : Goal door
     Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
@@ -468,10 +472,6 @@ void GameController::populate() {
     _avatar->setFilterData(b);
     _avatar->setDebugNode(draw);
     addObstacle(_avatar, 5);
-
-	// Set level offset and distance to center
-	_levelOffset = 0.0f;
-	_dist2center = 0.5f*DEFAULT_WIDTH - _avatar->getPosition().x;
     
 #pragma mark : Kids
     for (int i = 0; i < KID_COUNT; i++) {
@@ -649,13 +649,12 @@ void GameController::update(float dt) {
         Sound* source = _assets->get<Sound>(JUMP_EFFECT);
         //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
-    
-
-    // Turn the physics engine crank
-    _world->update(dt);
 
 	// Scroll the screen if necessary
 	handleScrolling();
+
+    // Turn the physics engine crank
+    _world->update(dt);
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
@@ -747,9 +746,31 @@ void GameController::removeBullet(Obstacle* bullet) {
 * Compute offsets for horizontal scrolling.
 */
 void GameController::handleScrolling() {
+	// Parameters
+	float L = 0.5f*DEFAULT_WIDTH - WINDOW_SIZE +_levelOffset;
+	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
+	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
+	float offset = 0.0f;
+	
+	// Compute the offset
+	if ((_levelOffset > 0) && (_avatar->getPosition().x < L)) {
+		float tempOffset = L - _avatar->getPosition().x;
+		float tempLevelOffset = _levelOffset - tempOffset;
+		_levelOffset = max(0.0f, tempLevelOffset);
+		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
+		offset = -offset;
+	}
+	else if ((_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
+		float tempOffset = _avatar->getPosition().x - R;
+		float tempLevelOffset = _levelOffset + tempOffset;
+		_levelOffset = min(maxLevelOffset, tempLevelOffset);
+		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
+	}
+
+	// Move all the objects in _worldnode
+	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	
 }
-
 
 #pragma mark -
 #pragma mark Collision Handling

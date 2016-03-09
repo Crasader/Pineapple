@@ -115,8 +115,6 @@ protected:
     int _countdown;
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
-	/** Distance from avatar to center of screen: '-' is left, '+' is right */
-	float _dist2center;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
