@@ -346,6 +346,7 @@ void GameController::populate() {
     float cscale = Director::getInstance()->getContentScaleFactor();
 	_levelOffset = 0.0f;
 	_worldnode->setPositionX(0.0f);
+	_debugnode->setPositionX(0.0f);
     
 #pragma mark : Goal door
     Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
@@ -769,6 +770,7 @@ void GameController::handleScrolling() {
 
 	// Move all the objects in _worldnode
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
+	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
 	
 }
 
