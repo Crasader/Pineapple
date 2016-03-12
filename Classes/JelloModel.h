@@ -56,12 +56,6 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define JELLO_FORCE      50.0f
-/** The amount to slow the character down */
-#define JELLO_DAMPING    10.0f
-/** The maximum character speed */
-#define JELLO_MAXSPEED   0.5f
 /** The Jello specific scaling */
 #define JELLO_SCALE      0.75f
 
@@ -81,8 +75,6 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(JelloModel);
 
 protected:
-    /** The current horizontal movement of the character */
-    float _movement;
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
@@ -140,51 +132,6 @@ public:
      * @return  An autoreleased physics object
      */
     static JelloModel* create(const Vec2& pos, const Vec2& scale);
-
-    
-#pragma mark Attribute Properties
-    /**
-     * Returns left/right movement of this character.
-     *
-     * This is the result of input times jello force.
-     *
-     * @return left/right movement of this character.
-     */
-    float getMovement() const { return _movement; }
-    
-    /**
-     * Sets left/right movement of this character.
-     *
-     * This is the result of input times jello force.
-     *
-     * @param value left/right movement of this character.
-     */
-    void setMovement(float value);
-    
-    /**
-     * Returns how much force to apply to get the jello moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the jello moving
-     */
-    float getForce() const { return JELLO_FORCE; }
-    
-    /**
-     * Returns ow hard the brakes are applied to get a jello to stop moving
-     *
-     * @return ow hard the brakes are applied to get a jello to stop moving
-     */
-    float getDamping() const { return JELLO_DAMPING; }
-    
-    /**
-     * Returns the upper limit on jello left-right movement.
-     *
-     * This does NOT apply to vertical movement.
-     *
-     * @return the upper limit on jello left-right movement.
-     */
-    float getMaxSpeed() const { return JELLO_MAXSPEED; }
     
     
 #pragma mark Physics Methods
