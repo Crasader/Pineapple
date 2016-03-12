@@ -61,7 +61,7 @@
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define DUDE_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.05f
+#define SENSOR_HEIGHT   0.07f
 /** The density of the character */
 #define DUDE_DENSITY    0.5f
 /** The impulse for the character jump */
@@ -244,13 +244,13 @@ void DudeModel::createFixtures() {
     corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
     corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
     corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
+
+    b2PolygonShape sensorShape;
+    sensorShape.Set(corners,4);
     
-    //b2PolygonShape sensorShape;
-    //sensorShape.Set(corners,4);
-    
-    //sensorDef.shape = &sensorShape;
-    //_sensorFixture = _body->CreateFixture(&sensorDef);
-    //_sensorFixture->SetUserData(getSensorName());
+    sensorDef.shape = &sensorShape;
+    _sensorFixture = _body->CreateFixture(&sensorDef);
+    _sensorFixture->SetUserData(getSensorName());
 }
 
 /**

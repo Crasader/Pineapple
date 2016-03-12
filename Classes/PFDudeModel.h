@@ -73,6 +73,7 @@ using namespace cocos2d;
 /** The relative size of smaller pineapple */
 #define PINEAPPLE_SHRINK_SCALE .5f
 
+#define DEBUG 0
 
 #pragma mark -
 #pragma mark Dude Model
@@ -183,16 +184,14 @@ public:
             _durationSinceGrowOrShrink = 0.0f;
             transitionToNormalSize();
         }
-        std::cout<<_durationSinceGrowOrShrink<<"\n";
+        if (DEBUG) {
+            std::cout<<_durationSinceGrowOrShrink<<"\n";
+        }
     }
     
     void transitionToNormalSize() {
         if (_normalSize) {
-            std::cout << "normalizing...\n";
-            std::cout << "current width: " << this->getDimension().width;
-            std::cout << "new width: " << _normalSize->width;
             this->setDimension(*_normalSize);
-            std::cout << "normalized";
         } else {
             std::cout << "\n\n_normalSize is NULL\n\n";
         }
@@ -216,6 +215,8 @@ public:
     void grow() {
         if (!this->_isLarge  && !this->_isSmall) {
             this->setDimension(*this->_normalSize * PINEAPPLE_GROW_SCALE);
+            //this->getBody()->DestroyFixture(this->getBody()->GetFixtureList());
+            //then checkout createFixtures() in capsuleObstacle.cpp (create the fixtures with desired dimensions)
             this->setIsLarge(true);
         }
     }
