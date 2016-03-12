@@ -109,6 +109,8 @@ protected:
     bool _complete;
     /** Whether or not debug mode is active */
     bool _debug;
+    /** Count of remaining kids */
+    int _kidsRemaining;
     /** Whether we have failed at this world (and need a reset) */
     bool _failed;
     /** Countdown active for winning or losing */
@@ -293,6 +295,16 @@ public:
     
 #pragma mark -
 #pragma mark Collision Handling
+    
+    /**
+     * Kills the given player or child.
+     * This method is called when a dude or kid collides with the blender,
+     * to trigger any blending animation and remove the given object from the world
+     *
+     * This method shouldn't do any checks for gameover, that should be handled elsewhere
+     */
+    void blendAndKill(SimpleObstacle* dudeOrKid);
+    
     /**
      * Processes the start of a collision
      *
