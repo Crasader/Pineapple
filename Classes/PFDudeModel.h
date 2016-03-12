@@ -60,6 +60,8 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
+/** The amount to shrink the whole body, including image */
+#define DUDE_SCALE 0.2f
 /** The factor to multiply by the input */
 #define DUDE_FORCE      50.0f
 /** The amount to slow the character down */
