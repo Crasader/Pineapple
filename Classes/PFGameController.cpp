@@ -45,35 +45,35 @@ using namespace std;
 #define DEFAULT_WIDTH   32.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
+/** Length of level in Box2d units */
+#define LEVEL_LENGTH    64.0f
+/** Half-width of scrolling window in Box2d units */
+#define WINDOW_SIZE     5.0f
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
-#define WALL_VERTS 12
-#define WALL_COUNT  2
+#define WALL_VERTS  8
+#define WALL_COUNT  1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-    {10.0f, 12.0f, 10.0f, 11.0f,  1.0f, 11.0f,
-      1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 12.0f},
-    {32.0f, 12.0f, 32.0f,  0.0f, 31.0f,  0.0f,
-     31.0f, 11.0f, 10.0f, 11.0f, 10.0f, 12.0f}
+	{ 0.0f, 0.0f, 64.0f, 0.0f, 64.0f, 2.0f, 0.0f, 2.0f }
 };
 
 /** The number of platforms */
-#define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  4
+#define PLATFORM_VERTS  24
+#define PLATFORM_COUNT  3
 
 /** The outlines of all of the platforms */
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-    { 1.0f, 3.0f, 12.0f, 3.0f, 12.0f, 2.5f, 1.0f, 2.5f},
-    {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f},
-    {17.0f, 2.8f,19.0f, 2.8f,19.0f, 2.5f,17.0f, 2.5f},
-    {12.0f, 2.8f,13.0f, 2.8f,13.0f, 2.5f,12.0f, 2.5f}
+	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
+	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
+	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
 };
 
 /** The goal door position */
-float GOAL_POS[] = {29.0f, 6.7f};
+float GOAL_POS[] = {61.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
@@ -344,6 +344,9 @@ void GameController::populate() {
     // This was set as the design resolution in AppDelegate
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
+	_levelOffset = 0.0f;
+	_worldnode->setPositionX(0.0f);
+	_debugnode->setPositionX(0.0f);
     
 #pragma mark : Goal door
     Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
@@ -652,9 +655,11 @@ void GameController::update(float dt) {
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
     }
-    
 
-    // Turn the physics engine crank.
+	// Scroll the screen if necessary
+	handleScrolling();
+
+    // Turn the physics engine crank
     _world->update(dt);
     
     // Since items may be deleted, garbage collect
@@ -719,6 +724,36 @@ void GameController::removeBullet(Obstacle* bullet) {
     //SoundEngine::getInstance()->playEffect(POP_EFFECT,source,false,EFFECT_VOLUME, true);
 }
 
+/**
+* Compute offsets for horizontal scrolling.
+*/
+void GameController::handleScrolling() {
+	// Parameters
+	float L = 0.5f*DEFAULT_WIDTH - WINDOW_SIZE +_levelOffset;
+	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
+	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
+	float offset = 0.0f;
+	
+	// Compute the offset
+	if ((_levelOffset > 0) && (_avatar->getPosition().x < L)) {
+		float tempOffset = L - _avatar->getPosition().x;
+		float tempLevelOffset = _levelOffset - tempOffset;
+		_levelOffset = max(0.0f, tempLevelOffset);
+		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
+		offset = -offset;
+	}
+	else if ((_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
+		float tempOffset = _avatar->getPosition().x - R;
+		float tempLevelOffset = _levelOffset + tempOffset;
+		_levelOffset = min(maxLevelOffset, tempLevelOffset);
+		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
+	}
+
+	// Move all the objects in _worldnode
+	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
+	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
+	
+}
 
 #pragma mark -
 #pragma mark Collision Handling

@@ -115,6 +115,8 @@ protected:
     bool _failed;
     /** Countdown active for winning or losing */
     int _countdown;
+	/** Distance between start of level and left side of screen */
+	float _levelOffset;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
@@ -359,6 +361,11 @@ public:
      * @param  bullet   the bullet to remove
      */
     void removeBullet(Obstacle* bullet);
+
+	/**
+	* Compute offsets for horizontal scrolling.
+	*/
+	void handleScrolling();
 
 };
 
