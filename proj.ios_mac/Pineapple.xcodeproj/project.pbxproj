@@ -11,6 +11,8 @@
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		400C68511C94E32800C141C3 /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
+		400C68521C94E32800C141C3 /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
 		405CBEB31C7D14DF004AB5A0 /* PFGameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */; };
 		405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */; };
 		405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */; };
@@ -121,6 +123,8 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Pineapple-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pineapple-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		400C684F1C94E32200C141C3 /* JelloModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JelloModel.h; sourceTree = "<group>"; };
+		400C68501C94E32800C141C3 /* JelloModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JelloModel.cpp; sourceTree = "<group>"; };
 		405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameController.cpp; sourceTree = "<group>"; };
 		405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFRopeBridge.cpp; sourceTree = "<group>"; };
 		405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFSpinner.cpp; sourceTree = "<group>"; };
@@ -328,23 +332,25 @@
 			isa = PBXGroup;
 			children = (
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
-				405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */,
-				407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */,
-				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
-				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
-				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
-				405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */,
-				405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
-				405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */,
-				407625C41C8E13E6005A0651 /* PFBlenderModel.h */,
-				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
-				405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */,
-				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
-				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
-				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
+				400C68501C94E32800C141C3 /* JelloModel.cpp */,
+				400C684F1C94E32200C141C3 /* JelloModel.h */,
 				4070BDD71C7E7289008AE7AF /* KidModel.cpp */,
 				4070BDD81C7E7289008AE7AF /* KidModel.h */,
+				407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */,
+				407625C41C8E13E6005A0651 /* PFBlenderModel.h */,
+				405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */,
+				405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */,
+				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
+				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
+				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
+				405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */,
+				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
+				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
+				405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */,
+				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
+				405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */,
+				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -562,6 +568,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */,
+				400C68511C94E32800C141C3 /* JelloModel.cpp in Sources */,
 				407625C61C8E13F2005A0651 /* PFBlenderModel.cpp in Sources */,
 				4070BDD91C7E7289008AE7AF /* KidModel.cpp in Sources */,
 				405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */,
@@ -583,6 +590,7 @@
 				405CBEBD1C7D1A5A004AB5A0 /* PFRopeBridge.cpp in Sources */,
 				405CBEBC1C7D1A5A004AB5A0 /* PFInputController.cpp in Sources */,
 				405CBEB91C7D1A56004AB5A0 /* PFDudeModel.cpp in Sources */,
+				400C68521C94E32800C141C3 /* JelloModel.cpp in Sources */,
 				405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */,
 				4070BDDA1C7E7289008AE7AF /* KidModel.cpp in Sources */,
 				407625C71C8E13F2005A0651 /* PFBlenderModel.cpp in Sources */,

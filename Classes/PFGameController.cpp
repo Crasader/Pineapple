@@ -82,8 +82,6 @@ float DUDE_POS[] = {10.0f, 7.0f};
 float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
-/** The position of the rope bridge */
-float BRIDGE_POS[] = {9.0f, 3.8f};
 
 #pragma mark -
 #pragma mark Collision Constants
