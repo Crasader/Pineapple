@@ -77,11 +77,11 @@ float GOAL_POS[] = {29.0f, 6.7f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
-float DUDE_POS[] = { 17.5f, 5.0f};
+float DUDE_POS[] = {20.0f, 7.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{15.0f, 5.0f}, {16.5f, 5.0f}};
+float KID_POS[2][2] = {{25.0f, 5.1f}, {26.5f, 5.1f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = {2.0f, 5.0f};
+float BLENDER_POS[] = {2.0f, 6.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -499,12 +499,12 @@ void GameController::populate() {
     Vec2 blenderPos = BLENDER_POS;
     image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
-    _blender = BlenderModel::create(blenderPos,_scale);
-    _blender->setDrawScale(_scale.x * BLENDER_SCALE, _scale.y * BLENDER_SCALE);
+    _blender = BlenderModel::create(blenderPos,_scale / BLENDER_SCALE);
+    _blender->setDrawScale(_scale.x, _scale.y);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale);
+    sprite->setScale(cscale * BLENDER_SCALE);
     _blender->setSceneNode(sprite);
     
     draw = WireNode::create();
@@ -629,7 +629,7 @@ void GameController::update(float dt) {
     
     //Blender moves
     _blender->applyForce();
-    _blender->setPosition(_blender->getX(), _blender->getHeight()/2);
+    _blender->setVY(0);
     
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
