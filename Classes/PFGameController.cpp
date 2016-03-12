@@ -61,27 +61,27 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 	{ 0.0f, 0.0f, 64.0f, 0.0f, 64.0f, 2.0f, 0.0f, 2.0f }
 };
 
-/** The number of platforms */
-#define PLATFORM_VERTS  24
-#define PLATFORM_COUNT  3
-
-/** The outlines of all of the platforms */
-float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
-	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
-	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
-};
+///** The number of platforms */
+//#define PLATFORM_VERTS  24
+//#define PLATFORM_COUNT  3
+//
+///** The outlines of all of the platforms */
+//float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
+//	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
+//	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
+//	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
+//};
 
 /** The goal door position */
 float GOAL_POS[] = {61.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
-float DUDE_POS[] = {20.0f, 7.0f};
+float DUDE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
-float KID_POS[4][2] = {{20.25f, 5.1f}, {21.5f, 5.1f}, {22.75f, 5.1f}, {24.0f, 5.1f}};
+float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = {2.0f, 6.0f};
+float BLENDER_POS[] = {-25.0f, 7.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -412,33 +412,33 @@ void GameController::populate() {
         addObstacle(wallobj,1);
     }
     
-#pragma mark : Platforms
-    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
-        PolygonObstacle* platobj;
-        Poly2 platform(PLATFORMS[ii],8);
-        platform.triangulate();
-        platobj = PolygonObstacle::create(platform);
-        platobj->setDrawScale(_scale.x, _scale.y);
-        // You cannot add constant "".  Must stringify
-        platobj->setName(std::string(PLATFORM_NAME)+cocos2d::to_string(ii));
-
-        // Set the physics attributes
-        platobj->setBodyType(b2_staticBody);
-        platobj->setDensity(BASIC_DENSITY);
-        platobj->setFriction(BASIC_FRICTION);
-        platobj->setRestitution(BASIC_RESTITUTION);
-        
-        // Add the scene graph nodes to this object
-        platform *= _scale;
-        sprite = PolygonNode::createWithTexture(image,platform);
-        platobj->setSceneNode(sprite);
-        
-        draw = WireNode::create();
-        draw->setColor(DEBUG_COLOR);
-        draw->setOpacity(DEBUG_OPACITY);
-        platobj->setDebugNode(draw);
-        addObstacle(platobj,1);
-    }
+//#pragma mark : Platforms
+//    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
+//        PolygonObstacle* platobj;
+//        Poly2 platform(PLATFORMS[ii],8);
+//        platform.triangulate();
+//        platobj = PolygonObstacle::create(platform);
+//        platobj->setDrawScale(_scale.x, _scale.y);
+//        // You cannot add constant "".  Must stringify
+//        platobj->setName(std::string(PLATFORM_NAME)+cocos2d::to_string(ii));
+//
+//        // Set the physics attributes
+//        platobj->setBodyType(b2_staticBody);
+//        platobj->setDensity(BASIC_DENSITY);
+//        platobj->setFriction(BASIC_FRICTION);
+//        platobj->setRestitution(BASIC_RESTITUTION);
+//        
+//        // Add the scene graph nodes to this object
+//        platform *= _scale;
+//        sprite = PolygonNode::createWithTexture(image,platform);
+//        platobj->setSceneNode(sprite);
+//        
+//        draw = WireNode::create();
+//        draw->setColor(DEBUG_COLOR);
+//        draw->setOpacity(DEBUG_OPACITY);
+//        platobj->setDebugNode(draw);
+//        addObstacle(platobj,1);
+//    }
 
 #pragma mark : Spinner
     Vec2 spinPos = SPIN_POS;
