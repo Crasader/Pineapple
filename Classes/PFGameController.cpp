@@ -735,14 +735,14 @@ void GameController::handleScrolling() {
 	float offset = 0.0f;
 	
 	// Compute the offset
-	if ((_levelOffset > 0) && (_avatar->getPosition().x < L)) {
+	if (_avatar != nullptr && (_levelOffset > 0) && (_avatar->getPosition().x < L)) {
 		float tempOffset = L - _avatar->getPosition().x;
 		float tempLevelOffset = _levelOffset - tempOffset;
 		_levelOffset = max(0.0f, tempLevelOffset);
 		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
 		offset = -offset;
 	}
-	else if ((_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
+	else if (_avatar != nullptr && (_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
 		float tempOffset = _avatar->getPosition().x - R;
 		float tempLevelOffset = _levelOffset + tempOffset;
 		_levelOffset = min(maxLevelOffset, tempLevelOffset);
