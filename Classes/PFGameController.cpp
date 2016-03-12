@@ -79,7 +79,7 @@ float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
 float DUDE_POS[] = {20.0f, 7.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{20.0f, 5.1f}, {21.5f, 5.1f}};
+float KID_POS[4][2] = {{20.25f, 5.1f}, {21.5f, 5.1f}, {22.75f, 5.1f}, {24.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {2.0f, 6.0f};
 /** The position of the rope bridge */
