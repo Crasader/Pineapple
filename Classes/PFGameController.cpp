@@ -73,15 +73,15 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
 };
 
 /** The goal door position */
-float GOAL_POS[] = {29.0f, 3.7f};
+float GOAL_POS[] = {29.0f, 6.7f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
-float DUDE_POS[] = { 7.5f, 5.0f};
+float DUDE_POS[] = { 17.5f, 5.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
+float KID_POS[2][2] = {{15.0f, 5.0f}, {16.5f, 5.0f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = {0.0f, 5.0f};
+float BLENDER_POS[] = {2.0f, 5.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -500,7 +500,7 @@ void GameController::populate() {
     image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
     _blender = BlenderModel::create(blenderPos,_scale);
-    _blender->setDrawScale(_scale);
+    _blender->setDrawScale(_scale.x * BLENDER_SCALE, _scale.y * BLENDER_SCALE);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);

@@ -50,22 +50,16 @@
 
 #pragma mark -
 #pragma mark Physics Constants
-/** Cooldown (in animation frames) for jumping */
-#define JUMP_COOLDOWN   5
-/** Cooldown (in animation frames) for shooting */
-#define SHOOT_COOLDOWN  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define BLENDER_VSHRINK  1.0f
+#define BLENDER_VSHRINK  0.8f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define BLENDER_HSHRINK  1.0f
+#define BLENDER_HSHRINK  0.8f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define BLENDER_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.05f
 /** The density of the character */
 #define BLENDER_DENSITY    0.5f
-/** The impulse for the character jump */
-#define BLENDER_JUMP       50.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
@@ -232,8 +226,6 @@ void BlenderModel::createFixtures() {
     sensorShape.Set(corners,4);
     
     sensorDef.shape = &sensorShape;
-    _sensorFixture = _body->CreateFixture(&sensorDef);
-    _sensorFixture->SetUserData(getSensorName());
 }
 
 /**
@@ -247,10 +239,6 @@ void BlenderModel::releaseFixtures() {
     }
     
     BoxObstacle::releaseFixtures();
-    if (_sensorFixture != nullptr) {
-        _body->DestroyFixture(_sensorFixture);
-        _sensorFixture = nullptr;
-    }
 }
 
 /**
@@ -306,11 +294,6 @@ void BlenderModel::resetDebugNode() {
     float h = SENSOR_HEIGHT*_drawScale.y;
     Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));
     poly.traverse(Poly2::Traversal::INTERIOR);
-    
-    _sensorNode = WireNode::createWithPoly(poly);
-    _sensorNode->setColor(DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-    _debug->addChild(_sensorNode);
 }
 
 
