@@ -77,11 +77,11 @@ float GOAL_POS[] = {61.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
-float DUDE_POS[] = { 7.5f, 5.0f};
+float DUDE_POS[] = {20.0f, 7.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
+float KID_POS[2][2] = {{20.0f, 5.1f}, {21.5f, 5.1f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = {0.0f, 5.0f};
+float BLENDER_POS[] = {2.0f, 6.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -475,6 +475,7 @@ void GameController::populate() {
     addObstacle(_avatar, 5);
     
 #pragma mark : Kids
+    _kidsRemaining = KID_COUNT;
     for (int i = 0; i < KID_COUNT; i++) {
         Vec2 kidPos = KID_POS[i];
         image = _assets->get<Texture2D>(KID_TEXTURE);
@@ -502,12 +503,12 @@ void GameController::populate() {
     Vec2 blenderPos = BLENDER_POS;
     image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
-    _blender = BlenderModel::create(blenderPos,_scale);
-    _blender->setDrawScale(_scale);
+    _blender = BlenderModel::create(blenderPos,_scale / BLENDER_SCALE);
+    _blender->setDrawScale(_scale.x, _scale.y);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale);
+    sprite->setScale(cscale * BLENDER_SCALE);
     _blender->setSceneNode(sprite);
     
     draw = WireNode::create();
@@ -523,7 +524,7 @@ void GameController::populate() {
     _blender->setMovement(_blender->getForce());
     _blender->setRestitution(0);
     _blender->setMass(BLENDER_MASS);
-    //addObstacle(_blender, 3);
+    addObstacle(_blender, 3);
 
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
@@ -598,7 +599,7 @@ void GameController::setComplete(bool value) {
  *
  * @param value whether the level is failed.
  */
-void GameController::setFailure(bool value) {
+void GameController::setFailure(bool value){
     _failed = value;
     if (value) {
         Sound* source = _assets->get<Sound>(LOSE_MUSIC);
@@ -627,12 +628,14 @@ void GameController::update(float dt) {
     
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
-        _kids[i]->applyForce();
+        if(_kids[i] != nullptr) {
+            _kids[i]->applyForce();
+        }
     }
     
     //Blender moves
-    //_blender->applyForce();
-    //_blender->setPosition(_blender->getX(), _blender->getHeight()/2);
+    _blender->applyForce();
+    _blender->setVY(0);
     
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
@@ -642,13 +645,15 @@ void GameController::update(float dt) {
     }
     
     // Process the movement
-    _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-    _avatar->setJumping( _input.didJump());
-    _avatar->applyForce();
-
-    if (_avatar->isJumping()) {
-        Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-        //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+    if(_avatar != nullptr) {
+        _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
+        _avatar->setJumping( _input.didJump());
+        _avatar->applyForce();
+        
+        if (_avatar->isJumping()) {
+            Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        }
     }
 
 	// Scroll the screen if necessary
@@ -659,30 +664,6 @@ void GameController::update(float dt) {
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-    
-    // Add a bullet AFTER physics allows it to hang in front
-    // Otherwise, it looks like bullet appears far away
-    _avatar->setShooting(_input.didFire());
-   if (_avatar->isShooting()) {
-        createBullet();
-    }
-    
-    // Record failure if necessary.
-    if (!_failed && _avatar->getY() < 0) {
-        setFailure(true);
-    }
-    
-    if(! _failed) {
-        bool kid_alive = false;
-        for (int i = 0; i < KID_COUNT; i++) {
-            if (_kids[i]->getY() > 0) {
-                kid_alive = true;
-            }
-        }
-        if(!kid_alive) {
-            setFailure(true);
-        }
-    }
     
     // Reset the game if we win or lose.
     if (_countdown > 0) {
@@ -754,14 +735,14 @@ void GameController::handleScrolling() {
 	float offset = 0.0f;
 	
 	// Compute the offset
-	if ((_levelOffset > 0) && (_avatar->getPosition().x < L)) {
+	if (_avatar != nullptr && (_levelOffset > 0) && (_avatar->getPosition().x < L)) {
 		float tempOffset = L - _avatar->getPosition().x;
 		float tempLevelOffset = _levelOffset - tempOffset;
 		_levelOffset = max(0.0f, tempLevelOffset);
 		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
 		offset = -offset;
 	}
-	else if ((_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
+	else if (_avatar != nullptr && (_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
 		float tempOffset = _avatar->getPosition().x - R;
 		float tempLevelOffset = _levelOffset + tempOffset;
 		_levelOffset = min(maxLevelOffset, tempLevelOffset);
@@ -776,6 +757,20 @@ void GameController::handleScrolling() {
 
 #pragma mark -
 #pragma mark Collision Handling
+
+/** 
+ * Kills the given player or child.
+ * This method is called when a dude or kid collides with the blender,
+ * to trigger any blending animation and remove the given object from the world
+ * 
+ * This method shouldn't do any checks for gameover, that should be handled elsewhere
+ */
+void GameController::blendAndKill(SimpleObstacle* dudeOrKid) {
+    _worldnode->removeChild(dudeOrKid->getSceneNode());
+    _debugnode->removeChild(dudeOrKid->getDebugNode());
+    dudeOrKid->markRemoved(true);
+}
+
 /**
  * Processes the start of a collision
  *
@@ -828,6 +823,25 @@ void GameController::beginContact(b2Contact* contact) {
         if((bd1 == _kids[i]   && bd2 == _goalDoor) ||
            (bd1 == _goalDoor && bd2 == _kids[i])) {
             setComplete(true);
+        }
+    }
+    
+    //See if we have collided with the blender
+    if((bd1 == _avatar && bd2 == _blender) || (bd2 == _avatar && bd1 == _blender)) {
+        blendAndKill(_avatar);
+        _avatar = nullptr;
+        setFailure(true);
+    }
+    
+    //See if a kid has collided with the blender
+    for(int i = 0; i < KID_COUNT; i++) {
+        if((bd1 == _kids[i] && bd2 == _blender) || (bd2 == _kids[i] && bd1 == _blender)) {
+            blendAndKill(_kids[i]);
+            _kids[i] = nullptr;
+            _kidsRemaining--;
+            if(_kidsRemaining == 0) {
+                setFailure(true);
+            }
         }
     }
 }

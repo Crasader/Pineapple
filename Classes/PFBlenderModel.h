@@ -53,9 +53,6 @@ using namespace cocos2d;
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
 #define BLENDER_TEXTURE    "blender"
-/** Identifier to allow us to track the sensor in ContactListener */
-#define BLENDER_SENSOR     "blendersensor"
-
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -65,6 +62,8 @@ using namespace cocos2d;
 #define BLENDER_DAMPING    10.0f
 /** The maximum character speed */
 #define BLENDER_MAXSPEED   0.5f
+/** The Blender specific scaling */
+#define BLENDER_SCALE      0.75f
 /** Blender Mass, for collisions */
 #define BLENDER_MASS 1000000
 
@@ -86,13 +85,6 @@ private:
 protected:
     /** The current horizontal movement of the character */
     float _movement;
-    /** Ground sensor to represent our feet */
-    b2Fixture*  _sensorFixture;
-    /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _sensorName;
-    /** The node for debugging the sensor */
-    WireNode* _sensorNode;
-    
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
@@ -196,15 +188,6 @@ public:
      */
     float getMaxSpeed() const { return BLENDER_MAXSPEED; }
     
-    /**
-     * Returns the name of the ground sensor
-     *
-     * This is used by ContactListener
-     *
-     * @return the name of the ground sensor
-     */
-    std::string* getSensorName() { return &_sensorName; }
-    
     
 #pragma mark Physics Methods
     /**
@@ -250,7 +233,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the blender values beyond
      * the defaults.  To use a BlenderModel, you must call init().
      */
-    BlenderModel() : BoxObstacle(), _sensorName(BLENDER_SENSOR) { }
+    BlenderModel() : BoxObstacle() { }
 
     /**
      * Initializes a new blender at the origin.
