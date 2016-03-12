@@ -452,12 +452,12 @@ void GameController::populate() {
     Vec2 dudePos = DUDE_POS;
     image  = _assets->get<Texture2D>(DUDE_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
-    _avatar = DudeModel::create(dudePos,_scale);
+    _avatar = DudeModel::create(dudePos,_scale / DUDE_SCALE);
     _avatar->setDrawScale(_scale);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale);
+    sprite->setScale(cscale * DUDE_SCALE);
     _avatar->setSceneNode(sprite);
     
     draw = WireNode::create();
@@ -474,13 +474,13 @@ void GameController::populate() {
 #pragma mark : Kids
     for (int i = 0; i < KID_COUNT; i++) {
         Vec2 kidPos = KID_POS[i];
-        image = _assets->get<Texture2D>(KID_TEXTURE);
+        image = _assets->get<Texture2D>(KidModel::getTexture(i));
         sprite = PolygonNode::createWithTexture(image);
-        _kids[i] = KidModel::create(kidPos,_scale);
+        _kids[i] = KidModel::create(kidPos,_scale / KID_SCALE, i);
         _kids[i]->setDrawScale(_scale);
         
         sprite = PolygonNode::createWithTexture(image);
-        sprite->setScale(cscale);
+        sprite->setScale(cscale * KID_SCALE);
         _kids[i]->setSceneNode(sprite);
         draw = WireNode::create();
         draw->setColor(DEBUG_COLOR);
@@ -855,9 +855,15 @@ void GameController::preload() {
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
     tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png", params);
-    tloader->loadAsync(DUDE_TEXTURE,    "textures/william_smaller.png");
-    tloader->loadAsync(KID_TEXTURE,     "textures/kid_smaller.png");
+    tloader->loadAsync(DUDE_TEXTURE,    "textures/will2.png");
+    
+    tloader->loadAsync(KID_TEXTURE_1,     "textures/pineapplet_bow.png");
+    tloader->loadAsync(KID_TEXTURE_2,     "textures/pineapplet_glasses.png");
+    tloader->loadAsync(KID_TEXTURE_3,     "textures/pineapplet_hat.png");
+    tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
+
     tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
+    
     tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
     tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
     tloader->loadAsync(GOAL_TEXTURE,    "textures/goal.png");
