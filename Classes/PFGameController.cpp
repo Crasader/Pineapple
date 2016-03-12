@@ -46,9 +46,25 @@ using namespace std;
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
 /** Length of level in Box2d units */
-#define LEVEL_LENGTH    64.0f
+#define LEVEL_LENGTH    256.0f
 /** Half-width of scrolling window in Box2d units */
 #define WINDOW_SIZE     5.0f
+
+/** Scale factor for background images */
+#define BACKGROUND_SCALE 1.1f
+/** The width of background assets */
+#define BACKGROUND_WIDTH 1000.0f
+/** Height of background assets */
+#define BACKGROUND_HEIGHT 500.0f
+/** Vertical offset of background assets */
+#define BACKGROUND_VERTICAL_OFFSET -200.0f
+
+/** Main background texture */
+#define FRONT_BACKGROUND    "background_1"
+/** Further back background texture */
+#define MIDDLE_BACKGROUND   "background_2"
+/** Furthest back background texture */
+#define BACK_BACKGROUND     "background_3"
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
@@ -58,7 +74,7 @@ using namespace std;
 #define WALL_COUNT  1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-	{ 0.0f, 0.0f, 64.0f, 0.0f, 64.0f, 2.0f, 0.0f, 2.0f }
+	{ 0.0f, 0.0f, LEVEL_LENGTH, 0.0f, LEVEL_LENGTH, 2.0f, 0.0f, 2.0f }
 };
 
 /** The number of platforms */
@@ -73,7 +89,7 @@ float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
 };
 
 /** The goal door position */
-float GOAL_POS[] = {61.0f, 3.0f};
+float GOAL_POS[] = {100.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
@@ -345,13 +361,30 @@ void GameController::populate() {
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
 	_levelOffset = 0.0f;
+    _scrollingForward = true;
 	_worldnode->setPositionX(0.0f);
 	_debugnode->setPositionX(0.0f);
     
-#pragma mark : Goal door
-    Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
+    Texture2D* image;
     PolygonNode* sprite;
     WireNode* draw;
+    
+    image = _assets->get<Texture2D>(FRONT_BACKGROUND);
+    _frontBackground_1 = PolygonNode::createWithTexture(image);
+    _frontBackground_1->setScale(cscale * BACKGROUND_SCALE);
+    _frontBackground_1->setPosition(BACKGROUND_WIDTH/2 * cscale*BACKGROUND_SCALE,
+                                    BACKGROUND_HEIGHT + BACKGROUND_VERTICAL_OFFSET);
+    _worldnode->addChild(_frontBackground_1);
+    _frontBackground_2 = PolygonNode::createWithTexture(image);
+    _frontBackground_2->setScale(cscale * BACKGROUND_SCALE);
+    _frontBackground_2->setPosition(BACKGROUND_WIDTH * 3/2 * cscale*BACKGROUND_SCALE,
+                                    BACKGROUND_HEIGHT + BACKGROUND_VERTICAL_OFFSET);
+    _worldnode->addChild(_frontBackground_2);
+
+    
+    
+#pragma mark : Goal door
+    image = _assets->get<Texture2D>(GOAL_TEXTURE);
     
     // Create obstacle
     Vec2 goalPos = GOAL_POS;
@@ -734,6 +767,8 @@ void GameController::handleScrolling() {
 	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
 	float offset = 0.0f;
 	
+    float oldLevelOffset = _levelOffset;
+    
 	// Compute the offset
 	if (_avatar != nullptr && (_levelOffset > 0) && (_avatar->getPosition().x < L)) {
 		float tempOffset = L - _avatar->getPosition().x;
@@ -748,11 +783,35 @@ void GameController::handleScrolling() {
 		_levelOffset = min(maxLevelOffset, tempLevelOffset);
 		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
 	}
+    
+    _scrollingForward = _levelOffset >= oldLevelOffset;
 
 	// Move all the objects in _worldnode
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
-	
+    
+    //Move background images as necessary
+    float tolerance = 5.0f;
+    int levelOffsetMod = (int)_levelOffset % (int)(DEFAULT_WIDTH*2);
+    if(_scrollingForward && levelOffsetMod > DEFAULT_WIDTH + tolerance
+        && _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX()) {
+        _frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
+    }
+
+    
+    if(_scrollingForward && levelOffsetMod > tolerance && levelOffsetMod < DEFAULT_WIDTH - tolerance
+        && _frontBackground_2->getPositionX() < _frontBackground_1->getPositionX()) {
+        _frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
+    }
+    
+    //    if((int)_levelOffset % (int)(DEFAULT_WIDTH*2) < DEFAULT_WIDTH * tolerance && _frontBackground_1->getPositionX() > _frontBackground_2->getPositionX()) {
+    //        _frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
+    //    }
+    
+//    if((int)_levelOffset % (int)(DEFAULT_WIDTH*2) > DEFAULT_WIDTH * (3 - tolerance) && _frontBackground_2->getPositionX() > _frontBackground_1->getPositionX()) {
+//        _frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
+//    }
+    printf("%f\n", _levelOffset);
 }
 
 #pragma mark -
@@ -903,19 +962,25 @@ void GameController::preload() {
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
-    tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png", params);
-    tloader->loadAsync(DUDE_TEXTURE,    "textures/will2.png");
+    
+    tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
+    tloader->loadAsync(DUDE_TEXTURE,      "textures/will2.png");
     
     tloader->loadAsync(KID_TEXTURE_1,     "textures/pineapplet_bow.png");
     tloader->loadAsync(KID_TEXTURE_2,     "textures/pineapplet_glasses.png");
     tloader->loadAsync(KID_TEXTURE_3,     "textures/pineapplet_hat.png");
     tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
 
-    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
+    tloader->loadAsync(BLENDER_TEXTURE,   "textures/blender.png");
     
-    tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
-    tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
-    tloader->loadAsync(GOAL_TEXTURE,    "textures/goal.png");
+    tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
+    tloader->loadAsync(BULLET_TEXTURE,    "textures/bullet.png");
+    tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
+    
+    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
+    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/clouds.png");
+    tloader->loadAsync(BACK_BACKGROUND,   "textures/hills.png");
+    
 //    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
 //    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
 //    _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");

@@ -88,7 +88,23 @@ protected:
     WorldController* _world;
     /** The world scale (computed from root node) */
     Vec2 _scale;
+    
+    /** The front background (first copy), with no paralax */
+    PolygonNode* _frontBackground_1;
+    /** The front background (second copy), with no paralax */
+    PolygonNode* _frontBackground_2;
+    
+    /** The middle background (first copy), with some paralax */
+    PolygonNode* _middleBackground_1;
+    /** The middle background (second copy), with some paralax */
+    PolygonNode* _middleBackground_2;
+    
+    /** The back backBackground (first copy), with heavy paralax */
+    PolygonNode* _backBackground_1;
+    /** The back background (second copy), with heavy paralax */
+    PolygonNode* _backBackground_2;
 
+    
     // Physics objects for the game
     /** Reference to the goalDoor (for collision detection) */
     BoxObstacle*    _goalDoor;
@@ -117,6 +133,8 @@ protected:
     int _countdown;
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
+    /** true if scrolling forward, false for scrolling backwards */
+    bool _scrollingForward;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
