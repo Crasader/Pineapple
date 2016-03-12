@@ -16,13 +16,22 @@
 
 using namespace cocos2d;
 
-/** The texture for the character avatar */
-#define KID_TEXTURE    "pineapple"
+/** The texture for the first kid */
+#define KID_TEXTURE_1    "pineapplet_bow"
+/** The texture for the first kid */
+#define KID_TEXTURE_2    "pineapplet_glasses"
+/** The texture for the first kid */
+#define KID_TEXTURE_3    "pineapplet_hat"
+/** The texture for the first kid */
+#define KID_TEXTURE_4    "pineapplet_pirate"
+
 /** Identifier to allow us to track the sensor in ContactListener */
 #define KID_SENSOR     "kidsensor"
 
 #pragma mark -
 #pragma mark Physics Constants
+/** The amount to shrink the whole body, including image */
+#define KID_SCALE 0.075f
 /** The factor to multiply by the input */
 #define KID_FORCE      10.0f
 /** The amount to slow the character down */
@@ -109,11 +118,16 @@ public:
      *
      * @param  pos      Initial position in world coordinates
      * @param  scale    The drawing scale
+     * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
      *
      * @return  An autoreleased physics object
      */
-    static KidModel* create(const Vec2& pos, const Vec2& scale);
+    static KidModel* create(const Vec2& pos, const Vec2& scale, int idx);
     
+    /**
+     * Returns the kid texture name for the given kid index
+     */
+    static std::string getTexture(int idx);
     
 #pragma mark Attribute Properties
     /**
@@ -248,7 +262,7 @@ CC_CONSTRUCTOR_ACCESS:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE); }
+    virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE, 0); }
     
     /**
      * Initializes a new dude at the given position.
@@ -264,7 +278,7 @@ CC_CONSTRUCTOR_ACCESS:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE); }
+    virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE, 0); }
     
     /**
      * Initializes a new dude at the given position.
@@ -278,10 +292,11 @@ CC_CONSTRUCTOR_ACCESS:
      *
      * @param  pos      Initial position in world coordinates
      * @param  scale    The drawing scale
+     * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos, const Vec2& scale);
+    virtual bool init(const Vec2& pos, const Vec2& scale, int idx);
 };
 
 

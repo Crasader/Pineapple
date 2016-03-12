@@ -59,7 +59,7 @@
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define DUDE_HSHRINK  0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define DUDE_SSHRINK  0.6f
+#define DUDE_SSHRINK  0.9f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.05f
 /** The density of the character */
