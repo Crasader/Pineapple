@@ -18,10 +18,13 @@
 #include <cocos2d.h>
 #include <cornell/CUKeyboardPoller.h>
 #include <cornell/CUAccelerationPoller.h>
-#include <cornell/CUTouchListener.h>
+#include <cornell/CUMultiTouchListener.h>
+#include <iostream>
 
 
 using namespace cocos2d;
+
+#define PINCH_SPREAD_SPEED_NEEDED    20.0f
 
 #pragma mark -
 #pragma mark Polled Input
@@ -59,10 +62,20 @@ private:
 protected:
     // EVENT LISTENERS
     /** Listener to process touch events */
-    TouchListener* _touchListener;
+    MultiTouchListener* _touchListener;
     
     /** Whether or not this controller is currently active. */
     bool _active;
+    
+    // Gesture recognition
+    // The distance in last timestep
+    float _previousDelta;
+    // One of the touches in the gesture, -1 if no current gesture
+    int _id1;
+    Vec2 _touch1;
+    // The other one, -1 if no current gesture
+    int _id2;
+    Vec2 _touch2;
     
     // Input results
     /** Whether the reset action was chosen. */
@@ -183,6 +196,22 @@ protected:
      */
     int  checkSwipe(const Vec2& start, const Vec2& stop, timestamp_t current);
 
+    
+    // @return -1 for pinch, 1 for spread, 0 for neither
+    int checkPinchSpread() {
+        float speed =_previousDelta - _touch1.distance(_touch2);
+        //std::cout << "CURRENT DIST: " << speed << "\n";
+        //std::cout << "SPEED: " << speed << "\n";
+        if (speed >= PINCH_SPREAD_SPEED_NEEDED) {
+            std::cout << "PINCH\n";
+            return -1;
+        } else if (_previousDelta - _touch1.distance(_touch2) <= -PINCH_SPREAD_SPEED_NEEDED) {
+            std::cout << "SPREAD\n";
+            return 1;
+        }
+        return 0;
+    }
+
 
 #pragma mark -
 #pragma mark Input Control
@@ -302,7 +331,7 @@ public:
      *
      * @return True if the touch was processed; false otherwise.
      */
-    bool    touchBeganCB(Touch* t, timestamp_t time);
+    bool    touchesBeganCB(std::vector<Touch*> touches, timestamp_t time);
     
     /**
      * Callback for the end of a touch event
@@ -310,7 +339,7 @@ public:
      * @param t     The touch information
      * @param event The associated event
      */
-    void    touchEndedCB(Touch* t, timestamp_t time);
+    void    touchesEndedCB(std::vector<Touch*> touches, timestamp_t time);
     
     /**
      * Callback for a touch movement event
@@ -318,7 +347,7 @@ public:
      * @param t     The touch information
      * @param event The associated event
      */
-    void    touchMovedCB(Touch* t, timestamp_t time);
+    void    touchesMovedCB(std::vector<Touch*> touches, timestamp_t time);
     
     /**
      * Callback for the cancellation of a touch event
@@ -330,7 +359,7 @@ public:
      * @param t     The touch information
      * @param event The associated event
      */
-    void    touchCancelCB(Touch* t, timestamp_t time);
+    void    touchesCancelCB(std::vector<Touch*> touches, timestamp_t time);
 };
 
 #endif /* defined(__PF_INPUT_CONTROLLER_H__) */

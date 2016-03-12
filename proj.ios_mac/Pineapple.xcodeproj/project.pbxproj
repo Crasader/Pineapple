@@ -333,6 +333,7 @@
 				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
 				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
 				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
+				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
 				405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */,
 				405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
@@ -340,7 +341,6 @@
 				407625C41C8E13E6005A0651 /* PFBlenderModel.h */,
 				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
 				405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */,
-				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
 				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
 				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
 				4070BDD71C7E7289008AE7AF /* KidModel.cpp */,
@@ -468,7 +468,7 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = NK7Y3376G8;
+						DevelopmentTeam = BJ293T3427;
 					};
 				};
 			};
@@ -640,7 +640,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = cornell.gdiac.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -678,7 +678,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = cornell.gdiac.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
