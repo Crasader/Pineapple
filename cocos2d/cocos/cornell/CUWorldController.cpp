@@ -267,7 +267,7 @@ bool WorldController::init(const Rect& bounds, const Vec2& gravity) {
  * @retain a reference to the obstacle
  */
 void WorldController::addObstacle(Obstacle* obj) {
-    CCASSERT(inBounds(obj), "Object is not in bounds");
+    // CCASSERT(inBounds(obj), "Object is not in bounds");
     _objects.push_back(obj);
     obj->retain();
     obj->activatePhysics(*_world);

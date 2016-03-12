@@ -146,6 +146,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\KidModel.cpp" />
+    <ClCompile Include="..\Classes\PFBlenderModel.cpp" />
     <ClCompile Include="..\Classes\PFDudeModel.cpp" />
     <ClCompile Include="..\Classes\PFGameController.cpp" />
     <ClCompile Include="..\Classes\PFGameRoot.cpp" />
@@ -157,6 +158,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\KidModel.h" />
+    <ClInclude Include="..\Classes\PFBlenderModel.h" />
     <ClInclude Include="..\Classes\PFDudeModel.h" />
     <ClInclude Include="..\Classes\PFGameController.h" />
     <ClInclude Include="..\Classes\PFGameRoot.h" />

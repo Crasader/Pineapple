@@ -45,43 +45,43 @@ using namespace std;
 #define DEFAULT_WIDTH   32.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
+/** Length of level in Box2d units */
+#define LEVEL_LENGTH    64.0f
+/** Half-width of scrolling window in Box2d units */
+#define WINDOW_SIZE     5.0f
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
-#define WALL_VERTS 12
-#define WALL_COUNT  2
+#define WALL_VERTS  8
+#define WALL_COUNT  1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-    {10.0f, 12.0f, 10.0f, 11.0f,  1.0f, 11.0f,
-      1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 12.0f},
-    {32.0f, 12.0f, 32.0f,  0.0f, 31.0f,  0.0f,
-     31.0f, 11.0f, 10.0f, 11.0f, 10.0f, 12.0f}
+	{ 0.0f, 0.0f, 64.0f, 0.0f, 64.0f, 2.0f, 0.0f, 2.0f }
 };
 
 /** The number of platforms */
-#define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  4
+#define PLATFORM_VERTS  24
+#define PLATFORM_COUNT  3
 
 /** The outlines of all of the platforms */
 float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-    { 1.0f, 3.0f, 12.0f, 3.0f, 12.0f, 2.5f, 1.0f, 2.5f},
-    {19.0f, 3.0f,31.0f, 3.0f,31.0f, 2.5f,19.0f, 2.5f},
-    {17.0f, 2.8f,19.0f, 2.8f,19.0f, 2.5f,17.0f, 2.5f},
-    {12.0f, 2.8f,13.0f, 2.8f,13.0f, 2.5f,12.0f, 2.5f}
+	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
+	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
+	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
 };
 
 /** The goal door position */
-float GOAL_POS[] = {29.0f, 3.7f};
+float GOAL_POS[] = {61.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
-float DUDE_POS[] = { 7.5f, 5.0f};
+float DUDE_POS[] = {20.0f, 7.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{5.0f, 5.0f}, {1.5f, 5.0f}};
+float KID_POS[2][2] = {{20.0f, 5.1f}, {21.5f, 5.1f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = {0.0f, 5.0f};
+float BLENDER_POS[] = {2.0f, 6.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
@@ -344,6 +344,9 @@ void GameController::populate() {
     // This was set as the design resolution in AppDelegate
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
+	_levelOffset = 0.0f;
+	_worldnode->setPositionX(0.0f);
+	_debugnode->setPositionX(0.0f);
     
 #pragma mark : Goal door
     Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
@@ -472,6 +475,7 @@ void GameController::populate() {
     addObstacle(_avatar, 5);
     
 #pragma mark : Kids
+    _kidsRemaining = KID_COUNT;
     for (int i = 0; i < KID_COUNT; i++) {
         Vec2 kidPos = KID_POS[i];
         image = _assets->get<Texture2D>(KidModel::getTexture(i));
@@ -499,12 +503,12 @@ void GameController::populate() {
     Vec2 blenderPos = BLENDER_POS;
     image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
-    _blender = BlenderModel::create(blenderPos,_scale);
-    _blender->setDrawScale(_scale);
+    _blender = BlenderModel::create(blenderPos,_scale / BLENDER_SCALE);
+    _blender->setDrawScale(_scale.x, _scale.y);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale);
+    sprite->setScale(cscale * BLENDER_SCALE);
     _blender->setSceneNode(sprite);
     
     draw = WireNode::create();
@@ -520,7 +524,7 @@ void GameController::populate() {
     _blender->setMovement(_blender->getForce());
     _blender->setRestitution(0);
     _blender->setMass(BLENDER_MASS);
-    //addObstacle(_blender, 3);
+    addObstacle(_blender, 3);
 
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
@@ -595,7 +599,7 @@ void GameController::setComplete(bool value) {
  *
  * @param value whether the level is failed.
  */
-void GameController::setFailure(bool value) {
+void GameController::setFailure(bool value){
     _failed = value;
     if (value) {
         Sound* source = _assets->get<Sound>(LOSE_MUSIC);
@@ -624,12 +628,14 @@ void GameController::update(float dt) {
     
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
-        _kids[i]->applyForce();
+        if(_kids[i] != nullptr) {
+            _kids[i]->applyForce();
+        }
     }
     
     //Blender moves
-    //_blender->applyForce();
-    //_blender->setPosition(_blender->getX(), _blender->getHeight()/2);
+    _blender->applyForce();
+    _blender->setVY(0);
     
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
@@ -639,45 +645,25 @@ void GameController::update(float dt) {
     }
     
     // Process the movement
-    _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-    _avatar->setJumping( _input.didJump());
-    _avatar->applyForce();
-
-    if (_avatar->isJumping()) {
-        Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-        //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+    if(_avatar != nullptr) {
+        _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
+        _avatar->setJumping( _input.didJump());
+        _avatar->applyForce();
+        
+        if (_avatar->isJumping()) {
+            Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        }
     }
-    
 
-    // Turn the physics engine crank.
+	// Scroll the screen if necessary
+	handleScrolling();
+
+    // Turn the physics engine crank
     _world->update(dt);
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-    
-    // Add a bullet AFTER physics allows it to hang in front
-    // Otherwise, it looks like bullet appears far away
-    _avatar->setShooting(_input.didFire());
-   if (_avatar->isShooting()) {
-        createBullet();
-    }
-    
-    // Record failure if necessary.
-    if (!_failed && _avatar->getY() < 0) {
-        setFailure(true);
-    }
-    
-    if(! _failed) {
-        bool kid_alive = false;
-        for (int i = 0; i < KID_COUNT; i++) {
-            if (_kids[i]->getY() > 0) {
-                kid_alive = true;
-            }
-        }
-        if(!kid_alive) {
-            setFailure(true);
-        }
-    }
     
     // Reset the game if we win or lose.
     if (_countdown > 0) {
@@ -738,9 +724,53 @@ void GameController::removeBullet(Obstacle* bullet) {
     //SoundEngine::getInstance()->playEffect(POP_EFFECT,source,false,EFFECT_VOLUME, true);
 }
 
+/**
+* Compute offsets for horizontal scrolling.
+*/
+void GameController::handleScrolling() {
+	// Parameters
+	float L = 0.5f*DEFAULT_WIDTH - WINDOW_SIZE +_levelOffset;
+	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
+	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
+	float offset = 0.0f;
+	
+	// Compute the offset
+	if (_avatar != nullptr && (_levelOffset > 0) && (_avatar->getPosition().x < L)) {
+		float tempOffset = L - _avatar->getPosition().x;
+		float tempLevelOffset = _levelOffset - tempOffset;
+		_levelOffset = max(0.0f, tempLevelOffset);
+		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
+		offset = -offset;
+	}
+	else if (_avatar != nullptr && (_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
+		float tempOffset = _avatar->getPosition().x - R;
+		float tempLevelOffset = _levelOffset + tempOffset;
+		_levelOffset = min(maxLevelOffset, tempLevelOffset);
+		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
+	}
+
+	// Move all the objects in _worldnode
+	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
+	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
+	
+}
 
 #pragma mark -
 #pragma mark Collision Handling
+
+/** 
+ * Kills the given player or child.
+ * This method is called when a dude or kid collides with the blender,
+ * to trigger any blending animation and remove the given object from the world
+ * 
+ * This method shouldn't do any checks for gameover, that should be handled elsewhere
+ */
+void GameController::blendAndKill(SimpleObstacle* dudeOrKid) {
+    _worldnode->removeChild(dudeOrKid->getSceneNode());
+    _debugnode->removeChild(dudeOrKid->getDebugNode());
+    dudeOrKid->markRemoved(true);
+}
+
 /**
  * Processes the start of a collision
  *
@@ -793,6 +823,25 @@ void GameController::beginContact(b2Contact* contact) {
         if((bd1 == _kids[i]   && bd2 == _goalDoor) ||
            (bd1 == _goalDoor && bd2 == _kids[i])) {
             setComplete(true);
+        }
+    }
+    
+    //See if we have collided with the blender
+    if((bd1 == _avatar && bd2 == _blender) || (bd2 == _avatar && bd1 == _blender)) {
+        blendAndKill(_avatar);
+        _avatar = nullptr;
+        setFailure(true);
+    }
+    
+    //See if a kid has collided with the blender
+    for(int i = 0; i < KID_COUNT; i++) {
+        if((bd1 == _kids[i] && bd2 == _blender) || (bd2 == _kids[i] && bd1 == _blender)) {
+            blendAndKill(_kids[i]);
+            _kids[i] = nullptr;
+            _kidsRemaining--;
+            if(_kidsRemaining == 0) {
+                setFailure(true);
+            }
         }
     }
 }
