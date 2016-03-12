@@ -64,8 +64,6 @@ using namespace cocos2d;
 #define BLENDER_MAXSPEED   0.5f
 /** The Blender specific scaling */
 #define BLENDER_SCALE      0.75f
-/** Blender Mass, for collisions */
-#define BLENDER_MASS 1000000
 
 
 #pragma mark -
