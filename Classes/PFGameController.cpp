@@ -77,11 +77,11 @@ float GOAL_POS[] = {61.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
-float DUDE_POS[] = {20.0f, 7.0f};
+float DUDE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
-float KID_POS[2][2] = {{20.0f, 5.1f}, {21.5f, 5.1f}};
+float KID_POS[2][2] = {{4.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
-float BLENDER_POS[] = {2.0f, 6.0f};
+float BLENDER_POS[] = {-25.0f, 7.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
 
