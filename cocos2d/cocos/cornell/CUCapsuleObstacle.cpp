@@ -181,9 +181,10 @@ bool CapsuleObstacle::init(const Vec2& pos, const Size& size, CapsuleObstacle::O
  */
 bool CapsuleObstacle::resize(const Size& size) {
     _dimension = size;
-    if (size.width < size.height &&
-        (_orient == Orientation::LEFT || _orient == Orientation::RIGHT || _orient == Orientation::HORIZONTAL)) {
-        return false;
+    if (size.width < size.height && isHorizontal(_orient)) {
+        _orient = Orientation::VERTICAL;    // OVERRIDE
+    } else if (size.width > size.height && !isHorizontal(_orient)) {
+        _orient = Orientation::HORIZONTAL;  // OVERRIDE
     }
     
     // Get an AABB for the core
@@ -234,6 +235,15 @@ bool CapsuleObstacle::resize(const Size& size) {
             _center.upperBound.y -= _seamEpsilon;
             break;
     }
+    // Handle degenerate polys
+    if (_center.lowerBound.x == _center.upperBound.x) {
+        _center.lowerBound.x -= _seamEpsilon;
+        _center.upperBound.x += _seamEpsilon;
+    }
+    if (_center.lowerBound.y == _center.upperBound.y) {
+        _center.lowerBound.y -= _seamEpsilon;
+        _center.upperBound.y += _seamEpsilon;
+    }
     
     // Make the box for the core
     b2Vec2 corners[4];
@@ -246,10 +256,11 @@ bool CapsuleObstacle::resize(const Size& size) {
     corners[3].x = _center.upperBound.x;
     corners[3].y = _center.lowerBound.y;
     _shape.Set(corners, 4);
+    
+    _ends.m_radius = r;
     if (_debug != nullptr) {
         resetDebugNode();
     }
-    _ends.m_radius = r;
     
     return true;
 }
@@ -276,7 +287,7 @@ void CapsuleObstacle::resetDebugNode() {
     const float coef = (float)M_PI/BODY_DEBUG_SEGS;
     float rx = _ends.m_radius*_drawScale.x;
     float ry = _ends.m_radius*_drawScale.y;
-
+    
     std::vector<Vec2> vertices;
     Vec2 vert;
     
@@ -309,7 +320,7 @@ void CapsuleObstacle::resetDebugNode() {
             vertices.push_back(vert);
         }
     }
-
+    
     // Next corner
     vert.x = _center.upperBound.x*_drawScale.x;
     vert.y = _center.lowerBound.y*_drawScale.y;
@@ -324,7 +335,7 @@ void CapsuleObstacle::resetDebugNode() {
             vertices.push_back(vert);
         }
     }
-
+    
     
     // Next corner
     vert.x = _center.lowerBound.x*_drawScale.x;
@@ -340,10 +351,10 @@ void CapsuleObstacle::resetDebugNode() {
             vertices.push_back(vert);
         }
     }
-
+    
     // Create polygon
     Poly2 poly(vertices);
-     poly.traverse(Poly2::Traversal::CLOSED);
+    poly.traverse(Poly2::Traversal::CLOSED);
     _debug->setPolygon(poly);
 }
 
@@ -427,7 +438,7 @@ void CapsuleObstacle::createFixtures() {
             _cap1 = _body->CreateFixture(&_fixture);
             break;
     }
-
+    
     markDirty(false);
 }
 

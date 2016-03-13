@@ -28,13 +28,13 @@ NS_CC_BEGIN
 /**
  * Capsule-shaped model to support collisions.
  *
- * A capsule is a box with semicircular ends along the major axis. They are a popular physics 
- * objects, particularly for character avatars.  The rounded ends means they are less likely 
- * to snag, and they naturally fall off platforms when they go too far. 
+ * A capsule is a box with semicircular ends along the major axis. They are a popular physics
+ * objects, particularly for character avatars.  The rounded ends means they are less likely
+ * to snag, and they naturally fall off platforms when they go too far.
  *
  * The constructors allow some control over the capsule shape.  You can have half-capsules or
  * full capsules.  In the case where width == height, you can specify a vertical or horizontal
- * capsule.  However, the circles must be on a major axis.  Therefore, you cannot have a 
+ * capsule.  However, the circles must be on a major axis.  Therefore, you cannot have a
  * vertical capsule if width > height, or a horiztonal capsule when width < height.  The
  * constructors will fail in those cases.
  */
@@ -42,7 +42,7 @@ class CC_DLL CapsuleObstacle : public SimpleObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(CapsuleObstacle);
-
+    
 public:
     /** Enum to specify the capsule orientiation */
     enum class Orientation {
@@ -59,7 +59,7 @@ public:
         /** A half-capsule with a rounded end at the right */
         RIGHT
     };
-
+    
 protected:
     /** Shape information for this capsule core */
     b2PolygonShape _shape;
@@ -67,7 +67,7 @@ protected:
     b2CircleShape  _ends;
     /** AABB representation of capsule core for fast computation */
     b2AABB _center;
-
+    
     /** A cache value for the center fixture (for resizing) */
     b2Fixture* _core;
     /** A cache value for the first end cap fixture (for resizing) */
@@ -131,8 +131,8 @@ public:
     /**
      * Creates a new capsule object of the given dimensions.
      *
-     * The orientation of the capsule will be a full capsule along the 
-     * major axis.  If width == height, it will default to a vertical 
+     * The orientation of the capsule will be a full capsule along the
+     * major axis.  If width == height, it will default to a vertical
      * orientation.
      *
      * The scene graph is completely decoupled from the physics system.
@@ -150,7 +150,7 @@ public:
     /**
      * Creates a new capsule object of the given dimensions and orientation.
      *
-     * The orientation must be consistent with the major axis (or else the 
+     * The orientation must be consistent with the major axis (or else the
      * two axes must be the same). If the orientation specifies a minor axis,
      * then this constructor will return null.
      *
@@ -238,7 +238,17 @@ public:
      * @return true if the orientation was successfully changed.
      */
     bool setOrientation(Orientation value);
-
+    
+    /**
+     * Returns true if the orientation is a horizontal full or half capsule.
+     *
+     * @param value the orientation to check
+     *
+     * @return true if the orientation is a horizontal full or half capsule.
+     */
+    static bool isHorizontal(Orientation value) {
+        return (value == Orientation::LEFT || value == Orientation::RIGHT || value == Orientation::HORIZONTAL);
+    }
     
 #pragma mark -
 #pragma mark Physics Methods
@@ -246,14 +256,14 @@ public:
      * Sets the seam offset of the core rectangle
      *
      * If the center rectangle is exactly the same size as the circle radius,
-     * you may get catching at the seems.  To prevent this, you should make 
+     * you may get catching at the seems.  To prevent this, you should make
      * the center rectangle epsilon narrower so that everything rolls off the
      * round shape. This parameter is that epsilon value
      *
      * @parm  value the seam offset of the core rectangle
      */
     void setSeamOffset(float value) { _seamEpsilon = value; markDirty(true); }
-
+    
     /**
      * Returns the seam offset of the core rectangle
      *
@@ -265,7 +275,7 @@ public:
      * @return the seam offset of the core rectangle
      */
     float getSeamOffset() const { return _seamEpsilon; }
-
+    
     /**
      * Sets the density of this body
      *
@@ -339,7 +349,7 @@ CC_CONSTRUCTOR_ACCESS:
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
     virtual bool init(const Vec2& pos, const Size& size);
-
+    
     /**
      * Initializes a new capsule object of the given dimensions.
      *

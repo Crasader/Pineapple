@@ -89,21 +89,20 @@ protected:
     /** The world scale (computed from root node) */
     Vec2 _scale;
     
-    /** The front background (first copy), with no paralax */
+    /** The front background (first copy), with no parallax */
     PolygonNode* _frontBackground_1;
-    /** The front background (second copy), with no paralax */
+    /** The front background (second copy), with no parallax */
     PolygonNode* _frontBackground_2;
     
-    /** The middle background (first copy), with some paralax */
+    /** The middle background (first copy), with some parallax */
     PolygonNode* _middleBackground_1;
-    /** The middle background (second copy), with some paralax */
+    /** The middle background (second copy), with some parallax */
     PolygonNode* _middleBackground_2;
     
-    /** The back backBackground (first copy), with heavy paralax */
+    /** The back backBackground (first copy), with heavy parallax */
     PolygonNode* _backBackground_1;
-    /** The back background (second copy), with heavy paralax */
+    /** The back background (second copy), with heavy parallax */
     PolygonNode* _backBackground_2;
-
     
     // Physics objects for the game
     /** Reference to the goalDoor (for collision detection) */

@@ -51,13 +51,21 @@ using namespace std;
 #define WINDOW_SIZE     5.0f
 
 /** Scale factor for background images */
-#define BACKGROUND_SCALE 1.1f
+#define FRONT_BACKGROUND_SCALE   1.1f
+#define MIDDLE_BACKGROUND_SCALE  1.1f
+#define BACK_BACKGROUND_SCALE    1.0f
 /** The width of background assets */
-#define BACKGROUND_WIDTH 1000.0f
+#define FRONT_BACKGROUND_WIDTH   1000.0f
+#define MIDDLE_BACKGROUND_WIDTH  1000.0f
+#define BACK_BACKGROUND_WIDTH    1500.0f
 /** Height of background assets */
-#define BACKGROUND_HEIGHT 500.0f
+#define FRONT_BACKGROUND_HEIGHT  500.0f
+#define MIDDLE_BACKGROUND_HEIGHT 300.0f
+#define BACK_BACKGROUND_HEIGHT   300.0f
 /** Vertical offset of background assets */
-#define BACKGROUND_VERTICAL_OFFSET -200.0f
+#define FRONT_BACKGROUND_VERTICAL_OFFSET  -190.0f
+#define MIDDLE_BACKGROUND_VERTICAL_OFFSET  120.0f
+#define BACK_BACKGROUND_VERTICAL_OFFSET    200.0f
 
 /** Main background texture */
 #define FRONT_BACKGROUND    "background_1"
@@ -368,20 +376,46 @@ void GameController::populate() {
     Texture2D* image;
     PolygonNode* sprite;
     WireNode* draw;
-    
+
+	// Middle background
+	//image = _assets->get<Texture2D>(MIDDLE_BACKGROUND);
+	//_middleBackground_1 = PolygonNode::createWithTexture(image);
+	//_middleBackground_1->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
+	//_middleBackground_1->setPosition(MIDDLE_BACKGROUND_WIDTH/2 * cscale*MIDDLE_BACKGROUND_SCALE,
+	//	                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
+	//_worldnode->addChild(_middleBackground_1);
+	//_middleBackground_2 = PolygonNode::createWithTexture(image);
+	//_middleBackground_2->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
+	//_middleBackground_2->setPosition(MIDDLE_BACKGROUND_WIDTH*3/2 * cscale*MIDDLE_BACKGROUND_SCALE,
+	//	                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
+	//_worldnode->addChild(_middleBackground_2);
+
+	// Back background
+	//image = _assets->get<Texture2D>(BACK_BACKGROUND);
+	//_backBackground_1 = PolygonNode::createWithTexture(image);
+	//_backBackground_1->setScale(cscale*BACK_BACKGROUND_SCALE);
+	//_backBackground_1->setPosition(BACK_BACKGROUND_WIDTH/2 * cscale*BACK_BACKGROUND_SCALE,
+	//	                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
+	//_worldnode->addChild(_backBackground_1);
+	//_backBackground_2 = PolygonNode::createWithTexture(image);
+	//_backBackground_2->setScale(cscale*BACK_BACKGROUND_SCALE);
+	//_backBackground_2->setPosition(BACK_BACKGROUND_WIDTH*3/2 * cscale*BACK_BACKGROUND_SCALE,
+	//	                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
+	//_worldnode->addChild(_backBackground_2);
+
+	// Front background
     image = _assets->get<Texture2D>(FRONT_BACKGROUND);
     _frontBackground_1 = PolygonNode::createWithTexture(image);
-    _frontBackground_1->setScale(cscale * BACKGROUND_SCALE);
-    _frontBackground_1->setPosition(BACKGROUND_WIDTH/2 * cscale*BACKGROUND_SCALE,
-                                    BACKGROUND_HEIGHT + BACKGROUND_VERTICAL_OFFSET);
+    _frontBackground_1->setScale(cscale*FRONT_BACKGROUND_SCALE);
+    _frontBackground_1->setPosition(FRONT_BACKGROUND_WIDTH/2 * cscale*FRONT_BACKGROUND_SCALE,
+		                            FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
     _worldnode->addChild(_frontBackground_1);
     _frontBackground_2 = PolygonNode::createWithTexture(image);
-    _frontBackground_2->setScale(cscale * BACKGROUND_SCALE);
-    _frontBackground_2->setPosition(BACKGROUND_WIDTH * 3/2 * cscale*BACKGROUND_SCALE,
-                                    BACKGROUND_HEIGHT + BACKGROUND_VERTICAL_OFFSET);
+    _frontBackground_2->setScale(cscale*FRONT_BACKGROUND_SCALE);
+    _frontBackground_2->setPosition(FRONT_BACKGROUND_WIDTH*3/2 * cscale*FRONT_BACKGROUND_SCALE,
+		                            FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
     _worldnode->addChild(_frontBackground_2);
 
-    
     
 #pragma mark : Goal door
     image = _assets->get<Texture2D>(GOAL_TEXTURE);
@@ -786,27 +820,29 @@ void GameController::handleScrolling() {
 	// Move all the objects in _worldnode
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
-    
-    // Move background images as necessary
+
+    // Move background layers as necessary
 	float tolerance = 0.05f;
-	float limitR = (_nFlip + tolerance) * BACKGROUND_WIDTH * BACKGROUND_SCALE / _scale.x;
-	float limitL = (_nFlip - tolerance) * BACKGROUND_WIDTH * BACKGROUND_SCALE / _scale.x;
 	bool scrollRight = _levelOffset >= oldLevelOffset; // true = right; false = left
+
+	// Front
+	float limitR = (_nFlip + tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
+	float limitL = (_nFlip - tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
 	bool bkgrdOrder = _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
 	if (scrollRight && _levelOffset > limitR && bkgrdOrder) {
-		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
 		_nFlip++;
 	}
 	else if (scrollRight && _levelOffset > limitR && !bkgrdOrder) {
-		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
 		_nFlip++;
 	}
 	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < limitL && bkgrdOrder) {
-		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
 		_nFlip--;
 	}
 	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < limitL && !bkgrdOrder) {
-		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
 		_nFlip--;
 	}
 }
@@ -977,8 +1013,8 @@ void GameController::preload() {
     tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
     
     tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
-    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/clouds.png");
-    tloader->loadAsync(BACK_BACKGROUND,   "textures/hills.png");
+    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
+    tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
 //    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
 //    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
