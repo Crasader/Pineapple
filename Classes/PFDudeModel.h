@@ -390,7 +390,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the dude values beyond
      * the defaults.  To use a DudeModel, you must call init().
      */
-    DudeModel() : CapsuleObstacle(), _sensorName(DUDE_SENSOR) { }
+    DudeModel() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(DUDE_SENSOR) { }
     ~DudeModel() {
         delete _normalSize;
     }
