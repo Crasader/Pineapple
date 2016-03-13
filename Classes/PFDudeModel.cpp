@@ -259,7 +259,7 @@ void DudeModel::createFixtures() {
  * This is the primary method to override for custom physics objects.
  */
 void DudeModel::releaseFixtures() {
-    if (_body != nullptr) {
+    if (_body == nullptr) {
         return;
     }
     
