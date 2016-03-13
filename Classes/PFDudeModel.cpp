@@ -61,7 +61,7 @@
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define DUDE_SSHRINK  0.9f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.05f
+#define SENSOR_HEIGHT   0.07f
 /** The density of the character */
 #define DUDE_DENSITY    0.5f
 /** The impulse for the character jump */
@@ -174,6 +174,7 @@ bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
     nsize.width  *= DUDE_HSHRINK/scale.x;
     nsize.height *= DUDE_VSHRINK/scale.y;
     if (CapsuleObstacle::init(pos,nsize)) {
+        _normalSize = nsize;
         setDensity(DUDE_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
@@ -190,7 +191,6 @@ bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
     }
     return false;
 }
-
 
 #pragma mark -
 #pragma mark Attribute Properties
@@ -217,7 +217,6 @@ void DudeModel::setMovement(float value) {
     _faceRight = (_movement > 0);
 }
 
-
 #pragma mark -
 #pragma mark Physics Methods
 /**
@@ -229,6 +228,7 @@ void DudeModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
+    std::cout << " createFixtures WIDTH: " << getWidth() << "\n";
 
     CapsuleObstacle::createFixtures();
     b2FixtureDef sensorDef;
@@ -245,7 +245,7 @@ void DudeModel::createFixtures() {
     corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
     corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
     corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    
+
     b2PolygonShape sensorShape;
     sensorShape.Set(corners,4);
     
@@ -260,7 +260,7 @@ void DudeModel::createFixtures() {
  * This is the primary method to override for custom physics objects.
  */
 void DudeModel::releaseFixtures() {
-    if (_body != nullptr) {
+    if (_body == nullptr) {
         return;
     }
     
