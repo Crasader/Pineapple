@@ -543,6 +543,7 @@ void GameController::populate() {
     
 #pragma mark : Kids
     _kidsRemaining = KID_COUNT;
+    _kidsReachedGoal = new bool[KID_COUNT];
     for (int i = 0; i < KID_COUNT; i++) {
         Vec2 kidPos = KID_POS[i];
         image = _assets->get<Texture2D>(KidModel::getTexture(i));
@@ -589,8 +590,7 @@ void GameController::populate() {
     _blender->setDebugNode(draw);
     _blender->setGravityScale(0);
     _blender->setMovement(_blender->getForce());
-    _blender->setRestitution(0);
-    _blender->setMass(BLENDER_MASS);
+    _blender->setSensor(true);
     addObstacle(_blender, 3);
 
     // Play the background music on a loop.
@@ -863,6 +863,22 @@ void GameController::blendAndKill(SimpleObstacle* dudeOrKid) {
     dudeOrKid->markRemoved(true);
 }
 
+/** 
+ * Checks for victory, triggering it if it occurs
+ * Specifically, sees if every living child has reached the goal
+ *
+ * @return true if victory has occurred
+ */
+bool GameController::checkForVictory() {
+    int count = 0;
+    for(int i = 0; i < KID_COUNT; i++) {
+        if(_kidsReachedGoal[i]) {
+            count++;
+        }
+    }
+    return count >= _kidsRemaining;
+}
+ 
 /**
  * Processes the start of a collision
  *
@@ -914,6 +930,12 @@ void GameController::beginContact(b2Contact* contact) {
     for(int i = 0; i < KID_COUNT; i++) {
         if((bd1 == _kids[i]   && bd2 == _goalDoor) ||
            (bd1 == _goalDoor && bd2 == _kids[i])) {
+            _kidsReachedGoal[i] = true;
+        }
+    }
+    
+    if((_avatar == bd1 && bd2 == _goalDoor) || (_avatar == bd2 && bd1 == _goalDoor)) {
+        if(checkForVictory()) {
             setComplete(true);
         }
     }

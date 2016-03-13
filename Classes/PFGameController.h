@@ -126,6 +126,8 @@ protected:
     bool _debug;
     /** Count of remaining kids */
     int _kidsRemaining;
+    /** Flags for kids who have reached the goal */
+    bool* _kidsReachedGoal;
     /** Whether we have failed at this world (and need a reset) */
     bool _failed;
     /** Countdown active for winning or losing */
@@ -323,6 +325,14 @@ public:
      * This method shouldn't do any checks for gameover, that should be handled elsewhere
      */
     void blendAndKill(SimpleObstacle* dudeOrKid);
+    
+    /**
+     * Checks for victory, triggering it if it occurs
+     * Specifically, sees if every living child has reached the goal
+     *
+     * @return true if victory has occurred
+     */
+    bool checkForVictory();
     
     /**
      * Processes the start of a collision
