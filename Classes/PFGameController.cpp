@@ -771,6 +771,7 @@ void GameController::beginContact(b2Contact* contact) {
     }
 
     // See if we have landed on the ground.
+    // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
     if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
         (_avatar->getSensorName() == fd1 && _avatar != bd2)) {
         _avatar->setGrounded(true);
