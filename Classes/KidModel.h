@@ -33,11 +33,11 @@ using namespace cocos2d;
 /** The amount to shrink the whole body, including image */
 #define KID_SCALE 0.075f
 /** The factor to multiply by the input */
-#define KID_FORCE      10.0f * 2
+#define KID_FORCE      10.0f
 /** The amount to slow the character down */
-#define KID_DAMPING    5.0f * 2
+#define KID_DAMPING    5.0f
 /** The maximum character speed */
-#define KID_MAXSPEED   1.0f * 2
+#define KID_MAXSPEED   1.0f
 
 #pragma mark -
 #pragma mark Dude Model
