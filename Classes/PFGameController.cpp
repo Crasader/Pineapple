@@ -361,10 +361,10 @@ void GameController::populate() {
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
 	_levelOffset = 0.0f;
-    _scrollingForward = true;
+	_nFlip = 1;
 	_worldnode->setPositionX(0.0f);
 	_debugnode->setPositionX(0.0f);
-    
+
     Texture2D* image;
     PolygonNode* sprite;
     WireNode* draw;
@@ -766,7 +766,6 @@ void GameController::handleScrolling() {
 	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
 	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
 	float offset = 0.0f;
-	
     float oldLevelOffset = _levelOffset;
     
 	// Compute the offset
@@ -783,35 +782,33 @@ void GameController::handleScrolling() {
 		_levelOffset = min(maxLevelOffset, tempLevelOffset);
 		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
 	}
-    
-    _scrollingForward = _levelOffset >= oldLevelOffset;
 
 	// Move all the objects in _worldnode
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
     
-    //Move background images as necessary
-    float tolerance = 5.0f;
-    int levelOffsetMod = (int)_levelOffset % (int)(DEFAULT_WIDTH*2);
-    if(_scrollingForward && levelOffsetMod > DEFAULT_WIDTH + tolerance
-        && _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX()) {
-        _frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
-    }
-
-    
-    if(_scrollingForward && levelOffsetMod > tolerance && levelOffsetMod < DEFAULT_WIDTH - tolerance
-        && _frontBackground_2->getPositionX() < _frontBackground_1->getPositionX()) {
-        _frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
-    }
-    
-    //    if((int)_levelOffset % (int)(DEFAULT_WIDTH*2) < DEFAULT_WIDTH * tolerance && _frontBackground_1->getPositionX() > _frontBackground_2->getPositionX()) {
-    //        _frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
-    //    }
-    
-//    if((int)_levelOffset % (int)(DEFAULT_WIDTH*2) > DEFAULT_WIDTH * (3 - tolerance) && _frontBackground_2->getPositionX() > _frontBackground_1->getPositionX()) {
-//        _frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
-//    }
-    printf("%f\n", _levelOffset);
+    // Move background images as necessary
+	float tolerance = 0.05f;
+	float limitR = (_nFlip + tolerance) * BACKGROUND_WIDTH * BACKGROUND_SCALE / _scale.x;
+	float limitL = (_nFlip - tolerance) * BACKGROUND_WIDTH * BACKGROUND_SCALE / _scale.x;
+	bool scrollRight = _levelOffset >= oldLevelOffset; // true = right; false = left
+	bool bkgrdOrder = _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && _levelOffset > limitR && bkgrdOrder) {
+		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_nFlip++;
+	}
+	else if (scrollRight && _levelOffset > limitR && !bkgrdOrder) {
+		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_nFlip++;
+	}
+	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < limitL && bkgrdOrder) {
+		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_nFlip--;
+	}
+	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < limitL && !bkgrdOrder) {
+		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - BACKGROUND_WIDTH * BACKGROUND_SCALE);
+		_nFlip--;
+	}
 }
 
 #pragma mark -
@@ -959,6 +956,8 @@ void GameController::preload() {
     params.wrapT = GL_REPEAT;
     params.magFilter = GL_LINEAR;
     params.minFilter = GL_NEAREST;
+	
+
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();

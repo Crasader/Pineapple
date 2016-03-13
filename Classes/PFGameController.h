@@ -133,8 +133,8 @@ protected:
     int _countdown;
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
-    /** true if scrolling forward, false for scrolling backwards */
-    bool _scrollingForward;
+    /** Number of times background has been flipped */
+    int _nFlip;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
