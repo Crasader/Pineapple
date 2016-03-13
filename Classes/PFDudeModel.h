@@ -63,11 +63,11 @@ using namespace cocos2d;
 /** The amount to shrink the whole body, including image */
 #define DUDE_SCALE 0.2f
 /** The factor to multiply by the input */
-#define DUDE_FORCE      50.0f
+#define DUDE_FORCE      50.0f * 2
 /** The amount to slow the character down */
-#define DUDE_DAMPING    10.0f
+#define DUDE_DAMPING    10.0f * 2
 /** The maximum character speed */
-#define DUDE_MAXSPEED   5.0f
+#define DUDE_MAXSPEED   5.0f * 2
 
 
 #pragma mark -
@@ -97,6 +97,8 @@ protected:
     int  _shootCooldown;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+	/** Whether or not we have reached the goal */
+	bool _reachedGoal;
     /** Whether we are actively shooting */
     bool _isShooting;
     /** Ground sensor to represent our feet */
@@ -226,13 +228,27 @@ public:
      */
     void setGrounded(bool value) { _isGrounded = value; }
     
-    /**
-     * Returns how much force to apply to get the dude moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the dude moving
-     */
+	/**
+	* Returns true if Will has reached the goal.
+	*
+	* @return true if Will has reached the goal.
+	*/
+	bool hasReachedGoal() const { return _reachedGoal; }
+
+	/**
+	* Sets whether Will has reached the goal.
+	*
+	* @param value whether Will has reached the goal.
+	*/
+	void setReachedGoal(bool value) { _reachedGoal = value; }
+
+	/**
+	* Returns how much force to apply to get the dude moving
+	*
+	* Multiply this by the input to get the movement value.
+	*
+	* @return how much force to apply to get the dude moving
+	*/
     float getForce() const { return DUDE_FORCE; }
     
     /**

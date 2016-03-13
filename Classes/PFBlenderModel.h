@@ -57,11 +57,11 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define BLENDER_FORCE      50.0f
+#define BLENDER_FORCE      50.0f * 2
 /** The amount to slow the character down */
-#define BLENDER_DAMPING    10.0f
+#define BLENDER_DAMPING    10.0f * 2
 /** The maximum character speed */
-#define BLENDER_MAXSPEED   0.5f
+#define BLENDER_MAXSPEED   0.5f * 2
 /** The Blender specific scaling */
 #define BLENDER_SCALE      0.75f
 

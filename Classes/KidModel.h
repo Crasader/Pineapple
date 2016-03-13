@@ -33,11 +33,11 @@ using namespace cocos2d;
 /** The amount to shrink the whole body, including image */
 #define KID_SCALE 0.075f
 /** The factor to multiply by the input */
-#define KID_FORCE      10.0f
+#define KID_FORCE      10.0f * 2
 /** The amount to slow the character down */
-#define KID_DAMPING    5.0f
+#define KID_DAMPING    5.0f * 2
 /** The maximum character speed */
-#define KID_MAXSPEED   1.0f
+#define KID_MAXSPEED   1.0f * 2
 
 #pragma mark -
 #pragma mark Dude Model
@@ -58,6 +58,8 @@ protected:
     float _movement;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+	/** Whether or not this kid has reached the goal */
+	bool _reachedGoal;
     /** Ground sensor to represent our feet */
     b2Fixture*  _sensorFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
@@ -169,6 +171,29 @@ public:
      *
      * @return how much force to apply to get the dude moving
      */
+
+	 /**
+	 * Returns true if the kid has reached the ground.
+	 *
+	 * @return true if the kid has reached the ground.
+	 */
+	bool hasReachedGoal() const { return _reachedGoal; }
+
+	/**
+	* Sets whether the kid has reached the goal.
+	*
+	* @param value whether the kid has reached the goal.
+	*/
+	void setReachedGoal(bool value) { _reachedGoal = value; }
+
+	/**
+	* Returns how much force to apply to get the dude moving
+	*
+	* Multiply this by the input to get the movement value.
+	*
+	* @return how much force to apply to get the dude moving
+	*/
+
     float getForce() const { return KID_FORCE; }
     
     /**
