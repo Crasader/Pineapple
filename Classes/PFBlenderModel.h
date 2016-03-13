@@ -1,5 +1,5 @@
 //
-//  PFDudeModel.h
+//  PFBlenderModel.h
 //  PlatformerDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -41,10 +41,9 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#ifndef __PF_DUDE_MODEL_H__
-#define __PF_DUDE_MODEL_H__
+#ifndef __PF_BLENDER_MODEL_H__
+#define __PF_BLENDER_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
-#include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
 
 
@@ -53,30 +52,25 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
-#define DUDE_TEXTURE    "dude"
+#define BLENDER_TEXTURE    "blender"
 /** Identifier to allow us to track the sensor in ContactListener */
-#define DUDE_SENSOR     "dudesensor"
+#define BLENDER_SENSOR     "blendersensor"
 
 
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define DUDE_FORCE      50.0f
+#define BLENDER_FORCE      50.0f
 /** The amount to slow the character down */
-#define DUDE_DAMPING    10.0f
+#define BLENDER_DAMPING    10.0f
 /** The maximum character speed */
-#define DUDE_MAXSPEED   5.0f
-/** The maximum duration of pineapple size */
-#define PINEAPPLE_MAX_SIZE_DURATION 3.0f
-/** The relative size of enlarged pineapple */
-#define PINEAPPLE_GROW_SCALE 1.5f
-/** The relative size of smaller pineapple */
-#define PINEAPPLE_SHRINK_SCALE .5f
+#define BLENDER_MAXSPEED   0.5f
+/** Blender Mass, for collisions */
+#define BLENDER_MASS 1000000
 
-#define DEBUG 0
 
 #pragma mark -
-#pragma mark Dude Model
+#pragma mark BLENDER Model
 /**
  * Player avatar for the plaform game.
  *
@@ -84,31 +78,14 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class DudeModel : public CapsuleObstacle {
+class BlenderModel : public BoxObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
-    CC_DISALLOW_COPY_AND_ASSIGN(DudeModel);
+    CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
 
 protected:
     /** The current horizontal movement of the character */
     float _movement;
-    /** Which direction is the character facing */
-    bool _faceRight;
-    bool _isLarge = false;
-    bool _isSmall = false;
-    Size _normalSize = Size();
-    /** Duration since last grow or shrink, 0 if currently normal size */
-    float _durationSinceGrowOrShrink = 0.0f;
-    /** How long until we can jump again */
-    int  _jumpCooldown;
-    /** Whether we are actively jumping */
-    bool _isJumping;
-    /** How long until we can shoot again */
-    int  _shootCooldown;
-    /** Whether our feet are on the ground */
-    bool _isGrounded;
-    /** Whether we are actively shooting */
-    bool _isShooting;
     /** Ground sensor to represent our feet */
     b2Fixture*  _sensorFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
@@ -128,9 +105,9 @@ protected:
 public:
 #pragma mark Static Constructors
     /**
-     * Creates a new dude at the origin.
+     * Creates a new blender at the origin.
      *
-     * The dude is scaled so that 1 pixel = 1 Box2d unit
+     * The blender is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -139,12 +116,12 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static DudeModel* create();
+    static BlenderModel* create();
     
     /**
-     * Creates a new dude at the given position.
+     * Creates a new blender at the given position.
      *
-     * The dude is scaled so that 1 pixel = 1 Box2d unit
+     * The blender is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -155,12 +132,12 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static DudeModel* create(const Vec2& pos);
+    static BlenderModel* create(const Vec2& pos);
     
     /**
-     * Creates a new dude at the given position.
+     * Creates a new blender at the given position.
      *
-     * The dude is sized according to the given drawing scale.
+     * The blender is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -172,76 +149,14 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static DudeModel* create(const Vec2& pos, const Vec2& scale);
+    static BlenderModel* create(const Vec2& pos, const Vec2& scale);
 
-    void updateSize(float dt) {
-        if (_isLarge || _isSmall) {
-            _durationSinceGrowOrShrink += dt;
-        }
-        if (_durationSinceGrowOrShrink > PINEAPPLE_MAX_SIZE_DURATION) {
-            _isLarge = false;
-            _isSmall = false;
-            _durationSinceGrowOrShrink = 0.0f;
-            transitionToNormalSize();
-        }
-        if (DEBUG) {
-            std::cout<<_durationSinceGrowOrShrink<<"\n";
-        }
-    }
-    
-    void transitionToNormalSize() {
-        this->setDimension(_normalSize);
-    }
-    
-    bool isLarge() const {
-        return _isLarge;
-    }
-    
-    /**
-     * Setter for _isLarge
-     */
-    void setIsLarge(bool isLarge) {
-        this->_durationSinceGrowOrShrink = 0.0f;
-        this->_isLarge = isLarge;
-    }
-    
-    /**
-     * Grows the pineapple
-     */
-    void grow() {
-        if (!this->_isLarge  && !this->_isSmall) {
-            this->setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-            this->setIsLarge(true);
-        }
-    }
-    
-    /**
-     * Shrinks the pineapple
-     */
-    void shrink() {
-        if (!this->_isLarge && !this->_isSmall) {
-            this->setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
-            this->setIsSmall(true);
-        }
-    }
-    
-    bool isSmall() const {
-        return _isSmall;
-    }
-    
-    /**
-     * Setter for _isLarge
-     */
-    void setIsSmall(bool isSmall) {
-        this->_durationSinceGrowOrShrink = 0.0f;
-        this->_isSmall = isSmall;
-    }
     
 #pragma mark Attribute Properties
     /**
      * Returns left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times blender force.
      *
      * @return left/right movement of this character.
      */
@@ -250,78 +165,36 @@ public:
     /**
      * Sets left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times blender force.
      *
      * @param value left/right movement of this character.
      */
     void setMovement(float value);
     
     /**
-     * Returns true if the dude is actively firing.
-     *
-     * @return true if the dude is actively firing.
-     */
-    bool isShooting() const { return _isShooting && _shootCooldown <= 0; }
-    
-    /**
-     * Sets whether the dude is actively firing.
-     *
-     * @param value whether the dude is actively firing.
-     */
-    void setShooting(bool value) { _isShooting = value; }
-    
-    /**
-     * Returns true if the dude is actively jumping.
-     *
-     * @return true if the dude is actively jumping.
-     */
-    bool isJumping() const { return _isJumping && _jumpCooldown <= 0; }
-    
-    /**
-     * Sets whether the dude is actively jumping.
-     *
-     * @param value whether the dude is actively jumping.
-     */
-    void setJumping(bool value) { _isJumping = value; }
-    
-    /**
-     * Returns true if the dude is on the ground.
-     *
-     * @return true if the dude is on the ground.
-     */
-    bool isGrounded() const { return _isGrounded; }
-    
-    /**
-     * Sets whether the dude is on the ground.
-     *
-     * @param value whether the dude is on the ground.
-     */
-    void setGrounded(bool value) { _isGrounded = value; }
-    
-    /**
-     * Returns how much force to apply to get the dude moving
+     * Returns how much force to apply to get the blender moving
      *
      * Multiply this by the input to get the movement value.
      *
-     * @return how much force to apply to get the dude moving
+     * @return how much force to apply to get the blender moving
      */
-    float getForce() const { return DUDE_FORCE; }
+    float getForce() const { return BLENDER_FORCE; }
     
     /**
-     * Returns ow hard the brakes are applied to get a dude to stop moving
+     * Returns ow hard the brakes are applied to get a blender to stop moving
      *
-     * @return ow hard the brakes are applied to get a dude to stop moving
+     * @return ow hard the brakes are applied to get a blender to stop moving
      */
-    float getDamping() const { return DUDE_DAMPING; }
+    float getDamping() const { return BLENDER_DAMPING; }
     
     /**
-     * Returns the upper limit on dude left-right movement.
+     * Returns the upper limit on blender left-right movement.
      *
      * This does NOT apply to vertical movement.
      *
-     * @return the upper limit on dude left-right movement.
+     * @return the upper limit on blender left-right movement.
      */
-    float getMaxSpeed() const { return DUDE_MAXSPEED; }
+    float getMaxSpeed() const { return BLENDER_MAXSPEED; }
     
     /**
      * Returns the name of the ground sensor
@@ -331,13 +204,6 @@ public:
      * @return the name of the ground sensor
      */
     std::string* getSensorName() { return &_sensorName; }
-    
-    /**
-     * Returns true if this character is facing right
-     *
-     * @return true if this character is facing right
-     */
-    bool isFacingRight() const { return _faceRight; }
     
     
 #pragma mark Physics Methods
@@ -369,7 +235,7 @@ public:
     void update(float dt) override;
     
     /**
-     * Applies the force to the body of this dude
+     * Applies the force to the body of this blender
      *
      * This method should be called after the force attribute is set.
      */
@@ -379,18 +245,17 @@ public:
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
     /**
-     * Creates a degenerate Dude object.
+     * Creates a degenerate Blender object.
      *
-     * This constructor does not initialize any of the dude values beyond
-     * the defaults.  To use a DudeModel, you must call init().
+     * This constructor does not initialize any of the blender values beyond
+     * the defaults.  To use a BlenderModel, you must call init().
      */
-    DudeModel() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(DUDE_SENSOR) { }
-    ~DudeModel() { }
+    BlenderModel() : BoxObstacle(), _sensorName(BLENDER_SENSOR) { }
 
     /**
-     * Initializes a new dude at the origin.
+     * Initializes a new blender at the origin.
      *
-     * The dude is scaled so that 1 pixel = 1 Box2d unit
+     * The blender is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -402,9 +267,9 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE); }
     
     /**
-     * Initializes a new dude at the given position.
+     * Initializes a new blender at the given position.
      *
-     * The dude is scaled so that 1 pixel = 1 Box2d unit
+     * The blender is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -418,9 +283,9 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE); }
     
     /**
-     * Initializes a new dude at the given position.
+     * Initializes a new blender at the given position.
      *
-     * The dude is sized according to the given drawing scale.
+     * The blender is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -435,4 +300,4 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init(const Vec2& pos, const Vec2& scale);
 };
 
-#endif /* __PF_DUDE_MODEL_H__ */
+#endif /* __PF_BLENDER_MODEL_H__ */

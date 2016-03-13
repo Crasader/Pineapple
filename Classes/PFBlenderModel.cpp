@@ -1,5 +1,5 @@
 //
-//  PFDudeModel.cpp
+//  PFBlenderModel.cpp
 //  PlatformerDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -41,7 +41,7 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#include "PFDudeModel.h"
+#include "PFBlenderModel.h"
 #include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
@@ -55,17 +55,17 @@
 /** Cooldown (in animation frames) for shooting */
 #define SHOOT_COOLDOWN  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define DUDE_VSHRINK  0.95f
+#define BLENDER_VSHRINK  1.0f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define DUDE_HSHRINK  0.7f
+#define BLENDER_HSHRINK  1.0f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define DUDE_SSHRINK  0.6f
+#define BLENDER_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.07f
+#define SENSOR_HEIGHT   0.05f
 /** The density of the character */
-#define DUDE_DENSITY    0.5f
+#define BLENDER_DENSITY    0.5f
 /** The impulse for the character jump */
-#define DUDE_JUMP       50.0f
+#define BLENDER_JUMP       50.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
@@ -73,9 +73,9 @@
 #pragma mark -
 #pragma mark Static Constructors
 /**
- * Creates a new dude at the origin.
+ * Creates a new blender at the origin.
  *
- * The dude is scaled so that 1 pixel = 1 Box2d unit
+ * The blender is scaled so that 1 pixel = 1 Box2d unit
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -84,20 +84,20 @@
  *
  * @return  An autoreleased physics object
  */
-DudeModel* DudeModel::create() {
-    DudeModel* dude = new (std::nothrow) DudeModel();
-    if (dude && dude->init()) {
-        dude->autorelease();
-        return dude;
+BlenderModel* BlenderModel::create() {
+    BlenderModel* blender = new (std::nothrow) BlenderModel();
+    if (blender && blender->init()) {
+        blender->autorelease();
+        return blender;
     }
-    CC_SAFE_DELETE(dude);
+    CC_SAFE_DELETE(blender);
     return nullptr;
 }
 
 /**
- * Creates a new dude at the given position.
+ * Creates a new blender at the given position.
  *
- * The dude is scaled so that 1 pixel = 1 Box2d unit
+ * The blender is scaled so that 1 pixel = 1 Box2d unit
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -108,20 +108,20 @@ DudeModel* DudeModel::create() {
  *
  * @return  An autoreleased physics object
  */
-DudeModel* DudeModel::create(const Vec2& pos) {
-    DudeModel* dude = new (std::nothrow) DudeModel();
-    if (dude && dude->init(pos)) {
-        dude->autorelease();
-        return dude;
+BlenderModel* BlenderModel::create(const Vec2& pos) {
+    BlenderModel* blender = new (std::nothrow) BlenderModel();
+    if (blender && blender->init(pos)) {
+        blender->autorelease();
+        return blender;
     }
-    CC_SAFE_DELETE(dude);
+    CC_SAFE_DELETE(blender);
     return nullptr;
 }
 
 /**
- * Creates a new dude at the given position.
+ * Creates a new blender at the given position.
  *
- * The dude is sized according to the given drawing scale.
+ * The blender is sized according to the given drawing scale.
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -133,13 +133,13 @@ DudeModel* DudeModel::create(const Vec2& pos) {
  *
  * @return  An autoreleased physics object
  */
-DudeModel* DudeModel::create(const Vec2& pos, const Vec2& scale) {
-    DudeModel* dude = new (std::nothrow) DudeModel();
-    if (dude && dude->init(pos,scale)) {
-        dude->autorelease();
-        return dude;
+BlenderModel* BlenderModel::create(const Vec2& pos, const Vec2& scale) {
+    BlenderModel* blender = new (std::nothrow) BlenderModel();
+    if (blender && blender->init(pos,scale)) {
+        blender->autorelease();
+        return blender;
     }
-    CC_SAFE_DELETE(dude);
+    CC_SAFE_DELETE(blender);
     return nullptr;
 }
 
@@ -148,9 +148,9 @@ DudeModel* DudeModel::create(const Vec2& pos, const Vec2& scale) {
 #pragma mark Initializers
 
 /**
- * Initializes a new dude at the given position.
+ * Initializes a new blender at the given position.
  *
- * The dude is sized according to the given drawing scale.
+ * The blender is sized according to the given drawing scale.
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -162,35 +162,28 @@ DudeModel* DudeModel::create(const Vec2& pos, const Vec2& scale) {
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
+bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
     SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(DUDE_TEXTURE);
+    Texture2D* image = scene->get<Texture2D>(BLENDER_TEXTURE);
     
     // Multiply by the scaling factor so we can be resolution independent
     float cscale = Director::getInstance()->getContentScaleFactor();
     Size nsize = image->getContentSize()*cscale;
     
     
-    nsize.width  *= DUDE_HSHRINK/scale.x;
-    nsize.height *= DUDE_VSHRINK/scale.y;
-    if (CapsuleObstacle::init(pos,nsize)) {
-        _normalSize = nsize;
-        setDensity(DUDE_DENSITY);
+    nsize.width  *= BLENDER_HSHRINK/scale.x;
+    nsize.height *= BLENDER_VSHRINK/scale.y;
+    if (BoxObstacle::init(pos,nsize)) {
+        setDensity(BLENDER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
-        _isGrounded = false;
-        _isShooting = false;
-        _isJumping  = false;
-        _faceRight  = true;
-        
-        _shootCooldown = 0;
-        _jumpCooldown  = 0;
         return true;
     }
     return false;
 }
+
 
 #pragma mark -
 #pragma mark Attribute Properties
@@ -198,24 +191,14 @@ bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
 /**
  * Sets left/right movement of this character.
  *
- * This is the result of input times dude force.
+ * This is the result of input times blender force.
  *
  * @param value left/right movement of this character.
  */
-void DudeModel::setMovement(float value) {
+void BlenderModel::setMovement(float value) {
     _movement = value;
-    bool face = _movement > 0;
-    if (_movement == 0 || _faceRight == face) {
-        return;
-    }
-    
-    // Change facing
-    TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
-    if (image != nullptr) {
-        image->flipHorizontal(!image->isFlipHorizontal());
-    }
-    _faceRight = (_movement > 0);
 }
+
 
 #pragma mark -
 #pragma mark Physics Methods
@@ -224,28 +207,27 @@ void DudeModel::setMovement(float value) {
  *
  * This is the primary method to override for custom physics objects
  */
-void DudeModel::createFixtures() {
+void BlenderModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
-    std::cout << " createFixtures WIDTH: " << getWidth() << "\n";
 
-    CapsuleObstacle::createFixtures();
+    BoxObstacle::createFixtures();
     b2FixtureDef sensorDef;
-    sensorDef.density = DUDE_DENSITY;
+    sensorDef.density = BLENDER_DENSITY;
     sensorDef.isSensor = true;
 
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -DUDE_SSHRINK*getWidth()/2.0f;
+    corners[0].x = -BLENDER_SSHRINK*getWidth()/2.0f;
     corners[0].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -DUDE_SSHRINK*getWidth()/2.0f;
+    corners[1].x = -BLENDER_SSHRINK*getWidth()/2.0f;
     corners[1].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[2].x =  DUDE_SSHRINK*getWidth()/2.0f;
+    corners[2].x =  BLENDER_SSHRINK*getWidth()/2.0f;
     corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
+    corners[3].x =  BLENDER_SSHRINK*getWidth()/2.0f;
     corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-
+    
     b2PolygonShape sensorShape;
     sensorShape.Set(corners,4);
     
@@ -259,12 +241,12 @@ void DudeModel::createFixtures() {
  *
  * This is the primary method to override for custom physics objects.
  */
-void DudeModel::releaseFixtures() {
-    if (_body == nullptr) {
+void BlenderModel::releaseFixtures() {
+    if (_body != nullptr) {
         return;
     }
     
-    CapsuleObstacle::releaseFixtures();
+    BoxObstacle::releaseFixtures();
     if (_sensorFixture != nullptr) {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
@@ -272,11 +254,11 @@ void DudeModel::releaseFixtures() {
 }
 
 /**
- * Applies the force to the body of this dude
+ * Applies the force to the body of this blender
  *
  * This method should be called after the force attribute is set.
  */
-void DudeModel::applyForce() {
+void BlenderModel::applyForce() {
     if (!isActive()) {
         return;
     }
@@ -294,12 +276,6 @@ void DudeModel::applyForce() {
         b2Vec2 force(getMovement(),0);
         _body->ApplyForce(force,_body->GetPosition(),true);
     }
-    
-    // Jump!
-    if (isJumping() && isGrounded()) {
-        b2Vec2 force(0, DUDE_JUMP);
-        _body->ApplyLinearImpulse(force,_body->GetPosition(),true);
-    }
 }
 
 /**
@@ -309,22 +285,8 @@ void DudeModel::applyForce() {
  *
  * @param delta Number of seconds since last animation frame
  */
-void DudeModel::update(float dt) {
-    // Apply cooldowns
-    if (isJumping()) {
-        _jumpCooldown = JUMP_COOLDOWN;
-    } else {
-        // Only cooldown while grounded
-        _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown-1 : 0);
-    }
-    
-    if (isShooting()) {
-        _shootCooldown = SHOOT_COOLDOWN;
-    } else {
-        _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
-    }
-    
-    CapsuleObstacle::update(dt);
+void BlenderModel::update(float dt) {
+    BoxObstacle::update(dt);
 }
 
 
@@ -338,9 +300,9 @@ void DudeModel::update(float dt) {
  * This is very useful when the fixtures have a very different shape than
  * the texture (e.g. a circular shape attached to a square texture).
  */
-void DudeModel::resetDebugNode() {
-    CapsuleObstacle::resetDebugNode();
-    float w = DUDE_SSHRINK*_dimension.width*_drawScale.x;
+void BlenderModel::resetDebugNode() {
+    BoxObstacle::resetDebugNode();
+    float w = BLENDER_SSHRINK*_dimension.width*_drawScale.x;
     float h = SENSOR_HEIGHT*_drawScale.y;
     Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));
     poly.traverse(Poly2::Traversal::INTERIOR);
