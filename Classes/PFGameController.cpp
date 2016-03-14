@@ -85,12 +85,36 @@ using namespace std;
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
 #define WALL_VERTS  8
-#define WALL_COUNT  1
+#define WALL_COUNT  4
+
+#define FLOOR_EXTRA_LENGTH 5.0f
+#define OFFSCREEN_BARRIER_WIDTH 3.0f
 
 #define JELLO_COUNT 1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-	{ 0.0f, 0.0f, LEVEL_LENGTH, 0.0f, LEVEL_LENGTH, 2.0f, 0.0f, 2.0f }
+	//Main floor
+    {
+        -FLOOR_EXTRA_LENGTH, 0.0f,
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 2.0f,
+        -FLOOR_EXTRA_LENGTH, 2.0f
+    },
+    //Wall preventing falling through floor on left
+    {
+        0.0f, 0.0f,
+        0.0f, DEFAULT_HEIGHT,
+        -OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
+        -OFFSCREEN_BARRIER_WIDTH, 0.0
+    },
+    //Wall preventing falling through floor on right
+    {
+        LEVEL_LENGTH, 0.0f,
+        LEVEL_LENGTH, DEFAULT_HEIGHT,
+        LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
+        LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, 0.0
+    },
+    {17.0f, 0.0f, 17.0f, 4.0f, 20.0f, 4.0f, 20.0f, 0.0f}
 };
 
 /** The goal door position */
@@ -102,7 +126,7 @@ float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
 /** The position of Jellos */
-float JELLO_POS[JELLO_COUNT][2] = {{11.0f, 2.2f}};
+float JELLO_POS[JELLO_COUNT][2] = {{15.0f, 2.2f}};
 
 #pragma mark -
 #pragma mark Collision Constants
