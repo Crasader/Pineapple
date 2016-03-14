@@ -648,6 +648,22 @@ void GameController::update(float dt) {
     if(_avatar != nullptr) {
         _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
         _avatar->setJumping( _input.didJump());
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        if (_input.didGrow()) {
+            if (_avatar->grow()) {
+                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_GROW_SCALE);
+            }
+        }
+        if (_input.didShrink()) {
+            if (_avatar->shrink()) {
+                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_SHRINK_SCALE);
+            }
+        }
+        
+        if ( _avatar->updateSize(dt)) {
+            _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE);
+        }
+        
         _avatar->applyForce();
         
         if (_avatar->isJumping()) {

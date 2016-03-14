@@ -65,7 +65,7 @@
 /** The density of the character */
 #define DUDE_DENSITY    0.5f
 /** The impulse for the character jump */
-#define DUDE_JUMP       50.0f
+#define DUDE_JUMP       10.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
@@ -136,6 +136,9 @@ DudeModel* DudeModel::create(const Vec2& pos) {
 DudeModel* DudeModel::create(const Vec2& pos, const Vec2& scale) {
     DudeModel* dude = new (std::nothrow) DudeModel();
     if (dude && dude->init(pos,scale)) {
+        dude->setDensity(PINEAPPLE_DENSITY);
+        dude->cocos2d::Obstacle::setMass(PINEAPPLE_NORMAL_MASS);
+        dude->resetMass();
         dude->autorelease();
         return dude;
     }
@@ -228,7 +231,6 @@ void DudeModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
-    std::cout << " createFixtures WIDTH: " << getWidth() << "\n";
 
     CapsuleObstacle::createFixtures();
     b2FixtureDef sensorDef;
@@ -252,6 +254,14 @@ void DudeModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     _sensorFixture = _body->CreateFixture(&sensorDef);
     _sensorFixture->SetUserData(getSensorName());
+    
+    // Override mass based on shape sizes to custom values
+    b2MassData massData = b2MassData();
+    float mass = this->_isLarge ? PINEAPPLE_GROWN_MASS : PINEAPPLE_NORMAL_MASS;
+    mass = this->_isSmall ? PINEAPPLE_SHRUNK_MASS : mass;
+    massData.mass = mass;
+    setDensity(DUDE_DENSITY);
+    _body->SetMassData(&massData);
 }
 
 /**

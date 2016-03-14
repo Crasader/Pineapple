@@ -210,15 +210,9 @@ protected:
     // @return -1 for pinch, 1 for spread, 0 for neither
     int checkPinchSpread() {
         float speed =_previousDelta - _touch1.distance(_touch2);
-        std::cout << "_previousDelta: " << _previousDelta << "\n";
-        std::cout << "thisDelta: " << _touch1.distance(_touch2) << "\n";
-        //std::cout << "CURRENT DIST: " << speed << "\n";
-        //std::cout << "SPEED: " << speed << "\n";
         if (speed >= PINCH_SPREAD_SPEED_NEEDED) {
-            std::cout << "PINCH\n";
             return PINCH;
         } else if (_previousDelta - _touch1.distance(_touch2) <= -PINCH_SPREAD_SPEED_NEEDED) {
-            std::cout << "SPREAD\n";
             return SPREAD;
         }
         return 0;

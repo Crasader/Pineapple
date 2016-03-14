@@ -60,8 +60,14 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
+#define PINEAPPLE_DENSITY .5f
+#define PINEAPPLE_GROWN_MASS 2.0f
+#define PINEAPPLE_NORMAL_MASS 1.5f
+#define PINEAPPLE_SHRUNK_MASS 1.0f
+#define PINEAPPLE_DENSITY .5f
+#define PINEAPPLE_DENSITY .5f
 /** The amount to shrink the whole body, including image */
-#define DUDE_SCALE 0.2f
+#define DUDE_SCALE 0.1f
 /** The factor to multiply by the input */
 #define DUDE_FORCE      50.0f
 /** The amount to slow the character down */
@@ -73,9 +79,7 @@ using namespace cocos2d;
 /** The relative size of enlarged pineapple */
 #define PINEAPPLE_GROW_SCALE 1.5f
 /** The relative size of smaller pineapple */
-#define PINEAPPLE_SHRINK_SCALE .5f
-
-#define DEBUG 0
+#define PINEAPPLE_SHRINK_SCALE .75f
 
 #pragma mark -
 #pragma mark Dude Model
@@ -176,7 +180,7 @@ public:
      */
     static DudeModel* create(const Vec2& pos, const Vec2& scale);
 
-    void updateSize(float dt) {
+    int updateSize(float dt) {
         if (_isLarge || _isSmall) {
             _durationSinceGrowOrShrink += dt;
         }
@@ -184,15 +188,14 @@ public:
             _isLarge = false;
             _isSmall = false;
             _durationSinceGrowOrShrink = 0.0f;
-            transitionToNormalSize();
+            toNormalSize();
+            return 1;
         }
-        if (DEBUG) {
-            std::cout<<_durationSinceGrowOrShrink<<"\n";
-        }
+        return 0;
     }
     
-    void transitionToNormalSize() {
-        this->setDimension(_normalSize);
+    void toNormalSize() {
+        setDimension(_normalSize);
     }
     
     bool isLarge() const {
@@ -203,28 +206,32 @@ public:
      * Setter for _isLarge
      */
     void setIsLarge(bool isLarge) {
-        this->_durationSinceGrowOrShrink = 0.0f;
-        this->_isLarge = isLarge;
+        _durationSinceGrowOrShrink = 0.0f;
+        _isLarge = isLarge;
     }
     
     /**
-     * Grows the pineapple
+     * Grows the pineapple, returns 1 if grown
      */
-    void grow() {
-        if (!this->_isLarge  && !this->_isSmall) {
-            this->setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-            this->setIsLarge(true);
+    int grow() {
+        if (!_isLarge  && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
+            setIsLarge(true);
+            return 1;
         }
+        return 0;
     }
     
     /**
-     * Shrinks the pineapple
+     * Shrinks the pineapple, returns 1 if shrunk
      */
-    void shrink() {
-        if (!this->_isLarge && !this->_isSmall) {
-            this->setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
-            this->setIsSmall(true);
+    int shrink() {
+        if (!_isLarge && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
+            setIsSmall(true);
+            return 1;
         }
+        return 0;
     }
     
     bool isSmall() const {
