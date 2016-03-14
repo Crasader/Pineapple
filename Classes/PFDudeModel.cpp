@@ -187,6 +187,7 @@ bool DudeModel::init(const Vec2& pos, const Vec2& scale) {
         _isShooting = false;
         _isJumping  = false;
         _faceRight  = true;
+		_reachedGoal = false;
         
         _shootCooldown = 0;
         _jumpCooldown  = 0;

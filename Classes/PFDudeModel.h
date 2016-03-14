@@ -113,6 +113,8 @@ protected:
     int  _shootCooldown;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+	/** Whether or not we have reached the goal */
+	bool _reachedGoal;
     /** Whether we are actively shooting */
     bool _isShooting;
     /** Ground sensor to represent our feet */
@@ -307,13 +309,27 @@ public:
      */
     void setGrounded(bool value) { _isGrounded = value; }
     
-    /**
-     * Returns how much force to apply to get the dude moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the dude moving
-     */
+	/**
+	* Returns true if Will has reached the goal.
+	*
+	* @return true if Will has reached the goal.
+	*/
+	bool hasReachedGoal() const { return _reachedGoal; }
+
+	/**
+	* Sets whether Will has reached the goal.
+	*
+	* @param value whether Will has reached the goal.
+	*/
+	void setReachedGoal(bool value) { _reachedGoal = value; }
+
+	/**
+	* Returns how much force to apply to get the dude moving
+	*
+	* Multiply this by the input to get the movement value.
+	*
+	* @return how much force to apply to get the dude moving
+	*/
     float getForce() const { return DUDE_FORCE; }
     
     /**

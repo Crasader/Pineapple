@@ -159,6 +159,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         
         // Gameplay attributes
         _isGrounded = false;
+		_reachedGoal = false;
         return true;
     }
     return false;
