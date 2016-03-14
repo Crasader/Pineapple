@@ -65,7 +65,10 @@ using namespace std;
 /** Vertical offset of background assets */
 #define FRONT_BACKGROUND_VERTICAL_OFFSET  -190.0f
 #define MIDDLE_BACKGROUND_VERTICAL_OFFSET  120.0f
-#define BACK_BACKGROUND_VERTICAL_OFFSET    200.0f
+#define BACK_BACKGROUND_VERTICAL_OFFSET    170.0f
+/** Damping factor for parallax scrolling */
+#define HILLS_DAMPING_FACTOR     4.0f
+#define CLOUDS_DAMPING_FACTOR    8.0f
 
 /** Main background texture */
 #define FRONT_BACKGROUND    "background_1"
@@ -97,7 +100,7 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 //};
 
 /** The goal door position */
-float GOAL_POS[] = {100.0f, 3.0f};
+float GOAL_POS[] = {253.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
@@ -200,6 +203,8 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 GameController::GameController() :
     _rootnode(nullptr),
     _worldnode(nullptr),
+	_hillsnode(nullptr),
+	_cloudsnode(nullptr),
     _debugnode(nullptr),
     _world(nullptr),
     _avatar(nullptr),
@@ -291,6 +296,8 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
 
     // Create the scene graph
     _worldnode = Node::create();
+	_hillsnode = Node::create();
+	_cloudsnode = Node::create();
     _debugnode = Node::create();
     _winnode = Label::create();
     
@@ -313,10 +320,12 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     setFailure(false);
 
     // Add everything to the root and retain
-    root->addChild(_worldnode,0);
-    root->addChild(_debugnode,1);
-    root->addChild(_winnode,3);
-    root->addChild(_losenode,4);
+	root->addChild(_hillsnode,0);
+	root->addChild(_cloudsnode,1);
+    root->addChild(_worldnode,2);
+    root->addChild(_debugnode,3);
+    root->addChild(_winnode,4);
+    root->addChild(_losenode,5);
     _rootnode = root;
     _rootnode->retain();
     
@@ -346,6 +355,8 @@ void GameController::dispose() {
         _world->release();
     }
     _worldnode = nullptr;
+	_hillsnode = nullptr;
+	_cloudsnode = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
     _rootnode->removeAllChildren();
@@ -369,8 +380,12 @@ void GameController::populate() {
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
 	_levelOffset = 0.0f;
-	_nFlip = 1;
+	_frontFlip = 1;
+	_middleFlip = 1;
+	_backFlip = 1;
 	_worldnode->setPositionX(0.0f);
+	_hillsnode->setPositionX(0.0f);
+	_cloudsnode->setPositionX(0.0f);
 	_debugnode->setPositionX(0.0f);
 
     Texture2D* image;
@@ -378,30 +393,30 @@ void GameController::populate() {
     WireNode* draw;
 
 	// Middle background
-	//image = _assets->get<Texture2D>(MIDDLE_BACKGROUND);
-	//_middleBackground_1 = PolygonNode::createWithTexture(image);
-	//_middleBackground_1->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
-	//_middleBackground_1->setPosition(MIDDLE_BACKGROUND_WIDTH/2 * cscale*MIDDLE_BACKGROUND_SCALE,
-	//	                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
-	//_worldnode->addChild(_middleBackground_1);
-	//_middleBackground_2 = PolygonNode::createWithTexture(image);
-	//_middleBackground_2->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
-	//_middleBackground_2->setPosition(MIDDLE_BACKGROUND_WIDTH*3/2 * cscale*MIDDLE_BACKGROUND_SCALE,
-	//	                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
-	//_worldnode->addChild(_middleBackground_2);
+	image = _assets->get<Texture2D>(MIDDLE_BACKGROUND);
+	_middleBackground_1 = PolygonNode::createWithTexture(image);
+	_middleBackground_1->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
+	_middleBackground_1->setPosition(MIDDLE_BACKGROUND_WIDTH/2 * cscale*MIDDLE_BACKGROUND_SCALE,
+		                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
+	_hillsnode->addChild(_middleBackground_1);
+	_middleBackground_2 = PolygonNode::createWithTexture(image);
+	_middleBackground_2->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
+	_middleBackground_2->setPosition(MIDDLE_BACKGROUND_WIDTH*3/2 * cscale*MIDDLE_BACKGROUND_SCALE,
+		                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
+	_hillsnode->addChild(_middleBackground_2);
 
 	// Back background
-	//image = _assets->get<Texture2D>(BACK_BACKGROUND);
-	//_backBackground_1 = PolygonNode::createWithTexture(image);
-	//_backBackground_1->setScale(cscale*BACK_BACKGROUND_SCALE);
-	//_backBackground_1->setPosition(BACK_BACKGROUND_WIDTH/2 * cscale*BACK_BACKGROUND_SCALE,
-	//	                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
-	//_worldnode->addChild(_backBackground_1);
-	//_backBackground_2 = PolygonNode::createWithTexture(image);
-	//_backBackground_2->setScale(cscale*BACK_BACKGROUND_SCALE);
-	//_backBackground_2->setPosition(BACK_BACKGROUND_WIDTH*3/2 * cscale*BACK_BACKGROUND_SCALE,
-	//	                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
-	//_worldnode->addChild(_backBackground_2);
+	image = _assets->get<Texture2D>(BACK_BACKGROUND);
+	_backBackground_1 = PolygonNode::createWithTexture(image);
+	_backBackground_1->setScale(cscale*BACK_BACKGROUND_SCALE);
+	_backBackground_1->setPosition(BACK_BACKGROUND_WIDTH/2 * cscale*BACK_BACKGROUND_SCALE,
+		                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
+	_cloudsnode->addChild(_backBackground_1);
+	_backBackground_2 = PolygonNode::createWithTexture(image);
+	_backBackground_2->setScale(cscale*BACK_BACKGROUND_SCALE);
+	_backBackground_2->setPosition(BACK_BACKGROUND_WIDTH*3/2 * cscale*BACK_BACKGROUND_SCALE,
+		                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
+	_cloudsnode->addChild(_backBackground_2);
 
 	// Front background
     image = _assets->get<Texture2D>(FRONT_BACKGROUND);
@@ -632,6 +647,8 @@ void GameController::addObstacle(Obstacle* obj, int zOrder) {
 void GameController::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
+	_hillsnode->removeAllChildren();
+	_cloudsnode->removeAllChildren();
     _debugnode->removeAllChildren();
     
     setFailure(false);
@@ -821,29 +838,75 @@ void GameController::handleScrolling() {
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
 
-    // Move background layers as necessary
+	// Do parallax scrolling in _hillsnode and _cloudsnode
+	_hillsnode->setPositionX(_hillsnode->getPositionX() - (_scale.x*offset/HILLS_DAMPING_FACTOR));
+	_cloudsnode->setPositionX(_cloudsnode->getPositionX() - (_scale.x*offset/CLOUDS_DAMPING_FACTOR));
+
+    // Tile background layers when necessary
 	float tolerance = 0.05f;
 	bool scrollRight = _levelOffset >= oldLevelOffset; // true = right; false = left
 
 	// Front
-	float limitR = (_nFlip + tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
-	float limitL = (_nFlip - tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
-	bool bkgrdOrder = _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
-	if (scrollRight && _levelOffset > limitR && bkgrdOrder) {
+	float frontR = (_frontFlip + tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
+	float frontL = (_frontFlip - tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
+	bool frontOrder = _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && _levelOffset > frontR && frontOrder) {
 		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
-		_nFlip++;
+		_frontFlip++;
 	}
-	else if (scrollRight && _levelOffset > limitR && !bkgrdOrder) {
+	else if (scrollRight && _levelOffset > frontR && !frontOrder) {
 		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
-		_nFlip++;
+		_frontFlip++;
 	}
-	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < limitL && bkgrdOrder) {
+	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < frontL && frontOrder) {
 		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
-		_nFlip--;
+		_frontFlip--;
 	}
-	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < limitL && !bkgrdOrder) {
+	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < frontL && !frontOrder) {
 		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
-		_nFlip--;
+		_frontFlip--;
+	}
+
+	// Middle
+	float middleR = (_middleFlip + tolerance) * MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE / _scale.x;
+	float middleL = (_middleFlip - tolerance) * MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE / _scale.x;
+	bool middleOrder = _middleBackground_1->getPositionX() < _middleBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && abs(_hillsnode->getPositionX() / _scale.x) > middleR && middleOrder) {
+		_middleBackground_1->setPositionX(_middleBackground_2->getPositionX() + MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip++;
+	} 
+	else if (scrollRight && abs(_hillsnode->getPositionX() / _scale.x) > middleR && !middleOrder) {
+		_middleBackground_2->setPositionX(_middleBackground_1->getPositionX() + MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip++;
+	}
+	else if (!scrollRight && (abs(_hillsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < middleL && middleOrder) {
+		_middleBackground_2->setPositionX(_middleBackground_1->getPositionX() - MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip--;
+	} 
+	else if (!scrollRight && (abs(_hillsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < middleL && !middleOrder) {
+		_middleBackground_1->setPositionX(_middleBackground_2->getPositionX() - MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip--;
+	}
+
+	// Back
+	float backR = (_backFlip + tolerance) * BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE / _scale.x;
+	float backL = (_backFlip - tolerance) * BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE / _scale.x;
+	bool backOrder = _backBackground_1->getPositionX() < _backBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && abs(_cloudsnode->getPositionX() / _scale.x) > backR && backOrder) {
+		_backBackground_1->setPositionX(_backBackground_2->getPositionX() + BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip++;
+	}
+	else if (scrollRight && abs(_cloudsnode->getPositionX() / _scale.x) > backR && !backOrder) {
+		_backBackground_2->setPositionX(_backBackground_1->getPositionX() + BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip++;
+	}
+	else if (!scrollRight && (abs(_cloudsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < backL && backOrder) {
+		_backBackground_2->setPositionX(_backBackground_1->getPositionX() - BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip--;
+	}
+	else if (!scrollRight && (abs(_cloudsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < backL && !backOrder) {
+		_backBackground_1->setPositionX(_backBackground_2->getPositionX() - BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip--;
 	}
 }
 
