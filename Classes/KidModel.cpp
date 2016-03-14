@@ -24,7 +24,7 @@
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.1f
 /** The density of the character */
-#define KID_DENSITY    .15f
+#define KID_DENSITY    .5f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
@@ -158,6 +158,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
+        _isCollidingWithJello = false;
         _isGrounded = false;
 		_reachedGoal = false;
         return true;
@@ -249,24 +250,28 @@ void KidModel::releaseFixtures() {
  *
  * This method should be called after the force attribute is set.
  */
-void KidModel::applyForce() {
+void KidModel::dampTowardsWalkspeed() {
     if (!isActive()) {
         return;
     }
-    
-    // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f) {
-        b2Vec2 force(-getDamping()*getVX(),0);
+
+    if (getVX() > getWalkingSpeed() && _isGrounded) {
+        b2Vec2 force(- SIGNUM(getVX()) * getDamping()*getVX(),0);
         _body->ApplyForce(force,_body->GetPosition(),true);
     }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed()) {
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-    } else {
-        b2Vec2 force(getMovement(),0);
+    else if (getVX() < getWalkingSpeed() && _isGrounded) {
+        b2Vec2 force(2,0);
         _body->ApplyForce(force,_body->GetPosition(),true);
+
     }
+    
+//    // Velocity too high, clamp it
+//    if (fabs(getVX()) >= getMaxWalkingSpeed() && _isGrounded) {
+//        setVX(SIGNUM(getVX())*getMaxWalkingSpeed());
+//    } else {
+//        b2Vec2 force(getMovement(),0);
+//        _body->ApplyForce(force,_body->GetPosition(),true);
+//    }
 }
 
 /**

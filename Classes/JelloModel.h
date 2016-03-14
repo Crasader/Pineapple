@@ -51,13 +51,19 @@ using namespace cocos2d;
  
 #pragma mark -
 #pragma mark Drawing Constants
+/** The name for a jello, for identification purposes */
+#define JELLO_NAME       "jello"
 /** The texture for the character avatar */
-#define JELLO_TEXTURE    "jello"
+#define JELLO_TEXTURE    "jello_tex"
 
 #pragma mark -
 #pragma mark Physics Constants
 /** The Jello specific scaling */
-#define JELLO_SCALE      0.75f
+#define JELLO_SCALE         0.075f
+/** Amount of upward force given to will or a kid when hitting a jello */
+#define JELLO_BOUNCE_FORCE  10.0f
+/** Amount of horizontal force given to a kid when hitting a jello */
+#define JELLO_HORIZONTAL_FORCE 5.0f
 
 
 #pragma mark -

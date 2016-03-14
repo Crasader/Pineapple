@@ -102,7 +102,7 @@ float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
 /** The position of Jellos */
-float JELLO_POS[JELLO_COUNT][2] = {{10.0f, 2.0f}};
+float JELLO_POS[JELLO_COUNT][2] = {{11.0f, 2.2f}};
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -526,7 +526,7 @@ void GameController::populate() {
         draw->setColor(DEBUG_COLOR);
         draw->setOpacity(DEBUG_OPACITY);
         _kids[i]->setDebugNode(draw);
-        _kids[i]->setMovement(_kids[i]->getForce());
+        _kids[i]->setMovement(KID_WALKSPEED);
         
         b = b2Filter();
         b.categoryBits = KID_MASK;
@@ -553,7 +553,9 @@ void GameController::populate() {
         draw->setOpacity(DEBUG_OPACITY);
         
         jello->setDebugNode(draw);
+        jello->setGravityScale(0);
         jello->setSensor(true);
+        jello->setName(JELLO_NAME);
         addObstacle(jello, 2);
     }
     
@@ -693,7 +695,7 @@ void GameController::update(float dt) {
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_kids[i] != nullptr) {
-            _kids[i]->applyForce();
+            _kids[i]->dampTowardsWalkspeed();
         }
     }
     
@@ -950,6 +952,43 @@ bool GameController::checkForVictory() {
 
 	return false;
 }
+
+/**
+ * Applies the jello force to the given dude.
+ * This method is called when a dude collides with a jello
+ * to trigger upward momentum, and a jello quiver animation
+ */
+void handleJelloCollision(DudeModel* dude) {
+    dude->setCollidingWithJello(true);
+    if(! dude->isLarge()) {
+        //Jump!
+        b2Body* body = dude->getBody();
+        dude->setVY(0);
+        body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+        dude->setJumping(true);
+    } else {
+        //Squish
+    }
+}
+
+/**
+ * Applies the jello force to the given kid.
+ * This method is called when a kid collides with a jello
+ * to trigger upward momentum, and a jello quiver animation
+ */
+void handleJelloCollision(KidModel* kid) {
+    kid->setCollidingWithJello(true);
+    //Jump!
+    kid->setVY(0);
+    b2Body* body = kid->getBody();
+    if(kid->getVX() > 0) {
+        body->ApplyLinearImpulse(b2Vec2(JELLO_HORIZONTAL_FORCE, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+    } else if(kid->getVX() < 0) {
+        body->ApplyLinearImpulse(b2Vec2(-JELLO_HORIZONTAL_FORCE, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+    } else {
+        body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+    }
+}
  
 /**
  * Processes the start of a collision
@@ -987,6 +1026,18 @@ void GameController::beginContact(b2Contact* contact) {
         _avatar->setGrounded(true);
         // Could have more than one ground
         _sensorFixtures.emplace(_avatar == bd1 ? fix2 : fix1);
+    }
+    
+    if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
+        if (! _avatar->isCollidingWithJello() && (_avatar == bd1 || _avatar == bd2)) {
+            handleJelloCollision(_avatar);
+        } else {
+            for(int i = 0; i < KID_COUNT; i++) {
+                if(! _kids[i]->isCollidingWithJello() && (_kids[i] == bd1 || _kids[i] == bd2)) {
+                    handleJelloCollision(_kids[i]);
+                }
+            }
+        }
     }
     
     // See if a kid has landed on the ground.
@@ -1049,8 +1100,8 @@ void GameController::endContact(b2Contact* contact) {
     void* fd1 = fix1->GetUserData();
     void* fd2 = fix2->GetUserData();
     
-    void* bd1 = body1->GetUserData();
-    void* bd2 = body2->GetUserData();
+    Obstacle* bd1 = (Obstacle*) body1->GetUserData();
+    Obstacle* bd2 = (Obstacle*) body2->GetUserData();
 
     
     if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
@@ -1058,6 +1109,19 @@ void GameController::endContact(b2Contact* contact) {
         _sensorFixtures.erase(_avatar == bd1 ? fix2 : fix1);
         if (_sensorFixtures.empty()) {
             _avatar->setGrounded(false);
+        }
+    }
+    
+    //See if you or a kid has stopped colliding with jello
+    if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
+        if (_avatar == bd1 || _avatar == bd2) {
+            _avatar->setCollidingWithJello(false);
+        } else {
+            for(int i = 0; i < KID_COUNT; i++) {
+                if(_kids[i] == bd1 || _kids[i] == bd2) {
+                    _kids[i]->setCollidingWithJello(false);
+                }
+            }
         }
     }
     

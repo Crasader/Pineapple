@@ -32,12 +32,10 @@ using namespace cocos2d;
 #pragma mark Physics Constants
 /** The amount to shrink the whole body, including image */
 #define KID_SCALE 0.075f
-/** The factor to multiply by the input */
-#define KID_FORCE      10.0f
 /** The amount to slow the character down */
 #define KID_DAMPING    5.0f
-/** The maximum character speed */
-#define KID_MAXSPEED   1.0f
+/** The kid walking speed */
+#define KID_WALKSPEED   1.5f
 
 #pragma mark -
 #pragma mark Dude Model
@@ -58,6 +56,8 @@ protected:
     float _movement;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+    /** Whether this kid is currently colliding with jello */
+    bool _isCollidingWithJello;
 	/** Whether or not this kid has reached the goal */
 	bool _reachedGoal;
     /** Ground sensor to represent our feet */
@@ -165,6 +165,20 @@ public:
     void setGrounded(bool value) { _isGrounded = value; }
     
     /**
+     * Returns true if the dude is actively colliding with jello
+     *
+     * @return true if the dude is actively colliding with jello
+     */
+    bool isCollidingWithJello() {return _isCollidingWithJello; }
+    
+    /**
+     * Sets whether the dude is currently colliding with a jello
+     *
+     * @param value whether the dude is currently colliding with a jello
+     */
+    void setCollidingWithJello(bool value) { _isCollidingWithJello = value; }
+    
+    /**
      * Returns how much force to apply to get the dude moving
      *
      * Multiply this by the input to get the movement value.
@@ -185,16 +199,6 @@ public:
 	* @param value whether the kid has reached the goal.
 	*/
 	void setReachedGoal(bool value) { _reachedGoal = value; }
-
-	/**
-	* Returns how much force to apply to get the dude moving
-	*
-	* Multiply this by the input to get the movement value.
-	*
-	* @return how much force to apply to get the dude moving
-	*/
-
-    float getForce() const { return KID_FORCE; }
     
     /**
      * Returns ow hard the brakes are applied to get a dude to stop moving
@@ -204,13 +208,13 @@ public:
     float getDamping() const { return KID_DAMPING; }
     
     /**
-     * Returns the upper limit on dude left-right movement.
+     * Returns the upper limit on kid left-right movement while on the ground.
      *
-     * This does NOT apply to vertical movement.
+     * This does NOT apply to vertical movement, or when in the air.
      *
      * @return the upper limit on dude left-right movement.
      */
-    float getMaxSpeed() const { return KID_MAXSPEED; }
+    float getWalkingSpeed() const { return KID_WALKSPEED; }
     
     /**
      * Returns the name of the ground sensor
@@ -262,7 +266,7 @@ public:
      *
      * This method should be called after the force attribute is set.
      */
-    void applyForce();
+    void dampTowardsWalkspeed();
     
     
 CC_CONSTRUCTOR_ACCESS:
