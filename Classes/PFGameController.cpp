@@ -522,16 +522,16 @@ void GameController::populate() {
 //        addObstacle(platobj,1);
 //    }
 
-#pragma mark : Spinner
-    Vec2 spinPos = SPIN_POS;
-    _spinner = Spinner::create(spinPos,_scale);
-    Node* node = Node::create();
-    draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    _spinner->setSceneNode(node);
-    _spinner->setDebugNode(draw);
-    addObstacle(_spinner, 1.5f);
+//#pragma mark : Spinner
+//    Vec2 spinPos = SPIN_POS;
+//    _spinner = Spinner::create(spinPos,_scale);
+//    Node* node = Node::create();
+//    draw = WireNode::create();
+//    draw->setColor(DEBUG_COLOR);
+//    draw->setOpacity(DEBUG_OPACITY);
+//    _spinner->setSceneNode(node);
+//    _spinner->setDebugNode(draw);
+//    addObstacle(_spinner, 1.5f);
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
