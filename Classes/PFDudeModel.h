@@ -60,15 +60,26 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
+#define PINEAPPLE_DENSITY .5f
+#define PINEAPPLE_GROWN_MASS 2.0f
+#define PINEAPPLE_NORMAL_MASS 1.5f
+#define PINEAPPLE_SHRUNK_MASS 1.0f
+#define PINEAPPLE_DENSITY .5f
+#define PINEAPPLE_DENSITY .5f
 /** The amount to shrink the whole body, including image */
-#define DUDE_SCALE 0.2f
+#define DUDE_SCALE 0.1f
 /** The factor to multiply by the input */
 #define DUDE_FORCE      50.0f
 /** The amount to slow the character down */
 #define DUDE_DAMPING    10.0f
 /** The maximum character speed */
 #define DUDE_MAXSPEED   5.0f
-
+/** The maximum duration of pineapple size */
+#define PINEAPPLE_MAX_SIZE_DURATION 3.0f
+/** The relative size of enlarged pineapple */
+#define PINEAPPLE_GROW_SCALE 1.5f
+/** The relative size of smaller pineapple */
+#define PINEAPPLE_SHRINK_SCALE .75f
 
 #pragma mark -
 #pragma mark Dude Model
@@ -89,6 +100,11 @@ protected:
     float _movement;
     /** Which direction is the character facing */
     bool _faceRight;
+    bool _isLarge = false;
+    bool _isSmall = false;
+    Size _normalSize = Size();
+    /** Duration since last grow or shrink, 0 if currently normal size */
+    float _durationSinceGrowOrShrink = 0.0f;
     /** How long until we can jump again */
     int  _jumpCooldown;
     /** Whether we are actively jumping */
@@ -97,6 +113,8 @@ protected:
     int  _shootCooldown;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+	/** Whether or not we have reached the goal */
+	bool _reachedGoal;
     /** Whether we are actively shooting */
     bool _isShooting;
     /** Ground sensor to represent our feet */
@@ -164,6 +182,71 @@ public:
      */
     static DudeModel* create(const Vec2& pos, const Vec2& scale);
 
+    int updateSize(float dt) {
+        if (_isLarge || _isSmall) {
+            _durationSinceGrowOrShrink += dt;
+        }
+        if (_durationSinceGrowOrShrink > PINEAPPLE_MAX_SIZE_DURATION) {
+            _isLarge = false;
+            _isSmall = false;
+            _durationSinceGrowOrShrink = 0.0f;
+            toNormalSize();
+            return 1;
+        }
+        return 0;
+    }
+    
+    void toNormalSize() {
+        setDimension(_normalSize);
+    }
+    
+    bool isLarge() const {
+        return _isLarge;
+    }
+    
+    /**
+     * Setter for _isLarge
+     */
+    void setIsLarge(bool isLarge) {
+        _durationSinceGrowOrShrink = 0.0f;
+        _isLarge = isLarge;
+    }
+    
+    /**
+     * Grows the pineapple, returns 1 if grown
+     */
+    int grow() {
+        if (!_isLarge  && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
+            setIsLarge(true);
+            return 1;
+        }
+        return 0;
+    }
+    
+    /**
+     * Shrinks the pineapple, returns 1 if shrunk
+     */
+    int shrink() {
+        if (!_isLarge && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
+            setIsSmall(true);
+            return 1;
+        }
+        return 0;
+    }
+    
+    bool isSmall() const {
+        return _isSmall;
+    }
+    
+    /**
+     * Setter for _isLarge
+     */
+    void setIsSmall(bool isSmall) {
+        this->_durationSinceGrowOrShrink = 0.0f;
+        this->_isSmall = isSmall;
+    }
     
 #pragma mark Attribute Properties
     /**
@@ -226,13 +309,27 @@ public:
      */
     void setGrounded(bool value) { _isGrounded = value; }
     
-    /**
-     * Returns how much force to apply to get the dude moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the dude moving
-     */
+	/**
+	* Returns true if Will has reached the goal.
+	*
+	* @return true if Will has reached the goal.
+	*/
+	bool hasReachedGoal() const { return _reachedGoal; }
+
+	/**
+	* Sets whether Will has reached the goal.
+	*
+	* @param value whether Will has reached the goal.
+	*/
+	void setReachedGoal(bool value) { _reachedGoal = value; }
+
+	/**
+	* Returns how much force to apply to get the dude moving
+	*
+	* Multiply this by the input to get the movement value.
+	*
+	* @return how much force to apply to get the dude moving
+	*/
     float getForce() const { return DUDE_FORCE; }
     
     /**
@@ -312,7 +409,8 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the dude values beyond
      * the defaults.  To use a DudeModel, you must call init().
      */
-    DudeModel() : CapsuleObstacle(), _sensorName(DUDE_SENSOR) { }
+    DudeModel() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(DUDE_SENSOR) { }
+    ~DudeModel() { }
 
     /**
      * Initializes a new dude at the origin.

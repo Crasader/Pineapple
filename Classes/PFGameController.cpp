@@ -46,9 +46,38 @@ using namespace std;
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
 /** Length of level in Box2d units */
-#define LEVEL_LENGTH    64.0f
+#define LEVEL_LENGTH    256.0f
 /** Half-width of scrolling window in Box2d units */
 #define WINDOW_SIZE     5.0f
+
+/** Scale factor for background images */
+#define FRONT_BACKGROUND_SCALE   1.1f
+#define MIDDLE_BACKGROUND_SCALE  1.1f
+#define BACK_BACKGROUND_SCALE    1.0f
+/** The width of background assets */
+#define FRONT_BACKGROUND_WIDTH   1000.0f
+#define MIDDLE_BACKGROUND_WIDTH  1000.0f
+#define BACK_BACKGROUND_WIDTH    1500.0f
+/** Height of background assets */
+#define FRONT_BACKGROUND_HEIGHT  500.0f
+#define MIDDLE_BACKGROUND_HEIGHT 300.0f
+#define BACK_BACKGROUND_HEIGHT   300.0f
+/** Vertical offset of background assets */
+#define FRONT_BACKGROUND_VERTICAL_OFFSET  -190.0f
+#define MIDDLE_BACKGROUND_VERTICAL_OFFSET  120.0f
+#define BACK_BACKGROUND_VERTICAL_OFFSET    170.0f
+/** Damping factor for parallax scrolling */
+#define HILLS_DAMPING_FACTOR     4.0f
+#define CLOUDS_DAMPING_FACTOR    6.0f
+/** Cloud velocity */
+#define CLOUD_VELOCITY           0.05f
+
+/** Main background texture */
+#define FRONT_BACKGROUND    "background_1"
+/** Further back background texture */
+#define MIDDLE_BACKGROUND   "background_2"
+/** Furthest back background texture */
+#define BACK_BACKGROUND     "background_3"
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
@@ -58,7 +87,7 @@ using namespace std;
 #define WALL_COUNT  1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-	{ 0.0f, 0.0f, 64.0f, 0.0f, 64.0f, 2.0f, 0.0f, 2.0f }
+	{ 0.0f, 0.0f, LEVEL_LENGTH, 0.0f, LEVEL_LENGTH, 2.0f, 0.0f, 2.0f }
 };
 
 ///** The number of platforms */
@@ -73,7 +102,7 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 //};
 
 /** The goal door position */
-float GOAL_POS[] = {61.0f, 3.0f};
+float GOAL_POS[] = {253.0f, 3.0f};
 /** The position of the spinning barrier */
 float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
@@ -174,6 +203,8 @@ float BLENDER_POS[] = {-25.0f, 7.0f};
 GameController::GameController() :
     _rootnode(nullptr),
     _worldnode(nullptr),
+	_hillsnode(nullptr),
+	_cloudsnode(nullptr),
     _debugnode(nullptr),
     _world(nullptr),
     _avatar(nullptr),
@@ -265,6 +296,8 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
 
     // Create the scene graph
     _worldnode = Node::create();
+	_hillsnode = Node::create();
+	_cloudsnode = Node::create();
     _debugnode = Node::create();
     _winnode = Label::create();
     
@@ -287,10 +320,12 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     setFailure(false);
 
     // Add everything to the root and retain
-    root->addChild(_worldnode,0);
-    root->addChild(_debugnode,1);
-    root->addChild(_winnode,3);
-    root->addChild(_losenode,4);
+	root->addChild(_hillsnode,0);
+	root->addChild(_cloudsnode,1);
+    root->addChild(_worldnode,2);
+    root->addChild(_debugnode,3);
+    root->addChild(_winnode,4);
+    root->addChild(_losenode,5);
     _rootnode = root;
     _rootnode->retain();
     
@@ -320,6 +355,8 @@ void GameController::dispose() {
         _world->release();
     }
     _worldnode = nullptr;
+	_hillsnode = nullptr;
+	_cloudsnode = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
     _rootnode->removeAllChildren();
@@ -343,13 +380,60 @@ void GameController::populate() {
     // To convert from design resolution to real, divide positions by cscale
     float cscale = Director::getInstance()->getContentScaleFactor();
 	_levelOffset = 0.0f;
+	_frontFlip = 1;
+	_middleFlip = 1;
+	_backFlip = 1;
 	_worldnode->setPositionX(0.0f);
+	_hillsnode->setPositionX(0.0f);
+	_cloudsnode->setPositionX(0.0f);
 	_debugnode->setPositionX(0.0f);
-    
-#pragma mark : Goal door
-    Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
+
+    Texture2D* image;
     PolygonNode* sprite;
     WireNode* draw;
+
+	// Middle background
+	image = _assets->get<Texture2D>(MIDDLE_BACKGROUND);
+	_middleBackground_1 = PolygonNode::createWithTexture(image);
+	_middleBackground_1->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
+	_middleBackground_1->setPosition(MIDDLE_BACKGROUND_WIDTH/2 * cscale*MIDDLE_BACKGROUND_SCALE,
+		                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
+	_hillsnode->addChild(_middleBackground_1);
+	_middleBackground_2 = PolygonNode::createWithTexture(image);
+	_middleBackground_2->setScale(cscale*MIDDLE_BACKGROUND_SCALE);
+	_middleBackground_2->setPosition(MIDDLE_BACKGROUND_WIDTH*3/2 * cscale*MIDDLE_BACKGROUND_SCALE,
+		                             MIDDLE_BACKGROUND_HEIGHT + MIDDLE_BACKGROUND_VERTICAL_OFFSET);
+	_hillsnode->addChild(_middleBackground_2);
+
+	// Back background
+	image = _assets->get<Texture2D>(BACK_BACKGROUND);
+	_backBackground_1 = PolygonNode::createWithTexture(image);
+	_backBackground_1->setScale(cscale*BACK_BACKGROUND_SCALE);
+	_backBackground_1->setPosition(BACK_BACKGROUND_WIDTH/2 * cscale*BACK_BACKGROUND_SCALE,
+		                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
+	_cloudsnode->addChild(_backBackground_1);
+	_backBackground_2 = PolygonNode::createWithTexture(image);
+	_backBackground_2->setScale(cscale*BACK_BACKGROUND_SCALE);
+	_backBackground_2->setPosition(BACK_BACKGROUND_WIDTH*3/2 * cscale*BACK_BACKGROUND_SCALE,
+		                           BACK_BACKGROUND_HEIGHT + BACK_BACKGROUND_VERTICAL_OFFSET);
+	_cloudsnode->addChild(_backBackground_2);
+
+	// Front background
+    image = _assets->get<Texture2D>(FRONT_BACKGROUND);
+    _frontBackground_1 = PolygonNode::createWithTexture(image);
+    _frontBackground_1->setScale(cscale*FRONT_BACKGROUND_SCALE);
+    _frontBackground_1->setPosition(FRONT_BACKGROUND_WIDTH/2 * cscale*FRONT_BACKGROUND_SCALE,
+		                            FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
+    _worldnode->addChild(_frontBackground_1);
+    _frontBackground_2 = PolygonNode::createWithTexture(image);
+    _frontBackground_2->setScale(cscale*FRONT_BACKGROUND_SCALE);
+    _frontBackground_2->setPosition(FRONT_BACKGROUND_WIDTH*3/2 * cscale*FRONT_BACKGROUND_SCALE,
+		                            FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
+    _worldnode->addChild(_frontBackground_2);
+
+    
+#pragma mark : Goal door
+    image = _assets->get<Texture2D>(GOAL_TEXTURE);
     
     // Create obstacle
     Vec2 goalPos = GOAL_POS;
@@ -438,16 +522,16 @@ void GameController::populate() {
 //        addObstacle(platobj,1);
 //    }
 
-#pragma mark : Spinner
-    Vec2 spinPos = SPIN_POS;
-    _spinner = Spinner::create(spinPos,_scale);
-    Node* node = Node::create();
-    draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    _spinner->setSceneNode(node);
-    _spinner->setDebugNode(draw);
-    addObstacle(_spinner, 1.5f);
+//#pragma mark : Spinner
+//    Vec2 spinPos = SPIN_POS;
+//    _spinner = Spinner::create(spinPos,_scale);
+//    Node* node = Node::create();
+//    draw = WireNode::create();
+//    draw->setColor(DEBUG_COLOR);
+//    draw->setOpacity(DEBUG_OPACITY);
+//    _spinner->setSceneNode(node);
+//    _spinner->setDebugNode(draw);
+//    addObstacle(_spinner, 1.5f);
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
@@ -563,6 +647,8 @@ void GameController::addObstacle(Obstacle* obj, int zOrder) {
 void GameController::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
+	_hillsnode->removeAllChildren();
+	_cloudsnode->removeAllChildren();
     _debugnode->removeAllChildren();
     
     setFailure(false);
@@ -598,7 +684,7 @@ void GameController::setComplete(bool value) {
  * @param value whether the level is failed.
  */
 void GameController::setFailure(bool value){
-    _failed = value;
+    _failed = value && !_complete;
     if (value) {
         Sound* source = _assets->get<Sound>(LOSE_MUSIC);
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
@@ -624,6 +710,11 @@ void GameController::setFailure(bool value){
 void GameController::update(float dt) {
     _input.update(dt);
     
+	// Check for Victory
+	if (checkForVictory()) {
+		setComplete(true);
+	}
+
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_kids[i] != nullptr) {
@@ -646,6 +737,22 @@ void GameController::update(float dt) {
     if(_avatar != nullptr) {
         _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
         _avatar->setJumping( _input.didJump());
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        if (_input.didGrow()) {
+            if (_avatar->grow()) {
+                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_GROW_SCALE);
+            }
+        }
+        if (_input.didShrink()) {
+            if (_avatar->shrink()) {
+                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_SHRINK_SCALE);
+            }
+        }
+        
+        if ( _avatar->updateSize(dt)) {
+            _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE);
+        }
+        
         _avatar->applyForce();
         
         if (_avatar->isJumping()) {
@@ -653,6 +760,9 @@ void GameController::update(float dt) {
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
     }
+
+	// Move the clouds
+	_cloudsnode->setPositionX(_cloudsnode->getPositionX() - CLOUD_VELOCITY);
 
 	// Scroll the screen if necessary
 	handleScrolling();
@@ -731,7 +841,8 @@ void GameController::handleScrolling() {
 	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
 	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
 	float offset = 0.0f;
-	
+    float oldLevelOffset = _levelOffset;
+    
 	// Compute the offset
 	if (_avatar != nullptr && (_levelOffset > 0) && (_avatar->getPosition().x < L)) {
 		float tempOffset = L - _avatar->getPosition().x;
@@ -750,7 +861,77 @@ void GameController::handleScrolling() {
 	// Move all the objects in _worldnode
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
-	
+
+	// Do parallax scrolling in _hillsnode and _cloudsnode
+	_hillsnode->setPositionX(_hillsnode->getPositionX() - (_scale.x*offset/HILLS_DAMPING_FACTOR));
+	_cloudsnode->setPositionX(_cloudsnode->getPositionX() - (_scale.x*offset/CLOUDS_DAMPING_FACTOR));
+
+    // Tile background layers when necessary
+	float tolerance = 0.05f;
+	bool scrollRight = _levelOffset >= oldLevelOffset; // true = right; false = left
+
+	// Front
+	float frontR = (_frontFlip + tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
+	float frontL = (_frontFlip - tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / _scale.x;
+	bool frontOrder = _frontBackground_1->getPositionX() < _frontBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && _levelOffset > frontR && frontOrder) {
+		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() + FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
+		_frontFlip++;
+	}
+	else if (scrollRight && _levelOffset > frontR && !frontOrder) {
+		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() + FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
+		_frontFlip++;
+	}
+	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < frontL && frontOrder) {
+		_frontBackground_2->setPositionX(_frontBackground_1->getPositionX() - FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
+		_frontFlip--;
+	}
+	else if (!scrollRight && _levelOffset + DEFAULT_WIDTH < frontL && !frontOrder) {
+		_frontBackground_1->setPositionX(_frontBackground_2->getPositionX() - FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE);
+		_frontFlip--;
+	}
+
+	// Middle
+	float middleR = (_middleFlip + tolerance) * MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE / _scale.x;
+	float middleL = (_middleFlip - tolerance) * MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE / _scale.x;
+	bool middleOrder = _middleBackground_1->getPositionX() < _middleBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && abs(_hillsnode->getPositionX() / _scale.x) > middleR && middleOrder) {
+		_middleBackground_1->setPositionX(_middleBackground_2->getPositionX() + MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip++;
+	} 
+	else if (scrollRight && abs(_hillsnode->getPositionX() / _scale.x) > middleR && !middleOrder) {
+		_middleBackground_2->setPositionX(_middleBackground_1->getPositionX() + MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip++;
+	}
+	else if (!scrollRight && (abs(_hillsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < middleL && middleOrder) {
+		_middleBackground_2->setPositionX(_middleBackground_1->getPositionX() - MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip--;
+	} 
+	else if (!scrollRight && (abs(_hillsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < middleL && !middleOrder) {
+		_middleBackground_1->setPositionX(_middleBackground_2->getPositionX() - MIDDLE_BACKGROUND_WIDTH * MIDDLE_BACKGROUND_SCALE);
+		_middleFlip--;
+	}
+
+	// Back
+	float backR = (_backFlip + tolerance) * BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE / _scale.x;
+	float backL = (_backFlip - tolerance) * BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE / _scale.x;
+	bool backOrder = _backBackground_1->getPositionX() < _backBackground_2->getPositionX(); // true = |1|2|; false = |2|1|
+	if (scrollRight && abs(_cloudsnode->getPositionX() / _scale.x) > backR && backOrder) {
+		_backBackground_1->setPositionX(_backBackground_2->getPositionX() + BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip++;
+	}
+	else if (scrollRight && abs(_cloudsnode->getPositionX() / _scale.x) > backR && !backOrder) {
+		_backBackground_2->setPositionX(_backBackground_1->getPositionX() + BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip++;
+	}
+	else if (!scrollRight && (abs(_cloudsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < backL && backOrder) {
+		_backBackground_2->setPositionX(_backBackground_1->getPositionX() - BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip--;
+	}
+	else if (!scrollRight && (abs(_cloudsnode->getPositionX() / _scale.x) + DEFAULT_WIDTH) < backL && !backOrder) {
+		_backBackground_1->setPositionX(_backBackground_2->getPositionX() - BACK_BACKGROUND_WIDTH * BACK_BACKGROUND_SCALE);
+		_backFlip--;
+	}
 }
 
 #pragma mark -
@@ -777,12 +958,22 @@ void GameController::blendAndKill(SimpleObstacle* dudeOrKid) {
  */
 bool GameController::checkForVictory() {
     int count = 0;
+
+	// count the number of kids who have reached the goal
     for(int i = 0; i < KID_COUNT; i++) {
-        if(_kidsReachedGoal[i]) {
-            count++;
-        }
+		if (_kids[i] != nullptr) {
+			if (_kids[i]->hasReachedGoal()) {
+				count++;
+			}
+		}
     }
-    return count >= _kidsRemaining;
+	
+	// return true if avatar and remaining kids reached goal
+	if (_avatar != nullptr) {
+		return _avatar->hasReachedGoal() && count >= _kidsRemaining;
+	}
+
+	return false;
 }
  
 /**
@@ -806,7 +997,7 @@ void GameController::beginContact(b2Contact* contact) {
     
     Obstacle* bd1 = (Obstacle*)body1->GetUserData();
     Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-    
+
     // Test bullet collision with world
     if (bd1->getName() == BULLET_NAME && bd2 != _avatar) {
         removeBullet(bd1);
@@ -815,6 +1006,7 @@ void GameController::beginContact(b2Contact* contact) {
     }
 
     // See if we have landed on the ground.
+    // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
     if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
         (_avatar->getSensorName() == fd1 && _avatar != bd2)) {
         _avatar->setGrounded(true);
@@ -832,18 +1024,17 @@ void GameController::beginContact(b2Contact* contact) {
         }
     }
     
-    // If a kid hits the "win" door, we are done
+    // If a kid hits the "win" door, update the kid's status
     for(int i = 0; i < KID_COUNT; i++) {
         if((bd1 == _kids[i]   && bd2 == _goalDoor) ||
            (bd1 == _goalDoor && bd2 == _kids[i])) {
-            _kidsReachedGoal[i] = true;
+            _kids[i]->setReachedGoal(true);
         }
     }
     
+	// If Will hits the "win" door, update the Will's status
     if((_avatar == bd1 && bd2 == _goalDoor) || (_avatar == bd2 && bd1 == _goalDoor)) {
-        if(checkForVictory()) {
-            setComplete(true);
-        }
+		_avatar->setReachedGoal(true);
     }
     
     //See if we have collided with the blender
@@ -905,6 +1096,11 @@ void GameController::endContact(b2Contact* contact) {
             }
         }
     }
+
+	// If Will leaves the "win" door, update the Will's status
+	if ((_avatar == bd1 && bd2 == _goalDoor) || (_avatar == bd2 && bd1 == _goalDoor)) {
+		_avatar->setReachedGoal(false);
+	}
 }
 
 
@@ -920,22 +1116,30 @@ void GameController::preload() {
     params.wrapT = GL_REPEAT;
     params.magFilter = GL_LINEAR;
     params.minFilter = GL_NEAREST;
+	
+
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
-    tloader->loadAsync(TILE_TEXTURE,    "textures/tiling.png", params);
-    tloader->loadAsync(DUDE_TEXTURE,    "textures/will2.png");
+    
+    tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
+    tloader->loadAsync(DUDE_TEXTURE,      "textures/will2.png");
     
     tloader->loadAsync(KID_TEXTURE_1,     "textures/pineapplet_bow.png");
     tloader->loadAsync(KID_TEXTURE_2,     "textures/pineapplet_glasses.png");
     tloader->loadAsync(KID_TEXTURE_3,     "textures/pineapplet_hat.png");
     tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
 
-    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
+    tloader->loadAsync(BLENDER_TEXTURE,   "textures/blender.png");
     
-    tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
-    tloader->loadAsync(BULLET_TEXTURE,  "textures/bullet.png");
-    tloader->loadAsync(GOAL_TEXTURE,    "textures/goal.png");
+    tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
+    tloader->loadAsync(BULLET_TEXTURE,    "textures/bullet.png");
+    tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
+    
+    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
+    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
+    tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
+    
 //    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
 //    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
 //    _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");
