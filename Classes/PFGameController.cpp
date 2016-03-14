@@ -31,6 +31,7 @@
 #include "PFDudeModel.h"
 #include "PFBlenderModel.h"
 #include "KidModel.h"
+#include "JelloModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
 
@@ -84,35 +85,48 @@ using namespace std;
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
 #define WALL_VERTS  8
-#define WALL_COUNT  1
+#define WALL_COUNT  4
+
+#define FLOOR_EXTRA_LENGTH 5.0f
+#define OFFSCREEN_BARRIER_WIDTH 3.0f
+
+#define JELLO_COUNT 1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-	{ 0.0f, 0.0f, LEVEL_LENGTH, 0.0f, LEVEL_LENGTH, 2.0f, 0.0f, 2.0f }
+	//Main floor
+    {
+        -FLOOR_EXTRA_LENGTH, 0.0f,
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 2.0f,
+        -FLOOR_EXTRA_LENGTH, 2.0f
+    },
+    //Wall preventing falling through floor on left
+    {
+        0.0f, 0.0f,
+        0.0f, DEFAULT_HEIGHT,
+        -OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
+        -OFFSCREEN_BARRIER_WIDTH, 0.0
+    },
+    //Wall preventing falling through floor on right
+    {
+        LEVEL_LENGTH, 0.0f,
+        LEVEL_LENGTH, DEFAULT_HEIGHT,
+        LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
+        LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, 0.0
+    },
+    {17.0f, 0.0f, 17.0f, 4.0f, 20.0f, 4.0f, 20.0f, 0.0f}
 };
-
-///** The number of platforms */
-//#define PLATFORM_VERTS  24
-//#define PLATFORM_COUNT  3
-//
-///** The outlines of all of the platforms */
-//float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-//	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
-//	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
-//	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
-//};
 
 /** The goal door position */
 float GOAL_POS[] = {253.0f, 3.0f};
-/** The position of the spinning barrier */
-float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
 float DUDE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
 float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
-/** The position of the rope bridge */
-float BRIDGE_POS[] = {9.0f, 3.8f};
+/** The position of Jellos */
+float JELLO_POS[JELLO_COUNT][2] = {{15.0f, 2.2f}};
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -495,45 +509,6 @@ void GameController::populate() {
         wallobj->setDebugNode(draw);
         addObstacle(wallobj,1);
     }
-    
-//#pragma mark : Platforms
-//    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
-//        PolygonObstacle* platobj;
-//        Poly2 platform(PLATFORMS[ii],8);
-//        platform.triangulate();
-//        platobj = PolygonObstacle::create(platform);
-//        platobj->setDrawScale(_scale.x, _scale.y);
-//        // You cannot add constant "".  Must stringify
-//        platobj->setName(std::string(PLATFORM_NAME)+cocos2d::to_string(ii));
-//
-//        // Set the physics attributes
-//        platobj->setBodyType(b2_staticBody);
-//        platobj->setDensity(BASIC_DENSITY);
-//        platobj->setFriction(BASIC_FRICTION);
-//        platobj->setRestitution(BASIC_RESTITUTION);
-//        
-//        // Add the scene graph nodes to this object
-//        platform *= _scale;
-//        sprite = PolygonNode::createWithTexture(image,platform);
-//        platobj->setSceneNode(sprite);
-//        
-//        draw = WireNode::create();
-//        draw->setColor(DEBUG_COLOR);
-//        draw->setOpacity(DEBUG_OPACITY);
-//        platobj->setDebugNode(draw);
-//        addObstacle(platobj,1);
-//    }
-
-//#pragma mark : Spinner
-//    Vec2 spinPos = SPIN_POS;
-//    _spinner = Spinner::create(spinPos,_scale);
-//    Node* node = Node::create();
-//    draw = WireNode::create();
-//    draw->setColor(DEBUG_COLOR);
-//    draw->setOpacity(DEBUG_OPACITY);
-//    _spinner->setSceneNode(node);
-//    _spinner->setDebugNode(draw);
-//    addObstacle(_spinner, 1.5f);
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
@@ -575,7 +550,7 @@ void GameController::populate() {
         draw->setColor(DEBUG_COLOR);
         draw->setOpacity(DEBUG_OPACITY);
         _kids[i]->setDebugNode(draw);
-        _kids[i]->setMovement(_kids[i]->getForce());
+        _kids[i]->setMovement(KID_WALKSPEED);
         
         b = b2Filter();
         b.categoryBits = KID_MASK;
@@ -584,6 +559,30 @@ void GameController::populate() {
         addObstacle(_kids[i], 4);
     }
 
+#pragma mark : Jello
+    for(int i = 0; i < JELLO_COUNT; i++) {
+        Vec2 jelloPos = JELLO_POS[i];
+        image  = _assets->get<Texture2D>(JELLO_TEXTURE);
+        sprite = PolygonNode::createWithTexture(image);
+        JelloModel* jello = JelloModel::create(jelloPos,_scale / JELLO_SCALE);
+        jello->setDrawScale(_scale.x, _scale.y);
+        
+        // Add the scene graph nodes to this object
+        sprite = PolygonNode::createWithTexture(image);
+        sprite->setScale(cscale * JELLO_SCALE);
+        jello->setSceneNode(sprite);
+        
+        draw = WireNode::create();
+        draw->setColor(DEBUG_COLOR);
+        draw->setOpacity(DEBUG_OPACITY);
+        
+        jello->setDebugNode(draw);
+        jello->setGravityScale(0);
+        jello->setSensor(true);
+        jello->setName(JELLO_NAME);
+        addObstacle(jello, 2);
+    }
+    
 #pragma mark : Blender
     Vec2 blenderPos = BLENDER_POS;
     image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
@@ -720,7 +719,7 @@ void GameController::update(float dt) {
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_kids[i] != nullptr) {
-            _kids[i]->applyForce();
+            _kids[i]->dampTowardsWalkspeed();
         }
     }
     
@@ -977,6 +976,38 @@ bool GameController::checkForVictory() {
 
 	return false;
 }
+
+/**
+ * Applies the jello force to the given dude.
+ * This method is called when a dude collides with a jello
+ * to trigger upward momentum, and a jello quiver animation
+ */
+void handleJelloCollision(DudeModel* dude) {
+    dude->setCollidingWithJello(true);
+    if(! dude->isLarge()) {
+        //Jump!
+        b2Body* body = dude->getBody();
+        dude->setVY(0);
+        body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+        dude->setJumping(true);
+        dude->setGrounded(false);
+    } else {
+        //Squish
+    }
+}
+
+/**
+ * Applies the jello force to the given kid.
+ * This method is called when a kid collides with a jello
+ * to trigger upward momentum, and a jello quiver animation
+ */
+void handleJelloCollision(KidModel* kid) {
+    //Jump!
+    kid->setVY(10);
+    kid->setVX(KID_WALKSPEED + 2);
+    kid->setGrounded(false);
+    kid->setCollidingWithJello(true);
+}
  
 /**
  * Processes the start of a collision
@@ -1009,17 +1040,31 @@ void GameController::beginContact(b2Contact* contact) {
 
     // See if we have landed on the ground.
     // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
-    if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
-        (_avatar->getSensorName() == fd1 && _avatar != bd2)) {
+    if (_avatar != nullptr && ! _avatar->isCollidingWithJello() &&
+        ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
+        (_avatar->getSensorName() == fd1 && _avatar != bd2))) {
         _avatar->setGrounded(true);
         // Could have more than one ground
         _sensorFixtures.emplace(_avatar == bd1 ? fix2 : fix1);
     }
     
+    if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
+        if (! _avatar->isCollidingWithJello() && (_avatar == bd1 || _avatar == bd2)) {
+            handleJelloCollision(_avatar);
+        } else {
+            for(int i = 0; i < KID_COUNT; i++) {
+                if(! _kids[i]->isCollidingWithJello() && (_kids[i] == bd1 || _kids[i] == bd2)) {
+                    handleJelloCollision(_kids[i]);
+                }
+            }
+        }
+    }
+    
     // See if a kid has landed on the ground.
     for(int i = 0; i < KID_COUNT; i++) {
-        if ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
-            (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2)) {
+        if (_kids[i] != nullptr && ! _kids[i]->isCollidingWithJello() &&
+            ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
+            (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2))) {
             _kids[i]->setGrounded(true);
             // Could have more than one ground
             _sensorFixtures.emplace(_kids[i] == bd1 ? fix2 : fix1);
@@ -1076,8 +1121,8 @@ void GameController::endContact(b2Contact* contact) {
     void* fd1 = fix1->GetUserData();
     void* fd2 = fix2->GetUserData();
     
-    void* bd1 = body1->GetUserData();
-    void* bd2 = body2->GetUserData();
+    Obstacle* bd1 = (Obstacle*) body1->GetUserData();
+    Obstacle* bd2 = (Obstacle*) body2->GetUserData();
 
     
     if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
@@ -1085,6 +1130,19 @@ void GameController::endContact(b2Contact* contact) {
         _sensorFixtures.erase(_avatar == bd1 ? fix2 : fix1);
         if (_sensorFixtures.empty()) {
             _avatar->setGrounded(false);
+        }
+    }
+    
+    //See if you or a kid has stopped colliding with jello
+    if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
+        if (_avatar == bd1 || _avatar == bd2) {
+            _avatar->setCollidingWithJello(false);
+        } else {
+            for(int i = 0; i < KID_COUNT; i++) {
+                if(_kids[i] == bd1 || _kids[i] == bd2) {
+                    _kids[i]->setCollidingWithJello(false);
+                }
+            }
         }
     }
     
@@ -1132,6 +1190,8 @@ void GameController::preload() {
     tloader->loadAsync(KID_TEXTURE_3,     "textures/pineapplet_hat.png");
     tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
 
+    tloader->loadAsync(JELLO_TEXTURE,     "textures/jello.png");
+    
     tloader->loadAsync(BLENDER_TEXTURE,   "textures/blender.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");

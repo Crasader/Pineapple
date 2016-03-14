@@ -109,6 +109,8 @@ protected:
     int  _jumpCooldown;
     /** Whether we are actively jumping */
     bool _isJumping;
+    /** Whether we are currently colliding with a jello */
+    bool _isCollidingWithJello;
     /** How long until we can shoot again */
     int  _shootCooldown;
     /** Whether our feet are on the ground */
@@ -294,6 +296,20 @@ public:
      * @param value whether the dude is actively jumping.
      */
     void setJumping(bool value) { _isJumping = value; }
+    
+    /**
+     * Returns true if the dude is actively colliding with jello
+     *
+     * @return true if the dude is actively colliding with jello
+     */
+    bool isCollidingWithJello() {return _isCollidingWithJello; }
+    
+    /**
+     * Sets whether the dude is currently colliding with a jello
+     *
+     * @param value whether the dude is currently colliding with a jello
+     */
+    void setCollidingWithJello(bool value) { _isCollidingWithJello = value; }
     
     /**
      * Returns true if the dude is on the ground.
