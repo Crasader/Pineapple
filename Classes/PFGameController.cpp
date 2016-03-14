@@ -69,6 +69,8 @@ using namespace std;
 /** Damping factor for parallax scrolling */
 #define HILLS_DAMPING_FACTOR     4.0f
 #define CLOUDS_DAMPING_FACTOR    6.0f
+/** Cloud velocity */
+#define CLOUD_VELOCITY           0.05f
 
 /** Main background texture */
 #define FRONT_BACKGROUND    "background_1"
@@ -760,6 +762,9 @@ void GameController::update(float dt) {
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
     }
+
+	// Move the clouds
+	_cloudsnode->setPositionX(_cloudsnode->getPositionX() - CLOUD_VELOCITY);
 
 	// Scroll the screen if necessary
 	handleScrolling();
