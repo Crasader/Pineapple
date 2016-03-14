@@ -294,13 +294,18 @@ InputController::Zone InputController::getZone(const Vec2& pos) {
  *
  * @return true if this is a jump swipe.
  */
-bool InputController::checkJump(const Vec2& start, const Vec2& stop, timestamp_t current) {
+bool InputController::checkJump(const int id, const Vec2& loc) {
     // Look for swipes up that are "long enough"
-    float ydiff = (stop.y-start.y);
-    if (elapsed_millis(_swipetime,current) < EVENT_SWIPE_TIME) {
-        return (ydiff > EVENT_SWIPE_LENGTH*_bounds.size.height);
+    Vec2 prev;
+    if (id == _id1) {
+        prev = _touch1;
+    } else if (id == _id2) {
+        prev = _touch2;
+    } else {
+        std::cout << "SOMETHING WENT WRONG IN CHECK JUMP";
+        return false;
     }
-    return false;
+    return (prev.y < loc.y && loc.y - prev.y > MIN_SWIPE_SPEED);
 }
 
 /**
@@ -466,11 +471,8 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
 void InputController::touchesMovedCB(std::vector<Touch*> touches, timestamp_t current) {
     if (touches.size() == 1) {
         Touch* t = touches[0];
-        if (t->getID() == _ltouch.touchid && getZone(t->getLocation()) == Zone::LEFT)  {
-            _keyJump = checkJump(_ltouch.position, t->getLocation(), current);
-        } else if (t->getID() == _rtouch.touchid && getZone(t->getLocation()) == Zone::RIGHT)  {
-            _keyJump = checkJump(_rtouch.position, t->getLocation(), current);
-        } else if (t->getID() == _btouch.touchid && getZone(t->getLocation()) == Zone::BOTTOM)  {
+        _keyJump = checkJump(t->getID(), t->getLocation());
+        if (t->getID() == _btouch.touchid && getZone(t->getLocation()) == Zone::BOTTOM)  {
             // Allow the fire "key" to be held down
             _keyFire = true;
         } else if (t->getID() == _mtouch.touchid && _mtouch.count > 1) {
@@ -483,7 +485,7 @@ void InputController::touchesMovedCB(std::vector<Touch*> touches, timestamp_t cu
         }
     }
     // process gesture recognition
-    if (touches.size() >= 1) {
+    if (touches.size() > 1) {
         for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
             Touch* t = *i;
             if (t->getID() == _id1) {
@@ -492,7 +494,7 @@ void InputController::touchesMovedCB(std::vector<Touch*> touches, timestamp_t cu
                 _touch2 = t->getLocation();
             }
         }
-        if (_id1 != -1 && _id2 != -1) {
+        if (_id1 != -1 && _id2 != -1 && !_keyJump) {
             int pinch_spread = checkPinchSpread();
             if (pinch_spread == PINCH) {
                 _keyShrink = true;

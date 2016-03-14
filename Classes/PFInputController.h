@@ -24,7 +24,8 @@
 
 using namespace cocos2d;
 
-#define PINCH_SPREAD_SPEED_NEEDED    20.0f
+#define MIN_SWIPE_SPEED      20.0f
+#define MIN_PINCH_SPREAD_SPEED    20.0f
 #define PINCH                        -1
 #define SPREAD                       1
 
@@ -191,7 +192,7 @@ protected:
      *
      * @return true if this is a jump swipe.
      */
-    bool checkJump(const Vec2& start, const Vec2& stop, timestamp_t current);
+    bool checkJump(const int id, const Vec2& loc);
     
     /**
      * Returns a nonzero value if this is a quick left or right swipe
@@ -210,9 +211,9 @@ protected:
     // @return -1 for pinch, 1 for spread, 0 for neither
     int checkPinchSpread() {
         float speed =_previousDelta - _touch1.distance(_touch2);
-        if (speed >= PINCH_SPREAD_SPEED_NEEDED) {
+        if (speed >= MIN_PINCH_SPREAD_SPEED) {
             return PINCH;
-        } else if (_previousDelta - _touch1.distance(_touch2) <= -PINCH_SPREAD_SPEED_NEEDED) {
+        } else if (_previousDelta - _touch1.distance(_touch2) <= -MIN_PINCH_SPREAD_SPEED) {
             return SPREAD;
         }
         return 0;
