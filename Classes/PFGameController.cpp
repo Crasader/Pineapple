@@ -966,6 +966,7 @@ void handleJelloCollision(DudeModel* dude) {
         dude->setVY(0);
         body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
         dude->setJumping(true);
+        dude->setGrounded(false);
     } else {
         //Squish
     }
@@ -977,17 +978,11 @@ void handleJelloCollision(DudeModel* dude) {
  * to trigger upward momentum, and a jello quiver animation
  */
 void handleJelloCollision(KidModel* kid) {
-    kid->setCollidingWithJello(true);
     //Jump!
-    kid->setVY(0);
-    b2Body* body = kid->getBody();
-    if(kid->getVX() > 0) {
-        body->ApplyLinearImpulse(b2Vec2(JELLO_HORIZONTAL_FORCE, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
-    } else if(kid->getVX() < 0) {
-        body->ApplyLinearImpulse(b2Vec2(-JELLO_HORIZONTAL_FORCE, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
-    } else {
-        body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
-    }
+    kid->setVY(10);
+    kid->setVX(KID_WALKSPEED + 2);
+    kid->setGrounded(false);
+    kid->setCollidingWithJello(true);
 }
  
 /**
@@ -1021,8 +1016,9 @@ void GameController::beginContact(b2Contact* contact) {
 
     // See if we have landed on the ground.
     // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
-    if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
-        (_avatar->getSensorName() == fd1 && _avatar != bd2)) {
+    if (! _avatar->isCollidingWithJello() &&
+        ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
+        (_avatar->getSensorName() == fd1 && _avatar != bd2))) {
         _avatar->setGrounded(true);
         // Could have more than one ground
         _sensorFixtures.emplace(_avatar == bd1 ? fix2 : fix1);
@@ -1042,8 +1038,9 @@ void GameController::beginContact(b2Contact* contact) {
     
     // See if a kid has landed on the ground.
     for(int i = 0; i < KID_COUNT; i++) {
-        if ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
-            (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2)) {
+        if (! _kids[i]->isCollidingWithJello() &&
+            ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
+            (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2))) {
             _kids[i]->setGrounded(true);
             // Could have more than one ground
             _sensorFixtures.emplace(_kids[i] == bd1 ? fix2 : fix1);

@@ -32,8 +32,6 @@ using namespace cocos2d;
 #pragma mark Physics Constants
 /** The amount to shrink the whole body, including image */
 #define KID_SCALE 0.075f
-/** The amount to slow the character down */
-#define KID_DAMPING    5.0f
 /** The kid walking speed */
 #define KID_WALKSPEED   1.5f
 
@@ -52,6 +50,8 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(KidModel);
 
 protected:
+    /** The index of this kid in the array of kids */
+    float _index;
     /** The current horizontal movement of the character */
     float _movement;
     /** Whether our feet are on the ground */
@@ -133,6 +133,11 @@ public:
     
 #pragma mark Attribute Properties
     /**
+     * Returns the index of this kid in the kid array
+     */
+    int getIndex() const { return _index; }
+    
+    /**
      * Returns left/right movement of this character.
      *
      * This is the result of input times dude force.
@@ -199,13 +204,6 @@ public:
 	* @param value whether the kid has reached the goal.
 	*/
 	void setReachedGoal(bool value) { _reachedGoal = value; }
-    
-    /**
-     * Returns ow hard the brakes are applied to get a dude to stop moving
-     *
-     * @return ow hard the brakes are applied to get a dude to stop moving
-     */
-    float getDamping() const { return KID_DAMPING; }
     
     /**
      * Returns the upper limit on kid left-right movement while on the ground.

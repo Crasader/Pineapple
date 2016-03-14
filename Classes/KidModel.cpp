@@ -25,6 +25,10 @@
 #define SENSOR_HEIGHT   0.1f
 /** The density of the character */
 #define KID_DENSITY    .5f
+/** The amount kids change force to get back to max speed */
+#define KID_FORCE    5.0f
+/** Epsilon on Kid Speed - if within this amount, just set to max speed */
+#define KID_SPEED_EPSILON   .1f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
@@ -149,6 +153,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Size nsize = image->getContentSize()*cscale;
     
+    _index = idx;
     
     nsize.width  *= KID_HSHRINK/scale.x;
     nsize.height *= KID_VSHRINK/scale.y;
@@ -255,15 +260,22 @@ void KidModel::dampTowardsWalkspeed() {
         return;
     }
 
-    if (getVX() > getWalkingSpeed() && _isGrounded) {
-        b2Vec2 force(- SIGNUM(getVX()) * getDamping()*getVX(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
+    
+    if(_isGrounded && getVX() != KID_WALKSPEED) {
+        if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
+            setVX(KID_WALKSPEED);
+        } else if (getVX() > getWalkingSpeed()) {
+            printf("Kid %f reducing speed, grounded is %d\n", _index, _isGrounded);
+            b2Vec2 force(-KID_FORCE,0);
+            _body->ApplyForce(force,_body->GetPosition(),true);
+        }
+        else if (getVX() < getWalkingSpeed()) {
+            b2Vec2 force(KID_FORCE,0);
+            _body->ApplyForce(force,_body->GetPosition(),true);
+        }
     }
-    else if (getVX() < getWalkingSpeed() && _isGrounded) {
-        b2Vec2 force(2,0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-
-    }
+    
+    
     
 //    // Velocity too high, clamp it
 //    if (fabs(getVX()) >= getMaxWalkingSpeed() && _isGrounded) {
