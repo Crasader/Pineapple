@@ -31,6 +31,7 @@
 #include "PFDudeModel.h"
 #include "PFBlenderModel.h"
 #include "KidModel.h"
+#include "JelloModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
 
@@ -86,31 +87,22 @@ using namespace std;
 #define WALL_VERTS  8
 #define WALL_COUNT  1
 
+#define JELLO_COUNT 1
+
 float WALL[WALL_COUNT][WALL_VERTS] = {
 	{ 0.0f, 0.0f, LEVEL_LENGTH, 0.0f, LEVEL_LENGTH, 2.0f, 0.0f, 2.0f }
 };
 
-///** The number of platforms */
-//#define PLATFORM_VERTS  24
-//#define PLATFORM_COUNT  3
-//
-///** The outlines of all of the platforms */
-//float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-//	{  0.0f, 10.0f, 11.0f, 10.0f, 11.0f, 11.0f,  0.0f, 11.0f },
-//	{ 21.0f, 10.0f, 43.0f, 10.0f, 43.0f, 11.0f, 21.0f, 11.0f },
-//	{ 53.0f, 10.0f, 64.0f, 10.0f, 64.0f, 11.0f, 53.0f, 11.0f }
-//};
-
 /** The goal door position */
 float GOAL_POS[] = {253.0f, 3.0f};
-/** The position of the spinning barrier */
-float SPIN_POS[] = {16.0f, 2.85f};
 /** The initial position of the dude */
 float DUDE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
 float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
+/** The position of Jellos */
+float JELLO_POS[JELLO_COUNT][2] = {{10.0f, 2.0f}};
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -493,45 +485,6 @@ void GameController::populate() {
         wallobj->setDebugNode(draw);
         addObstacle(wallobj,1);
     }
-    
-//#pragma mark : Platforms
-//    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
-//        PolygonObstacle* platobj;
-//        Poly2 platform(PLATFORMS[ii],8);
-//        platform.triangulate();
-//        platobj = PolygonObstacle::create(platform);
-//        platobj->setDrawScale(_scale.x, _scale.y);
-//        // You cannot add constant "".  Must stringify
-//        platobj->setName(std::string(PLATFORM_NAME)+cocos2d::to_string(ii));
-//
-//        // Set the physics attributes
-//        platobj->setBodyType(b2_staticBody);
-//        platobj->setDensity(BASIC_DENSITY);
-//        platobj->setFriction(BASIC_FRICTION);
-//        platobj->setRestitution(BASIC_RESTITUTION);
-//        
-//        // Add the scene graph nodes to this object
-//        platform *= _scale;
-//        sprite = PolygonNode::createWithTexture(image,platform);
-//        platobj->setSceneNode(sprite);
-//        
-//        draw = WireNode::create();
-//        draw->setColor(DEBUG_COLOR);
-//        draw->setOpacity(DEBUG_OPACITY);
-//        platobj->setDebugNode(draw);
-//        addObstacle(platobj,1);
-//    }
-
-//#pragma mark : Spinner
-//    Vec2 spinPos = SPIN_POS;
-//    _spinner = Spinner::create(spinPos,_scale);
-//    Node* node = Node::create();
-//    draw = WireNode::create();
-//    draw->setColor(DEBUG_COLOR);
-//    draw->setOpacity(DEBUG_OPACITY);
-//    _spinner->setSceneNode(node);
-//    _spinner->setDebugNode(draw);
-//    addObstacle(_spinner, 1.5f);
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
@@ -582,6 +535,28 @@ void GameController::populate() {
         addObstacle(_kids[i], 4);
     }
 
+#pragma mark : Jello
+    for(int i = 0; i < JELLO_COUNT; i++) {
+        Vec2 jelloPos = JELLO_POS[i];
+        image  = _assets->get<Texture2D>(JELLO_TEXTURE);
+        sprite = PolygonNode::createWithTexture(image);
+        JelloModel* jello = JelloModel::create(jelloPos,_scale / JELLO_SCALE);
+        jello->setDrawScale(_scale.x, _scale.y);
+        
+        // Add the scene graph nodes to this object
+        sprite = PolygonNode::createWithTexture(image);
+        sprite->setScale(cscale * JELLO_SCALE);
+        jello->setSceneNode(sprite);
+        
+        draw = WireNode::create();
+        draw->setColor(DEBUG_COLOR);
+        draw->setOpacity(DEBUG_OPACITY);
+        
+        jello->setDebugNode(draw);
+        jello->setSensor(true);
+        addObstacle(jello, 2);
+    }
+    
 #pragma mark : Blender
     Vec2 blenderPos = BLENDER_POS;
     image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
@@ -1130,6 +1105,8 @@ void GameController::preload() {
     tloader->loadAsync(KID_TEXTURE_3,     "textures/pineapplet_hat.png");
     tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
 
+    tloader->loadAsync(JELLO_TEXTURE,     "textures/jello.png");
+    
     tloader->loadAsync(BLENDER_TEXTURE,   "textures/blender.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
