@@ -265,7 +265,6 @@ void KidModel::dampTowardsWalkspeed() {
         if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
             setVX(KID_WALKSPEED);
         } else if (getVX() > getWalkingSpeed()) {
-            printf("Kid %f reducing speed, grounded is %d\n", _index, _isGrounded);
             b2Vec2 force(-KID_FORCE,0);
             _body->ApplyForce(force,_body->GetPosition(),true);
         }

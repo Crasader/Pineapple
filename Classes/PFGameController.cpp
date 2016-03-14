@@ -1040,7 +1040,7 @@ void GameController::beginContact(b2Contact* contact) {
 
     // See if we have landed on the ground.
     // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
-    if (! _avatar->isCollidingWithJello() &&
+    if (_avatar != nullptr && ! _avatar->isCollidingWithJello() &&
         ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
         (_avatar->getSensorName() == fd1 && _avatar != bd2))) {
         _avatar->setGrounded(true);
@@ -1062,7 +1062,7 @@ void GameController::beginContact(b2Contact* contact) {
     
     // See if a kid has landed on the ground.
     for(int i = 0; i < KID_COUNT; i++) {
-        if (! _kids[i]->isCollidingWithJello() &&
+        if (_kids[i] != nullptr && ! _kids[i]->isCollidingWithJello() &&
             ((_kids[i]->getSensorName() == fd2 && _kids[i] != bd1) ||
             (_kids[i]->getSensorName() == fd1 && _kids[i] != bd2))) {
             _kids[i]->setGrounded(true);
