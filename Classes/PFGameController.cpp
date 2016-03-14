@@ -68,7 +68,7 @@ using namespace std;
 #define BACK_BACKGROUND_VERTICAL_OFFSET    170.0f
 /** Damping factor for parallax scrolling */
 #define HILLS_DAMPING_FACTOR     4.0f
-#define CLOUDS_DAMPING_FACTOR    8.0f
+#define CLOUDS_DAMPING_FACTOR    6.0f
 
 /** Main background texture */
 #define FRONT_BACKGROUND    "background_1"
