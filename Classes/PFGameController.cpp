@@ -684,7 +684,7 @@ void GameController::setComplete(bool value) {
  * @param value whether the level is failed.
  */
 void GameController::setFailure(bool value){
-    _failed = value;
+    _failed = value && !_complete;
     if (value) {
         Sound* source = _assets->get<Sound>(LOSE_MUSIC);
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
@@ -710,6 +710,11 @@ void GameController::setFailure(bool value){
 void GameController::update(float dt) {
     _input.update(dt);
     
+	// Check for Victory
+	if (checkForVictory()) {
+		setComplete(true);
+	}
+
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_kids[i] != nullptr) {
@@ -732,6 +737,22 @@ void GameController::update(float dt) {
     if(_avatar != nullptr) {
         _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
         _avatar->setJumping( _input.didJump());
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        if (_input.didGrow()) {
+            if (_avatar->grow()) {
+                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_GROW_SCALE);
+            }
+        }
+        if (_input.didShrink()) {
+            if (_avatar->shrink()) {
+                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_SHRINK_SCALE);
+            }
+        }
+        
+        if ( _avatar->updateSize(dt)) {
+            _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE);
+        }
+        
         _avatar->applyForce();
         
         if (_avatar->isJumping()) {
@@ -934,12 +955,22 @@ void GameController::blendAndKill(SimpleObstacle* dudeOrKid) {
  */
 bool GameController::checkForVictory() {
     int count = 0;
+
+	// count the number of kids who have reached the goal
     for(int i = 0; i < KID_COUNT; i++) {
-        if(_kidsReachedGoal[i]) {
-            count++;
-        }
+		if (_kids[i] != nullptr) {
+			if (_kids[i]->hasReachedGoal()) {
+				count++;
+			}
+		}
     }
-    return count >= _kidsRemaining;
+	
+	// return true if avatar and remaining kids reached goal
+	if (_avatar != nullptr) {
+		return _avatar->hasReachedGoal() && count >= _kidsRemaining;
+	}
+
+	return false;
 }
  
 /**
@@ -963,7 +994,7 @@ void GameController::beginContact(b2Contact* contact) {
     
     Obstacle* bd1 = (Obstacle*)body1->GetUserData();
     Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-    
+
     // Test bullet collision with world
     if (bd1->getName() == BULLET_NAME && bd2 != _avatar) {
         removeBullet(bd1);
@@ -972,6 +1003,7 @@ void GameController::beginContact(b2Contact* contact) {
     }
 
     // See if we have landed on the ground.
+    // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
     if ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
         (_avatar->getSensorName() == fd1 && _avatar != bd2)) {
         _avatar->setGrounded(true);
@@ -989,18 +1021,17 @@ void GameController::beginContact(b2Contact* contact) {
         }
     }
     
-    // If a kid hits the "win" door, we are done
+    // If a kid hits the "win" door, update the kid's status
     for(int i = 0; i < KID_COUNT; i++) {
         if((bd1 == _kids[i]   && bd2 == _goalDoor) ||
            (bd1 == _goalDoor && bd2 == _kids[i])) {
-            _kidsReachedGoal[i] = true;
+            _kids[i]->setReachedGoal(true);
         }
     }
     
+	// If Will hits the "win" door, update the Will's status
     if((_avatar == bd1 && bd2 == _goalDoor) || (_avatar == bd2 && bd1 == _goalDoor)) {
-        if(checkForVictory()) {
-            setComplete(true);
-        }
+		_avatar->setReachedGoal(true);
     }
     
     //See if we have collided with the blender
@@ -1062,6 +1093,11 @@ void GameController::endContact(b2Contact* contact) {
             }
         }
     }
+
+	// If Will leaves the "win" door, update the Will's status
+	if ((_avatar == bd1 && bd2 == _goalDoor) || (_avatar == bd2 && bd1 == _goalDoor)) {
+		_avatar->setReachedGoal(false);
+	}
 }
 
 
