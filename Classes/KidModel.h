@@ -10,7 +10,7 @@
 #define KidModel_h
 
 #include <stdio.h>
-#include <cornell/CUBoxObstacle.h>
+//#include <cornell/CUBoxObstacle.h>
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
 

@@ -28,14 +28,14 @@
 #include <Box2D/Dynamics/Joints/b2WeldJoint.h>
 #include "PFGameController.h"
 #include "PFInputController.h"
-#include "PFDudeModel.h"
+#include "Pineapple.h"
 #include "PFBlenderModel.h"
 #include "KidModel.h"
 #include "JelloModel.h"
 #include "SpikeModel.h"
 #include "PFSpinner.h"
-#include "PFRopeBridge.h"
 #include "CrushableModel.h"
+#include "LoadingScreenController.h"
 
 
 using namespace cocos2d;
@@ -79,13 +79,6 @@ using namespace std;
 #define CLOUDS_DAMPING_FACTOR    6.0f
 /** Cloud velocity */
 #define CLOUD_VELOCITY           0.05f
-
-/** Main background texture */
-#define FRONT_BACKGROUND    "background_1"
-/** Further back background texture */
-#define MIDDLE_BACKGROUND   "background_2"
-/** Furthest back background texture */
-#define BACK_BACKGROUND     "background_3"
 
 // Since these appear only once, we do not care about the magic numbers.
 // In an actual game, this information would go in a data file.
@@ -135,14 +128,12 @@ float PLATFORM[PLATFORM_COUNT][PLATFORM_VERTS] = {
 
 /** The goal door position */
 float GOAL_POS[] = {38.0f, 3.0f};
-/** The initial position of the dude */
-float DUDE_POS[] = {10.0f, 7.0f};
+/** The initial position of the pineapple */
+float PINEAPPLE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
 float KID_POS[4][2] = {{MAIN_PLATFORM_Y, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
-/** The position of the rope bridge */
-float BRIDGE_POS[] = {9.0f, 3.8f};
 /** The positions of cups */
 float CUP_POS[CUP_COUNT][2] = {{28.0f, 2.5f}};
 /** The position of Jellos */
@@ -153,14 +144,14 @@ float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}};
 #pragma mark -
 #pragma mark Collision Constants
 
-#define DUDE_MASK 0x0002
-#define DUDE_COLLIDES_WITH 0xFFFB //All but 0x0004
+#define PINEAPPLE_MASK 0x0002
+#define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
 
 #define KID_MASK 0x0004
 #define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
 
 #define BLENDER_MASK 0x0008
-#define BLENDER_COLLIDES_WITH 0x006 //Only kid and dude
+#define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -184,29 +175,10 @@ float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}};
 
 #pragma mark -
 #pragma mark Asset Constants
-/** The key for the tile tile texture in the asset manager */
-#define RED_CUP_TEXTURE   "redcup"
-/** The key for the tile tile texture in the asset manager */
-#define BLUE_CUP_TEXTURE   "bluecup"
-/** The key for the tile tile texture in the asset manager */
-#define GREEN_CUP_TEXTURE   "greencup"
-/** The key for the tile tile texture in the asset manager */
-#define CUPSTACK_TEXTURE   "stackedcups"
-/** The key for the tile tile texture in the asset manager */
-#define TILE_TEXTURE   "tile"
-#define PLATFORM_TEXTURE "platform"
-/** The key for the win door texture in the asset manager */
-#define GOAL_TEXTURE    "goal"
-/** The key for the win door texture in the asset manager */
-#define BULLET_TEXTURE  "bullet"
-/** The name of a bullet (for object identification) */
-#define BULLET_NAME     "bullet"
 /** The name of a wall (for object identification) */
 #define WALL_NAME       "wall"
 /** The name of a platform (for object identification) */
 #define PLATFORM_NAME   "platform"
-/** The font for victory/failure messages */
-#define MESSAGE_FONT    "retro"
 /** The message for winning the game */
 #define WIN_MESSAGE     "VICTORY"
 /** The color of the win message */
@@ -316,6 +288,8 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity) {
+		// TODO: PRELOAD: Check if this is right way to do things
+		_assets = AssetManager::getInstance()->getCurrent();
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
     Vec2 center(dimen.width/2.0f,dimen.height/2.0f);
@@ -574,16 +548,16 @@ void GameController::populate() {
         addObstacle(wallobj,1);
     }
     
-#pragma mark : Dude
-    Vec2 dudePos = DUDE_POS;
-    image  = _assets->get<Texture2D>(DUDE_TEXTURE);
+#pragma mark : Pineapple
+    Vec2 pineapplePos = PINEAPPLE_POS;
+    image  = _assets->get<Texture2D>(PINEAPPLE_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
-    _avatar = DudeModel::create(dudePos,_scale / DUDE_SCALE);
+    _avatar = Pineapple::create(pineapplePos,_scale / PINEAPPLE_SCALE);
     _avatar->setDrawScale(_scale);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale * DUDE_SCALE);
+    sprite->setScale(cscale * PINEAPPLE_SCALE);
     _avatar->setSceneNode(sprite);
     
     draw = WireNode::create();
@@ -591,8 +565,8 @@ void GameController::populate() {
     draw->setOpacity(DEBUG_OPACITY);
     
     b2Filter b = b2Filter();
-    b.categoryBits = DUDE_MASK;
-    b.maskBits = DUDE_COLLIDES_WITH;
+    b.categoryBits = PINEAPPLE_MASK;
+    b.maskBits = PINEAPPLE_COLLIDES_WITH;
     _avatar->setFilterData(b);
     _avatar->setDebugNode(draw);
     addObstacle(_avatar, 5);
@@ -860,17 +834,17 @@ void GameController::update(float dt) {
         float cscale = Director::getInstance()->getContentScaleFactor();
         if (_input.didGrow()) {
             if (_avatar->grow()) {
-                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_GROW_SCALE);
+                _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_GROW_SCALE);
             }
         }
         if (_input.didShrink()) {
             if (_avatar->shrink()) {
-                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_SHRINK_SCALE);
+                _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_SHRINK_SCALE);
             }
         }
         
         if ( _avatar->updateSize(dt)) {
-            _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE);
+            _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE);
         }
         
         _avatar->applyForce();
@@ -899,57 +873,6 @@ void GameController::update(float dt) {
     } else if (_countdown == 0) {
         reset();
     }
-}
-
-/**
- * Add a new bullet to the world and send it in the right direction.
- */
-void GameController::createBullet() {
-    float offset = BULLET_OFFSET;
-    Vec2 pos = _avatar->getPosition();
-    pos.x += (_avatar->isFacingRight() ? offset : -offset);
-    
-    Texture2D* image = _assets->get<Texture2D>(BULLET_TEXTURE);
-    float radius = 0.5f*image->getContentSize().width/_scale.x;
-    
-    WheelObstacle* bullet = WheelObstacle::create(pos, radius);
-    bullet->setName(BULLET_NAME);
-    bullet->setDensity(HEAVY_DENSITY);
-    bullet->setDrawScale(_scale);
-    bullet->setBullet(true);
-    bullet->setGravityScale(0);
-    
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    PolygonNode* sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale);
-    bullet->setSceneNode(sprite);
-    
-    WireNode* draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    bullet->setDebugNode(draw);
-
-    // Compute position and velocity
-    float speed  = (_avatar->isFacingRight() ? BULLET_SPEED : -BULLET_SPEED);
-    bullet->setVX(speed);
-    addObstacle(bullet,5);
-    
-    Sound* source = _assets->get<Sound>(PEW_EFFECT);
-    //SoundEngine::getInstance()->playEffect(PEW_EFFECT,source, false, EFFECT_VOLUME, true);
-}
-
-/**
- * Remove a new bullet from the world.
- *
- * @param  bullet   the bullet to remove
- */
-void GameController::removeBullet(Obstacle* bullet) {
-    _worldnode->removeChild(bullet->getSceneNode());
-    _debugnode->removeChild(bullet->getDebugNode());
-    bullet->markRemoved(true);
-    
-    Sound* source = _assets->get<Sound>(POP_EFFECT);
-    //SoundEngine::getInstance()->playEffect(POP_EFFECT,source,false,EFFECT_VOLUME, true);
 }
 
 /**
@@ -1059,15 +982,15 @@ void GameController::handleScrolling() {
 
 /** 
  * Kills the given player or child.
- * This method is called when a dude or kid collides with the blender,
+ * This method is called when the pineapple or a kid collides with the blender,
  * to trigger any blending animation and remove the given object from the world
  * 
  * This method shouldn't do any checks for gameover, that should be handled elsewhere
  */
-void GameController::blendAndKill(SimpleObstacle* dudeOrKid) {
-    _worldnode->removeChild(dudeOrKid->getSceneNode());
-    _debugnode->removeChild(dudeOrKid->getDebugNode());
-    dudeOrKid->markRemoved(true);
+void GameController::blendAndKill(SimpleObstacle* pineappleOrKid) {
+		removeObstacle(pineappleOrKid);
+
+		//TODO: Animation and sounds
 }
 
 /** 
@@ -1097,19 +1020,19 @@ bool GameController::checkForVictory() {
 }
 
 /**
- * Applies the jello force to the given dude.
- * This method is called when a dude collides with a jello
+ * Applies the jello force to the given pinepple.
+ * This method is called when the given pineapple collides with a jello
  * to trigger upward momentum, and a jello quiver animation
  */
-void handleJelloCollision(DudeModel* dude) {
-    dude->setCollidingWithJello(true);
-    if(! dude->isLarge()) {
+void handleJelloCollision(Pineapple* will) {
+    will->setCollidingWithJello(true);
+    if(! will->isLarge()) {
         //Jump!
-        b2Body* body = dude->getBody();
-        dude->setVY(0);
+        b2Body* body = will->getBody();
+        will->setVY(0);
         body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
-        dude->setJumping(true);
-        dude->setGrounded(false);
+        will->setJumping(true);
+        will->setGrounded(false);
     } else {
         //Squish
     }
@@ -1128,10 +1051,10 @@ void handleJelloCollision(KidModel* kid) {
     kid->setCollidingWithJello(true);
 }
 
-void GameController::handleSpikeCollision(SimpleObstacle* dudeOrKid) {
-    _worldnode->removeChild(dudeOrKid->getSceneNode());
-    _debugnode->removeChild(dudeOrKid->getDebugNode());
-    dudeOrKid->markRemoved(true);
+void GameController::handleSpikeCollision(SimpleObstacle* PineappleOrKid) {
+	removeObstacle(PineappleOrKid);
+
+	//TODO: animation and sounds
 }
 
 bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
@@ -1162,13 +1085,6 @@ void GameController::beginContact(b2Contact* contact) {
     
     Obstacle* bd1 = (Obstacle*)body1->GetUserData();
     Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-
-    // Test bullet collision with world
-    if (bd1->getName() == BULLET_NAME && bd2 != _avatar) {
-        removeBullet(bd1);
-    } else if (bd2->getName() == BULLET_NAME && bd1 != _avatar) {
-        removeBullet(bd2);
-    }
 
     // See if we have landed on the ground.
     // TODO this is super shitty.  we should make sure bd1/bd2 is a platform rather than not a kid
@@ -1334,53 +1250,14 @@ void GameController::endContact(b2Contact* contact) {
 }
 
 
-#pragma mark -
-#pragma mark Asset Management
-/**
- * Preloads the assets needed for the game.
- */
-void GameController::preload() {
-    // Load the textures (Autorelease objects)
-    Texture2D::TexParams params;
-    params.wrapS = GL_REPEAT;
-    params.wrapT = GL_REPEAT;
-    params.magFilter = GL_LINEAR;
-    params.minFilter = GL_NEAREST;
-
-    _assets = AssetManager::getInstance()->getCurrent();
-    TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
-    
-    tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
-    tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
-    tloader->loadAsync(DUDE_TEXTURE,      "textures/will2.png");
-    
-    tloader->loadAsync(KID_TEXTURE_1,     "textures/pineapplet_bow.png");
-    tloader->loadAsync(KID_TEXTURE_2,     "textures/pineapplet_glasses.png");
-    tloader->loadAsync(KID_TEXTURE_3,     "textures/pineapplet_hat.png");
-    tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
-
-    tloader->loadAsync(JELLO_TEXTURE,     "textures/jello.png");
-    tloader->loadAsync(SPIKE_TEXTURE,     "textures/spikes.png");
-    
-    tloader->loadAsync(BLENDER_TEXTURE,   "textures/blender.png");
-    
-    tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
-    tloader->loadAsync(BULLET_TEXTURE,    "textures/bullet.png");
-    tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
-		tloader->loadAsync(RED_CUP_TEXTURE,		"textures/redcup.png");
-		tloader->loadAsync(BLUE_CUP_TEXTURE,	"textures/bluecup.png");
-		tloader->loadAsync(GREEN_CUP_TEXTURE,	"textures/greencup.png");
-		tloader->loadAsync(CUPSTACK_TEXTURE,	"textures/stackedcups.png");
-    
-    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
-    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
-    tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
-    
-//    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
-//    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
-//    _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");
-//    _assets->loadAsync<Sound>(JUMP_EFFECT,  "sounds/jump.mp3");
-//    _assets->loadAsync<Sound>(PEW_EFFECT,   "sounds/pew.mp3");
-//    _assets->loadAsync<Sound>(POP_EFFECT,   "sounds/plop.mp3");
-    _assets->loadAsync<TTFont>(MESSAGE_FONT,"fonts/RetroGame.ttf");
-}
+//#pragma mark -
+//#pragma mark Asset Management
+///**
+// * Preloads the assets needed for the game.
+// */
+//void GameController::preload() {
+//
+//		_assets = AssetManager::getInstance()->getCurrent();
+//		LoadingScreenController loader = LoadingScreenController();
+//		loader.preload();
+//}

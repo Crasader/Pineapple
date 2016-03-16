@@ -42,12 +42,12 @@ namespace cocos2d {
 
 // These forward declarations are in the project
 class InputController;
-class DudeModel;
+class Pineapple;
 class KidModel;
 class BlenderModel;
-class RopeBridge;
 class Spinner;
 class CrushableModel;
+class LoadingScreenController;
 
 using namespace cocos2d;
 using namespace std;
@@ -113,15 +113,13 @@ protected:
     /** Reference to the goalDoor (for collision detection) */
     BoxObstacle*    _goalDoor;
     /** Reference to the player avatar */
-    DudeModel*      _avatar;
+    Pineapple*      _avatar;
     /** References to the kid avatars */
     KidModel*     _kids[KID_COUNT];
     /** Reference to the blender avatar */
     BlenderModel* _blender;
     /** Reference to the spinning barrier */
     Spinner*        _spinner;
-    /** Reference to the rope bridge */
-    RopeBridge*     _ropebridge;
     
     /** Whether or note this game is still active */
     bool _active;
@@ -319,10 +317,10 @@ public:
      */
     void dispose();
     
-    /**
-     * Preloads all of the assets necessary for this game world
-     */
-    void preload();
+    ///**
+    // * Preloads all of the assets necessary for this game world
+    // */
+    //void preload();
 
     
 #pragma mark -
@@ -330,24 +328,24 @@ public:
     
     /**
      * Kills the given player or child.
-     * This method is called when a dude or kid collides with the blender,
+     * This method is called when Will or one of his kids collides with the blender,
      * to trigger any blending animation and remove the given object from the world
      *
      * This method shouldn't do any checks for gameover, that should be handled elsewhere
      */
-    void blendAndKill(SimpleObstacle* dudeOrKid);
+    void blendAndKill(SimpleObstacle* pineappleOrKid);
     
     /**
      * Kills the given player or child.
-     * This method is called when a dude or kid collides with a spike,
+     * This method is called when Will or one of his kids collides with a spike,
      * to trigger any blending animation and remove the given object from the world
      *
      * This method shouldn't do any checks for gameover, that should be handled elsewhere
      *
      * If necesarry to enable different animations this can be separated into separate funcs for
-     * kid/dude
+     * kid/pineapple
      */
-    void handleSpikeCollision(SimpleObstacle* dudeOrKid);
+    void handleSpikeCollision(SimpleObstacle* pineappleOrKid);
     
     /**
      * Checks for victory, triggering it if it occurs
@@ -399,18 +397,6 @@ public:
      * @param  delta    Number of seconds since last animation frame
      */
     void update(float dt);
-    
-    /**
-     * Add a new bullet to the world and send it in the right direction.
-     */
-    void createBullet();
-    
-    /**
-     * Remove a new bullet from the world.
-     *
-     * @param  bullet   the bullet to remove
-     */
-    void removeBullet(Obstacle* bullet);
 
 	/**
 	* Compute offsets for horizontal scrolling.

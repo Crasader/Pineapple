@@ -7,7 +7,7 @@
 //
 
 #include "KidModel.h"
-#include <cornell/CUPolygonNode.h>
+//#include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
 

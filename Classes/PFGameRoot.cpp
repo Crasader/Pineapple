@@ -13,6 +13,7 @@
 //  Version: 1/15/15
 //
 #include "PFGameRoot.h"
+#include "LoadingScreenController.h"
 
 /** Font size for loading message */
 #define DEFAULT_FONT_SIZE   64.0f
@@ -86,7 +87,9 @@ void PlatformRoot::update(float deltaTime) {
         _gameplay.update(deltaTime);
     } else if (!_preloaded) {
         _preloaded = true;
-        _gameplay.preload();
+				// TODO: PRELOAD: Check if this is right way to do things
+				LoadingScreenController loader = LoadingScreenController();
+				loader.preload();
     }
 }
 

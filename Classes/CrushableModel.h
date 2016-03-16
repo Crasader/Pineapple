@@ -18,12 +18,12 @@ using namespace cocos2d;
 #define RED_CUP_TEXTURE			"redcup"
 #define BLUE_CUP_TEXTURE		"bluecup"
 #define GREEN_CUP_TEXTURE		"greencup"
-#define STACKED_CUPS_TEXTURE	"stackedcups"
+#define CUPSTACK_TEXTURE	"stackedcups"
 
 #define RED_CUP_ID				0
 #define BLUE_CUP_ID				1
 #define GREEN_CUP_ID			2
-#define STACKED_CUPS_ID			3
+#define CUPSTACK_ID				3
 
 
 #pragma mark -
