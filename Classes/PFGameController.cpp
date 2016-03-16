@@ -33,6 +33,7 @@
 #include "KidModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
+#include "CrushableModel.h"
 
 
 using namespace cocos2d;
@@ -113,6 +114,8 @@ float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 float BLENDER_POS[] = {-25.0f, 7.0f};
 /** The position of the rope bridge */
 float BRIDGE_POS[] = {9.0f, 3.8f};
+/** The initial position of red cup */
+float RCUP_POS[] = { 28.0f, 7.0f };
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -148,6 +151,14 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 
 #pragma mark -
 #pragma mark Asset Constants
+/** The key for the tile tile texture in the asset manager */
+#define RED_CUP_TEXTURE   "redcup"
+/** The key for the tile tile texture in the asset manager */
+#define BLUE_CUP_TEXTURE   "bluecup"
+/** The key for the tile tile texture in the asset manager */
+#define GREEN_CUP_TEXTURE   "greencup"
+/** The key for the tile tile texture in the asset manager */
+#define STACKED_CUPS_TEXTURE   "stackedcups"
 /** The key for the tile tile texture in the asset manager */
 #define TILE_TEXTURE   "tile"
 /** The key for the win door texture in the asset manager */
@@ -210,6 +221,7 @@ GameController::GameController() :
     _debugnode(nullptr),
     _world(nullptr),
     _avatar(nullptr),
+	_rcup(nullptr),
     _active(false),
     _debug(false){}
 
@@ -534,6 +546,26 @@ void GameController::populate() {
 //    _spinner->setSceneNode(node);
 //    _spinner->setDebugNode(draw);
 //    addObstacle(_spinner, 1.5f);
+
+#pragma mark : Red Cup
+	Vec2 cupPos = RCUP_POS;
+	image = _assets->get<Texture2D>(RED_CUP_TEXTURE);
+	sprite = PolygonNode::createWithTexture(image);
+	_rcup = CrushableModel::create(RED_CUP_TEXTURE, cupPos, _scale / CRUSHABLE_SCALE);
+	_rcup->setDrawScale(_scale);
+
+	// Add the scene graph nodes to this object
+	sprite = PolygonNode::createWithTexture(image);
+	sprite->setScale(cscale * CRUSHABLE_SCALE);
+	_rcup->setSceneNode(sprite);
+
+	draw = WireNode::create();
+	draw->setColor(DEBUG_COLOR);
+	draw->setOpacity(DEBUG_OPACITY);
+
+	_rcup->setDebugNode(draw);
+	addObstacle(_rcup, 5);
+	
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;

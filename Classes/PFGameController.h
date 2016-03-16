@@ -47,6 +47,7 @@ class KidModel;
 class BlenderModel;
 class RopeBridge;
 class Spinner;
+class CrushableModel;
 
 using namespace cocos2d;
 using namespace std;
@@ -121,6 +122,8 @@ protected:
     Spinner*        _spinner;
     /** Reference to the rope bridge */
     RopeBridge*     _ropebridge;
+	/** Reference to the red cup */
+	CrushableModel* _rcup;
     
     /** Whether or note this game is still active */
     bool _active;
