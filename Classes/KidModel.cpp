@@ -24,7 +24,11 @@
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.1f
 /** The density of the character */
-#define KID_DENSITY    .15f
+#define KID_DENSITY    .5f
+/** The amount kids change force to get back to max speed */
+#define KID_FORCE    5.0f
+/** Epsilon on Kid Speed - if within this amount, just set to max speed */
+#define KID_SPEED_EPSILON   .1f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color3B::RED
 
@@ -149,6 +153,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Size nsize = image->getContentSize()*cscale;
     
+    _index = idx;
     
     nsize.width  *= KID_HSHRINK/scale.x;
     nsize.height *= KID_VSHRINK/scale.y;
@@ -158,6 +163,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
+        _isCollidingWithJello = false;
         _isGrounded = false;
 		_reachedGoal = false;
         return true;
@@ -249,24 +255,34 @@ void KidModel::releaseFixtures() {
  *
  * This method should be called after the force attribute is set.
  */
-void KidModel::applyForce() {
+void KidModel::dampTowardsWalkspeed() {
     if (!isActive()) {
         return;
     }
+
     
-    // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f) {
-        b2Vec2 force(-getDamping()*getVX(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
+    if(_isGrounded && getVX() != KID_WALKSPEED) {
+        if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
+            setVX(KID_WALKSPEED);
+        } else if (getVX() > getWalkingSpeed()) {
+            b2Vec2 force(-KID_FORCE,0);
+            _body->ApplyForce(force,_body->GetPosition(),true);
+        }
+        else if (getVX() < getWalkingSpeed()) {
+            b2Vec2 force(KID_FORCE,0);
+            _body->ApplyForce(force,_body->GetPosition(),true);
+        }
     }
     
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed()) {
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-    } else {
-        b2Vec2 force(getMovement(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-    }
+    
+    
+//    // Velocity too high, clamp it
+//    if (fabs(getVX()) >= getMaxWalkingSpeed() && _isGrounded) {
+//        setVX(SIGNUM(getVX())*getMaxWalkingSpeed());
+//    } else {
+//        b2Vec2 force(getMovement(),0);
+//        _body->ApplyForce(force,_body->GetPosition(),true);
+//    }
 }
 
 /**
