@@ -35,6 +35,7 @@
 #include "SpikeModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
+#include "CrushableModel.h"
 
 
 using namespace cocos2d;
@@ -98,6 +99,7 @@ using namespace std;
 
 #define JELLO_COUNT 1
 #define SPIKE_COUNT 2
+#define CUP_COUNT 1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
 	//Main floor
@@ -139,6 +141,10 @@ float DUDE_POS[] = {10.0f, 7.0f};
 float KID_POS[4][2] = {{MAIN_PLATFORM_Y, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
+/** The position of the rope bridge */
+float BRIDGE_POS[] = {9.0f, 3.8f};
+/** The positions of cups */
+float CUP_POS[CUP_COUNT][2] = {{28.0f, 2.5f}};
 /** The position of Jellos */
 float JELLO_POS[JELLO_COUNT][2] = {{15.0f, MAIN_PLATFORM_Y}};
 /** The position of Spikes */
@@ -178,6 +184,14 @@ float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}, {30.0f, MAIN_PLATFO
 
 #pragma mark -
 #pragma mark Asset Constants
+/** The key for the tile tile texture in the asset manager */
+#define RED_CUP_TEXTURE   "redcup"
+/** The key for the tile tile texture in the asset manager */
+#define BLUE_CUP_TEXTURE   "bluecup"
+/** The key for the tile tile texture in the asset manager */
+#define GREEN_CUP_TEXTURE   "greencup"
+/** The key for the tile tile texture in the asset manager */
+#define CUPSTACK_TEXTURE   "stackedcups"
 /** The key for the tile tile texture in the asset manager */
 #define TILE_TEXTURE   "tile"
 #define PLATFORM_TEXTURE "platform"
@@ -610,6 +624,30 @@ void GameController::populate() {
         addObstacle(_kids[i], 4);
     }
 
+#pragma mark : Red Cup
+		for (int i = 0; i < CUP_COUNT; i++) {
+			Vec2 cupPos = CUP_POS[i];
+			image = _assets->get<Texture2D>(BLUE_CUP_TEXTURE);
+			sprite = PolygonNode::createWithTexture(image);
+			CrushableModel* cup = CrushableModel::create(BLUE_CUP_TEXTURE, cupPos, _scale / CRUSHABLE_SCALE);
+			cup->setDrawScale(_scale);
+
+			// Add the scene graph nodes to this object
+			sprite = PolygonNode::createWithTexture(image);
+			sprite->setScale(cscale * CRUSHABLE_SCALE);
+			cup->setSceneNode(sprite);
+
+			draw = WireNode::create();
+			draw->setColor(DEBUG_COLOR);
+			draw->setOpacity(DEBUG_OPACITY);
+
+			cup->setDebugNode(draw);
+			cup->setGravityScale(0);
+			cup->setBodyType(b2BodyType::b2_staticBody);
+			cup->setName(CUP_NAME);
+			addObstacle(cup, 3);
+		}
+
 #pragma mark : Jello
     for(int i = 0; i < JELLO_COUNT; i++) {
         Vec2 jelloPos = JELLO_POS[i];
@@ -709,6 +747,12 @@ void GameController::addObstacle(Obstacle* obj, int zOrder) {
     if (obj->getDebugNode() != nullptr) {
         _debugnode->addChild(obj->getDebugNode(),zOrder);
     }
+}
+
+void GameController::removeObstacle(Obstacle* obj) {
+	_worldnode->removeChild(obj->getSceneNode());
+	_debugnode->removeChild(obj->getDebugNode());
+	obj->markRemoved(true);
 }
 
 
@@ -1090,6 +1134,12 @@ void GameController::handleSpikeCollision(SimpleObstacle* dudeOrKid) {
     dudeOrKid->markRemoved(true);
 }
 
+bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
+	float e = 0.01f;
+	float objTop = obj->getY() + (obj->getHeight() / 2);
+	float charBot = character->getY() - (character->getHeight() / 2);
+	return charBot + e >= objTop;
+}
 
 /**
  * Processes the start of a collision
@@ -1206,6 +1256,23 @@ void GameController::beginContact(b2Contact* contact) {
             }
         }
     }
+
+		//CRUSHHHHHHHHHHHHHHHHHHH TODO: SO BAD
+		if (_avatar->isLarge()) {
+			Obstacle* cup = nullptr;
+			if (bd1 == _avatar && bd2->getName() == CUP_NAME) {
+				cup = bd2;
+			}
+			else if (bd1->getName() == CUP_NAME && bd2 == _avatar) {
+				cup = bd1;
+			}
+			if (cup != nullptr) {
+				if (isBelowChar((BoxObstacle*)cup, _avatar)) {
+					removeObstacle(cup);
+				}
+			}
+		}
+>>>>>>> cd5219a5b22ebedfe76a50646417fec792655532
 }
 
 /**
@@ -1301,6 +1368,10 @@ void GameController::preload() {
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
     tloader->loadAsync(BULLET_TEXTURE,    "textures/bullet.png");
     tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
+		tloader->loadAsync(RED_CUP_TEXTURE,		"textures/redcup.png");
+		tloader->loadAsync(BLUE_CUP_TEXTURE,	"textures/bluecup.png");
+		tloader->loadAsync(GREEN_CUP_TEXTURE,	"textures/greencup.png");
+		tloader->loadAsync(CUPSTACK_TEXTURE,	"textures/stackedcups.png");
     
     tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
     tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");

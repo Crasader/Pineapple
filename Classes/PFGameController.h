@@ -47,6 +47,7 @@ class KidModel;
 class BlenderModel;
 class RopeBridge;
 class Spinner;
+class CrushableModel;
 
 using namespace cocos2d;
 using namespace std;
@@ -168,6 +169,8 @@ protected:
      * @retain a reference to the obstacle
      */
     void addObstacle(Obstacle* obj, int zOrder);
+
+		void removeObstacle(Obstacle* obj);
     
     
 public:
