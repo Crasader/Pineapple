@@ -49,7 +49,7 @@ using namespace std;
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
 /** Length of level in Box2d units */
-#define LEVEL_LENGTH    256.0f
+#define LEVEL_LENGTH    40.0f
 /** Half-width of scrolling window in Box2d units */
 #define WINDOW_SIZE     5.0f
 
@@ -98,7 +98,7 @@ using namespace std;
 #define OFFSCREEN_BARRIER_WIDTH 3.0f
 
 #define JELLO_COUNT 1
-#define SPIKE_COUNT 2
+#define SPIKE_COUNT 1
 #define CUP_COUNT 1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
@@ -134,7 +134,7 @@ float PLATFORM[PLATFORM_COUNT][PLATFORM_VERTS] = {
 };
 
 /** The goal door position */
-float GOAL_POS[] = {253.0f, 3.0f};
+float GOAL_POS[] = {38.0f, 3.0f};
 /** The initial position of the dude */
 float DUDE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
@@ -148,7 +148,7 @@ float CUP_POS[CUP_COUNT][2] = {{28.0f, 2.5f}};
 /** The position of Jellos */
 float JELLO_POS[JELLO_COUNT][2] = {{15.0f, MAIN_PLATFORM_Y}};
 /** The position of Spikes */
-float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}, {30.0f, MAIN_PLATFORM_Y}};
+float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}};
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -1258,7 +1258,7 @@ void GameController::beginContact(b2Contact* contact) {
     }
 
 		//CRUSHHHHHHHHHHHHHHHHHHH TODO: SO BAD
-		if (_avatar->isLarge()) {
+		if (_avatar != nullptr && _avatar->isLarge()) {
 			Obstacle* cup = nullptr;
 			if (bd1 == _avatar && bd2->getName() == CUP_NAME) {
 				cup = bd2;
@@ -1272,7 +1272,6 @@ void GameController::beginContact(b2Contact* contact) {
 				}
 			}
 		}
->>>>>>> cd5219a5b22ebedfe76a50646417fec792655532
 }
 
 /**
