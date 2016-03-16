@@ -122,8 +122,6 @@ protected:
     Spinner*        _spinner;
     /** Reference to the rope bridge */
     RopeBridge*     _ropebridge;
-	/** Reference to the red cup */
-	CrushableModel* _rcup;
     
     /** Whether or note this game is still active */
     bool _active;
@@ -171,6 +169,8 @@ protected:
      * @retain a reference to the obstacle
      */
     void addObstacle(Obstacle* obj, int zOrder);
+
+		void removeObstacle(Obstacle* obj);
     
     
 public:

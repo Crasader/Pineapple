@@ -13,6 +13,8 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Drawing Constants
 
+#define CUP_NAME						"cup"
+
 #define RED_CUP_TEXTURE			"redcup"
 #define BLUE_CUP_TEXTURE		"bluecup"
 #define GREEN_CUP_TEXTURE		"greencup"
