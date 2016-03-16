@@ -335,6 +335,18 @@ public:
     void blendAndKill(SimpleObstacle* dudeOrKid);
     
     /**
+     * Kills the given player or child.
+     * This method is called when a dude or kid collides with a spike,
+     * to trigger any blending animation and remove the given object from the world
+     *
+     * This method shouldn't do any checks for gameover, that should be handled elsewhere
+     *
+     * If necesarry to enable different animations this can be separated into separate funcs for
+     * kid/dude
+     */
+    void handleSpikeCollision(SimpleObstacle* dudeOrKid);
+    
+    /**
      * Checks for victory, triggering it if it occurs
      * Specifically, sees if every living child has reached the goal
      *

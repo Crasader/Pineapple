@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		037D90E51C98FA0C001C332F /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
+		037D90E61C98FA0C001C332F /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
 		1AC6FB21180E996B004C840B /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */; };
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -119,6 +121,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		037D90E31C98FA0C001C332F /* SpikeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpikeModel.cpp; sourceTree = "<group>"; };
+		037D90E41C98FA0C001C332F /* SpikeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpikeModel.h; sourceTree = "<group>"; };
 		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Pineapple-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pineapple-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -340,6 +344,8 @@
 				407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */,
 				407625C41C8E13E6005A0651 /* PFBlenderModel.h */,
 				405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */,
+				037D90E31C98FA0C001C332F /* SpikeModel.cpp */,
+				037D90E41C98FA0C001C332F /* SpikeModel.h */,
 				405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */,
 				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
 				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
@@ -575,6 +581,7 @@
 				405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */,
 				405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				037D90E51C98FA0C001C332F /* SpikeModel.cpp in Sources */,
 				405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				405CBEB31C7D14DF004AB5A0 /* PFGameController.cpp in Sources */,
@@ -597,6 +604,7 @@
 				405CBEBA1C7D1A5A004AB5A0 /* PFGameController.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				037D90E61C98FA0C001C332F /* SpikeModel.cpp in Sources */,
 				405CBEBB1C7D1A5A004AB5A0 /* PFGameRoot.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

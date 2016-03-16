@@ -32,6 +32,7 @@
 #include "PFBlenderModel.h"
 #include "KidModel.h"
 #include "JelloModel.h"
+#include "SpikeModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
 
@@ -50,6 +51,11 @@ using namespace std;
 #define LEVEL_LENGTH    256.0f
 /** Half-width of scrolling window in Box2d units */
 #define WINDOW_SIZE     5.0f
+
+/** platform heights **/
+#define MAIN_PLATFORM_Y         2.0f
+#define SECOND_PLATFORM_Y       4.25f
+#define SECOND_PLATFORM_HEIGHT  .5f
 
 /** Scale factor for background images */
 #define FRONT_BACKGROUND_SCALE   1.1f
@@ -85,20 +91,21 @@ using namespace std;
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
 #define WALL_VERTS  8
-#define WALL_COUNT  4
+#define WALL_COUNT  3
 
 #define FLOOR_EXTRA_LENGTH 5.0f
 #define OFFSCREEN_BARRIER_WIDTH 3.0f
 
 #define JELLO_COUNT 1
+#define SPIKE_COUNT 2
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
 	//Main floor
     {
         -FLOOR_EXTRA_LENGTH, 0.0f,
         LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
-        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 2.0f,
-        -FLOOR_EXTRA_LENGTH, 2.0f
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y,
+        -FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y
     },
     //Wall preventing falling through floor on left
     {
@@ -113,8 +120,15 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
         LEVEL_LENGTH, DEFAULT_HEIGHT,
         LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
         LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, 0.0
-    },
-    {17.0f, 0.0f, 17.0f, 4.0f, 20.0f, 4.0f, 20.0f, 0.0f}
+    }
+};
+
+#define PLATFORM_COUNT 1
+#define PLATFORM_VERTS 8
+
+float PLATFORM[PLATFORM_COUNT][PLATFORM_VERTS] = {
+    {17.0f, SECOND_PLATFORM_Y, 17.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT,
+        20.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT, 20.0f, SECOND_PLATFORM_Y}
 };
 
 /** The goal door position */
@@ -122,11 +136,13 @@ float GOAL_POS[] = {253.0f, 3.0f};
 /** The initial position of the dude */
 float DUDE_POS[] = {10.0f, 7.0f};
 /** The kid positions */
-float KID_POS[4][2] = {{2.0f, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
+float KID_POS[4][2] = {{MAIN_PLATFORM_Y, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
 /** The initial position of the blender */
 float BLENDER_POS[] = {-25.0f, 7.0f};
 /** The position of Jellos */
-float JELLO_POS[JELLO_COUNT][2] = {{15.0f, 2.2f}};
+float JELLO_POS[JELLO_COUNT][2] = {{15.0f, MAIN_PLATFORM_Y}};
+/** The position of Spikes */
+float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}, {30.0f, MAIN_PLATFORM_Y}};
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -164,6 +180,7 @@ float JELLO_POS[JELLO_COUNT][2] = {{15.0f, 2.2f}};
 #pragma mark Asset Constants
 /** The key for the tile tile texture in the asset manager */
 #define TILE_TEXTURE   "tile"
+#define PLATFORM_TEXTURE "platform"
 /** The key for the win door texture in the asset manager */
 #define GOAL_TEXTURE    "goal"
 /** The key for the win door texture in the asset manager */
@@ -509,7 +526,40 @@ void GameController::populate() {
         wallobj->setDebugNode(draw);
         addObstacle(wallobj,1);
     }
-
+    
+#pragma mark : Platforms
+    image  = _assets->get<Texture2D>(PLATFORM_TEXTURE);
+    wname = "platform";
+    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
+        PolygonObstacle* wallobj;
+        
+        Poly2 wall(PLATFORM[ii],PLATFORM_VERTS);
+        wall.triangulate();
+        wallobj = PolygonObstacle::create(wall);
+        wallobj->setDrawScale(_scale.x , _scale.y);
+        // You cannot add constant "".  Must stringify
+        wallobj->setName(std::string(PLATFORM_NAME)+cocos2d::to_string(ii));
+        wallobj->setName(wname);
+        
+        // Set the physics attributes
+        wallobj->setBodyType(b2_staticBody);
+        wallobj->setDensity(BASIC_DENSITY);
+        wallobj->setFriction(BASIC_FRICTION);
+        wallobj->setRestitution(BASIC_RESTITUTION);
+        
+        // Add the scene graph nodes to this object
+        wall *= _scale / 1.95f;
+        sprite = PolygonNode::createWithTexture(image,wall);
+        sprite->setScale(1.95f);
+        wallobj->setSceneNode(sprite);
+        
+        draw = WireNode::create();
+        draw->setColor(DEBUG_COLOR);
+        draw->setOpacity(DEBUG_OPACITY);
+        wallobj->setDebugNode(draw);
+        addObstacle(wallobj,1);
+    }
+    
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
     image  = _assets->get<Texture2D>(DUDE_TEXTURE);
@@ -556,6 +606,7 @@ void GameController::populate() {
         b.categoryBits = KID_MASK;
         b.maskBits = KID_COLLIDES_WITH;
         _kids[i]->setFilterData(b);
+        _kids[i]->setName(KID_NAME);
         addObstacle(_kids[i], 4);
     }
 
@@ -581,6 +632,30 @@ void GameController::populate() {
         jello->setSensor(true);
         jello->setName(JELLO_NAME);
         addObstacle(jello, 2);
+    }
+    
+#pragma mark : Spike
+    for(int i = 0; i < SPIKE_COUNT; i++) {
+        Vec2 spikePos = SPIKE_POS[i];
+        image  = _assets->get<Texture2D>(SPIKE_TEXTURE);
+        sprite = PolygonNode::createWithTexture(image);
+        SpikeModel* spike = SpikeModel::create(spikePos,_scale / SPIKE_SCALE);
+        spike->setDrawScale(_scale.x, _scale.y);
+        
+        // Add the scene graph nodes to this object
+        sprite = PolygonNode::createWithTexture(image);
+        sprite->setScale(cscale * SPIKE_SCALE);
+        spike->setSceneNode(sprite);
+        
+        draw = WireNode::create();
+        draw->setColor(DEBUG_COLOR);
+        draw->setOpacity(DEBUG_OPACITY);
+        
+        spike->setDebugNode(draw);
+        spike->setGravityScale(0);
+        spike->setSensor(true);
+        spike->setName(SPIKE_NAME);
+        addObstacle(spike, 2);
     }
     
 #pragma mark : Blender
@@ -1008,7 +1083,14 @@ void handleJelloCollision(KidModel* kid) {
     kid->setGrounded(false);
     kid->setCollidingWithJello(true);
 }
- 
+
+void GameController::handleSpikeCollision(SimpleObstacle* dudeOrKid) {
+    _worldnode->removeChild(dudeOrKid->getSceneNode());
+    _debugnode->removeChild(dudeOrKid->getDebugNode());
+    dudeOrKid->markRemoved(true);
+}
+
+
 /**
  * Processes the start of a collision
  *
@@ -1039,21 +1121,22 @@ void GameController::beginContact(b2Contact* contact) {
     }
 
     // See if we have landed on the ground.
-    // TODO this is super shitty.  we should make sure bd1/bd2 is a platform
+    // TODO this is super shitty.  we should make sure bd1/bd2 is a platform rather than not a kid
     if (_avatar != nullptr && ! _avatar->isCollidingWithJello() &&
-        ((_avatar->getSensorName() == fd2 && _avatar != bd1) ||
-        (_avatar->getSensorName() == fd1 && _avatar != bd2))) {
-        _avatar->setGrounded(true);
-        // Could have more than one ground
-        _sensorFixtures.emplace(_avatar == bd1 ? fix2 : fix1);
+        ((_avatar->getSensorName() == fd2 && _avatar != bd1 && bd1->getName() != KID_NAME) ||
+        (_avatar->getSensorName() == fd1 && _avatar != bd2 && bd2->getName() != KID_NAME))) {
+            _avatar->setGrounded(true);
+            // Could have more than one ground
+            _sensorFixtures.emplace(_avatar == bd1 ? fix2 : fix1);
     }
     
     if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
-        if (! _avatar->isCollidingWithJello() && (_avatar == bd1 || _avatar == bd2)) {
+        if (_avatar != nullptr && ! _avatar->isCollidingWithJello() && (_avatar == bd1 || _avatar == bd2)) {
             handleJelloCollision(_avatar);
         } else {
             for(int i = 0; i < KID_COUNT; i++) {
-                if(! _kids[i]->isCollidingWithJello() && (_kids[i] == bd1 || _kids[i] == bd2)) {
+                if(_kids[i] != nullptr && !_kids[i]->isCollidingWithJello() &&
+                   (_kids[i] == bd1 || _kids[i] == bd2)) {
                     handleJelloCollision(_kids[i]);
                 }
             }
@@ -1095,6 +1178,27 @@ void GameController::beginContact(b2Contact* contact) {
     for(int i = 0; i < KID_COUNT; i++) {
         if((bd1 == _kids[i] && bd2 == _blender) || (bd2 == _kids[i] && bd1 == _blender)) {
             blendAndKill(_kids[i]);
+            _kids[i] = nullptr;
+            _kidsRemaining--;
+            if(_kidsRemaining == 0) {
+                setFailure(true);
+            }
+        }
+    }
+    
+    //See if we have collided with a spike!
+    if((bd1 == _avatar && bd2->getName() == SPIKE_NAME) ||
+       (bd2 == _avatar && bd1->getName() == SPIKE_NAME)) {
+        handleSpikeCollision(_avatar);
+        _avatar = nullptr;
+        setFailure(true);
+    }
+    
+    //See if a kid has collided with a spike
+    for(int i = 0; i < KID_COUNT; i++) {
+        if((bd1 == _kids[i] && bd2->getName() == SPIKE_NAME) ||
+           (bd2 == _kids[i] && bd1->getName() == SPIKE_NAME)) {
+            handleSpikeCollision(_kids[i]);
             _kids[i] = nullptr;
             _kidsRemaining--;
             if(_kidsRemaining == 0) {
@@ -1176,13 +1280,12 @@ void GameController::preload() {
     params.wrapT = GL_REPEAT;
     params.magFilter = GL_LINEAR;
     params.minFilter = GL_NEAREST;
-	
-
 
     _assets = AssetManager::getInstance()->getCurrent();
     TextureLoader* tloader = (TextureLoader*)_assets->access<Texture2D>();
     
     tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
+    tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
     tloader->loadAsync(DUDE_TEXTURE,      "textures/will2.png");
     
     tloader->loadAsync(KID_TEXTURE_1,     "textures/pineapplet_bow.png");
@@ -1191,6 +1294,7 @@ void GameController::preload() {
     tloader->loadAsync(KID_TEXTURE_4,     "textures/pineapplet_pirate.png");
 
     tloader->loadAsync(JELLO_TEXTURE,     "textures/jello.png");
+    tloader->loadAsync(SPIKE_TEXTURE,     "textures/spikes.png");
     
     tloader->loadAsync(BLENDER_TEXTURE,   "textures/blender.png");
     
