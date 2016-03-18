@@ -9,6 +9,7 @@ proj.win32/
 bin/**
 
 #Xcode setting files
+proj.ios_mac/Pineapple.xcodeproj/project.pbxproj
 proj.ios_mac/Pineapple.xcodeproj/project.xcworkspace/**
 
 # Mac OSX crap
