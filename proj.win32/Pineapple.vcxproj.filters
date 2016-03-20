@@ -48,6 +48,9 @@
     <ClCompile Include="..\Classes\JelloModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SpikeModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -84,6 +87,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\JelloModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SpikeModel.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

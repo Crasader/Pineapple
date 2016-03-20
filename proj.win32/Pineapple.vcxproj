@@ -155,6 +155,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\PFInputController.cpp" />
     <ClCompile Include="..\Classes\PFRopeBridge.cpp" />
     <ClCompile Include="..\Classes\PFSpinner.cpp" />
+    <ClCompile Include="..\Classes\SpikeModel.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PFInputController.h" />
     <ClInclude Include="..\Classes\PFRopeBridge.h" />
     <ClInclude Include="..\Classes\PFSpinner.h" />
+    <ClInclude Include="..\Classes\SpikeModel.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
