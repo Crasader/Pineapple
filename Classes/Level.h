@@ -15,7 +15,7 @@ protected:
 	/** Reference to the player avatar */
 	Pineapple*      _pineapple;
 	/** References to the kid avatars */
-	KidModel*     _kids[KID_COUNT];
+	KidModel**     _kids;
 	/** Reference to the blender avatar */
 	BlenderModel* _blender;
 	/** Reference to the physics root of the scene graph TODO: is this shared across levels? */
@@ -106,9 +106,19 @@ public:
 #pragma mark Allocation
 
 	/**
-	*
+	* shitty constructor to get collisioncontroller up and running
 	*/
 	Level();
+
+	/**
+	*
+	*/
+	bool init(BoxObstacle* goal, KidModel** kid, Pineapple* will, BlenderModel* blender, Node* debug, Node* world);
+
+	/**
+	*
+	*/
+	static Level* create(BoxObstacle* goal, KidModel** kid, Pineapple* will, BlenderModel* blender, Node* debug, Node* world);
 
 	/**
 	* Kills the given player or child.

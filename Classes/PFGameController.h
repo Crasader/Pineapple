@@ -47,6 +47,7 @@ class BlenderModel;
 class Spinner;
 class CrushableModel;
 class LoadingScreenController;
+class Level;
 
 using namespace cocos2d;
 using namespace std;
@@ -108,13 +109,16 @@ protected:
     /** The back background (second copy), with heavy parallax */
     PolygonNode* _backBackground_2;
     
+		// Reference to current level
+		Level* _level;
+
     // Physics objects for the game
     /** Reference to the goalDoor (for collision detection) */
     BoxObstacle*    _goalDoor;
     /** Reference to the player avatar */
     Pineapple*      _avatar;
     /** References to the kid avatars */
-    KidModel*     _kids[KID_COUNT];
+    KidModel**     _kids;
     /** Reference to the blender avatar */
     BlenderModel* _blender;
     /** Reference to the spinning barrier */
@@ -126,8 +130,6 @@ protected:
     bool _complete;
     /** Whether or not debug mode is active */
     bool _debug;
-    /** Count of remaining kids */
-    int _kidsRemaining;
     /** Flags for kids who have reached the goal */
     bool* _kidsReachedGoal;
     /** Whether we have failed at this world (and need a reset) */

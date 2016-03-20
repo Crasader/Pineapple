@@ -8,12 +8,15 @@
 #include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2Fixture.h>
 #include <unordered_set>
+#include <cornell/CUSimpleObstacle.h>
 
 // Forward declarations in the project
 class Level;
 class LevelController;
 class Pineapple;
 class KidModel;
+
+using namespace std;
 
 class CollisionController {
 protected:

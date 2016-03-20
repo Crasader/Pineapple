@@ -36,6 +36,7 @@
 #include "PFSpinner.h"
 #include "CrushableModel.h"
 #include "LoadingScreenController.h"
+#include "Level.h"
 
 
 using namespace cocos2d;
@@ -309,10 +310,10 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _world->retain();
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
-        beginContact(contact);
+        CollisionController::beginContact(contact);
     };
     _world->onEndContact = [this](b2Contact* contact) {
-        endContact(contact);
+				CollisionController::endContact(contact);
     };
 
     // Create the scene graph
@@ -339,6 +340,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
     setFailure(false);
+		_level->setFailure(false);
 
     // Add everything to the root and retain
 	root->addChild(_hillsnode,0);
@@ -552,13 +554,13 @@ void GameController::populate() {
     Vec2 pineapplePos = PINEAPPLE_POS;
     image  = _assets->get<Texture2D>(PINEAPPLE_TEXTURE);
     sprite = PolygonNode::createWithTexture(image);
-    _avatar = Pineapple::create(pineapplePos,_scale / PINEAPPLE_SCALE);
-    _avatar->setDrawScale(_scale);
+		Pineapple* will = Pineapple::create(pineapplePos,_scale / PINEAPPLE_SCALE);
+		will->setDrawScale(_scale);
     
     // Add the scene graph nodes to this object
     sprite = PolygonNode::createWithTexture(image);
     sprite->setScale(cscale * PINEAPPLE_SCALE);
-    _avatar->setSceneNode(sprite);
+		will->setSceneNode(sprite);
     
     draw = WireNode::create();
     draw->setColor(DEBUG_COLOR);
@@ -567,12 +569,11 @@ void GameController::populate() {
     b2Filter b = b2Filter();
     b.categoryBits = PINEAPPLE_MASK;
     b.maskBits = PINEAPPLE_COLLIDES_WITH;
-    _avatar->setFilterData(b);
-    _avatar->setDebugNode(draw);
-    addObstacle(_avatar, 5);
+		will->setFilterData(b);
+		will->setDebugNode(draw);
+    addObstacle(will, 5);
     
 #pragma mark : Kids
-    _kidsRemaining = KID_COUNT;
     _kidsReachedGoal = new bool[KID_COUNT];
     for (int i = 0; i < KID_COUNT; i++) {
         Vec2 kidPos = KID_POS[i];
@@ -699,6 +700,8 @@ void GameController::populate() {
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
     ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
+
+		_level = Level::create(_goalDoor, _kids, _avatar, _blender, _debugnode, _worldnode);
 }
 
 /**
@@ -723,12 +726,6 @@ void GameController::addObstacle(Obstacle* obj, int zOrder) {
     }
 }
 
-void GameController::removeObstacle(Obstacle* obj) {
-	_worldnode->removeChild(obj->getSceneNode());
-	_debugnode->removeChild(obj->getDebugNode());
-	obj->markRemoved(true);
-}
-
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -746,6 +743,7 @@ void GameController::reset() {
     _debugnode->removeAllChildren();
     
     setFailure(false);
+		_level->setFailure(false);
     setComplete(false);
     populate();
 }
@@ -804,6 +802,10 @@ void GameController::setFailure(bool value){
 void GameController::update(float dt) {
     _input.update(dt);
     
+		if (_level->haveFailed()) {
+			setFailure(true);
+		}
+
 	// Check for Victory
 	if (checkForVictory()) {
 		setComplete(true);
@@ -981,19 +983,6 @@ void GameController::handleScrolling() {
 #pragma mark Collision Handling
 
 /** 
- * Kills the given player or child.
- * This method is called when the pineapple or a kid collides with the blender,
- * to trigger any blending animation and remove the given object from the world
- * 
- * This method shouldn't do any checks for gameover, that should be handled elsewhere
- */
-void GameController::blendAndKill(SimpleObstacle* pineappleOrKid) {
-		removeObstacle(pineappleOrKid);
-
-		//TODO: Animation and sounds
-}
-
-/** 
  * Checks for victory, triggering it if it occurs
  * Specifically, sees if every living child has reached the goal
  *
@@ -1013,7 +1002,7 @@ bool GameController::checkForVictory() {
 	
 	// return true if avatar and remaining kids reached goal
 	if (_avatar != nullptr) {
-		return _avatar->hasReachedGoal() && count >= _kidsRemaining;
+		return _avatar->hasReachedGoal() && count >= _level->numKidsRemaining();
 	}
 
 	return false;
