@@ -121,8 +121,6 @@ protected:
     KidModel**     _kids;
     /** Reference to the blender avatar */
     BlenderModel* _blender;
-    /** Reference to the spinning barrier */
-    Spinner*        _spinner;
     
     /** Whether or note this game is still active */
     bool _active;
@@ -144,10 +142,6 @@ protected:
 	int _middleFlip;
 	/** Number of times back background has been flipped */
 	int _backFlip;
-    
-    /** Mark set to handle more sophisticated collision callbacks */
-    unordered_set<b2Fixture*> _sensorFixtures;
-    
     
 #pragma mark Internal Object Management
     /**

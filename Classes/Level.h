@@ -8,6 +8,10 @@
 
 #define KID_COUNT 4
 
+class RootLayer;
+class PolygonObstacle;
+class WorldController;
+
 class Level {
 protected:
 	/** Reference to the goalDoor (for collision detection) */
@@ -18,10 +22,32 @@ protected:
 	KidModel**     _kids;
 	/** Reference to the blender avatar */
 	BlenderModel* _blender;
-	/** Reference to the physics root of the scene graph TODO: is this shared across levels? */
+	/** Reference to the root node of the scene graph */
+	RootLayer* _rootnode;
+	/** Reference to the physics root of the scene graph */
 	Node* _worldnode;
-	/** Reference to the debug root of the scene graph TODO: is this shared across levels? */
+	/** Reference to the debug root of the scene graph */
 	Node* _debugnode;
+
+	/** Flags for kids who have reached the goal */
+	bool* _kidsReachedGoal;
+
+	/** Length of the level in box2d units */
+	float _length;
+	int _platformCount;
+	int _wallCount;
+
+	PolygonObstacle** _walls;
+	PolygonObstacle** _platforms;
+
+
+	/** The Box2D world */
+	WorldController* _world;
+	/** The world scale (computed from root node) */
+	Vec2 _scale;
+
+	/** Whether we have completed this "game" */
+	bool _complete;
 
 	/** Count of remaining kids */
 	int _kidsRemaining;
@@ -104,21 +130,42 @@ public:
 
 #pragma mark -
 #pragma mark Allocation
-
-	/**
-	* shitty constructor to get collisioncontroller up and running
-	*/
-	Level();
-
 	/**
 	*
 	*/
-	bool init(BoxObstacle* goal, KidModel** kid, Pineapple* will, BlenderModel* blender, Node* debug, Node* world);
+	static Level* create();
 
-	/**
-	*
-	*/
-	static Level* create(BoxObstacle* goal, KidModel** kid, Pineapple* will, BlenderModel* blender, Node* debug, Node* world);
+	/** Reference to the goalDoor (for collision detection) */
+	void addGoal(BoxObstacle* goal);
+	/** Reference to the player avatar */
+	void addPineapple(Pineapple* pineapple);
+	/** References to the kid avatars */
+	void addKids(KidModel** kids);
+	/** Reference to the blender avatar */
+	void addBlender(BlenderModel* blender);
+	/** Reference to the root node of the scene graph */
+	void addRootNode(RootLayer* rootnode);
+	/** Reference to the physics root of the scene graph */
+	void addWorldNode (Node* worldnode);
+	/** Reference to the debug root of the scene graph */
+	void addDebugNode (Node* debugnode);
+
+	/** Flags for kids who have reached the goal */
+	bool* _kidsReachedGoal;
+
+	/** Length of the level in box2d units */
+	void addLength (float length);
+	void addPlatformCount(int platformCount);
+	void addWallCount(int wallCount);
+
+	void addWalls(PolygonObstacle** walls);
+	void addPlatforms(PolygonObstacle** platforms);
+
+
+	/** The Box2D world */
+	void addWorld(WorldController* world);
+	/** The world scale (computed from root node) */
+	void addScale(Vec2 _scale);
 
 	/**
 	* Kills the given player or child.
@@ -148,7 +195,13 @@ public:
 		obj->markRemoved(true);
 	}
 
+private:
+	/**
+	*
+	*/
+	Level();
 
 };
+
 
 #endif
