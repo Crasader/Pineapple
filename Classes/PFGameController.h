@@ -28,7 +28,6 @@
 #include <Box2D/Dynamics/b2Fixture.h>
 #include "PFInputController.h"
 #include <unordered_set>
-#include <vector>
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
