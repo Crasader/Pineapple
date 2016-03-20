@@ -8,10 +8,6 @@
 
 #define KID_COUNT 4
 
-class RootLayer;
-class PolygonObstacle;
-class WorldController;
-
 class Level {
 protected:
 	/** Reference to the goalDoor (for collision detection) */
@@ -70,7 +66,7 @@ public:
 	/**
 	*
 	*/
-	Pineapple* clearPineapple() { _pineapple = nullptr; }
+	void clearPineapple() { _pineapple = nullptr; }
 
 	/**
 	*
@@ -80,7 +76,7 @@ public:
 	/**
 	*
 	*/
-	Pineapple* clearKid(int i) { _kids[i] = nullptr; }
+	void clearKid(int i) { _kids[i] = nullptr; }
 
 
 	/**
@@ -148,10 +144,7 @@ public:
 	/** Reference to the physics root of the scene graph */
 	void addWorldNode (Node* worldnode);
 	/** Reference to the debug root of the scene graph */
-	void addDebugNode (Node* debugnode);
-
-	/** Flags for kids who have reached the goal */
-	bool* _kidsReachedGoal;
+    void addDebugNode (Node* debugnode);
 
 	/** Length of the level in box2d units */
 	void addLength (float length);
@@ -160,13 +153,20 @@ public:
 
 	void addWalls(PolygonObstacle** walls);
 	void addPlatforms(PolygonObstacle** platforms);
-
-
 	/** The Box2D world */
 	void addWorld(WorldController* world);
 	/** The world scale (computed from root node) */
 	void addScale(Vec2 _scale);
+    
+    /** Adds the given obstacle to the level. Should only be called on
+     * an obstacle not in the above list, i.e. a jello or a cup */
+    void addObstacle(Obstacle* obj, int zOrder);
 
+#pragma mark -
+#pragma mark Deallocation
+    
+    void dispose();
+    
 	/**
 	* Kills the given player or child.
 	* This method is called when Will or one of his kids collides with the blender,
@@ -195,6 +195,8 @@ public:
 		obj->markRemoved(true);
 	}
 
+    
+    
 private:
 	/**
 	*
