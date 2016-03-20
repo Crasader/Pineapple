@@ -146,6 +146,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\CollisionController.cpp" />
+    <ClCompile Include="..\Classes\CollisionObject.cpp" />
     <ClCompile Include="..\Classes\CrushableModel.cpp" />
     <ClCompile Include="..\Classes\JelloModel.cpp" />
     <ClCompile Include="..\Classes\KidModel.cpp" />
@@ -168,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\CollisionController.h" />
+    <ClInclude Include="..\Classes\CollisionObject.h" />
     <ClInclude Include="..\Classes\CrushableModel.h" />
     <ClInclude Include="..\Classes\JelloModel.h" />
     <ClInclude Include="..\Classes\KidModel.h" />

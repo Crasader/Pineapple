@@ -72,6 +72,9 @@
     <ClCompile Include="..\Classes\Pineapple.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\CollisionObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -132,6 +135,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Pineapple.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CollisionObject.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
