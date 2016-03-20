@@ -126,6 +126,9 @@
   <PropertyGroup>
     <PackageCertificateKeyFile>Pineapple_TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>69E61EED9D75298C20C00383913E70404878E922</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -216,7 +219,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\..\Classes\HelloWorld.h" />
+    <ClInclude Include="..\..\Classes\CrushableModel.h" />
+    <ClInclude Include="..\..\Classes\JelloModel.h" />
+    <ClInclude Include="..\..\Classes\KidModel.h" />
+    <ClInclude Include="..\..\Classes\PFBlenderModel.h" />
+    <ClInclude Include="..\..\Classes\PFDudeModel.h" />
+    <ClInclude Include="..\..\Classes\PFGameController.h" />
+    <ClInclude Include="..\..\Classes\PFGameRoot.h" />
+    <ClInclude Include="..\..\Classes\PFInputController.h" />
+    <ClInclude Include="..\..\Classes\PFRopeBridge.h" />
+    <ClInclude Include="..\..\Classes\PFSpinner.h" />
+    <ClInclude Include="..\..\Classes\SpikeModel.h" />
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
@@ -240,7 +253,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\..\Classes\HelloWorld.cpp" />
+    <ClCompile Include="..\..\Classes\CrushableModel.cpp" />
+    <ClCompile Include="..\..\Classes\JelloModel.cpp" />
+    <ClCompile Include="..\..\Classes\KidModel.cpp" />
+    <ClCompile Include="..\..\Classes\PFBlenderModel.cpp" />
+    <ClCompile Include="..\..\Classes\PFDudeModel.cpp" />
+    <ClCompile Include="..\..\Classes\PFGameController.cpp" />
+    <ClCompile Include="..\..\Classes\PFGameRoot.cpp" />
+    <ClCompile Include="..\..\Classes\PFInputController.cpp" />
+    <ClCompile Include="..\..\Classes\PFRopeBridge.cpp" />
+    <ClCompile Include="..\..\Classes\PFSpinner.cpp" />
+    <ClCompile Include="..\..\Classes\SpikeModel.cpp" />
     <ClCompile Include="App.xaml.cpp">
       <DependentUpon>App.xaml</DependentUpon>
     </ClCompile>
