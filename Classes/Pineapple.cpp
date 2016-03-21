@@ -6,9 +6,8 @@
 //  Version: TODO
 //
 #include "Pineapple.h"
-//#include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
-#include <cornell/CUSceneManager.h>
+//#include <cornell/CUSceneManager.h>
 
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 

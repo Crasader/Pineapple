@@ -7,7 +7,6 @@
 //
 #ifndef __PINEAPPLE_H__
 #define __PINEAPPLE_H__
-//#include <cornell/CUBoxObstacle.h>
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
 

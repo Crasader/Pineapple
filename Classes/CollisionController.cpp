@@ -13,11 +13,67 @@
 #pragma mark Initialization
 
 CollisionController::CollisionController() :
-	_level(nullptr),
-	_levelCtrlr(nullptr){}
+	_level(nullptr) {}
+	//_levelCtrlr(nullptr){}
+
+CollisionController* CollisionController::create() {
+	return new (std::nothrow) CollisionController();
+}
+
+void CollisionController::setLevel(Level* level) {
+	_level = level;
+}
 
 #pragma mark -
 #pragma mark Collision Handling
+/**
+* Applies the jello force to the given pinepple.
+* This method is called when the given pineapple collides with a jello
+* to trigger upward momentum, and a jello quiver animation
+*/
+void CollisionController::handleJelloCollision(Pineapple* will) {
+	will->setCollidingWithJello(true);
+	if (!will->isLarge()) {
+		//Jump!
+		b2Body* body = will->getBody();
+		will->setVY(0);
+		body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+		will->setJumping(true);
+		will->setGrounded(false);
+	}
+	else {
+		//Squish
+	}
+}
+
+/**
+* Applies the jello force to the given kid.
+* This method is called when a kid collides with a jello
+* to trigger upward momentum, and a jello quiver animation
+*/
+void CollisionController::handleJelloCollision(KidModel* kid) {
+	//Jump!
+	kid->setVY(10);
+	kid->setVX(KID_WALKSPEED + 2);
+	kid->setGrounded(false);
+	kid->setCollidingWithJello(true);
+}
+
+void CollisionController::handleSpikeCollision(SimpleObstacle* PineappleOrKid) {
+	_level->removeObstacle(PineappleOrKid);
+
+	//TODO: animation and sounds
+}
+
+/**
+* helper to determine if a given Obstacle is below a given character
+*/
+bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
+	float e = 0.01f;
+	float objTop = obj->getY() + (obj->getHeight() / 2);
+	float charBot = character->getY() - (character->getHeight() / 2);
+	return charBot + e >= objTop;
+}
 
 /**
 * Processes the start of a collision
@@ -204,53 +260,4 @@ void CollisionController::endContact(b2Contact* contact) {
 	if ((_level->getPineapple() == bd1 && bd2 == _level->getGoal()) || (_level->getPineapple() == bd2 && bd1 == _level->getGoal())) {
 		_level->getPineapple()->setReachedGoal(false);
 	}
-}
-
-/**
-* Applies the jello force to the given pinepple.
-* This method is called when the given pineapple collides with a jello
-* to trigger upward momentum, and a jello quiver animation
-*/
-void CollisionController::handleJelloCollision(Pineapple* will) {
-	will->setCollidingWithJello(true);
-	if (!will->isLarge()) {
-		//Jump!
-		b2Body* body = will->getBody();
-		will->setVY(0);
-		body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
-		will->setJumping(true);
-		will->setGrounded(false);
-	}
-	else {
-		//Squish
-	}
-}
-
-/**
-* Applies the jello force to the given kid.
-* This method is called when a kid collides with a jello
-* to trigger upward momentum, and a jello quiver animation
-*/
-void CollisionController::handleJelloCollision(KidModel* kid) {
-	//Jump!
-	kid->setVY(10);
-	kid->setVX(KID_WALKSPEED + 2);
-	kid->setGrounded(false);
-	kid->setCollidingWithJello(true);
-}
-
-void CollisionController::handleSpikeCollision(SimpleObstacle* PineappleOrKid) {
-	_level->removeObstacle(PineappleOrKid);
-
-	//TODO: animation and sounds
-}
-
-/**
-* helper to determine if a given Obstacle is below a given character
-*/
-bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
-	float e = 0.01f;
-	float objTop = obj->getY() + (obj->getHeight() / 2);
-	float charBot = character->getY() - (character->getHeight() / 2);
-	return charBot + e >= objTop;
 }

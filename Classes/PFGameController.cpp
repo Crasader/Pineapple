@@ -22,10 +22,6 @@
 #include <cornell.h>
 #include <Box2D/Dynamics/b2World.h>
 #include <Box2D/Common/b2Math.h>
-#include <Box2D/Dynamics/Contacts/b2Contact.h>
-#include <Box2D/Collision/b2Collision.h>
-#include <Box2D/Collision/Shapes/b2EdgeShape.h>
-#include <Box2D/Dynamics/Joints/b2WeldJoint.h>
 #include "PFGameController.h"
 #include "PFInputController.h"
 #include "Pineapple.h"
@@ -37,10 +33,11 @@
 #include "CrushableModel.h"
 #include "LoadingScreenController.h"
 #include "Level.h"
+#include "CollisionController.h"
 
 
 using namespace cocos2d;
-using namespace std;
+//using namespace std;
 
 #pragma mark -
 #pragma mark Level Geography
@@ -229,6 +226,7 @@ GameController::GameController() :
     _world(nullptr),
     _avatar(nullptr),
     _active(false),
+	_collision(nullptr),
     _debug(false){}
 
 /**
@@ -306,14 +304,17 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _input.start();
     
     // Create the world; there are no listeners this time.
+		_collision = CollisionController::create();
+		_level = Level::create();
+		_collision->setLevel(_level);
     _world = WorldController::create(rect,gravity);
     _world->retain();
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
-        CollisionController::beginContact(contact);
+        _collision->beginContact(contact);
     };
     _world->onEndContact = [this](b2Contact* contact) {
-				CollisionController::endContact(contact);
+				_collision->endContact(contact);
     };
 
     // Create the scene graph
@@ -339,8 +340,6 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _losenode->setPosition(root->getContentSize().width/2.0f,
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
-    setFailure(false);
-		_level->setFailure(false);
 
     // Add everything to the root and retain
 	root->addChild(_hillsnode,0);
@@ -397,6 +396,7 @@ void GameController::dispose() {
  * with your serialization loader, which would process a level file.
  */
 void GameController::populate() {
+
     // We need to know the content scale for resolution independence
     // If the device is higher resolution than 1024x576, Cocos2d will scale it
     // This was set as the design resolution in AppDelegate
@@ -572,6 +572,7 @@ void GameController::populate() {
 		will->setFilterData(b);
 		will->setDebugNode(draw);
     addObstacle(will, 5);
+		_level->addPineapple(will);
     
 #pragma mark : Kids
     _kidsReachedGoal = new bool[KID_COUNT];
@@ -597,6 +598,8 @@ void GameController::populate() {
         _kids[i]->setFilterData(b);
         _kids[i]->setName(KID_NAME);
         addObstacle(_kids[i], 4);
+
+				_level->addKids(_kids);
     }
 
 #pragma mark : Red Cup
@@ -697,11 +700,11 @@ void GameController::populate() {
     _blender->setSensor(true);
     addObstacle(_blender, 3);
 
+		_level->addBlender(_blender);
+
     // Play the background music on a loop.
     Sound* source = _assets->get<Sound>(GAME_MUSIC);
     ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
-
-		_level = Level::create(_goalDoor, _kids, _avatar, _blender, _debugnode, _worldnode);
 }
 
 /**
@@ -743,7 +746,6 @@ void GameController::reset() {
     _debugnode->removeAllChildren();
     
     setFailure(false);
-		_level->setFailure(false);
     setComplete(false);
     populate();
 }
@@ -776,7 +778,7 @@ void GameController::setComplete(bool value) {
  * @param value whether the level is failed.
  */
 void GameController::setFailure(bool value){
-    _failed = value && !_complete;
+    _level->setFailure(value && !_complete);
     if (value) {
         Sound* source = _assets->get<Sound>(LOSE_MUSIC);
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);

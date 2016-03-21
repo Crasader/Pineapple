@@ -1,11 +1,9 @@
 #ifndef __COLLISION_CONTROLLER_H__
 #define __COLLISION_CONTROLLER_H__
 
-#include "cocos2d.h"
-#include <vector>
-#include <Box2D/Dynamics/b2WorldCallbacks.h>
-#include <Box2D/Dynamics/Joints/b2MouseJoint.h>
-#include <Box2D/Dynamics/b2Body.h>
+//#include "cocos2d.h"
+//#include <vector>
+//#include <Box2D/Dynamics/b2Body.h>
 #include <Box2D/Dynamics/b2Fixture.h>
 #include <unordered_set>
 #include <cornell/CUSimpleObstacle.h>
@@ -16,14 +14,14 @@ class LevelController;
 class Pineapple;
 class KidModel;
 
-using namespace std;
+using namespace cocos2d;
 
 class CollisionController {
 protected:
 	Level* _level;
 	LevelController* _levelCtrlr;
 	/** Mark set to handle more sophisticated collision callbacks */
-	unordered_set<b2Fixture*> _sensorFixtures;
+	std::unordered_set<b2Fixture*> _sensorFixtures;
 #pragma mark -
 #pragma mark Collision Handling
 	/**
@@ -76,6 +74,14 @@ public:
 
 #pragma mark -
 #pragma mark Allocation
+	/**
+	* 
+	*/
+	static CollisionController* create();
+
+	void setLevel(Level * level);
+
+private:
 	/**
 	* Creates a new game world with the default values.
 	*

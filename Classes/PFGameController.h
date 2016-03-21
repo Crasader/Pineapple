@@ -20,19 +20,19 @@
 #ifndef __PF_GAME_CONTROLLER_H__
 #define __PF_GAME_CONTROLLER_H__
 
-#include "cocos2d.h"
-#include <vector>
-#include <Box2D/Dynamics/b2WorldCallbacks.h>
-#include <Box2D/Dynamics/Joints/b2MouseJoint.h>
-#include <Box2D/Dynamics/b2Body.h>
-#include <Box2D/Dynamics/b2Fixture.h>
+//#include "cocos2d.h"
+//#include <vector>
+//#include <Box2D/Dynamics/b2WorldCallbacks.h>
+//#include <Box2D/Dynamics/Joints/b2MouseJoint.h>
+//#include <Box2D/Dynamics/b2Body.h>
+//#include <Box2D/Dynamics/b2Fixture.h>
 #include "PFInputController.h"
-#include <unordered_set>
+//#include <unordered_set>
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
 namespace cocos2d {
-    class RootLayer;
+		class RootLayer;
     class WorldController;
     class ComplexObstacle;
     class ObstacleSelector;
@@ -40,7 +40,6 @@ namespace cocos2d {
 }
 
 // These forward declarations are in the project
-class InputController;
 class Pineapple;
 class KidModel;
 class BlenderModel;
@@ -48,6 +47,7 @@ class Spinner;
 class CrushableModel;
 class LoadingScreenController;
 class Level;
+class CollisionController;
 
 using namespace cocos2d;
 using namespace std;
@@ -73,15 +73,18 @@ protected:
     
     /** Controller for abstracting out input away from layer */
     InputController _input;
+
+		/** Controller for collision handling */
+		CollisionController* _collision;
     
     /** Reference to the root node of the scene graph */
     RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
-	/** For hills background */
-	Node* _hillsnode;
-	/** For clouds background */
-	Node* _cloudsnode;
+		/** For hills background */
+		Node* _hillsnode;
+		/** For clouds background */
+		Node* _cloudsnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
     /** Reference to the win message label */
@@ -118,7 +121,7 @@ protected:
     /** Reference to the player avatar */
     Pineapple*      _avatar;
     /** References to the kid avatars */
-    KidModel**     _kids;
+    KidModel*     _kids[KID_COUNT];
     /** Reference to the blender avatar */
     BlenderModel* _blender;
     
@@ -162,9 +165,6 @@ protected:
      * @retain a reference to the obstacle
      */
     void addObstacle(Obstacle* obj, int zOrder);
-
-		void removeObstacle(Obstacle* obj);
-    
     
 public:
 #pragma mark -

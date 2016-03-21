@@ -1,16 +1,22 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
-#include "Pineapple.h"
-#include "PFBlenderModel.h"
-#include "KidModel.h"
-#include "SpikeModel.h"
+#include <cocos2d/cocos/2d/CCNode.h>
+#include <cornell/CUBoxObstacle.h>
+#include <cornell/CUSimpleObstacle.h>
+#include <cornell/CUObstacle.h>
+#include <cornell/CUPolygonObstacle.h>
+#include <cornell/CURootLayer.h>
+#include <cornell/CUWorldController.h>
 
 #define KID_COUNT 4
 
-class RootLayer;
-class PolygonObstacle;
-class WorldController;
+class Pineapple;
+class BlenderModel;
+class KidModel;
+class SpikeModel;
+
+using namespace cocos2d;
 
 class Level {
 protected:
@@ -19,7 +25,7 @@ protected:
 	/** Reference to the player avatar */
 	Pineapple*      _pineapple;
 	/** References to the kid avatars */
-	KidModel**     _kids;
+	KidModel*     _kids[KID_COUNT];
 	/** Reference to the blender avatar */
 	BlenderModel* _blender;
 	/** Reference to the root node of the scene graph */
@@ -70,7 +76,7 @@ public:
 	/**
 	*
 	*/
-	Pineapple* clearPineapple() { _pineapple = nullptr; }
+	void clearPineapple() { _pineapple = nullptr; }
 
 	/**
 	*
@@ -80,7 +86,7 @@ public:
 	/**
 	*
 	*/
-	Pineapple* clearKid(int i) { _kids[i] = nullptr; }
+	void clearKid(int i) { _kids[i] = nullptr; }
 
 
 	/**
@@ -140,7 +146,7 @@ public:
 	/** Reference to the player avatar */
 	void addPineapple(Pineapple* pineapple);
 	/** References to the kid avatars */
-	void addKids(KidModel** kids);
+	void addKids(KidModel* kids[KID_COUNT]);
 	/** Reference to the blender avatar */
 	void addBlender(BlenderModel* blender);
 	/** Reference to the root node of the scene graph */
@@ -149,9 +155,6 @@ public:
 	void addWorldNode (Node* worldnode);
 	/** Reference to the debug root of the scene graph */
 	void addDebugNode (Node* debugnode);
-
-	/** Flags for kids who have reached the goal */
-	bool* _kidsReachedGoal;
 
 	/** Length of the level in box2d units */
 	void addLength (float length);
