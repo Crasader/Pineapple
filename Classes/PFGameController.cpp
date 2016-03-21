@@ -378,6 +378,8 @@ void GameController::dispose() {
     _rootnode->removeAllChildren();
     _rootnode->release();
     _rootnode = nullptr;
+	_willWalkcycle->release();
+	_willWalkcycle = nullptr;
 }
 
 
@@ -511,16 +513,22 @@ void GameController::populate() {
     }
 
 #pragma mark : Dude
-    Vec2 dudePos = DUDE_POS;
-    image  = _assets->get<Texture2D>(DUDE_TEXTURE);
-    sprite = PolygonNode::createWithTexture(image);
-    _avatar = DudeModel::create(dudePos,_scale / DUDE_SCALE);
-    _avatar->setDrawScale(_scale);
-    
-    // Add the scene graph nodes to this object
-    sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale * DUDE_SCALE);
-    _avatar->setSceneNode(sprite);
+	Vec2 dudePos = DUDE_POS;
+	image = _assets->get<Texture2D>(DUDE_TEXTURE);
+	_willRest = PolygonNode::createWithTexture(image);
+	_willRest->setScale(cscale * DUDE_SCALE);
+	_avatar = DudeModel::create(dudePos, _scale / DUDE_SCALE);
+	_avatar->setDrawScale(_scale);
+	//_avatar->setSceneNode(_willRest);
+	_avatar->setIsMoving(false);
+
+	image = _assets->get<Texture2D>(WILL_WALKCYCLE);
+	_willWalkcycleFrame = 0;
+	_willWalkcycle = AnimationNode::create(image, 1, 12, 12);
+	_willWalkcycle->setScale(cscale * DUDE_SCALE);
+	_willWalkcycle->setFrame(_willWalkcycleFrame);
+	_avatar->setSceneNode(_willWalkcycle);
+	//_willWalkcycle->retain();
     
     draw = WireNode::create();
     draw->setColor(DEBUG_COLOR);
@@ -749,17 +757,28 @@ void GameController::update(float dt) {
                 _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_SHRINK_SCALE);
             }
         }
-        
         if ( _avatar->updateSize(dt)) {
             _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE);
-        }
-        
-        _avatar->applyForce();
-        
+        }        
+        _avatar->applyForce();        
         if (_avatar->isJumping()) {
             Sound* source = _assets->get<Sound>(JUMP_EFFECT);
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
+
+		// Animate Will when he's moving
+		if (abs(_avatar->getVX()) > 0.5f) {
+			_avatar->setIsMoving(true);
+			_willWalkcycleFrame++;
+			_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
+			//_avatar->setSceneNode(_willWalkcycle);			
+		}
+		else {
+			_avatar->setIsMoving(false);
+			_willWalkcycleFrame = 0;
+			_willWalkcycle->setFrame(_willWalkcycleFrame);
+			//_avatar->setSceneNode(_willRest);
+		}
     }
 
 	// Move the clouds
@@ -1184,6 +1203,7 @@ void GameController::preload() {
     
     tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
     tloader->loadAsync(DUDE_TEXTURE,      "textures/will2.png");
+	tloader->loadAsync(WILL_WALKCYCLE,    "textures/will_walkcycle.png");
     
     tloader->loadAsync(KID_TEXTURE_1,     "textures/pineapplet_bow.png");
     tloader->loadAsync(KID_TEXTURE_2,     "textures/pineapplet_glasses.png");

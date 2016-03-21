@@ -215,11 +215,11 @@ void DudeModel::setMovement(float value) {
     }
     
     // Change facing
-    TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
+    /*TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
     if (image != nullptr) {
         image->flipHorizontal(!image->isFlipHorizontal());
     }
-    _faceRight = (_movement > 0);
+    _faceRight = (_movement > 0);*/
 }
 
 #pragma mark -
@@ -335,8 +335,9 @@ void DudeModel::update(float dt) {
     } else {
         _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
     }
-    
+	
     CapsuleObstacle::update(dt);
+	
 }
 
 

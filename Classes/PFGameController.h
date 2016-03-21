@@ -144,6 +144,13 @@ protected:
 	int _middleFlip;
 	/** Number of times back background has been flipped */
 	int _backFlip;
+
+	/** Sprite for Will rest */
+	PolygonNode* _willRest;
+	/** Filmstrip for Will walkcycle */
+	AnimationNode* _willWalkcycle;
+	/** Frame counter for Will walkcycle */
+	int _willWalkcycleFrame;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;

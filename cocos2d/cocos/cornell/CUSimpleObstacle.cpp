@@ -137,7 +137,7 @@ void SimpleObstacle::positionSceneNode() {
     Vec2 pos = getPosition();
     pos.scale(_drawScale);
     float angle = -getAngle()*180.0f/M_PI;
-    
+
     // Positional snap
     if (_posSnap >= 0) {
         pos.x = floor((pos.x*_posFact+0.5f)/_posFact);
