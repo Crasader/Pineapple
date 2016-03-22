@@ -277,7 +277,6 @@ void DudeModel::releaseFixtures() {
     }
     
     CapsuleObstacle::releaseFixtures();
-    
     if (_sensorFixture != nullptr) {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
