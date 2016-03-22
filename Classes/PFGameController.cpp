@@ -693,6 +693,7 @@ void GameController::populate() {
         spike->setGravityScale(0);
         spike->setSensor(true);
         spike->setName(SPIKE_NAME);
+
         addObstacle(spike, 2);
     }
     
@@ -817,6 +818,23 @@ void GameController::setFailure(bool value){
     
 }
 
+void handleAvatarGrowth(float cscale, InputController _input, DudeModel* _avatar) {
+    int size = 0;
+    float scale = 1.0f;
+    if (_input.didGrow()) {
+        size = _avatar->grow();
+        if (size == 2)
+            scale = PINEAPPLE_GROW_SCALE;
+    } else if (_input.didShrink()) {
+        size = _avatar->shrink();
+        if (size == 2)
+            scale = PINEAPPLE_SHRINK_SCALE;
+    }
+    if (size) {
+        _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * scale);
+    }
+}
+
 /**
  * Executes the core gameplay loop of this world.
  *
@@ -858,20 +876,8 @@ void GameController::update(float dt) {
         _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
         _avatar->setJumping( _input.didJump());
         float cscale = Director::getInstance()->getContentScaleFactor();
-        if (_input.didGrow()) {
-            if (_avatar->grow()) {
-                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_GROW_SCALE);
-            }
-        }
-        if (_input.didShrink()) {
-            if (_avatar->shrink()) {
-                _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE * PINEAPPLE_SHRINK_SCALE);
-            }
-        }
         
-        if ( _avatar->updateSize(dt)) {
-            _avatar->getSceneNode()->setScale(cscale * DUDE_SCALE);
-        }
+        handleAvatarGrowth(cscale, _input, _avatar);
         
         _avatar->applyForce();
         

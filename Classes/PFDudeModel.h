@@ -74,8 +74,6 @@ using namespace cocos2d;
 #define DUDE_DAMPING    10.0f
 /** The maximum character speed */
 #define DUDE_MAXSPEED   5.0f
-/** The maximum duration of pineapple size */
-#define PINEAPPLE_MAX_SIZE_DURATION 3.0f
 /** The relative size of enlarged pineapple */
 #define PINEAPPLE_GROW_SCALE 1.5f
 /** The relative size of smaller pineapple */
@@ -103,8 +101,6 @@ protected:
     bool _isLarge = false;
     bool _isSmall = false;
     Size _normalSize = Size();
-    /** Duration since last grow or shrink, 0 if currently normal size */
-    float _durationSinceGrowOrShrink = 0.0f;
     /** How long until we can jump again */
     int  _jumpCooldown;
     /** Whether we are actively jumping */
@@ -183,24 +179,7 @@ public:
      * @return  An autoreleased physics object
      */
     static DudeModel* create(const Vec2& pos, const Vec2& scale);
-
-    int updateSize(float dt) {
-        if (_isLarge || _isSmall) {
-            _durationSinceGrowOrShrink += dt;
-        }
-        if (_durationSinceGrowOrShrink > PINEAPPLE_MAX_SIZE_DURATION) {
-            _isLarge = false;
-            _isSmall = false;
-            _durationSinceGrowOrShrink = 0.0f;
-            toNormalSize();
-            return 1;
-        }
-        return 0;
-    }
     
-    void toNormalSize() {
-        setDimension(_normalSize);
-    }
     
     bool isLarge() const {
         return _isLarge;
@@ -210,30 +189,38 @@ public:
      * Setter for _isLarge
      */
     void setIsLarge(bool isLarge) {
-        _durationSinceGrowOrShrink = 0.0f;
         _isLarge = isLarge;
     }
     
     /**
-     * Grows the pineapple, returns 1 if grown
+     * Grows the pineapple, returns 1 if now normal size, 2 if large
      */
     int grow() {
-        if (!_isLarge  && !_isSmall) {
-            setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-            setIsLarge(true);
+        if (_isSmall) {
+            setDimension(_normalSize);
+            _isSmall = false;
             return 1;
+        } else if (!_isLarge  && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
+            _isLarge = true;
+            return 2;
         }
+
         return 0;
     }
     
     /**
-     * Shrinks the pineapple, returns 1 if shrunk
+     * Shrinks the pineapple, returns 1 if normal size, 2 if small
      */
     int shrink() {
-        if (!_isLarge && !_isSmall) {
+        if (_isLarge) {
+            setDimension(_normalSize);
+            _isLarge = false;
+            return 1;
+        } else if (!_isLarge && !_isSmall) {
             setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
             setIsSmall(true);
-            return 1;
+            return 2;
         }
         return 0;
     }
@@ -246,7 +233,6 @@ public:
      * Setter for _isLarge
      */
     void setIsSmall(bool isSmall) {
-        this->_durationSinceGrowOrShrink = 0.0f;
         this->_isSmall = isSmall;
     }
     
