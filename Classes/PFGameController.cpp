@@ -544,7 +544,7 @@ void GameController::populate() {
 #pragma mark : Platforms
     image  = _assets->get<Texture2D>(PLATFORM_TEXTURE);
     wname = "platform";
-    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
+    for (int ii = 0; ii < 0; ii++) {
         PolygonObstacle* wallobj;
         
         Poly2 wall(PLATFORM[ii],PLATFORM_VERTS);
