@@ -20,6 +20,16 @@ CollisionController::CollisionController() :
 #pragma mark Collision Handling
 
 /**
+ * helper to determine if a given Obstacle is below a given character
+ */
+bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
+    float e = 0.01f;
+    float objTop = obj->getY() + (obj->getHeight() / 2);
+    float charBot = character->getY() - (character->getHeight() / 2);
+    return charBot + e >= objTop;
+}
+
+/**
 * Processes the start of a collision
 *
 * This method is called when we first get a collision between two objects.  We use
@@ -243,14 +253,4 @@ void CollisionController::handleSpikeCollision(SimpleObstacle* PineappleOrKid) {
 	_level->removeObstacle(PineappleOrKid);
 
 	//TODO: animation and sounds
-}
-
-/**
-* helper to determine if a given Obstacle is below a given character
-*/
-bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
-	float e = 0.01f;
-	float objTop = obj->getY() + (obj->getHeight() / 2);
-	float charBot = character->getY() - (character->getHeight() / 2);
-	return charBot + e >= objTop;
 }

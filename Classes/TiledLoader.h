@@ -3,6 +3,7 @@
 
 #include <cornell.h>
 #include "Vec2.h"
+#include "Level.h"
 
 //Forward class declarations
 

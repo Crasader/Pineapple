@@ -16,6 +16,7 @@ class LevelController;
 class Pineapple;
 class KidModel;
 
+using namespace cocos2d;
 using namespace std;
 
 class CollisionController {

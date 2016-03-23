@@ -5,8 +5,22 @@
 #include "PFBlenderModel.h"
 #include "KidModel.h"
 #include "SpikeModel.h"
+#include <cornell.h>
 
 #define KID_COUNT 4
+/** Color to outline the physics nodes */
+#define DEBUG_COLOR     Color3B::YELLOW
+/** Opacity of the physics outlines */
+#define DEBUG_OPACITY   192
+
+/** The density for most physics objects */
+#define BASIC_DENSITY   0.0f
+/** The density for a bullet */
+#define HEAVY_DENSITY   10.0f
+/** Friction of most platforms */
+#define BASIC_FRICTION  0.4f
+/** The restitution for all physics objects */
+#define BASIC_RESTITUTION   0.1f
 
 class Level {
 protected:
