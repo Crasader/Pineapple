@@ -127,8 +127,6 @@ protected:
     std::string _sensorName;
     /** The node for debugging the sensor */
     WireNode* _sensorNode;
-	/** Whether the avatar is already in motion */
-	bool _isMoving;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -254,19 +252,6 @@ public:
         this->_isSmall = isSmall;
     }
 
-	/**
-	 * Getter for _isMoving
-	 */
-	bool getIsMoving() {
-		return this->_isMoving;
-	}
-
-	/**
-	 * Setter for _isMoving
-	 */
-	void setIsMoving(bool moving) {
-		this->_isMoving = moving;
-	}
     
 #pragma mark Attribute Properties
     /**

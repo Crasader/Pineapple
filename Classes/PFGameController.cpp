@@ -378,8 +378,8 @@ void GameController::dispose() {
     _rootnode->removeAllChildren();
     _rootnode->release();
     _rootnode = nullptr;
-	_willWalkcycle->release();
-	_willWalkcycle = nullptr;
+	//_willWalkcycle->release();
+	//_willWalkcycle = nullptr;
 }
 
 
@@ -520,7 +520,6 @@ void GameController::populate() {
 	_avatar = DudeModel::create(dudePos, _scale / DUDE_SCALE);
 	_avatar->setDrawScale(_scale);
 	//_avatar->setSceneNode(_willRest);
-	_avatar->setIsMoving(false);
 
 	image = _assets->get<Texture2D>(WILL_WALKCYCLE);
 	_willWalkcycleFrame = 0;
@@ -767,14 +766,15 @@ void GameController::update(float dt) {
         }
 
 		// Animate Will when he's moving
-		if (abs(_avatar->getVX()) > 0.5f) {
-			_avatar->setIsMoving(true);
+		if (_avatar->getVX() > 0.5f) {
 			_willWalkcycleFrame++;
+			_willWalkcycle->setFrame(_willWalkcycleFrame % 12);			
+		} 
+		else if (_avatar->getVX() < -0.5f) {
+			_willWalkcycleFrame += 11;;
 			_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-			//_avatar->setSceneNode(_willWalkcycle);			
 		}
 		else {
-			_avatar->setIsMoving(false);
 			_willWalkcycleFrame = 0;
 			_willWalkcycle->setFrame(_willWalkcycleFrame);
 			//_avatar->setSceneNode(_willRest);

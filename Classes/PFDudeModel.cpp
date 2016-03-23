@@ -218,8 +218,8 @@ void DudeModel::setMovement(float value) {
     /*TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
     if (image != nullptr) {
         image->flipHorizontal(!image->isFlipHorizontal());
-    }
-    _faceRight = (_movement > 0);*/
+    }*/
+    _faceRight = (_movement > 0);
 }
 
 #pragma mark -
