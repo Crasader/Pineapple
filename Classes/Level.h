@@ -1,7 +1,6 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
-#include <cocos2d/cocos/2d/CCNode.h>
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUSimpleObstacle.h>
 #include <cornell/CUObstacle.h>
