@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		037D90E51C98FA0C001C332F /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
 		037D90E61C98FA0C001C332F /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
+		038104621CA385FE00FA17FB /* PlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 038104601CA385FE00FA17FB /* PlatformModel.cpp */; };
+		038104631CA385FE00FA17FB /* PlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 038104601CA385FE00FA17FB /* PlatformModel.cpp */; };
 		03E256141C991AF0002FB07E /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
 		03E256151C991AF0002FB07E /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
 		1AC6FB21180E996B004C840B /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */; };
@@ -125,6 +127,8 @@
 /* Begin PBXFileReference section */
 		037D90E31C98FA0C001C332F /* SpikeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpikeModel.cpp; sourceTree = "<group>"; };
 		037D90E41C98FA0C001C332F /* SpikeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpikeModel.h; sourceTree = "<group>"; };
+		038104601CA385FE00FA17FB /* PlatformModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlatformModel.cpp; sourceTree = "<group>"; };
+		038104611CA385FE00FA17FB /* PlatformModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PlatformModel.hpp; sourceTree = "<group>"; };
 		03E256121C991AF0002FB07E /* CrushableModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrushableModel.cpp; sourceTree = "<group>"; };
 		03E256131C991AF0002FB07E /* CrushableModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrushableModel.h; sourceTree = "<group>"; };
 		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
@@ -363,6 +367,8 @@
 				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
 				405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */,
 				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
+				038104601CA385FE00FA17FB /* PlatformModel.cpp */,
+				038104611CA385FE00FA17FB /* PlatformModel.hpp */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -587,6 +593,7 @@
 				405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */,
 				405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */,
 				405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */,
+				038104621CA385FE00FA17FB /* PlatformModel.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				037D90E51C98FA0C001C332F /* SpikeModel.cpp in Sources */,
 				405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */,
@@ -605,6 +612,7 @@
 				405CBEBC1C7D1A5A004AB5A0 /* PFInputController.cpp in Sources */,
 				405CBEB91C7D1A56004AB5A0 /* PFDudeModel.cpp in Sources */,
 				400C68521C94E32800C141C3 /* JelloModel.cpp in Sources */,
+				038104631CA385FE00FA17FB /* PlatformModel.cpp in Sources */,
 				405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */,
 				03E256151C991AF0002FB07E /* CrushableModel.cpp in Sources */,
 				4070BDDA1C7E7289008AE7AF /* KidModel.cpp in Sources */,
