@@ -14,7 +14,7 @@
 
 using namespace cocos2d;
 
-class TiledLoader {
+class LevelController {
 protected:
     /** The level that is being built */
     Level* _level;
@@ -53,7 +53,7 @@ protected:
     
 public:
 
-    static TiledLoader* create(SceneManager* assets,  RootLayer* rootnode,
+    static LevelController* create(SceneManager* assets,  RootLayer* rootnode,
                                Node* worldnode, Node* debugnode,
                                WorldController* world, Vec2 scale);
                  
@@ -65,7 +65,7 @@ public:
     Level* getLevel() { return _level; }
 
 private:
-    TiledLoader();
+    LevelController();
 
 };
 #endif

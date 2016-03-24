@@ -46,7 +46,7 @@ class BlenderModel;
 class Spinner;
 class CrushableModel;
 class LoadingScreenController;
-class TiledLoader;
+class LevelController;
 class Level;
 class CollisionController;
 
@@ -114,7 +114,7 @@ protected:
     PolygonNode* _backBackground_2;
     
     /** Reference to the level controller */
-    TiledLoader* _levelController;
+    LevelController* _levelController;
     /** Reference to current level */
     Level* _level;
     

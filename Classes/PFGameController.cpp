@@ -33,7 +33,7 @@
 #include "CrushableModel.h"
 #include "LoadingScreenController.h"
 #include "Level.h"
-#include "TiledLoader.h"
+#include "LevelController.h"
 #include "CollisionController.h"
 
 
@@ -261,7 +261,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _rootnode->retain();
     
     // Now populate the physics objects
-    _levelController = TiledLoader::create(_assets, _rootnode, _worldnode, _debugnode, _world, _scale);
+    _levelController = LevelController::create(_assets, _rootnode, _worldnode, _debugnode, _world, _scale);
     _levelController->read("");
     _collision->setLevel(_levelController->getLevel());
     _level = _levelController->getLevel();
