@@ -92,7 +92,7 @@ using namespace std;
 // IMPORTANT: Note that Box2D units do not equal drawing units
 /** The wall vertices */
 #define WALL_VERTS  8
-#define WALL_COUNT  2
+#define WALL_COUNT  3
 
 #define FLOOR_EXTRA_LENGTH 5.0f
 #define OFFSCREEN_BARRIER_WIDTH 3.0f
@@ -102,6 +102,13 @@ using namespace std;
 #define CUP_COUNT 1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
+	//Main floor
+    {
+        -FLOOR_EXTRA_LENGTH, 0.0f,
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
+        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y,
+        -FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y
+    },
     //Wall preventing falling through floor on left
     {
         0.0f, 0.0f,
@@ -118,19 +125,12 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
     }
 };
 
-#define PLATFORM_COUNT 2
+#define PLATFORM_COUNT 1
 #define PLATFORM_VERTS 8
 
 float PLATFORM[PLATFORM_COUNT][PLATFORM_VERTS] = {
     {17.0f, SECOND_PLATFORM_Y, 17.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT,
-        20.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT, 20.0f, SECOND_PLATFORM_Y},
-    //Main floor
-    {
-        -FLOOR_EXTRA_LENGTH, 0.0f,
-        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
-        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y,
-        -FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y
-    }
+        20.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT, 20.0f, SECOND_PLATFORM_Y}
 };
 
 /** The goal door position */

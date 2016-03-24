@@ -193,4 +193,4 @@ CC_CONSTRUCTOR_ACCESS:
 	virtual bool init(const char* texture, const Vec2& pos, const Vec2& scale);
 };
 
-#endif /* __PF_JELLO_MODEL_H__ */
+#endif /* __CRUSHABLE_MODEL_H__ */
