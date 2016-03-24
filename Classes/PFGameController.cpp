@@ -817,7 +817,7 @@ void GameController::setFailure(bool value){
     
 }
 
-void handleAvatarGrowth(float cscale, InputController _input, DudeModel* _avatar) {
+void handleAvatarGrowth(float cscale, InputController& _input, DudeModel* _avatar) {
     int size = 0;
     float scale = 1.0f;
     if (_input.didGrow()) {
