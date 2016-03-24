@@ -8,12 +8,12 @@
 #include <cornell/CURootLayer.h>
 #include <cornell/CUWorldController.h>
 
-#define KID_COUNT 4
+#include "Pineapple.h"
+#include "PFBlenderModel.h"
+#include "KidModel.h"
+#include "SpikeModel.h"
 
-class Pineapple;
-class BlenderModel;
-class KidModel;
-class SpikeModel;
+#define KID_COUNT 4
 
 using namespace cocos2d;
 

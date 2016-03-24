@@ -340,6 +340,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _losenode->setPosition(root->getContentSize().width/2.0f,
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
+    setFailure(false);
 
     // Add everything to the root and retain
 	root->addChild(_hillsnode,0);
@@ -598,9 +599,9 @@ void GameController::populate() {
         _kids[i]->setFilterData(b);
         _kids[i]->setName(KID_NAME);
         addObstacle(_kids[i], 4);
-
-				_level->addKids(_kids);
     }
+    _level->addKids(_kids);
+
 
 #pragma mark : Red Cup
 		for (int i = 0; i < CUP_COUNT; i++) {
