@@ -11,17 +11,23 @@ _kids(),
 _pineapple(nullptr),
 _blender(nullptr),
 _failed(false),
+_walls(nullptr),
+_platforms(nullptr),
 _length(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _platformCount(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _wallCount(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _kidsRemaining(KID_COUNT) {}
 
-Level* Level::create() {
-	return new (std::nothrow) Level();
+Level* Level::create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world) {
+	Level* l = new (std::nothrow) Level();
+    l->_rootnode = rootnode;
+    l->_worldnode = worldnode;
+    l->_debugnode = debugnode;
+    l->_world = world;
+    return l;
 }
 
-Level::~Level(){
-    
+void Level::dispose() {
     //TODO - pre-nulling cleanup
     
     _pineapple = nullptr;
@@ -48,9 +54,41 @@ Level::~Level(){
     _length = UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT;
 }
 
+Level::~Level(){
+    dispose();
+}
+
+/**
+ * Immediately adds the object to the physics world.
+ * Should not be called directly, shuold only be called as part of another add function
+ *
+ * Objects have a z-order.  This is the order they are drawn in the scene
+ * graph node.  Objects with the different textures should have different
+ * z-orders whenever possible.  This will cut down on the amount of drawing done
+ *
+ * param obj The object to add
+ * param zOrder The drawing order
+ *
+ * @retain a reference to the obstacle
+ */
+void Level::addObstacle(Obstacle* obj, int zOrder) {
+    if (_world == nullptr || _worldnode == nullptr || _debugnode == nullptr) {
+        CC_ASSERT(false);
+    }
+    
+    _world->addObstacle(obj);  // Implicit retain
+    if (obj->getSceneNode() != nullptr) {
+        _worldnode->addChild(obj->getSceneNode(),zOrder);
+    }
+    if (obj->getDebugNode() != nullptr) {
+        _debugnode->addChild(obj->getDebugNode(),zOrder);
+    }
+}
+
 void Level::addGoal(BoxObstacle* goal) {
     if (_goalDoor == nullptr) {
         _goalDoor = goal;
+        addObstacle(_goalDoor, GOAL_Z_INDEX);
     } else {
         CC_ASSERT(false);
     }
@@ -59,6 +97,7 @@ void Level::addGoal(BoxObstacle* goal) {
 void Level::addPineapple(Pineapple* will) {
 	if (_pineapple == nullptr) {
 		_pineapple = will;
+        addObstacle(_pineapple, PINEAPPLE_Z_INDEX);
     } else {
         CC_ASSERT(false);
     }
@@ -67,6 +106,7 @@ void Level::addPineapple(Pineapple* will) {
 void Level::addBlender(BlenderModel* blender) {
 	if (_blender == nullptr) {
 		_blender = blender;
+        addObstacle(_blender, BLENDER_Z_INDEX);
     } else {
         CC_ASSERT(false);
     }
@@ -76,39 +116,8 @@ void Level::addKids(KidModel* kids[KID_COUNT]) {
 	if (_kids[0] == nullptr) {
 		for (int i = 0; i < KID_COUNT; i++) {
 			_kids[i] = kids[i];
+            addObstacle(_kids[i], KID_Z_INDEX+i);
 		}
-    } else {
-        CC_ASSERT(false);
-    }
-}
-
-void Level::addRootNode(RootLayer* root) {
-    if (_rootnode == nullptr) {
-        _rootnode = root;
-    } else {
-        CC_ASSERT(false);
-    }
-}
-
-void Level::addWorldNode(Node* worldnode) {
-    if (_worldnode == nullptr) {
-        _worldnode = worldnode;
-    } else {
-        CC_ASSERT(false);
-    }
-}
-
-void Level::addWorld(WorldController* world) {
-    if (_world == nullptr) {
-        _world = world;
-    } else {
-        CC_ASSERT(false);
-    }
-}
-
-void Level::addDebugNode(Node* debugnode) {
-    if (_debugnode == nullptr) {
-        _debugnode = debugnode;
     } else {
         CC_ASSERT(false);
     }
@@ -141,6 +150,9 @@ void Level::addWallCount(int wallCount) {
 void Level::addWalls(PolygonObstacle **walls) {
     if (_walls == nullptr) {
         _walls = walls;
+        for(int i = 0; i < _wallCount; i++) {
+            addObstacle(_walls[i], WALL_Z_INDEX);
+        }
     } else {
         CC_ASSERT(false);
     }
@@ -149,6 +161,9 @@ void Level::addWalls(PolygonObstacle **walls) {
 void Level::addPlatforms(PolygonObstacle **platforms) {
     if (_platforms == nullptr) {
         _platforms = platforms;
+        for(int i = 0; i < _platformCount; i++) {
+            addObstacle(_platforms[i], PLATFORM_Z_INDEX);
+        }
     } else {
         CC_ASSERT(false);
     }
@@ -165,28 +180,6 @@ void Level::addScale(Vec2 scale) {
     }
 }
 
-/**
- * Immediately adds the object to the physics world
- *
- * Objects have a z-order.  This is the order they are drawn in the scene
- * graph node.  Objects with the different textures should have different
- * z-orders whenever possible.  This will cut down on the amount of drawing done
- *
- * param obj The object to add
- * param zOrder The drawing order
- *
- * @retain a reference to the obstacle
- */
-void Level::addObstacle(Obstacle* obj, int zOrder) {
-    if (_world == nullptr || _worldnode == nullptr || _debugnode == nullptr) {
-        CC_ASSERT(false);
-    }
-    
-    _world->addObstacle(obj);  // Implicit retain
-    if (obj->getSceneNode() != nullptr) {
-        _worldnode->addChild(obj->getSceneNode(),zOrder);
-    }
-    if (obj->getDebugNode() != nullptr) {
-        _debugnode->addChild(obj->getDebugNode(),zOrder);
-    }
+void Level::addAnonymousObstacle(cocos2d::Obstacle *obj, int zOrder) {
+    addObstacle(obj, zOrder);
 }

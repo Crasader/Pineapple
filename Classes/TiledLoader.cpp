@@ -6,18 +6,48 @@
 #define SPIKE_NAME "spike"
 #define CUP_NAME "cup"
 
-#define WALL_VERTS 8
-#define PLATFORM_VERTS 8
+#define WALL_VERTS      8
+#define PLATFORM_VERTS  8
+#define POS_COORDS      2
+
+/** Width of the game world in Box2d units */
+#define DEFAULT_WIDTH   32.0f
+/** Height of the game world in Box2d units */
+#define DEFAULT_HEIGHT  12.0f
+/** Half-width of scrolling window in Box2d units */
+#define WINDOW_SIZE     5.0f
+
+
+
+#define MAIN_PLATFORM_Y         2.0f        //DELETE ONCE LEVEL READING IN
+#define SECOND_PLATFORM_Y       4.25f       //DELETE ONCE LEVEL READING IN
+#define SECOND_PLATFORM_HEIGHT  .5f         //DELETE ONCE LEVEL READING IN
+
+#define JELLO_COUNT 1                       //DELETE ONCE LEVEL READING IN
+#define SPIKE_COUNT 1                       //DELETE ONCE LEVEL READING IN
+#define CUP_COUNT 1                         //DELETE ONCE LEVEL READING IN
+
+#define LEVEL_LENGTH    40.0f               //DELETE ONCE LEVEL READING IN
+#define WALL_COUNT      3                   //DELETE ONCE LEVEL READING IN
+#define PLATFORM_COUNT  1                   //DELETE ONCE LEVEL READING IN
+#define FLOOR_EXTRA_LENGTH 5.0f             //DELETE ONCE LEVEL READING IN
+#define OFFSCREEN_BARRIER_WIDTH 3.0f        //DELETE ONCE LEVEL READING IN
+
 
 TiledLoader::TiledLoader() :
 _assets(nullptr),
-_scale(nullptr),
 _level(nullptr){}
 
-TiledLoader* TiledLoader::create(SceneManager* assets, Vec2 scale) {
+TiledLoader* TiledLoader::create(SceneManager* assets, RootLayer* rootnode,
+                                 Node* worldnode, Node* debugnode,
+                                 WorldController* world, Vec2 scale) {
     TiledLoader* loader = new (std::nothrow) TiledLoader();
-    
+
     loader->_assets = assets;
+    loader->_rootnode = rootnode;
+    loader->_worldnode = worldnode;
+    loader->_debugnode = debugnode;
+    loader->_world = world;
     loader->_scale = scale;
     loader->_level = nullptr;
     return loader;
@@ -57,16 +87,77 @@ Level* TiledLoader::read(string filename) {
     if(_level != nullptr) {
         _level->dispose();
     }
-    Level* level = Level::create();
     
+    //------------ BEGIN DEFAULT LEVEL SECTION ------------------------------
+
     
-    return level;
+    float** walls = new float* [WALL_COUNT];
+    walls[0] = new float[WALL_VERTS]{
+                    -FLOOR_EXTRA_LENGTH, 0.0f,
+                    LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
+                    LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y,
+                    -FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y
+                };
+    walls[1] = new float[WALL_VERTS]{
+                    0.0f, 0.0f,
+                    0.0f, DEFAULT_HEIGHT,
+                    -OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
+                    -OFFSCREEN_BARRIER_WIDTH, 0.0
+                };
+    walls[2] = new float[WALL_VERTS]{
+                    LEVEL_LENGTH, 0.0f,
+                    LEVEL_LENGTH, DEFAULT_HEIGHT,
+                    LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
+                    LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, 0.0
+    };
+    
+    float** PLATFORM = new float*[PLATFORM_COUNT];
+    PLATFORM[0] = new float[PLATFORM_VERTS]
+        {17.0f, SECOND_PLATFORM_Y, 17.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT,
+            20.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT, 20.0f, SECOND_PLATFORM_Y};
+    
+    float GOAL_POS[] = {38.0f, 3.0f};
+
+    float PINEAPPLE_POS[] = {10.0f, 7.0f};
+
+    float** KID_POS = new float* [KID_COUNT];
+    KID_POS[0] = new float[POS_COORDS]{MAIN_PLATFORM_Y, 5.1f};
+    KID_POS[1] = new float[POS_COORDS]{4.0f, 5.1f};
+    KID_POS[2] = new float[POS_COORDS]{6.0f, 5.1f};
+    KID_POS[3] = new float[POS_COORDS]{8.0f, 5.1f};
+    
+    float BLENDER_POS[] = {-25.0f, 7.0f};
+
+    float** CUP_POS = new float* [CUP_COUNT];
+    CUP_POS[0] = new float[POS_COORDS]{28.0f, 2.5f};
+
+    float** JELLO_POS = new float* [JELLO_COUNT];
+    JELLO_POS[0] = new float[POS_COORDS]{15.0f, MAIN_PLATFORM_Y};
+
+    float** SPIKE_POS = new float* [SPIKE_COUNT];
+    SPIKE_POS[0] = new float[POS_COORDS]{17.5f, MAIN_PLATFORM_Y};
+    
+    //------------ END SECTION --------------------------------------------
+    
+    _level = Level::create(_rootnode, _worldnode, _debugnode, _world);
+    
+    addGoal(GOAL_POS);
+    addWalls(WALL_COUNT, walls);
+    addPlatforms(PLATFORM_COUNT, PLATFORM);
+    addPineapple(PINEAPPLE_POS);
+    addKids(KID_POS);
+    addCups(CUP_COUNT, CUP_POS);
+    addJello(JELLO_COUNT, JELLO_POS);
+    addSpikes(SPIKE_COUNT, SPIKE_POS);
+    addBlender(BLENDER_POS);
+    
+    return _level;
 }
 
-void TiledLoader::addGoal(Vec2 goalPos) {
+void TiledLoader::addGoal(float goalPos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
-    Texture2D* image = _assets->get<Texture2D>(""); //TODO - add GOAL_TEXTURE
-
+    Texture2D* image = _assets->get<Texture2D>(GOAL_TEXTURE);
+    
     
     Size goalSize(image->getContentSize().width*cscale/_scale.x,
                   image->getContentSize().height*cscale/_scale.y);
@@ -85,7 +176,7 @@ void TiledLoader::addGoal(Vec2 goalPos) {
 void TiledLoader::addWalls(int wallCount, float** wallPos) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     _level->addWallCount(wallCount);
-    Texture2D* image  = _assets->get<Texture2D>(""); //TODO - add TILE_TEXTURE
+    Texture2D* image  = _assets->get<Texture2D>(TILE_TEXTURE);
     PolygonObstacle** walls = new PolygonObstacle* [wallCount];
     for (int ii = 0; ii < wallCount; ii++) {
         Poly2 wallPoly(wallPos[ii],WALL_VERTS);
@@ -105,17 +196,17 @@ void TiledLoader::addWalls(int wallCount, float** wallPos) {
     _level->addWalls(walls);
 }
 
-void TiledLoader::addPlatforms(int platformCount, float** platformPos) {
+void TiledLoader::addPlatforms(int platformCount, float* platformPos[PLATFORM_VERTS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     _level->addPlatformCount(platformCount);
-    Texture2D* image  = _assets->get<Texture2D>(""); //TODO - add PLATORM_TEXTURE
+    Texture2D* image  = _assets->get<Texture2D>(PLATFORM_TEXTURE);
     PolygonObstacle** platforms = new PolygonObstacle* [platformCount];
     for (int ii = 0; ii < platformCount; ii++) {
         Poly2 platformPoly(platformPos[ii],PLATFORM_VERTS);
         platformPoly.triangulate();
         PolygonObstacle* platformObj = PolygonObstacle::create(platformPoly);
         platformObj->setDrawScale(_scale.x , _scale.y);
-                
+        
         // Add the scene graph nodes to this object
         platformPoly *= _scale / 1.95f; //This is janky AF.....
         PolygonNode*  sprite = PolygonNode::createWithTexture(image,platformPoly);
@@ -131,7 +222,7 @@ void TiledLoader::addPlatforms(int platformCount, float** platformPos) {
 }
 
 
-void TiledLoader::addPineapple(Vec2 pineapplePos) {
+void TiledLoader::addPineapple(float pineapplePos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Texture2D* image  = _assets->get<Texture2D>(PINEAPPLE_TEXTURE);
     Pineapple* will = Pineapple::create(pineapplePos,_scale / PINEAPPLE_SCALE);
@@ -140,7 +231,7 @@ void TiledLoader::addPineapple(Vec2 pineapplePos) {
     PolygonNode* sprite = PolygonNode::createWithTexture(image);
     sprite->setScale(cscale * PINEAPPLE_SCALE);
     will->setSceneNode(sprite);
-
+    
     
     b2Filter b = b2Filter();
     b.categoryBits = PINEAPPLE_MASK;
@@ -151,7 +242,7 @@ void TiledLoader::addPineapple(Vec2 pineapplePos) {
     _level->addPineapple(will);
 }
 
-void TiledLoader::addKids(Vec2* kidPos) {
+void TiledLoader::addKids(float* kidPos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     KidModel** kids = new KidModel* [KID_COUNT];
     for (int i = 0; i < KID_COUNT; i++) {
@@ -177,7 +268,7 @@ void TiledLoader::addKids(Vec2* kidPos) {
     _level->addKids(kids);
 }
 
-void TiledLoader::addJello(int jelloCount, Vec2* jelloPos) {
+void TiledLoader::addJello(int jelloCount, float* jelloPos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     for(int i = 0; i < jelloCount; i++) {
         Vec2 pos = jelloPos[i];
@@ -192,15 +283,15 @@ void TiledLoader::addJello(int jelloCount, Vec2* jelloPos) {
         initDebugProperties(jello);
         initSensor(jello);
         jello->setName(JELLO_NAME);
-        _level->addObstacle(jello, 0); //TODO - Z-index
+        _level->addAnonymousObstacle(jello, JELLO_Z_INDEX);
     }
 }
 
-void TiledLoader::addCups(int cupCount, Vec2* cupPos) {
+void TiledLoader::addCups(int cupCount, float* cupPos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     for (int i = 0; i < cupCount; i++) {
         Vec2 pos = cupPos[i];
-        Texture2D* image = _assets->get<Texture2D>(""); //TODO - do BLUE CUP TEXTURE
+        Texture2D* image = _assets->get<Texture2D>(BLUE_CUP_TEXTURE);
         CrushableModel* cup = CrushableModel::create(BLUE_CUP_TEXTURE, pos, _scale / CRUSHABLE_SCALE);
         cup->setDrawScale(_scale);
         
@@ -211,11 +302,11 @@ void TiledLoader::addCups(int cupCount, Vec2* cupPos) {
         cup->setName(CUP_NAME);
         initPhysicalObstacle(cup);
         initDebugProperties(cup);
-        _level->addObstacle(cup, 0); //TODO - z-index
+        _level->addAnonymousObstacle(cup, CUP_Z_INDEX);
     }
 }
 
-void TiledLoader::addSpikes(int spikeCount, Vec2* spikesPos) {
+void TiledLoader::addSpikes(int spikeCount, float* spikesPos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     for(int i = 0; i < spikeCount; i++) {
         Vec2 spikePos = spikesPos[i];
@@ -230,11 +321,11 @@ void TiledLoader::addSpikes(int spikeCount, Vec2* spikesPos) {
         initDebugProperties(spike);
         initSensor(spike);
         spike->setName(SPIKE_NAME);
-        _level->addObstacle(spike, 0); //TODO - z index
+        _level->addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }
 }
 
-void TiledLoader::addBlender(Vec2 blenderPos) {
+void TiledLoader::addBlender(float blenderPos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Texture2D* image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
     BlenderModel* blender = BlenderModel::create(blenderPos,_scale / BLENDER_SCALE);

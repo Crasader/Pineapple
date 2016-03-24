@@ -46,6 +46,7 @@ class BlenderModel;
 class Spinner;
 class CrushableModel;
 class LoadingScreenController;
+class TiledLoader;
 class Level;
 class CollisionController;
 
@@ -112,18 +113,10 @@ protected:
     /** The back background (second copy), with heavy parallax */
     PolygonNode* _backBackground_2;
     
-		// Reference to current level
-		Level* _level;
-
-    // Physics objects for the game
-    /** Reference to the goalDoor (for collision detection) */
-    BoxObstacle*    _goalDoor;
-    /** Reference to the player avatar */
-    Pineapple*      _avatar;
-    /** References to the kid avatars */
-    KidModel*     _kids[KID_COUNT];
-    /** Reference to the blender avatar */
-    BlenderModel* _blender;
+    /** Reference to the level controller */
+    TiledLoader* _levelController;
+    /** Reference to current level */
+    Level* _level;
     
     /** Whether or note this game is still active */
     bool _active;
@@ -131,8 +124,6 @@ protected:
     bool _complete;
     /** Whether or not debug mode is active */
     bool _debug;
-    /** Flags for kids who have reached the goal */
-    bool* _kidsReachedGoal;
     /** Whether we have failed at this world (and need a reset) */
     bool _failed;
     /** Countdown active for winning or losing */

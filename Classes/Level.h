@@ -29,6 +29,30 @@
 /** The restitution for all physics objects */
 #define BASIC_RESTITUTION   0.1f
 
+/** 
+ *          Z index table:
+ * /------------------------------------\
+ * | 0-9    |   Behind walls            |
+ * | 10-19  |   Walls and equivalent    |
+ * | 20-29  |   Obstacles               |
+ * | 30-40  |   Characters              |
+ * \------------------------------------/
+ */
+
+#define GOAL_Z_INDEX            0
+ 
+#define WALL_Z_INDEX            10
+#define PLATFORM_Z_INDEX        11
+
+#define CUP_Z_INDEX             20
+#define JELLO_Z_INDEX           21
+#define SPIKES_Z_INDEX          29
+
+#define KID_Z_INDEX             30 //30...30+NUM_CHILDREN-1 used by Kids
+
+#define PINEAPPLE_Z_INDEX       35
+#define BLENDER_Z_INDEX         36
+
 using namespace cocos2d;
 
 class Level {
@@ -146,14 +170,24 @@ public:
 	*
 	*/
 	void setFailure(bool value) { _failed = value; }
+    
+    /**
+     *
+     */
+    float getLength() { return _length; }
 
 #pragma mark -
 #pragma mark Allocation
 	/**
 	*
 	*/
-	static Level* create();
+	static Level* create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world);
 
+    /** Actually handles the obstacle addition. Should not be called from the outside
+     * Will be called as a part of the following add functions
+     */
+    void addObstacle(Obstacle* obstacle, int zOrder);
+    
 	/** Reference to the goalDoor (for collision detection) */
 	void addGoal(BoxObstacle* goal);
 	/** Reference to the player avatar */
@@ -162,12 +196,6 @@ public:
 	void addKids(KidModel* kids[KID_COUNT]);
 	/** Reference to the blender avatar */
 	void addBlender(BlenderModel* blender);
-	/** Reference to the root node of the scene graph */
-	void addRootNode(RootLayer* rootnode);
-	/** Reference to the physics root of the scene graph */
-	void addWorldNode (Node* worldnode);
-	/** Reference to the debug root of the scene graph */
-    void addDebugNode (Node* debugnode);
 
 	/** Length of the level in box2d units */
 	void addLength (float length);
@@ -176,14 +204,12 @@ public:
 
 	void addWalls(PolygonObstacle* walls[]);
 	void addPlatforms(PolygonObstacle* platforms[]);
-	/** The Box2D world */
-	void addWorld(WorldController* world);
 	/** The world scale (computed from root node) */
 	void addScale(Vec2 _scale);
     
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
-    void addObstacle(Obstacle* obj, int zOrder);
+    void addAnonymousObstacle(Obstacle* obj, int zOrder);
 
 #pragma mark -
 #pragma mark Deallocation

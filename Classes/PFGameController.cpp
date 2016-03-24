@@ -33,6 +33,7 @@
 #include "CrushableModel.h"
 #include "LoadingScreenController.h"
 #include "Level.h"
+#include "TiledLoader.h"
 #include "CollisionController.h"
 
 
@@ -46,15 +47,8 @@ using namespace cocos2d;
 #define DEFAULT_WIDTH   32.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  12.0f
-/** Length of level in Box2d units */
-#define LEVEL_LENGTH    40.0f
 /** Half-width of scrolling window in Box2d units */
 #define WINDOW_SIZE     5.0f
-
-/** platform heights **/
-#define MAIN_PLATFORM_Y         2.0f
-#define SECOND_PLATFORM_Y       4.25f
-#define SECOND_PLATFORM_HEIGHT  .5f
 
 /** Scale factor for background images */
 #define FRONT_BACKGROUND_SCALE   1.1f
@@ -77,67 +71,6 @@ using namespace cocos2d;
 #define CLOUDS_DAMPING_FACTOR    6.0f
 /** Cloud velocity */
 #define CLOUD_VELOCITY           0.05f
-
-// Since these appear only once, we do not care about the magic numbers.
-// In an actual game, this information would go in a data file.
-// IMPORTANT: Note that Box2D units do not equal drawing units
-/** The wall vertices */
-#define WALL_VERTS  8
-#define WALL_COUNT  3
-
-#define FLOOR_EXTRA_LENGTH 5.0f
-#define OFFSCREEN_BARRIER_WIDTH 3.0f
-
-#define JELLO_COUNT 1
-#define SPIKE_COUNT 1
-#define CUP_COUNT 1
-
-float WALL[WALL_COUNT][WALL_VERTS] = {
-	//Main floor
-    {
-        -FLOOR_EXTRA_LENGTH, 0.0f,
-        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, 0.0f,
-        LEVEL_LENGTH + FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y,
-        -FLOOR_EXTRA_LENGTH, MAIN_PLATFORM_Y
-    },
-    //Wall preventing falling through floor on left
-    {
-        0.0f, 0.0f,
-        0.0f, DEFAULT_HEIGHT,
-        -OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
-        -OFFSCREEN_BARRIER_WIDTH, 0.0
-    },
-    //Wall preventing falling through floor on right
-    {
-        LEVEL_LENGTH, 0.0f,
-        LEVEL_LENGTH, DEFAULT_HEIGHT,
-        LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, DEFAULT_HEIGHT,
-        LEVEL_LENGTH + OFFSCREEN_BARRIER_WIDTH, 0.0
-    }
-};
-
-#define PLATFORM_COUNT 1
-#define PLATFORM_VERTS 8
-
-float PLATFORM[PLATFORM_COUNT][PLATFORM_VERTS] = {
-    {17.0f, SECOND_PLATFORM_Y, 17.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT,
-        20.0f, SECOND_PLATFORM_Y + SECOND_PLATFORM_HEIGHT, 20.0f, SECOND_PLATFORM_Y}
-};
-
-/** The goal door position */
-float GOAL_POS[] = {38.0f, 3.0f};
-/** The initial position of the pineapple */
-float PINEAPPLE_POS[] = {10.0f, 7.0f};
-/** The kid positions */
-float KID_POS[4][2] = {{MAIN_PLATFORM_Y, 5.1f}, {4.0f, 5.1f}, {6.0f, 5.1f}, {8.0f, 5.1f}};
-/** The initial position of the blender */
-float BLENDER_POS[] = {-25.0f, 7.0f};
-/** The positions of cups */
-float CUP_POS[CUP_COUNT][2] = {{28.0f, 2.5f}};
-/** The position of Jellos */
-float JELLO_POS[JELLO_COUNT][2] = {{15.0f, MAIN_PLATFORM_Y}};
-/** The position of Spikes */
-float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}};
 
 #pragma mark -
 #pragma mark Collision Constants
@@ -203,7 +136,6 @@ GameController::GameController() :
 	_cloudsnode(nullptr),
     _debugnode(nullptr),
     _world(nullptr),
-    _avatar(nullptr),
     _active(false),
 	_collision(nullptr),
     _debug(false){}
@@ -283,9 +215,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _input.start();
     
     // Create the world; there are no listeners this time.
-		_collision = CollisionController::create();
-		_level = Level::create();
-		_collision->setLevel(_level);
+    _collision = CollisionController::create();
     _world = WorldController::create(rect,gravity);
     _world->retain();
     _world->activateCollisionCallbacks(true);
@@ -293,7 +223,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
         _collision->beginContact(contact);
     };
     _world->onEndContact = [this](b2Contact* contact) {
-				_collision->endContact(contact);
+        _collision->endContact(contact);
     };
 
     // Create the scene graph
@@ -319,7 +249,6 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _losenode->setPosition(root->getContentSize().width/2.0f,
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
-    setFailure(false);
 
     // Add everything to the root and retain
 	root->addChild(_hillsnode,0);
@@ -332,9 +261,14 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _rootnode->retain();
     
     // Now populate the physics objects
+    _levelController = TiledLoader::create(_assets, _rootnode, _worldnode, _debugnode, _world, _scale);
+    _levelController->read("");
+    _collision->setLevel(_levelController->getLevel());
+    _level = _levelController->getLevel();
     populate();
     _active = true;
     setDebug(false);
+    setFailure(false);
     return true;
 }
 
@@ -433,258 +367,6 @@ void GameController::populate() {
     _frontBackground_2->setPosition(FRONT_BACKGROUND_WIDTH*3/2 * cscale*FRONT_BACKGROUND_SCALE,
 		                            FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
     _worldnode->addChild(_frontBackground_2);
-
-    
-#pragma mark : Goal door
-    image = _assets->get<Texture2D>(GOAL_TEXTURE);
-    
-    // Create obstacle
-    Vec2 goalPos = GOAL_POS;
-    sprite = PolygonNode::createWithTexture(image);
-    Size goalSize(image->getContentSize().width*cscale/_scale.x,
-                  image->getContentSize().height*cscale/_scale.y);
-    _goalDoor = BoxObstacle::create(goalPos,goalSize);
-    _goalDoor->setDrawScale(_scale.x, _scale.y);
-    
-    // Set the physics attributes
-    _goalDoor->setBodyType(b2_staticBody);
-    _goalDoor->setDensity(0.0f);
-    _goalDoor->setFriction(0.0f);
-    _goalDoor->setRestitution(0.0f);
-    _goalDoor->setSensor(true);
-    
-    // Add the scene graph nodes to this object
-    sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale);
-    _goalDoor->setSceneNode(sprite);
-    
-    draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    _goalDoor->setDebugNode(draw);
-    addObstacle(_goalDoor, 0); // Put this at the very back
-    
-#pragma mark : Walls
-    // All walls and platforms share the same texture
-    image  = _assets->get<Texture2D>(TILE_TEXTURE);
-    string wname = "wall";
-    for (int ii = 0; ii < WALL_COUNT; ii++) {
-        PolygonObstacle* wallobj;
-    
-        Poly2 wall(WALL[ii],WALL_VERTS);
-        wall.triangulate();
-        wallobj = PolygonObstacle::create(wall);
-        wallobj->setDrawScale(_scale.x, _scale.y);
-        // You cannot add constant "".  Must stringify
-        wallobj->setName(std::string(WALL_NAME)+cocos2d::to_string(ii));
-        wallobj->setName(wname);
-    
-        // Set the physics attributes
-        wallobj->setBodyType(b2_staticBody);
-        wallobj->setDensity(BASIC_DENSITY);
-        wallobj->setFriction(BASIC_FRICTION);
-        wallobj->setRestitution(BASIC_RESTITUTION);
-    
-        // Add the scene graph nodes to this object
-        wall *= _scale;
-        sprite = PolygonNode::createWithTexture(image,wall);
-        wallobj->setSceneNode(sprite);
-    
-        draw = WireNode::create();
-        draw->setColor(DEBUG_COLOR);
-        draw->setOpacity(DEBUG_OPACITY);
-        wallobj->setDebugNode(draw);
-        addObstacle(wallobj,1);
-    }
-    
-#pragma mark : Platforms
-    image  = _assets->get<Texture2D>(PLATFORM_TEXTURE);
-    wname = "platform";
-    for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
-        PolygonObstacle* wallobj;
-        
-        Poly2 wall(PLATFORM[ii],PLATFORM_VERTS);
-        wall.triangulate();
-        wallobj = PolygonObstacle::create(wall);
-        wallobj->setDrawScale(_scale.x , _scale.y);
-        // You cannot add constant "".  Must stringify
-        wallobj->setName(std::string(PLATFORM_NAME)+cocos2d::to_string(ii));
-        wallobj->setName(wname);
-        
-        // Set the physics attributes
-        wallobj->setBodyType(b2_staticBody);
-        wallobj->setDensity(BASIC_DENSITY);
-        wallobj->setFriction(BASIC_FRICTION);
-        wallobj->setRestitution(BASIC_RESTITUTION);
-        
-        // Add the scene graph nodes to this object
-        wall *= _scale / 1.95f;
-        sprite = PolygonNode::createWithTexture(image,wall);
-        sprite->setScale(1.95f);
-        wallobj->setSceneNode(sprite);
-        
-        draw = WireNode::create();
-        draw->setColor(DEBUG_COLOR);
-        draw->setOpacity(DEBUG_OPACITY);
-        wallobj->setDebugNode(draw);
-        addObstacle(wallobj,1);
-    }
-    
-#pragma mark : Pineapple
-    Vec2 pineapplePos = PINEAPPLE_POS;
-    image  = _assets->get<Texture2D>(PINEAPPLE_TEXTURE);
-    sprite = PolygonNode::createWithTexture(image);
-		Pineapple* will = Pineapple::create(pineapplePos,_scale / PINEAPPLE_SCALE);
-		will->setDrawScale(_scale);
-    
-    // Add the scene graph nodes to this object
-    sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale * PINEAPPLE_SCALE);
-		will->setSceneNode(sprite);
-    
-    draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    
-    b2Filter b = b2Filter();
-    b.categoryBits = PINEAPPLE_MASK;
-    b.maskBits = PINEAPPLE_COLLIDES_WITH;
-		will->setFilterData(b);
-		will->setDebugNode(draw);
-    addObstacle(will, 5);
-		_level->addPineapple(will);
-    
-#pragma mark : Kids
-    _kidsReachedGoal = new bool[KID_COUNT];
-    for (int i = 0; i < KID_COUNT; i++) {
-        Vec2 kidPos = KID_POS[i];
-        image = _assets->get<Texture2D>(KidModel::getTexture(i));
-        sprite = PolygonNode::createWithTexture(image);
-        _kids[i] = KidModel::create(kidPos,_scale / KID_SCALE, i);
-        _kids[i]->setDrawScale(_scale);
-        
-        sprite = PolygonNode::createWithTexture(image);
-        sprite->setScale(cscale * KID_SCALE);
-        _kids[i]->setSceneNode(sprite);
-        draw = WireNode::create();
-        draw->setColor(DEBUG_COLOR);
-        draw->setOpacity(DEBUG_OPACITY);
-        _kids[i]->setDebugNode(draw);
-        _kids[i]->setMovement(KID_WALKSPEED);
-        
-        b = b2Filter();
-        b.categoryBits = KID_MASK;
-        b.maskBits = KID_COLLIDES_WITH;
-        _kids[i]->setFilterData(b);
-        _kids[i]->setName(KID_NAME);
-        addObstacle(_kids[i], 4);
-    }
-    _level->addKids(_kids);
-
-
-#pragma mark : Red Cup
-		for (int i = 0; i < CUP_COUNT; i++) {
-			Vec2 cupPos = CUP_POS[i];
-			image = _assets->get<Texture2D>(BLUE_CUP_TEXTURE);
-			sprite = PolygonNode::createWithTexture(image);
-			CrushableModel* cup = CrushableModel::create(BLUE_CUP_TEXTURE, cupPos, _scale / CRUSHABLE_SCALE);
-			cup->setDrawScale(_scale);
-
-			// Add the scene graph nodes to this object
-			sprite = PolygonNode::createWithTexture(image);
-			sprite->setScale(cscale * CRUSHABLE_SCALE);
-			cup->setSceneNode(sprite);
-
-			draw = WireNode::create();
-			draw->setColor(DEBUG_COLOR);
-			draw->setOpacity(DEBUG_OPACITY);
-
-			cup->setDebugNode(draw);
-			cup->setGravityScale(0);
-			cup->setBodyType(b2BodyType::b2_staticBody);
-			cup->setName(CUP_NAME);
-			addObstacle(cup, 3);
-		}
-
-#pragma mark : Jello
-    for(int i = 0; i < JELLO_COUNT; i++) {
-        Vec2 jelloPos = JELLO_POS[i];
-        image  = _assets->get<Texture2D>(JELLO_TEXTURE);
-        sprite = PolygonNode::createWithTexture(image);
-        JelloModel* jello = JelloModel::create(jelloPos,_scale / JELLO_SCALE);
-        jello->setDrawScale(_scale.x, _scale.y);
-        
-        // Add the scene graph nodes to this object
-        sprite = PolygonNode::createWithTexture(image);
-        sprite->setScale(cscale * JELLO_SCALE);
-        jello->setSceneNode(sprite);
-        
-        draw = WireNode::create();
-        draw->setColor(DEBUG_COLOR);
-        draw->setOpacity(DEBUG_OPACITY);
-        
-        jello->setDebugNode(draw);
-        jello->setGravityScale(0);
-        jello->setSensor(true);
-        jello->setName(JELLO_NAME);
-        addObstacle(jello, 2);
-    }
-    
-#pragma mark : Spike
-    for(int i = 0; i < SPIKE_COUNT; i++) {
-        Vec2 spikePos = SPIKE_POS[i];
-        image  = _assets->get<Texture2D>(SPIKE_TEXTURE);
-        sprite = PolygonNode::createWithTexture(image);
-        SpikeModel* spike = SpikeModel::create(spikePos,_scale / SPIKE_SCALE);
-        spike->setDrawScale(_scale.x, _scale.y);
-        
-        // Add the scene graph nodes to this object
-        sprite = PolygonNode::createWithTexture(image);
-        sprite->setScale(cscale * SPIKE_SCALE);
-        spike->setSceneNode(sprite);
-        
-        draw = WireNode::create();
-        draw->setColor(DEBUG_COLOR);
-        draw->setOpacity(DEBUG_OPACITY);
-        
-        spike->setDebugNode(draw);
-        spike->setGravityScale(0);
-        spike->setSensor(true);
-        spike->setName(SPIKE_NAME);
-        addObstacle(spike, 2);
-    }
-    
-#pragma mark : Blender
-    Vec2 blenderPos = BLENDER_POS;
-    image  = _assets->get<Texture2D>(BLENDER_TEXTURE);
-    sprite = PolygonNode::createWithTexture(image);
-    _blender = BlenderModel::create(blenderPos,_scale / BLENDER_SCALE);
-    _blender->setDrawScale(_scale.x, _scale.y);
-    
-    // Add the scene graph nodes to this object
-    sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale * BLENDER_SCALE);
-    _blender->setSceneNode(sprite);
-    
-    draw = WireNode::create();
-    draw->setColor(DEBUG_COLOR);
-    draw->setOpacity(DEBUG_OPACITY);
-    
-    b = b2Filter();
-    b.categoryBits = BLENDER_MASK;
-    b.maskBits = BLENDER_COLLIDES_WITH;
-    _blender->setFilterData(b);
-    _blender->setDebugNode(draw);
-    _blender->setGravityScale(0);
-    _blender->setMovement(_blender->getForce());
-    _blender->setSensor(true);
-    addObstacle(_blender, 3);
-
-		_level->addBlender(_blender);
-
-    // Play the background music on a loop.
-    Sound* source = _assets->get<Sound>(GAME_MUSIC);
-    ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
 }
 
 
@@ -707,6 +389,9 @@ void GameController::reset() {
     
     setFailure(false);
     setComplete(false);
+    _levelController->read("");
+    _collision->setLevel(_levelController->getLevel());
+    _level = _levelController->getLevel();
     populate();
 }
 
@@ -775,14 +460,14 @@ void GameController::update(float dt) {
 
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
-        if(_kids[i] != nullptr) {
-            _kids[i]->dampTowardsWalkspeed();
+        if(_level->getKid(i) != nullptr) {
+            _level->getKid(i)->dampTowardsWalkspeed();
         }
     }
     
     //Blender moves
-    _blender->applyForce();
-    _blender->setVY(0);
+    _level->getBlender()->applyForce();
+    _level->getBlender()->setVY(0);
     
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
@@ -792,28 +477,28 @@ void GameController::update(float dt) {
     }
     
     // Process the movement
-    if(_avatar != nullptr) {
-        _avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-        _avatar->setJumping( _input.didJump());
+    if(_level->getPineapple() != nullptr) {
+        _level->getPineapple()->setMovement(_input.getHorizontal()*_level->getPineapple()->getForce());
+        _level->getPineapple()->setJumping( _input.didJump());
         float cscale = Director::getInstance()->getContentScaleFactor();
         if (_input.didGrow()) {
-            if (_avatar->grow()) {
-                _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_GROW_SCALE);
+            if (_level->getPineapple()->grow()) {
+                _level->getPineapple()->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_GROW_SCALE);
             }
         }
         if (_input.didShrink()) {
-            if (_avatar->shrink()) {
-                _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_SHRINK_SCALE);
+            if (_level->getPineapple()->shrink()) {
+                _level->getPineapple()->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_SHRINK_SCALE);
             }
         }
         
-        if ( _avatar->updateSize(dt)) {
-            _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE);
+        if ( _level->getPineapple()->updateSize(dt)) {
+            _level->getPineapple()->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE);
         }
         
-        _avatar->applyForce();
+        _level->getPineapple()->applyForce();
         
-        if (_avatar->isJumping()) {
+        if (_level->getPineapple()->isJumping()) {
             Sound* source = _assets->get<Sound>(JUMP_EFFECT);
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
@@ -846,20 +531,20 @@ void GameController::handleScrolling() {
 	// Parameters
 	float L = 0.5f*DEFAULT_WIDTH - WINDOW_SIZE +_levelOffset;
 	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
-	float maxLevelOffset = LEVEL_LENGTH - DEFAULT_WIDTH;
+	float maxLevelOffset = _level->getLength() - DEFAULT_WIDTH;
 	float offset = 0.0f;
     float oldLevelOffset = _levelOffset;
     
 	// Compute the offset
-	if (_avatar != nullptr && (_levelOffset > 0) && (_avatar->getPosition().x < L)) {
-		float tempOffset = L - _avatar->getPosition().x;
+	if (_level->getPineapple() != nullptr && (_levelOffset > 0) && (_level->getPineapple()->getPosition().x < L)) {
+		float tempOffset = L - _level->getPineapple()->getPosition().x;
 		float tempLevelOffset = _levelOffset - tempOffset;
 		_levelOffset = max(0.0f, tempLevelOffset);
 		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
 		offset = -offset;
 	}
-	else if (_avatar != nullptr && (_levelOffset < maxLevelOffset) && (_avatar->getPosition().x > R)) {
-		float tempOffset = _avatar->getPosition().x - R;
+	else if (_level->getPineapple() != nullptr && (_levelOffset < maxLevelOffset) && (_level->getPineapple()->getPosition().x > R)) {
+		float tempOffset = _level->getPineapple()->getPosition().x - R;
 		float tempLevelOffset = _levelOffset + tempOffset;
 		_levelOffset = min(maxLevelOffset, tempLevelOffset);
 		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
@@ -955,16 +640,16 @@ bool GameController::checkForVictory() {
 
 	// count the number of kids who have reached the goal
     for(int i = 0; i < KID_COUNT; i++) {
-		if (_kids[i] != nullptr) {
-			if (_kids[i]->hasReachedGoal()) {
+		if (_level->getKid(i) != nullptr) {
+			if (_level->getKid(i)->hasReachedGoal()) {
 				count++;
 			}
 		}
     }
 	
 	// return true if avatar and remaining kids reached goal
-	if (_avatar != nullptr) {
-		return _avatar->hasReachedGoal() && count >= _level->numKidsRemaining();
+	if (_level->getPineapple() != nullptr) {
+		return _level->getPineapple()->hasReachedGoal() && count >= _level->numKidsRemaining();
 	}
 
 	return false;
