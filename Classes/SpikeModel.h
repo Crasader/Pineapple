@@ -6,6 +6,7 @@
 #define __SPIKE_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
+#include "Const.h"
 
 
 using namespace cocos2d;

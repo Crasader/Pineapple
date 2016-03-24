@@ -9,6 +9,7 @@
 #define __PINEAPPLE_H__
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
+#include "Const.h"
 
 
 using namespace cocos2d;

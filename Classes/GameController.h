@@ -40,9 +40,6 @@ class CollisionController;
 using namespace cocos2d;
 using namespace std;
 
-/** The number of kids */
-#define KID_COUNT 4
-
 #pragma mark -
 #pragma mark GameController
 /**

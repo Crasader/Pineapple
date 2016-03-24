@@ -1,33 +1,12 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
-#include <cornell/CUBoxObstacle.h>
-#include <cornell/CUSimpleObstacle.h>
-#include <cornell/CUObstacle.h>
-#include <cornell/CUPolygonObstacle.h>
-#include <cornell/CURootLayer.h>
-#include <cornell/CUWorldController.h>
-
 #include "PineappleModel.h"
 #include "BlenderModel.h"
 #include "KidModel.h"
 #include "SpikeModel.h"
+#include "Const.h"
 #include <cornell.h>
-
-#define KID_COUNT 4
-/** Color to outline the physics nodes */
-#define DEBUG_COLOR     Color3B::YELLOW
-/** Opacity of the physics outlines */
-#define DEBUG_OPACITY   192
-
-/** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
-/** The density for a bullet */
-#define HEAVY_DENSITY   10.0f
-/** Friction of most platforms */
-#define BASIC_FRICTION  0.4f
-/** The restitution for all physics objects */
-#define BASIC_RESTITUTION   0.1f
 
 /** 
  *          Z index table:
@@ -182,11 +161,6 @@ public:
 	*
 	*/
 	static LevelModel* create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world);
-
-    /** Actually handles the obstacle addition. Should not be called from the outside
-     * Will be called as a part of the following add functions
-     */
-    void addObstacle(Obstacle* obstacle, int zOrder);
     
 	/** Reference to the goalDoor (for collision detection) */
 	void addGoal(BoxObstacle* goal);
@@ -253,6 +227,12 @@ private:
 	LevelModel();
     
     ~LevelModel();
+    
+    
+    /** Actually handles the obstacle addition. Should not be called from the outside
+     * Will be called as a part of the following add functions
+     */
+    void addObstacle(Obstacle* obstacle, int zOrder);
 
 };
 

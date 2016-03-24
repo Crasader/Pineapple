@@ -11,8 +11,6 @@
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
 
-#define SIGNUM(x)  ((x > 0) - (x < 0))
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The amount to shrink the body fixture (vertically) relative to the image */
