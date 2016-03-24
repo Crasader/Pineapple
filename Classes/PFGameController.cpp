@@ -648,7 +648,7 @@ void GameController::populate() {
 		}
 
 #pragma mark : Jello
-    for(int i = 0; i < 0; i++) {
+    for(int i = 0; i < JELLO_COUNT; i++) {
         Vec2 jelloPos = JELLO_POS[i];
         image  = _assets->get<Texture2D>(JELLO_TEXTURE);
         sprite = PolygonNode::createWithTexture(image);
@@ -672,7 +672,7 @@ void GameController::populate() {
     }
     
 #pragma mark : Spike
-    for(int i = 0; i < 0; i++) {
+    for(int i = 0; i < SPIKE_COUNT; i++) {
         Vec2 spikePos = SPIKE_POS[i];
         image  = _assets->get<Texture2D>(SPIKE_TEXTURE);
         sprite = PolygonNode::createWithTexture(image);
