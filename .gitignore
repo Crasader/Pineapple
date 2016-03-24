@@ -1,16 +1,5 @@
-
-#Cocos2D project files
-proj.android/
-proj.ios_mac/
-proj.win10/
-proj.win32/
-
 # Compiled outputs
 bin/**
-
-#Xcode setting files
-proj.ios_mac/Pineapple.xcodeproj/project.pbxproj
-proj.ios_mac/Pineapple.xcodeproj/project.xcworkspace/**
 
 # Mac OSX crap
 **/.DS_Store
