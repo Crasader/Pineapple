@@ -43,6 +43,9 @@ using namespace cocos2d;
 /** The relative size of smaller pineapple */
 #define PINEAPPLE_SHRINK_SCALE			0.75f
 
+#define PINEAPPLE_MASK 0x0002
+#define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
+
 #pragma mark -
 #pragma mark Pineapple Model
 /**

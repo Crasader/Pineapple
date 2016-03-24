@@ -15,6 +15,10 @@
 #include <cornell.h>
 
 #define KID_COUNT 4
+<<<<<<< HEAD
+
+using namespace cocos2d;
+=======
 /** Color to outline the physics nodes */
 #define DEBUG_COLOR     Color3B::YELLOW
 /** Opacity of the physics outlines */
@@ -28,8 +32,7 @@
 #define BASIC_FRICTION  0.4f
 /** The restitution for all physics objects */
 #define BASIC_RESTITUTION   0.1f
-
-using namespace cocos2d;
+>>>>>>> LevelController
 
 class Level {
 protected:
@@ -167,15 +170,19 @@ public:
 	/** Reference to the physics root of the scene graph */
 	void addWorldNode (Node* worldnode);
 	/** Reference to the debug root of the scene graph */
+<<<<<<< HEAD
+	void addDebugNode (Node* debugnode);
+=======
     void addDebugNode (Node* debugnode);
+>>>>>>> LevelController
 
 	/** Length of the level in box2d units */
 	void addLength (float length);
 	void addPlatformCount(int platformCount);
 	void addWallCount(int wallCount);
 
-	void addWalls(PolygonObstacle* walls[]);
-	void addPlatforms(PolygonObstacle* platforms[]);
+	void addWalls(PolygonObstacle** walls);
+	void addPlatforms(PolygonObstacle** platforms);
 	/** The Box2D world */
 	void addWorld(WorldController* world);
 	/** The world scale (computed from root node) */
@@ -225,8 +232,6 @@ private:
 	*
 	*/
 	Level();
-    
-    ~Level();
 
 };
 

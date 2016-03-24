@@ -29,6 +29,8 @@ using namespace cocos2d;
 /** The Blender specific scaling */
 #define BLENDER_SCALE      0.75f
 
+#define BLENDER_MASK 0x0008
+#define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
 
 #pragma mark -
 #pragma mark BLENDER Model

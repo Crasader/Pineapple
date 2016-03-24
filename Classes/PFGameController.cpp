@@ -142,27 +142,11 @@ float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}};
 #pragma mark -
 #pragma mark Collision Constants
 
-#define PINEAPPLE_MASK 0x0002
-#define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
-
-#define KID_MASK 0x0004
-#define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
-
-#define BLENDER_MASK 0x0008
-#define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -14.7f
-/** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
-/** The density for a bullet */
-#define HEAVY_DENSITY   10.0f
-/** Friction of most platforms */
-#define BASIC_FRICTION  0.4f
-/** The restitution for all physics objects */
-#define BASIC_RESTITUTION   0.1f
+
 /** Offset for bullet when firing */
 #define BULLET_OFFSET   0.5f
 /** The speed of the bullet after firing */
@@ -201,11 +185,6 @@ float SPIKE_POS[SPIKE_COUNT][2] = {{17.5f, MAIN_PLATFORM_Y}};
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */
 #define EFFECT_VOLUME   0.8f
-
-/** Color to outline the physics nodes */
-#define DEBUG_COLOR     Color3B::YELLOW
-/** Opacity of the physics outlines */
-#define DEBUG_OPACITY   192
 
 
 #pragma mark -

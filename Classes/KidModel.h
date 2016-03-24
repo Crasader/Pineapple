@@ -37,6 +37,9 @@ using namespace cocos2d;
 /** The kid walking speed */
 #define KID_WALKSPEED   1.5f
 
+#define KID_MASK 0x0004
+#define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
+
 #pragma mark -
 #pragma mark Dude Model
 /**

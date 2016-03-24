@@ -29,8 +29,6 @@
 #define KID_FORCE    5.0f
 /** Epsilon on Kid Speed - if within this amount, just set to max speed */
 #define KID_SPEED_EPSILON   .1f
-/** Debug color for the sensor */
-#define DEBUG_COLOR     Color3B::RED
 
 
 #pragma mark -
@@ -315,7 +313,6 @@ void KidModel::resetDebugNode() {
     poly.traverse(Poly2::Traversal::INTERIOR);
     
     _sensorNode = WireNode::createWithPoly(poly);
-    _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     _debug->addChild(_sensorNode);
 }

@@ -15,6 +15,31 @@ Level* Level::create() {
 	return new (std::nothrow) Level();
 }
 
+Level::~Level(){
+    
+    //TODO - pre-nulling cleanup
+    
+    clearPineapple();
+    for(int i = 0; i < KID_COUNT; i++) {
+        clearKid(i);
+    }
+    _goalDoor = nullptr;
+    _blender = nullptr;
+    _rootnode = nullptr;
+    _worldnode = nullptr;
+    _world = nullptr;
+    _debugnode = nullptr;
+    _kidsReachedGoal = nullptr;
+    for(int i = 0; i < _platformCount; i++) {
+        _platforms[i] = nullptr;
+    }
+    _platforms = nullptr;
+    for(int i = 0; i < _wallCount; i++) {
+        _walls[i] = nullptr;
+    }
+    _walls = nullptr;
+}
+
 void Level::addPineapple(Pineapple* will) {
 	if (_pineapple == nullptr) {
 		_pineapple = will;
