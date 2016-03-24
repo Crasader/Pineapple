@@ -405,18 +405,18 @@
 			isa = PBXGroup;
 			children = (
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
-				4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */,
-				4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */,
-				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
-				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
-				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
-				4072DF791C9F43F900F7DAA4 /* TiledLoader.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
+				4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */,
 				4072DF681C9F43F900F7DAA4 /* CollisionController.h */,
+				4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */,
 				4072DF6E1C9F43F900F7DAA4 /* LoadingScreenController.h */,
+				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
 				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
+				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
 				405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */,
+				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
 				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
+				4072DF791C9F43F900F7DAA4 /* TiledLoader.cpp */,
 				4072DF7A1C9F43F900F7DAA4 /* TiledLoader.h */,
 			);
 			name = Controller;

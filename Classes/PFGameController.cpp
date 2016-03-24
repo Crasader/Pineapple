@@ -687,27 +687,7 @@ void GameController::populate() {
     ////SoundEngine::getInstance()->playMusic(source, true, MUSIC_VOLUME);
 }
 
-/**
- * Immediately adds the object to the physics world
- *
- * Objects have a z-order.  This is the order they are drawn in the scene
- * graph node.  Objects with the different textures should have different
- * z-orders whenever possible.  This will cut down on the amount of drawing done
- *
- * param obj The object to add
- * param zOrder The drawing order
- *
- * @retain a reference to the obstacle
- */
-void GameController::addObstacle(Obstacle* obj, int zOrder) {
-    _world->addObstacle(obj);  // Implicit retain
-    if (obj->getSceneNode() != nullptr) {
-        _worldnode->addChild(obj->getSceneNode(),zOrder);
-    }
-    if (obj->getDebugNode() != nullptr) {
-        _debugnode->addChild(obj->getDebugNode(),zOrder);
-    }
-}
+
 
 
 #pragma mark -

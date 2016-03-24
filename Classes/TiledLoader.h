@@ -13,7 +13,6 @@
 //Forward class declarations
 
 using namespace cocos2d;
-using namespace std;
 
 class TiledLoader {
 protected:
@@ -50,7 +49,7 @@ public:
                  
     /** Reads in a level from a .tmx file into a Level object
      */
-    Level* read(string fileName);
+    Level* read(std::string fileName);
 
 private:
     TiledLoader();
