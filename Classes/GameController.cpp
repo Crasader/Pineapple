@@ -1,5 +1,5 @@
 //
-//  PFGameController.cpp
+//  GameController.cpp
 //  PlatformerDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -20,19 +20,7 @@
 // This is the root, so there are a lot of includes
 #include <string>
 #include <cornell.h>
-#include <Box2D/Dynamics/b2World.h>
-#include <Box2D/Common/b2Math.h>
-#include "PFGameController.h"
-#include "PFInputController.h"
-#include "PineappleModel.h"
-#include "BlenderModel.h"
-#include "KidModel.h"
-#include "JelloModel.h"
-#include "SpikeModel.h"
-#include "SpinnerModel.h"
-#include "CrushableModel.h"
-#include "LoadingScreenController.h"
-#include "LevelModel.h"
+#include "GameController.h"
 #include "LevelController.h"
 #include "CollisionController.h"
 

@@ -1,5 +1,5 @@
 //
-//  PFGameController.h
+//  GameController.h
 //  PlatformerDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -20,31 +20,17 @@
 #ifndef __PF_GAME_CONTROLLER_H__
 #define __PF_GAME_CONTROLLER_H__
 
-//#include "cocos2d.h"
-//#include <vector>
-//#include <Box2D/Dynamics/b2WorldCallbacks.h>
-//#include <Box2D/Dynamics/Joints/b2MouseJoint.h>
-//#include <Box2D/Dynamics/b2Body.h>
-//#include <Box2D/Dynamics/b2Fixture.h>
-#include "PFInputController.h"
-//#include <unordered_set>
+#include "InputController.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
 namespace cocos2d {
     class RootLayer;
     class WorldController;
-    class ComplexObstacle;
-    class ObstacleSelector;
     class SceneManager;
 }
 
 // These forward declarations are in the project
-class PineappleModel;
-class KidModel;
-class BlenderModel;
-class Spinner;
-class CrushableModel;
 class LoadingScreenController;
 class LevelController;
 class LevelModel;
@@ -70,14 +56,8 @@ using namespace std;
  */
 class GameController {
 protected:
-    /** The scene manager for this game demo */
-    SceneManager* _assets;
-    
-    /** Controller for abstracting out input away from layer */
-    InputController _input;
-
-		/** Controller for collision handling */
-		CollisionController* _collision;
+    /** The world scale (computed from root node) */
+    Vec2 _scale;
     
     /** Reference to the root node of the scene graph */
     RootLayer* _rootnode;
@@ -89,18 +69,22 @@ protected:
     Label* _winnode;
     /** Reference to the lose message label */
     Label* _losenode;
-
     /** The Box2D world */
     WorldController* _world;
-    /** The world scale (computed from root node) */
-    Vec2 _scale;
     
+    /** The scene manager for this game demo */
+    SceneManager* _assets;
     /** The background view */
     BackgroundView* _background;
-    /** Reference to the level controller */
-    LevelController* _levelController;
     /** Reference to current level */
     LevelModel* _level;
+    
+    /** Controller for abstracting out input away from layer */
+    InputController _input;
+    /** Controller for collision handling */
+    CollisionController* _collision;
+    /** Reference to the level controller */
+    LevelController* _levelController;
     
     /** Whether or note this game is still active */
     bool _active;

@@ -1,5 +1,5 @@
 //
-//  PFGameRoot.cpp
+//  GameRoot.cpp
 //  PlatformerDemo
 //
 //  This is the root class for a single game scene.  It shows how to subclass RootLayer to
@@ -12,7 +12,7 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#include "PFGameRoot.h"
+#include "GameRoot.h"
 #include "LoadingScreenController.h"
 
 /** Font size for loading message */
