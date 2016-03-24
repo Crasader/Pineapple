@@ -1,11 +1,11 @@
 //
-//  PFBlenderModel.cpp
+//  BlenderModel.cpp
 //  PlatformerDemo
 //
 //  Author: Flameingos
 //  Version: TODO
 //
-#include "PFBlenderModel.h"
+#include "BlenderModel.h"
 #include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>

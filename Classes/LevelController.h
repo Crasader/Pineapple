@@ -3,10 +3,10 @@
 
 #include <cornell.h>
 #include "LoadingScreenController.h"
-#include "Level.h"
+#include "LevelModel.h"
 
 #include "CrushableModel.h"
-#include "Pineapple.h"
+#include "PineappleModel.h"
 #include "JelloModel.h"
 #include "KidModel.h"
 
@@ -17,7 +17,7 @@ using namespace cocos2d;
 class LevelController {
 protected:
     /** The level that is being built */
-    Level* _level;
+    LevelModel* _level;
     /** Reference to the root node of the scene graph */
     RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
@@ -57,12 +57,12 @@ public:
                                Node* worldnode, Node* debugnode,
                                WorldController* world, Vec2 scale);
                  
-    /** Reads in a level from a .tmx file into a Level object
+    /** Reads in a level from a .tmx file into a LevelModel object
      */
-    Level* read(std::string fileName);
+    LevelModel* read(std::string fileName);
     
     /** Return a reference to the current level */
-    Level* getLevel() { return _level; }
+    LevelModel* getLevel() { return _level; }
 
 private:
     LevelController();

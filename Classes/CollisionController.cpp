@@ -1,13 +1,13 @@
 #include "CollisionController.h"
 #include <Box2D/Dynamics/Contacts/b2Contact.h>
 #include <Box2D/Collision/b2Collision.h>
-#include "Pineapple.h"
-#include "PFBlenderModel.h"
+#include "PineappleModel.h"
+#include "BlenderModel.h"
 #include "KidModel.h"
 #include "JelloModel.h"
 #include "SpikeModel.h"
 #include "CrushableModel.h"
-#include "Level.h"
+#include "LevelModel.h"
 
 #pragma mark -
 #pragma mark Initialization
@@ -20,7 +20,7 @@ CollisionController* CollisionController::create() {
 	return new (std::nothrow) CollisionController();
 }
 
-void CollisionController::setLevel(Level* level) {
+void CollisionController::setLevel(LevelModel* level) {
 	_level = level;
 }
 
@@ -31,7 +31,7 @@ void CollisionController::setLevel(Level* level) {
 * This method is called when the given pineapple collides with a jello
 * to trigger upward momentum, and a jello quiver animation
 */
-void CollisionController::handleJelloCollision(Pineapple* will) {
+void CollisionController::handleJelloCollision(PineappleModel* will) {
 	will->setCollidingWithJello(true);
 	if (!will->isLarge()) {
 		//Jump!

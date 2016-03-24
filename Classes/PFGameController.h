@@ -40,14 +40,14 @@ namespace cocos2d {
 }
 
 // These forward declarations are in the project
-class Pineapple;
+class PineappleModel;
 class KidModel;
 class BlenderModel;
 class Spinner;
 class CrushableModel;
 class LoadingScreenController;
 class LevelController;
-class Level;
+class LevelModel;
 class CollisionController;
 
 using namespace cocos2d;
@@ -116,7 +116,7 @@ protected:
     /** Reference to the level controller */
     LevelController* _levelController;
     /** Reference to current level */
-    Level* _level;
+    LevelModel* _level;
     
     /** Whether or note this game is still active */
     bool _active;

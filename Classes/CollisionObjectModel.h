@@ -5,7 +5,7 @@
 
 using namespace cocos2d;
 
-class CollisionObject : public SimpleObstacle {
+class CollisionObjectModel : public SimpleObstacle {
 
 protected:
 	/**
@@ -37,7 +37,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static CollisionObject* baseCreate();
+	static CollisionObjectModel* baseCreate();
 
 	/**
 	* Creates a new spike at the given position.
@@ -53,7 +53,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static CollisionObject* baseCreate(const Vec2& pos);
+	static CollisionObjectModel* baseCreate(const Vec2& pos);
 
 	/**
 	* Creates a new spike at the given position.
@@ -70,7 +70,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static CollisionObject* baseCreate(const Vec2& pos, const Vec2& scale);
+	static CollisionObjectModel* baseCreate(const Vec2& pos, const Vec2& scale);
 
 #pragma mark Physics Methods
 	/**

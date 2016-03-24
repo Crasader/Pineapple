@@ -1,5 +1,5 @@
 //
-//  PFSpinner.h
+//  SpinnerModel.h
 //  PlatformerDemo
 //
 //  This class provides a spinning rectangle on a fixed pin.  We did not really need

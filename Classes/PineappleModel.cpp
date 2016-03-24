@@ -1,11 +1,11 @@
 //
-//  Pineapple.cpp
+//  PineappleModel.cpp
 //  G.M.P.
 //
 //  Author: Flameingos
 //  Version: TODO
 //
-#include "Pineapple.h"
+#include "PineappleModel.h"
 #include <cornell/CUAssetManager.h>
 //#include <cornell/CUSceneManager.h>
 
@@ -45,8 +45,8 @@
 *
 * @return  An autoreleased physics object
 */
-Pineapple* Pineapple::create() {
-	Pineapple* pineapple = new (std::nothrow) Pineapple();
+PineappleModel* PineappleModel::create() {
+	PineappleModel* pineapple = new (std::nothrow) PineappleModel();
 	if (pineapple && pineapple->init()) {
 		pineapple->autorelease();
 		return pineapple;
@@ -69,8 +69,8 @@ Pineapple* Pineapple::create() {
 *
 * @return  An autoreleased physics object
 */
-Pineapple* Pineapple::create(const Vec2& pos) {
-	Pineapple* pineapple = new (std::nothrow) Pineapple();
+PineappleModel* PineappleModel::create(const Vec2& pos) {
+	PineappleModel* pineapple = new (std::nothrow) PineappleModel();
 	if (pineapple && pineapple->init(pos)) {
 		pineapple->autorelease();
 		return pineapple;
@@ -94,8 +94,8 @@ Pineapple* Pineapple::create(const Vec2& pos) {
 *
 * @return  An autoreleased physics object
 */
-Pineapple* Pineapple::create(const Vec2& pos, const Vec2& scale) {
-	Pineapple* pineapple = new (std::nothrow) Pineapple();
+PineappleModel* PineappleModel::create(const Vec2& pos, const Vec2& scale) {
+	PineappleModel* pineapple = new (std::nothrow) PineappleModel();
 	if (pineapple && pineapple->init(pos, scale)) {
 		pineapple->setDensity(PINEAPPLE_DENSITY);
 		pineapple->cocos2d::Obstacle::setMass(PINEAPPLE_NORMAL_MASS);
@@ -126,7 +126,7 @@ Pineapple* Pineapple::create(const Vec2& pos, const Vec2& scale) {
 *
 * @return  true if the obstacle is initialized properly, false otherwise.
 */
-bool Pineapple::init(const Vec2& pos, const Vec2& scale) {
+bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
 	SceneManager* scene = AssetManager::getInstance()->getCurrent();
 	Texture2D* image = scene->get<Texture2D>(PINEAPPLE_TEXTURE);
 
@@ -161,7 +161,7 @@ bool Pineapple::init(const Vec2& pos, const Vec2& scale) {
 /**
 * TODO: method spec
 */
-int Pineapple::updateSize(float dt) {
+int PineappleModel::updateSize(float dt) {
 	if (_isLarge || _isSmall) {
 		_durationSinceGrowOrShrink += dt;
 	}
@@ -178,7 +178,7 @@ int Pineapple::updateSize(float dt) {
 /**
 * Grows the pineapple, returns 1 if grown
 */
-int Pineapple::grow() {
+int PineappleModel::grow() {
 	if (!_isLarge  && !_isSmall) {
 		setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
 		setIsLarge(true);
@@ -190,7 +190,7 @@ int Pineapple::grow() {
 /**
 * Shrinks the pineapple, returns 1 if shrunk
 */
-int Pineapple::shrink() {
+int PineappleModel::shrink() {
 	if (!_isLarge && !_isSmall) {
 		setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
 		setIsSmall(true);
@@ -206,7 +206,7 @@ int Pineapple::shrink() {
 *
 * @param value left/right movement of this character.
 */
-void Pineapple::setMovement(float value) {
+void PineappleModel::setMovement(float value) {
 	_movement = value;
 	bool face = _movement > 0;
 	if (_movement == 0 || _faceRight == face) {
@@ -228,7 +228,7 @@ void Pineapple::setMovement(float value) {
 *
 * This is the primary method to override for custom physics objects
 */
-void Pineapple::createFixtures() {
+void PineappleModel::createFixtures() {
 	if (_body == nullptr) {
 		return;
 	}
@@ -270,7 +270,7 @@ void Pineapple::createFixtures() {
 *
 * This is the primary method to override for custom physics objects.
 */
-void Pineapple::releaseFixtures() {
+void PineappleModel::releaseFixtures() {
 	if (_body == nullptr) {
 		return;
 	}
@@ -287,7 +287,7 @@ void Pineapple::releaseFixtures() {
 *
 * This method should be called after the force attribute is set.
 */
-void Pineapple::applyForce() {
+void PineappleModel::applyForce() {
 	if (!isActive()) {
 		return;
 	}
@@ -321,7 +321,7 @@ void Pineapple::applyForce() {
 *
 * @param delta Number of seconds since last animation frame
 */
-void Pineapple::update(float dt) {
+void PineappleModel::update(float dt) {
 	// Apply cooldowns
 	if (isJumping()) {
 		_jumpCooldown = JUMP_COOLDOWN;
@@ -345,7 +345,7 @@ void Pineapple::update(float dt) {
 * This is very useful when the fixtures have a very different shape than
 * the texture (e.g. a circular shape attached to a square texture).
 */
-void Pineapple::resetDebugNode() {
+void PineappleModel::resetDebugNode() {
 	CapsuleObstacle::resetDebugNode();
 	float w = PINEAPPLE_SSHRINK*_dimension.width*_drawScale.x;
 	float h = SENSOR_HEIGHT*_drawScale.y;

@@ -8,8 +8,8 @@
 #include <cornell/CURootLayer.h>
 #include <cornell/CUWorldController.h>
 
-#include "Pineapple.h"
-#include "PFBlenderModel.h"
+#include "PineappleModel.h"
+#include "BlenderModel.h"
 #include "KidModel.h"
 #include "SpikeModel.h"
 #include <cornell.h>
@@ -55,12 +55,12 @@
 
 using namespace cocos2d;
 
-class Level {
+class LevelModel {
 protected:
 	/** Reference to the goalDoor (for collision detection) */
 	BoxObstacle*    _goalDoor;
 	/** Reference to the player avatar */
-	Pineapple*      _pineapple;
+	PineappleModel*      _pineapple;
 	/** References to the kid avatars */
 	KidModel*     _kids[KID_COUNT];
 	/** Reference to the blender avatar */
@@ -108,7 +108,7 @@ public:
 	/**
 	*
 	*/
-	Pineapple* getPineapple() { return _pineapple; }
+	PineappleModel* getPineapple() { return _pineapple; }
 
 	/**
 	*
@@ -181,7 +181,7 @@ public:
 	/**
 	*
 	*/
-	static Level* create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world);
+	static LevelModel* create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world);
 
     /** Actually handles the obstacle addition. Should not be called from the outside
      * Will be called as a part of the following add functions
@@ -191,7 +191,7 @@ public:
 	/** Reference to the goalDoor (for collision detection) */
 	void addGoal(BoxObstacle* goal);
 	/** Reference to the player avatar */
-	void addPineapple(Pineapple* pineapple);
+	void addPineapple(PineappleModel* pineapple);
 	/** References to the kid avatars */
 	void addKids(KidModel* kids[KID_COUNT]);
 	/** Reference to the blender avatar */
@@ -250,9 +250,9 @@ private:
 	/**
 	*
 	*/
-	Level();
+	LevelModel();
     
-    ~Level();
+    ~LevelModel();
 
 };
 

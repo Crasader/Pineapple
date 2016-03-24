@@ -1,5 +1,5 @@
 //
-//  PFSpinner.cpp
+//  SpinnerModel.cpp
 //  PlatformerDemo
 //
 //  This class provides a spinning rectangle on a fixed pin.  We did not really need
@@ -16,7 +16,7 @@
 //  Author: Walker White
 //  Version: 1/15/16
 //
-#include "PFSpinner.h"
+#include "SpinnerModel.h"
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWheelObstacle.h>
 #include <cornell/CUAssetManager.h>

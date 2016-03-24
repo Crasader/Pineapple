@@ -1,11 +1,11 @@
-#include "Level.h"
+#include "LevelModel.h"
 
 #define UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT -2
 
 /**
 *	Will replace this constructor with some kind of populate/build level via levelController
 */
-Level::Level() :
+LevelModel::LevelModel() :
 _goalDoor(nullptr),
 _kids(),
 _pineapple(nullptr),
@@ -18,8 +18,8 @@ _platformCount(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _wallCount(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _kidsRemaining(KID_COUNT) {}
 
-Level* Level::create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world) {
-	Level* l = new (std::nothrow) Level();
+LevelModel* LevelModel::create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world) {
+	LevelModel* l = new (std::nothrow) LevelModel();
     l->_rootnode = rootnode;
     l->_worldnode = worldnode;
     l->_debugnode = debugnode;
@@ -27,7 +27,7 @@ Level* Level::create(RootLayer* rootnode, Node* worldnode, Node* debugnode, Worl
     return l;
 }
 
-void Level::dispose() {
+void LevelModel::dispose() {
     //TODO - pre-nulling cleanup
     
     _pineapple = nullptr;
@@ -54,7 +54,7 @@ void Level::dispose() {
     _length = UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT;
 }
 
-Level::~Level(){
+LevelModel::~LevelModel(){
     dispose();
 }
 
@@ -71,7 +71,7 @@ Level::~Level(){
  *
  * @retain a reference to the obstacle
  */
-void Level::addObstacle(Obstacle* obj, int zOrder) {
+void LevelModel::addObstacle(Obstacle* obj, int zOrder) {
     if (_world == nullptr || _worldnode == nullptr || _debugnode == nullptr) {
         CC_ASSERT(false);
     }
@@ -85,7 +85,7 @@ void Level::addObstacle(Obstacle* obj, int zOrder) {
     }
 }
 
-void Level::addGoal(BoxObstacle* goal) {
+void LevelModel::addGoal(BoxObstacle* goal) {
     if (_goalDoor == nullptr) {
         _goalDoor = goal;
         addObstacle(_goalDoor, GOAL_Z_INDEX);
@@ -94,7 +94,7 @@ void Level::addGoal(BoxObstacle* goal) {
     }
 }
 
-void Level::addPineapple(Pineapple* will) {
+void LevelModel::addPineapple(PineappleModel* will) {
 	if (_pineapple == nullptr) {
 		_pineapple = will;
         addObstacle(_pineapple, PINEAPPLE_Z_INDEX);
@@ -103,7 +103,7 @@ void Level::addPineapple(Pineapple* will) {
     }
 }
 
-void Level::addBlender(BlenderModel* blender) {
+void LevelModel::addBlender(BlenderModel* blender) {
 	if (_blender == nullptr) {
 		_blender = blender;
         addObstacle(_blender, BLENDER_Z_INDEX);
@@ -112,7 +112,7 @@ void Level::addBlender(BlenderModel* blender) {
     }
 }
 
-void Level::addKids(KidModel* kids[KID_COUNT]) {
+void LevelModel::addKids(KidModel* kids[KID_COUNT]) {
 	if (_kids[0] == nullptr) {
 		for (int i = 0; i < KID_COUNT; i++) {
 			_kids[i] = kids[i];
@@ -123,7 +123,7 @@ void Level::addKids(KidModel* kids[KID_COUNT]) {
     }
 }
 
-void Level::addLength(float length) {
+void LevelModel::addLength(float length) {
     if (_length == UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT) {
         _length = length;
     } else {
@@ -131,7 +131,7 @@ void Level::addLength(float length) {
     }
 }
 
-void Level::addPlatformCount(int platformCount) {
+void LevelModel::addPlatformCount(int platformCount) {
     if (_platformCount == UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT) {
         _platformCount = platformCount;
     } else {
@@ -139,7 +139,7 @@ void Level::addPlatformCount(int platformCount) {
     }
 }
 
-void Level::addWallCount(int wallCount) {
+void LevelModel::addWallCount(int wallCount) {
     if (_wallCount == UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT) {
         _wallCount = wallCount;
     } else {
@@ -147,7 +147,7 @@ void Level::addWallCount(int wallCount) {
     }
 }
 
-void Level::addWalls(PolygonObstacle **walls) {
+void LevelModel::addWalls(PolygonObstacle **walls) {
     if (_walls == nullptr) {
         _walls = walls;
         for(int i = 0; i < _wallCount; i++) {
@@ -158,7 +158,7 @@ void Level::addWalls(PolygonObstacle **walls) {
     }
 }
 
-void Level::addPlatforms(PolygonObstacle **platforms) {
+void LevelModel::addPlatforms(PolygonObstacle **platforms) {
     if (_platforms == nullptr) {
         _platforms = platforms;
         for(int i = 0; i < _platformCount; i++) {
@@ -169,7 +169,7 @@ void Level::addPlatforms(PolygonObstacle **platforms) {
     }
 }
 
-void Level::addScale(Vec2 scale) {
+void LevelModel::addScale(Vec2 scale) {
     if (scale.x <= 0 || scale.y <= 0) {
         CC_ASSERT(false);
     }
@@ -180,6 +180,6 @@ void Level::addScale(Vec2 scale) {
     }
 }
 
-void Level::addAnonymousObstacle(cocos2d::Obstacle *obj, int zOrder) {
+void LevelModel::addAnonymousObstacle(cocos2d::Obstacle *obj, int zOrder) {
     addObstacle(obj, zOrder);
 }

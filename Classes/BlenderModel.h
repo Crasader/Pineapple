@@ -1,5 +1,5 @@
 //
-//  PFBlenderModel.h
+//  BlenderModel.h
 //  G.M.P.
 //
 //  Author: Flameingos

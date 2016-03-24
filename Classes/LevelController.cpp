@@ -82,7 +82,7 @@ void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setSensor(false);
 }
 
-Level* LevelController::read(string filename) {
+LevelModel* LevelController::read(string filename) {
     if(_level != nullptr) {
         _level->dispose();
     }
@@ -138,7 +138,7 @@ Level* LevelController::read(string filename) {
     
     //------------ END SECTION --------------------------------------------
     
-    _level = Level::create(_rootnode, _worldnode, _debugnode, _world);
+    _level = LevelModel::create(_rootnode, _worldnode, _debugnode, _world);
     
     addGoal(GOAL_POS);
     addWalls(WALL_COUNT, walls);
@@ -224,7 +224,7 @@ void LevelController::addPlatforms(int platformCount, float* platformPos[PLATFOR
 void LevelController::addPineapple(float pineapplePos[POS_COORDS]) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Texture2D* image  = _assets->get<Texture2D>(PINEAPPLE_TEXTURE);
-    Pineapple* will = Pineapple::create(pineapplePos,_scale / PINEAPPLE_SCALE);
+    PineappleModel* will = PineappleModel::create(pineapplePos,_scale / PINEAPPLE_SCALE);
     will->setDrawScale(_scale);
     
     PolygonNode* sprite = PolygonNode::createWithTexture(image);

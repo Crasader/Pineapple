@@ -1,5 +1,5 @@
 //
-//  Pineapple.h
+//  PineappleModel.h
 //  G.M.P.
 //
 //  Author: Flameingos
@@ -47,14 +47,14 @@ using namespace cocos2d;
 #define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
 
 #pragma mark -
-#pragma mark Pineapple Model
+#pragma mark PineappleModel Model
 /**
-* William the Papa Pineapple.
+* William the Papa PineappleModel.
 */
-class Pineapple : public CapsuleObstacle {
+class PineappleModel : public CapsuleObstacle {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
-	CC_DISALLOW_COPY_AND_ASSIGN(Pineapple);
+	CC_DISALLOW_COPY_AND_ASSIGN(PineappleModel);
 
 protected:
 	/** The current horizontal movement of the character */
@@ -109,7 +109,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static Pineapple* create();
+	static PineappleModel* create();
 
 	/**
 	* Creates a new pineapple at the given position.
@@ -125,7 +125,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static Pineapple* create(const Vec2& pos);
+	static PineappleModel* create(const Vec2& pos);
 
 	/**
 	* Creates a new pineapple at the given position.
@@ -142,7 +142,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static Pineapple* create(const Vec2& pos, const Vec2& scale);
+	static PineappleModel* create(const Vec2& pos, const Vec2& scale);
 
 #pragma mark Attribute Properties
 
@@ -350,10 +350,10 @@ CC_CONSTRUCTOR_ACCESS:
 	* Creates a degenerate pineapple object.
 	*
 	* This constructor does not initialize any of the pineapple values beyond
-	* the defaults.  To use a Pineapple, you must call init().
+	* the defaults.  To use a PineappleModel, you must call init().
 	*/
-	Pineapple() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(PINEAPPLE_SENSOR) { }
-	~Pineapple() { }
+	PineappleModel() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(PINEAPPLE_SENSOR) { }
+	~PineappleModel() { }
 
 	/**
 	* Initializes a new pineapple at the origin.

@@ -1,11 +1,11 @@
 #include "LoadingScreenController.h"
 
-#include "Pineapple.h"
-#include "PFBlenderModel.h"
+#include "PineappleModel.h"
+#include "BlenderModel.h"
 #include "KidModel.h"
 #include "JelloModel.h"
 #include "SpikeModel.h"
-#include "PFSpinner.h"
+#include "SpinnerModel.h"
 #include "CrushableModel.h"
 
 #pragma mark -

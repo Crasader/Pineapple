@@ -9,9 +9,9 @@
 #include <cornell/CUSimpleObstacle.h>
 
 // Forward declarations in the project
-class Level;
+class LevelModel;
 class LevelController;
-class Pineapple;
+class PineappleModel;
 class KidModel;
 
 using namespace cocos2d;
@@ -19,7 +19,7 @@ using namespace std;
 
 class CollisionController {
 protected:
-	Level* _level;
+	LevelModel* _level;
 	LevelController* _levelCtrlr;
 	/** Mark set to handle more sophisticated collision callbacks */
 	unordered_set<b2Fixture*> _sensorFixtures;
@@ -30,7 +30,7 @@ protected:
 	* This method is called when will collides with a jello
 	* to trigger upward momentum, and a jello quiver animation
 	*/
-	void handleJelloCollision(Pineapple* will);
+	void handleJelloCollision(PineappleModel* will);
 
 	/**
 	* Applies the jello force to the given kid.
@@ -80,7 +80,7 @@ public:
 	*/
 	static CollisionController* create();
 
-	void setLevel(Level * level);
+	void setLevel(LevelModel * level);
 
 private:
 	/**

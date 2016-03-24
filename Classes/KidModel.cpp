@@ -1,6 +1,6 @@
 //
 //  KidModel.cpp
-//  Pineapple
+//  PineappleModel
 //
 //  Created by Michael Patashnik on 2/24/16.
 //

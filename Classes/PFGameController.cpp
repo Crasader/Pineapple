@@ -24,15 +24,15 @@
 #include <Box2D/Common/b2Math.h>
 #include "PFGameController.h"
 #include "PFInputController.h"
-#include "Pineapple.h"
-#include "PFBlenderModel.h"
+#include "PineappleModel.h"
+#include "BlenderModel.h"
 #include "KidModel.h"
 #include "JelloModel.h"
 #include "SpikeModel.h"
-#include "PFSpinner.h"
+#include "SpinnerModel.h"
 #include "CrushableModel.h"
 #include "LoadingScreenController.h"
-#include "Level.h"
+#include "LevelModel.h"
 #include "LevelController.h"
 #include "CollisionController.h"
 
@@ -41,7 +41,7 @@ using namespace cocos2d;
 //using namespace std;
 
 #pragma mark -
-#pragma mark Level Geography
+#pragma mark LevelModel Geography
 
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH   32.0f
@@ -302,7 +302,7 @@ void GameController::dispose() {
 
 
 #pragma mark -
-#pragma mark Level Creation
+#pragma mark LevelModel Creation
 /**
  * Lays out the game geography.
  *
