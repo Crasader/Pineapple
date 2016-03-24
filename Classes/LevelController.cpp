@@ -10,15 +10,6 @@
 #define PLATFORM_VERTS  8
 #define POS_COORDS      2
 
-/** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   32.0f
-/** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT  12.0f
-/** Half-width of scrolling window in Box2d units */
-#define WINDOW_SIZE     5.0f
-
-
-
 #define MAIN_PLATFORM_Y         2.0f        //DELETE ONCE LEVEL READING IN
 #define SECOND_PLATFORM_Y       4.25f       //DELETE ONCE LEVEL READING IN
 #define SECOND_PLATFORM_HEIGHT  .5f         //DELETE ONCE LEVEL READING IN

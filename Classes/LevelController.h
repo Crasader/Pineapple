@@ -4,6 +4,7 @@
 #include <cornell.h>
 #include "LoadingScreenController.h"
 #include "LevelModel.h"
+#include "Const.h"
 
 #include "CrushableModel.h"
 #include "PineappleModel.h"

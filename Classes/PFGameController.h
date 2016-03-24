@@ -32,7 +32,7 @@
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
 namespace cocos2d {
-		class RootLayer;
+    class RootLayer;
     class WorldController;
     class ComplexObstacle;
     class ObstacleSelector;
@@ -48,6 +48,7 @@ class CrushableModel;
 class LoadingScreenController;
 class LevelController;
 class LevelModel;
+class BackgroundView;
 class CollisionController;
 
 using namespace cocos2d;
@@ -82,10 +83,6 @@ protected:
     RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
-		/** For hills background */
-		Node* _hillsnode;
-		/** For clouds background */
-		Node* _cloudsnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
     /** Reference to the win message label */
@@ -98,21 +95,8 @@ protected:
     /** The world scale (computed from root node) */
     Vec2 _scale;
     
-    /** The front background (first copy), with no parallax */
-    PolygonNode* _frontBackground_1;
-    /** The front background (second copy), with no parallax */
-    PolygonNode* _frontBackground_2;
-    
-    /** The middle background (first copy), with some parallax */
-    PolygonNode* _middleBackground_1;
-    /** The middle background (second copy), with some parallax */
-    PolygonNode* _middleBackground_2;
-    
-    /** The back backBackground (first copy), with heavy parallax */
-    PolygonNode* _backBackground_1;
-    /** The back background (second copy), with heavy parallax */
-    PolygonNode* _backBackground_2;
-    
+    /** The background view */
+    BackgroundView* _background;
     /** Reference to the level controller */
     LevelController* _levelController;
     /** Reference to current level */
@@ -130,12 +114,6 @@ protected:
     int _countdown;
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
-    /** Number of times front background has been flipped */
-    int _frontFlip;
-	/** Number of times middle background has been flipped */
-	int _middleFlip;
-	/** Number of times back background has been flipped */
-	int _backFlip;
     
 #pragma mark Internal Object Management
     /**

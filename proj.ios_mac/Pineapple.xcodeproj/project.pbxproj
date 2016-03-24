@@ -28,6 +28,8 @@
 		405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */; };
 		405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */; };
 		405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
+		406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
+		406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
 		4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */; };
 		4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */; };
 		4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */; };
@@ -162,6 +164,9 @@
 		405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameRoot.h; sourceTree = "<group>"; };
 		405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameRoot.cpp; sourceTree = "<group>"; };
 		405CBEBF1C7D1CF7004AB5A0 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BackgroundView.cpp; sourceTree = "<group>"; };
+		406E53E61CA4A72B001E2EBD /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
+		406E53E91CA4ACA4001E2EBD /* Const.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
 		4070BDD71C7E7289008AE7AF /* KidModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KidModel.cpp; sourceTree = "<group>"; };
 		4070BDD81C7E7289008AE7AF /* KidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KidModel.h; sourceTree = "<group>"; };
 		4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
@@ -393,6 +398,8 @@
 			children = (
 				4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */,
 				4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */,
+				406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */,
+				406E53E61CA4A72B001E2EBD /* BackgroundView.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -435,6 +442,7 @@
 				4072DF871C9F44C900F7DAA4 /* Controller */,
 				4072DF851C9F44B800F7DAA4 /* Model */,
 				4072DF861C9F44BE00F7DAA4 /* View */,
+				406E53E91CA4ACA4001E2EBD /* Const.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -673,6 +681,7 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
+				406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -689,6 +698,7 @@
 				4072DFA91C9F68C500F7DAA4 /* SpikeModel.cpp in Sources */,
 				4072DFA71C9F68C500F7DAA4 /* KidModel.cpp in Sources */,
 				4072DF921C9F68B300F7DAA4 /* LoadingScreenController.cpp in Sources */,
+				406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				4072DF971C9F68B300F7DAA4 /* PFInputController.cpp in Sources */,
 				4072DF961C9F68B300F7DAA4 /* PFGameRoot.cpp in Sources */,
 				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,

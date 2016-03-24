@@ -2,6 +2,7 @@
 #define __LOADING_SCREEN_CONTROLLER_H__
 
 #include <cornell.h>
+#include "BackgroundView.h"
 
 #pragma mark -
 #pragma mark Asset Constants
@@ -14,12 +15,6 @@
 #define PLATFORM_TEXTURE "platform"
 /** The key for the win door texture in the asset manager */
 #define GOAL_TEXTURE    "goal"
-/** The key for the main background texture in the asset manager */
-#define FRONT_BACKGROUND    "background_1"
-/** The key for the further back background texture in the asset manager */
-#define MIDDLE_BACKGROUND   "background_2"
-/** The key for the furthest back background texture in the asset manager */
-#define BACK_BACKGROUND     "background_3"
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT    "retro"
 
