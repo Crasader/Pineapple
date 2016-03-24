@@ -414,10 +414,12 @@ void CapsuleObstacle::createFixtures() {
             _ends.m_p.y = _center.lowerBound.y;
             _fixture.shape = &_ends;
             _cap2 = _body->CreateFixture(&_fixture);
+            break;
         case Orientation::BOTTOM:
             _ends.m_p.y = _center.lowerBound.y;
             _fixture.shape = &_ends;
             _cap1 = _body->CreateFixture(&_fixture);
+            _cap2 = nullptr;
             break;
         case Orientation::LEFT:
             _ends.m_p.x = _center.lowerBound.x;
@@ -432,10 +434,12 @@ void CapsuleObstacle::createFixtures() {
             _ends.m_p.x = _center.upperBound.x;
             _fixture.shape = &_ends;
             _cap2 = _body->CreateFixture(&_fixture);
+            break;
         case Orientation::RIGHT:
             _ends.m_p.x = _center.upperBound.x;
             _fixture.shape = &_ends;
             _cap1 = _body->CreateFixture(&_fixture);
+            _cap2 = nullptr;
             break;
     }
     
