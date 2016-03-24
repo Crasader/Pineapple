@@ -464,11 +464,7 @@ void GameController::update(float dt) {
             _level->getKid(i)->dampTowardsWalkspeed();
         }
     }
-    
-    //Blender moves
-    _level->getBlender()->applyForce();
-    _level->getBlender()->setVY(0);
-    
+        
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
     if (_input.didReset()) { reset(); }

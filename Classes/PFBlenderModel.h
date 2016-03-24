@@ -20,12 +20,8 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define BLENDER_FORCE      50.0f
-/** The amount to slow the character down */
-#define BLENDER_DAMPING    10.0f
 /** The maximum character speed */
-#define BLENDER_MAXSPEED   0.5f
+#define BLENDER_SPEED   1.0f
 /** The Blender specific scaling */
 #define BLENDER_SCALE      0.75f
 
@@ -47,8 +43,6 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
 
 protected:
-    /** The current horizontal movement of the character */
-    float _movement;
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
@@ -109,39 +103,6 @@ public:
 
     
 #pragma mark Attribute Properties
-    /**
-     * Returns left/right movement of this character.
-     *
-     * This is the result of input times blender force.
-     *
-     * @return left/right movement of this character.
-     */
-    float getMovement() const { return _movement; }
-    
-    /**
-     * Sets left/right movement of this character.
-     *
-     * This is the result of input times blender force.
-     *
-     * @param value left/right movement of this character.
-     */
-    void setMovement(float value);
-    
-    /**
-     * Returns how much force to apply to get the blender moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the blender moving
-     */
-    float getForce() const { return BLENDER_FORCE; }
-    
-    /**
-     * Returns ow hard the brakes are applied to get a blender to stop moving
-     *
-     * @return ow hard the brakes are applied to get a blender to stop moving
-     */
-    float getDamping() const { return BLENDER_DAMPING; }
     
     /**
      * Returns the upper limit on blender left-right movement.
@@ -150,7 +111,7 @@ public:
      *
      * @return the upper limit on blender left-right movement.
      */
-    float getMaxSpeed() const { return BLENDER_MAXSPEED; }
+    float getSpeed() const { return BLENDER_SPEED; }
     
     
 #pragma mark Physics Methods
@@ -180,13 +141,6 @@ public:
      * @param delta Number of seconds since last animation frame
      */
     void update(float dt) override;
-    
-    /**
-     * Applies the force to the body of this blender
-     *
-     * This method should be called after the force attribute is set.
-     */
-    void applyForce();
 
     
 CC_CONSTRUCTOR_ACCESS:

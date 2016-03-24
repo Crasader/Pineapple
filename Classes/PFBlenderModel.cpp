@@ -18,8 +18,6 @@
 #define BLENDER_VSHRINK  0.8f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define BLENDER_HSHRINK  0.72f
-/** The density of the character */
-#define BLENDER_DENSITY    0.5f
 
 
 #pragma mark -
@@ -122,33 +120,17 @@ bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Size nsize = image->getContentSize()*cscale;
     
-    
     nsize.width  *= BLENDER_HSHRINK/scale.x;
     nsize.height *= BLENDER_VSHRINK/scale.y;
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(BLENDER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+        setVX(BLENDER_SPEED);
         
         // Gameplay attributes
         return true;
     }
     return false;
-}
-
-
-#pragma mark -
-#pragma mark Attribute Properties
-
-/**
- * Sets left/right movement of this character.
- *
- * This is the result of input times blender force.
- *
- * @param value left/right movement of this character.
- */
-void BlenderModel::setMovement(float value) {
-    _movement = value;
 }
 
 
@@ -178,31 +160,6 @@ void BlenderModel::releaseFixtures() {
     }
     
     BoxObstacle::releaseFixtures();
-}
-
-/**
- * Applies the force to the body of this blender
- *
- * This method should be called after the force attribute is set.
- */
-void BlenderModel::applyForce() {
-    if (!isActive()) {
-        return;
-    }
-    
-    // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f) {
-        b2Vec2 force(-getDamping()*getVX(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed()) {
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-    } else {
-        b2Vec2 force(getMovement(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-    }
 }
 
 /**

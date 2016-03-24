@@ -65,7 +65,6 @@ void initDebugProperties(Obstacle* obstacle) {
 
 /** Helper method for creating sensors (and non-physical obstacles) */
 void initSensor(Obstacle* obstacle) {
-    obstacle->setBodyType(b2_staticBody);
     obstacle->setDensity(0.0f);
     obstacle->setFriction(0.0f);
     obstacle->setRestitution(0.0f);
@@ -126,7 +125,7 @@ Level* TiledLoader::read(string filename) {
     KID_POS[2] = new float[POS_COORDS]{6.0f, 5.1f};
     KID_POS[3] = new float[POS_COORDS]{8.0f, 5.1f};
     
-    float BLENDER_POS[] = {-25.0f, 7.0f};
+    float BLENDER_POS[] = {-14.0f, 7.0f};
 
     float** CUP_POS = new float* [CUP_COUNT];
     CUP_POS[0] = new float[POS_COORDS]{28.0f, 2.5f};
