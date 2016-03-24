@@ -118,10 +118,6 @@ protected:
     KidModel*     _kids[KID_COUNT];
     /** Reference to the blender avatar */
     BlenderModel* _blender;
-    /** Reference to the spinning barrier */
-    Spinner*        _spinner;
-    /** Reference to the rope bridge */
-    RopeBridge*     _ropebridge;
     
     /** Whether or note this game is still active */
     bool _active;
@@ -131,8 +127,6 @@ protected:
     bool _debug;
     /** Count of remaining kids */
     int _kidsRemaining;
-    /** Flags for kids who have reached the goal */
-    bool* _kidsReachedGoal;
     /** Whether we have failed at this world (and need a reset) */
     bool _failed;
     /** Countdown active for winning or losing */

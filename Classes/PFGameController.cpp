@@ -599,7 +599,6 @@ void GameController::populate() {
     
 #pragma mark : Kids
     _kidsRemaining = KID_COUNT;
-    _kidsReachedGoal = new bool[KID_COUNT];
     for (int i = 0; i < KID_COUNT; i++) {
         Vec2 kidPos = KID_POS[i];
         image = _assets->get<Texture2D>(KidModel::getTexture(i));
