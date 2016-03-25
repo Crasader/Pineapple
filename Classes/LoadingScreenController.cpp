@@ -1,13 +1,5 @@
 #include "LoadingScreenController.h"
 
-#include "PineappleModel.h"
-#include "BlenderModel.h"
-#include "KidModel.h"
-#include "JelloModel.h"
-#include "SpikeModel.h"
-#include "SpinnerModel.h"
-#include "CrushableModel.h"
-
 #pragma mark -
 #pragma mark Asset Management
 // TODO: PRELOAD: Check if this is right way to do things

@@ -17,10 +17,20 @@
 #define GOAL_TEXTURE    "goal"
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT    "retro"
+
 /** The texture for the character avatar */
 #define PINEAPPLE_TEXTURE    "pineapple"
 /** The texture for the character avatar */
 #define BLENDER_TEXTURE    "blender"
+/** The texture for the first kid */
+#define KID_TEXTURE_1    "pineapplet_bow"
+/** The texture for the first kid */
+#define KID_TEXTURE_2    "pineapplet_glasses"
+/** The texture for the first kid */
+#define KID_TEXTURE_3    "pineapplet_hat"
+/** The texture for the first kid */
+#define KID_TEXTURE_4    "pineapplet_pirate"
+
 /** The texture for the character avatar */
 #define SPIKE_TEXTURE    "spikes_tex"
 /** The texture for the character avatar */

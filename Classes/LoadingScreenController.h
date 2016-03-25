@@ -5,8 +5,12 @@
 #include "BackgroundView.h"
 #include "Texture.h"
 
-#pragma mark -
-#pragma mark Asset Constants
+/** Font size for loading message */
+#define DEFAULT_FONT_SIZE   64.0f
+/** Loading font name */
+#define LOADING_FONT_NAME   "felt"
+/** Loading font message */
+#define LOADING_MESSAGE     "Loading..."
 
 class LoadingScreenController {
 public:

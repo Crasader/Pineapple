@@ -10,20 +10,12 @@
 #define KidModel_h
 
 #include <stdio.h>
-//#include <cornell/CUBoxObstacle.h>
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
+#include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
-
-/** The texture for the first kid */
-#define KID_TEXTURE_1    "pineapplet_bow"
-/** The texture for the first kid */
-#define KID_TEXTURE_2    "pineapplet_glasses"
-/** The texture for the first kid */
-#define KID_TEXTURE_3    "pineapplet_hat"
-/** The texture for the first kid */
-#define KID_TEXTURE_4    "pineapplet_pirate"
 
 /** Identifier to allow us to track the sensor in ContactListener */
 #define KID_SENSOR     "kidsensor"

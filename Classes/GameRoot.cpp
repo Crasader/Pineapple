@@ -15,14 +15,6 @@
 #include "GameRoot.h"
 #include "LoadingScreenController.h"
 
-/** Font size for loading message */
-#define DEFAULT_FONT_SIZE   64.0f
-/** Loading font name */
-#define LOADING_FONT_NAME   "felt"
-/** Loading font message */
-#define LOADING_MESSAGE     "Loading..."
-
-
 using namespace cocos2d;
 
 #pragma mark -
