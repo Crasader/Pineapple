@@ -69,17 +69,10 @@
     <ClCompile Include="..\Classes\PFBlenderModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="..\Classes\JelloModel.cpp">
-=======
     <ClCompile Include="..\Classes\Pineapple.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\CollisionObject.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SpikeModel.cpp">
->>>>>>> master
+    <ClCompile Include="..\Classes\CollisionObjectModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -145,9 +138,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CollisionObject.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\JelloModel.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
