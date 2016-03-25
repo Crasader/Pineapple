@@ -95,26 +95,10 @@ protected:
     int _countdown;
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
-<<<<<<< HEAD:Classes/PFGameController.h
-    /** Number of times front background has been flipped */
-    int _frontFlip;
-	/** Number of times middle background has been flipped */
-	int _middleFlip;
-	/** Number of times back background has been flipped */
-	int _backFlip;
-
-	/** Sprite for Will rest */
-	PolygonNode* _willRest;
-	/** Filmstrip for Will walkcycle */
-	AnimationNode* _willWalkcycle;
-	/** Frame counter for Will walkcycle */
-	int _willWalkcycleFrame;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
-    
-=======
->>>>>>> master:Classes/GameController.h
+
     
 #pragma mark Internal Object Management
     /**
