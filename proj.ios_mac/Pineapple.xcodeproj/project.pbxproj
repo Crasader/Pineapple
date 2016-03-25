@@ -11,27 +11,49 @@
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		400C68511C94E32800C141C3 /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
-		400C68521C94E32800C141C3 /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
-		405CBEB31C7D14DF004AB5A0 /* PFGameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */; };
-		405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */; };
-		405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */; };
-		405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */; };
-		405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */; };
-		405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */; };
-		405CBEB91C7D1A56004AB5A0 /* PFDudeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */; };
-		405CBEBA1C7D1A5A004AB5A0 /* PFGameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */; };
-		405CBEBB1C7D1A5A004AB5A0 /* PFGameRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */; };
-		405CBEBC1C7D1A5A004AB5A0 /* PFInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */; };
-		405CBEBD1C7D1A5A004AB5A0 /* PFRopeBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */; };
-		405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */; };
+		403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */; };
+		403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
+		403B056E1CA37B5E003F47CB /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
+		403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
+		403B05701CA37B5E003F47CB /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4016BAAB1CA3745100557450 /* LevelModel.cpp */; };
+		403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */; };
+		403B05721CA37B5E003F47CB /* BlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* BlenderModel.cpp */; };
+		403B05731CA37B5E003F47CB /* SpinnerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */; };
+		403B05741CA37B5E003F47CB /* PhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */; };
+		403B05751CA37B5E003F47CB /* PineappleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */; };
+		403B05761CA37B5E003F47CB /* PlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF751C9F43F900F7DAA4 /* PlatformModel.cpp */; };
+		403B05771CA37B5E003F47CB /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
+		403B05781CA37B5E003F47CB /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4016BAAB1CA3745100557450 /* LevelModel.cpp */; };
+		405CBEB31C7D14DF004AB5A0 /* GameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* GameController.cpp */; };
+		405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* InputController.cpp */; };
+		405CBEB81C7D14DF004AB5A0 /* GameRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* GameRoot.cpp */; };
 		405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
-		4070BDD91C7E7289008AE7AF /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
-		4070BDDA1C7E7289008AE7AF /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
-		407625C61C8E13F2005A0651 /* PFBlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */; };
-		407625C71C8E13F2005A0651 /* PFBlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */; };
+		406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
+		406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
+		4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */; };
+		4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */; };
+		4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */; };
+		4072DF841C9F43F900F7DAA4 /* LevelController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF791C9F43F900F7DAA4 /* LevelController.cpp */; };
+		4072DF911C9F68B300F7DAA4 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */; };
+		4072DF921C9F68B300F7DAA4 /* LoadingScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */; };
+		4072DF931C9F68B300F7DAA4 /* LevelController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF791C9F43F900F7DAA4 /* LevelController.cpp */; };
+		4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
+		4072DF951C9F68B300F7DAA4 /* GameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* GameController.cpp */; };
+		4072DF961C9F68B300F7DAA4 /* GameRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* GameRoot.cpp */; };
+		4072DF971C9F68B300F7DAA4 /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* InputController.cpp */; };
+		4072DF981C9F68B600F7DAA4 /* ProgressHUD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */; };
+		4072DF9F1C9F68C500F7DAA4 /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
+		4072DFA01C9F68C500F7DAA4 /* CollisionObjectModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */; };
+		4072DFA21C9F68C500F7DAA4 /* NonPhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */; };
+		4072DFA31C9F68C500F7DAA4 /* PhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */; };
+		4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */; };
+		4072DFA51C9F68C500F7DAA4 /* PlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF751C9F43F900F7DAA4 /* PlatformModel.cpp */; };
+		4072DFA61C9F68C500F7DAA4 /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
+		4072DFA71C9F68C500F7DAA4 /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
+		4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* BlenderModel.cpp */; };
+		4072DFA91C9F68C500F7DAA4 /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
+		4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
-		46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
 		503AE10017EB989F00D1A890 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 503AE0FB17EB989F00D1A890 /* AppController.mm */; };
 		503AE10117EB989F00D1A890 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 503AE0FC17EB989F00D1A890 /* main.m */; };
@@ -119,29 +141,53 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		037D90E31C98FA0C001C332F /* SpikeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpikeModel.cpp; sourceTree = "<group>"; };
+		037D90E41C98FA0C001C332F /* SpikeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpikeModel.h; sourceTree = "<group>"; };
+		03E256121C991AF0002FB07E /* CrushableModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrushableModel.cpp; sourceTree = "<group>"; };
+		03E256131C991AF0002FB07E /* CrushableModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrushableModel.h; sourceTree = "<group>"; };
 		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Pineapple-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pineapple-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		400C684F1C94E32200C141C3 /* JelloModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JelloModel.h; sourceTree = "<group>"; };
 		400C68501C94E32800C141C3 /* JelloModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JelloModel.cpp; sourceTree = "<group>"; };
-		405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameController.cpp; sourceTree = "<group>"; };
-		405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFRopeBridge.cpp; sourceTree = "<group>"; };
-		405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFSpinner.cpp; sourceTree = "<group>"; };
-		405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFDudeModel.cpp; sourceTree = "<group>"; };
-		405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFDudeModel.h; sourceTree = "<group>"; };
-		405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameController.h; sourceTree = "<group>"; };
-		405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFSpinner.h; sourceTree = "<group>"; };
-		405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFRopeBridge.h; sourceTree = "<group>"; };
-		405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFInputController.h; sourceTree = "<group>"; };
-		405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFInputController.cpp; sourceTree = "<group>"; };
-		405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFGameRoot.h; sourceTree = "<group>"; };
-		405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFGameRoot.cpp; sourceTree = "<group>"; };
+		4016BA701CA36D9700557450 /* LevelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelModel.h; sourceTree = "<group>"; };
+		4016BA721CA36D9700557450 /* CollisionObjectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionObjectModel.h; sourceTree = "<group>"; };
+		4016BA771CA36D9700557450 /* NonPhysicalObstacleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonPhysicalObstacleModel.h; sourceTree = "<group>"; };
+		4016BAAB1CA3745100557450 /* LevelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelModel.cpp; sourceTree = "<group>"; };
+		405CBEA71C7D14DF004AB5A0 /* GameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameController.cpp; sourceTree = "<group>"; };
+		405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpinnerModel.cpp; sourceTree = "<group>"; };
+		405CBEAC1C7D14DF004AB5A0 /* GameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameController.h; sourceTree = "<group>"; };
+		405CBEAD1C7D14DF004AB5A0 /* SpinnerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinnerModel.h; sourceTree = "<group>"; };
+		405CBEAF1C7D14DF004AB5A0 /* InputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputController.h; sourceTree = "<group>"; };
+		405CBEB01C7D14DF004AB5A0 /* InputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
+		405CBEB11C7D14DF004AB5A0 /* GameRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRoot.h; sourceTree = "<group>"; };
+		405CBEB21C7D14DF004AB5A0 /* GameRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameRoot.cpp; sourceTree = "<group>"; };
 		405CBEBF1C7D1CF7004AB5A0 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BackgroundView.cpp; sourceTree = "<group>"; };
+		406E53E61CA4A72B001E2EBD /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
+		406E53E91CA4ACA4001E2EBD /* Const.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
+		406E53EA1CA4BA5F001E2EBD /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		4070BDD71C7E7289008AE7AF /* KidModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KidModel.cpp; sourceTree = "<group>"; };
 		4070BDD81C7E7289008AE7AF /* KidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KidModel.h; sourceTree = "<group>"; };
-		407625C41C8E13E6005A0651 /* PFBlenderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFBlenderModel.h; sourceTree = "<group>"; };
-		407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PFBlenderModel.cpp; sourceTree = "<group>"; };
+		4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
+		4072DF681C9F43F900F7DAA4 /* CollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionController.h; sourceTree = "<group>"; };
+		4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionObjectModel.cpp; sourceTree = "<group>"; };
+		4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScreenController.cpp; sourceTree = "<group>"; };
+		4072DF6E1C9F43F900F7DAA4 /* LoadingScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreenController.h; sourceTree = "<group>"; };
+		4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NonPhysicalObstacleModel.cpp; sourceTree = "<group>"; };
+		4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicalObstacleModel.cpp; sourceTree = "<group>"; };
+		4072DF721C9F43F900F7DAA4 /* PhysicalObstacleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalObstacleModel.h; sourceTree = "<group>"; };
+		4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PineappleModel.cpp; sourceTree = "<group>"; };
+		4072DF741C9F43F900F7DAA4 /* PineappleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PineappleModel.h; sourceTree = "<group>"; };
+		4072DF751C9F43F900F7DAA4 /* PlatformModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlatformModel.cpp; sourceTree = "<group>"; };
+		4072DF761C9F43F900F7DAA4 /* PlatformModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformModel.h; sourceTree = "<group>"; };
+		4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressHUD.cpp; sourceTree = "<group>"; };
+		4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
+		4072DF791C9F43F900F7DAA4 /* LevelController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelController.cpp; sourceTree = "<group>"; };
+		4072DF7A1C9F43F900F7DAA4 /* LevelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelController.h; sourceTree = "<group>"; };
+		407625C41C8E13E6005A0651 /* BlenderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlenderModel.h; sourceTree = "<group>"; };
+		407625C51C8E13F2005A0651 /* BlenderModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlenderModel.cpp; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
@@ -317,6 +363,69 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4072DF851C9F44B800F7DAA4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */,
+				4016BA721CA36D9700557450 /* CollisionObjectModel.h */,
+				03E256121C991AF0002FB07E /* CrushableModel.cpp */,
+				03E256131C991AF0002FB07E /* CrushableModel.h */,
+				400C68501C94E32800C141C3 /* JelloModel.cpp */,
+				400C684F1C94E32200C141C3 /* JelloModel.h */,
+				4070BDD71C7E7289008AE7AF /* KidModel.cpp */,
+				4070BDD81C7E7289008AE7AF /* KidModel.h */,
+				4016BAAB1CA3745100557450 /* LevelModel.cpp */,
+				4016BA701CA36D9700557450 /* LevelModel.h */,
+				4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */,
+				4016BA771CA36D9700557450 /* NonPhysicalObstacleModel.h */,
+				407625C51C8E13F2005A0651 /* BlenderModel.cpp */,
+				407625C41C8E13E6005A0651 /* BlenderModel.h */,
+				405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */,
+				405CBEAD1C7D14DF004AB5A0 /* SpinnerModel.h */,
+				4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */,
+				4072DF721C9F43F900F7DAA4 /* PhysicalObstacleModel.h */,
+				4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */,
+				4072DF741C9F43F900F7DAA4 /* PineappleModel.h */,
+				4072DF751C9F43F900F7DAA4 /* PlatformModel.cpp */,
+				4072DF761C9F43F900F7DAA4 /* PlatformModel.h */,
+				037D90E31C98FA0C001C332F /* SpikeModel.cpp */,
+				037D90E41C98FA0C001C332F /* SpikeModel.h */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		4072DF861C9F44BE00F7DAA4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */,
+				4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */,
+				406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */,
+				406E53E61CA4A72B001E2EBD /* BackgroundView.h */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4072DF871C9F44C900F7DAA4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
+				46880B8519C43A87006E1F66 /* AppDelegate.h */,
+				4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */,
+				4072DF681C9F43F900F7DAA4 /* CollisionController.h */,
+				4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */,
+				4072DF6E1C9F43F900F7DAA4 /* LoadingScreenController.h */,
+				405CBEA71C7D14DF004AB5A0 /* GameController.cpp */,
+				405CBEAC1C7D14DF004AB5A0 /* GameController.h */,
+				405CBEB21C7D14DF004AB5A0 /* GameRoot.cpp */,
+				405CBEB11C7D14DF004AB5A0 /* GameRoot.h */,
+				405CBEB01C7D14DF004AB5A0 /* InputController.cpp */,
+				405CBEAF1C7D14DF004AB5A0 /* InputController.h */,
+				4072DF791C9F43F900F7DAA4 /* LevelController.cpp */,
+				4072DF7A1C9F43F900F7DAA4 /* LevelController.h */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -331,26 +440,11 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
-				46880B8519C43A87006E1F66 /* AppDelegate.h */,
-				400C68501C94E32800C141C3 /* JelloModel.cpp */,
-				400C684F1C94E32200C141C3 /* JelloModel.h */,
-				4070BDD71C7E7289008AE7AF /* KidModel.cpp */,
-				4070BDD81C7E7289008AE7AF /* KidModel.h */,
-				407625C51C8E13F2005A0651 /* PFBlenderModel.cpp */,
-				407625C41C8E13E6005A0651 /* PFBlenderModel.h */,
-				405CBEAA1C7D14DF004AB5A0 /* PFDudeModel.cpp */,
-				405CBEAB1C7D14DF004AB5A0 /* PFDudeModel.h */,
-				405CBEA71C7D14DF004AB5A0 /* PFGameController.cpp */,
-				405CBEAC1C7D14DF004AB5A0 /* PFGameController.h */,
-				405CBEB21C7D14DF004AB5A0 /* PFGameRoot.cpp */,
-				405CBEB11C7D14DF004AB5A0 /* PFGameRoot.h */,
-				405CBEB01C7D14DF004AB5A0 /* PFInputController.cpp */,
-				405CBEAF1C7D14DF004AB5A0 /* PFInputController.h */,
-				405CBEA81C7D14DF004AB5A0 /* PFRopeBridge.cpp */,
-				405CBEAE1C7D14DF004AB5A0 /* PFRopeBridge.h */,
-				405CBEA91C7D14DF004AB5A0 /* PFSpinner.cpp */,
-				405CBEAD1C7D14DF004AB5A0 /* PFSpinner.h */,
+				4072DF871C9F44C900F7DAA4 /* Controller */,
+				4072DF851C9F44B800F7DAA4 /* Model */,
+				4072DF861C9F44BE00F7DAA4 /* View */,
+				406E53E91CA4ACA4001E2EBD /* Const.h */,
+				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -567,19 +661,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				405CBEB71C7D14DF004AB5A0 /* PFInputController.cpp in Sources */,
-				400C68511C94E32800C141C3 /* JelloModel.cpp in Sources */,
-				407625C61C8E13F2005A0651 /* PFBlenderModel.cpp in Sources */,
-				4070BDD91C7E7289008AE7AF /* KidModel.cpp in Sources */,
-				405CBEB61C7D14DF004AB5A0 /* PFDudeModel.cpp in Sources */,
-				405CBEB81C7D14DF004AB5A0 /* PFGameRoot.cpp in Sources */,
-				405CBEB41C7D14DF004AB5A0 /* PFRopeBridge.cpp in Sources */,
+				403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */,
+				405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */,
+				405CBEB81C7D14DF004AB5A0 /* GameRoot.cpp in Sources */,
+				403B05731CA37B5E003F47CB /* SpinnerModel.cpp in Sources */,
+				403B05701CA37B5E003F47CB /* LevelModel.cpp in Sources */,
+				4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */,
+				4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */,
+				403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
-				405CBEB51C7D14DF004AB5A0 /* PFSpinner.cpp in Sources */,
+				403B05751CA37B5E003F47CB /* PineappleModel.cpp in Sources */,
+				403B05761CA37B5E003F47CB /* PlatformModel.cpp in Sources */,
+				403B05721CA37B5E003F47CB /* BlenderModel.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
-				405CBEB31C7D14DF004AB5A0 /* PFGameController.cpp in Sources */,
+				403B05741CA37B5E003F47CB /* PhysicalObstacleModel.cpp in Sources */,
+				405CBEB31C7D14DF004AB5A0 /* GameController.cpp in Sources */,
+				403B056E1CA37B5E003F47CB /* JelloModel.cpp in Sources */,
+				4072DF841C9F43F900F7DAA4 /* LevelController.cpp in Sources */,
+				403B05771CA37B5E003F47CB /* SpikeModel.cpp in Sources */,
+				4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
+				406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
+				403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,17 +692,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				405CBEBD1C7D1A5A004AB5A0 /* PFRopeBridge.cpp in Sources */,
-				405CBEBC1C7D1A5A004AB5A0 /* PFInputController.cpp in Sources */,
-				405CBEB91C7D1A56004AB5A0 /* PFDudeModel.cpp in Sources */,
-				400C68521C94E32800C141C3 /* JelloModel.cpp in Sources */,
-				405CBEBE1C7D1A5A004AB5A0 /* PFSpinner.cpp in Sources */,
-				4070BDDA1C7E7289008AE7AF /* KidModel.cpp in Sources */,
-				407625C71C8E13F2005A0651 /* PFBlenderModel.cpp in Sources */,
-				405CBEBA1C7D1A5A004AB5A0 /* PFGameController.cpp in Sources */,
-				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				4072DF911C9F68B300F7DAA4 /* CollisionController.cpp in Sources */,
+				4072DFA61C9F68C500F7DAA4 /* JelloModel.cpp in Sources */,
+				4072DFA31C9F68C500F7DAA4 /* PhysicalObstacleModel.cpp in Sources */,
+				403B05781CA37B5E003F47CB /* LevelModel.cpp in Sources */,
+				4072DFA51C9F68C500F7DAA4 /* PlatformModel.cpp in Sources */,
+				4072DFA91C9F68C500F7DAA4 /* SpikeModel.cpp in Sources */,
+				4072DFA71C9F68C500F7DAA4 /* KidModel.cpp in Sources */,
+				4072DF921C9F68B300F7DAA4 /* LoadingScreenController.cpp in Sources */,
+				406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
+				4072DF971C9F68B300F7DAA4 /* InputController.cpp in Sources */,
+				4072DF961C9F68B300F7DAA4 /* GameRoot.cpp in Sources */,
+				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,
+				4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */,
+				4072DF931C9F68B300F7DAA4 /* LevelController.cpp in Sources */,
+				4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */,
+				4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */,
+				4072DFA01C9F68C500F7DAA4 /* CollisionObjectModel.cpp in Sources */,
+				4072DF981C9F68B600F7DAA4 /* ProgressHUD.cpp in Sources */,
+				4072DF951C9F68B300F7DAA4 /* GameController.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
-				405CBEBB1C7D1A5A004AB5A0 /* PFGameRoot.cpp in Sources */,
+				4072DF9F1C9F68C500F7DAA4 /* CrushableModel.cpp in Sources */,
+				4072DFA21C9F68C500F7DAA4 /* NonPhysicalObstacleModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

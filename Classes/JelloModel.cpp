@@ -46,8 +46,6 @@
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
 
-#define SIGNUM(x)  ((x > 0) - (x < 0))
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The amount to shrink the body fixture (vertically) relative to the image */
@@ -72,6 +70,7 @@
 JelloModel* JelloModel::create() {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init()) {
+        
         jello->autorelease();
         return jello;
     }
@@ -89,13 +88,14 @@ JelloModel* JelloModel::create() {
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @param  pos      Initial position in world coordinates
+ * @param  pos      Initial position in world coordinates (of bottom left)
  *
  * @return  An autoreleased physics object
  */
 JelloModel* JelloModel::create(const Vec2& pos) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos)) {
+        jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
         jello->autorelease();
         return jello;
     }
@@ -113,7 +113,7 @@ JelloModel* JelloModel::create(const Vec2& pos) {
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @param  pos      Initial position in world coordinates
+ * @param  pos      Initial position in world coordinates (of bottom left)
  * @param  scale    The drawing scale
  *
  * @return  An autoreleased physics object
@@ -121,6 +121,7 @@ JelloModel* JelloModel::create(const Vec2& pos) {
 JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos,scale)) {
+        jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
         jello->autorelease();
         return jello;
     }
