@@ -1,5 +1,5 @@
 //
-//  PFGameController.h
+//  GameController.h
 //  PlatformerDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -20,40 +20,25 @@
 #ifndef __PF_GAME_CONTROLLER_H__
 #define __PF_GAME_CONTROLLER_H__
 
-#include "cocos2d.h"
-#include <vector>
-#include <Box2D/Dynamics/b2WorldCallbacks.h>
-#include <Box2D/Dynamics/Joints/b2MouseJoint.h>
-#include <Box2D/Dynamics/b2Body.h>
-#include <Box2D/Dynamics/b2Fixture.h>
-#include "PFInputController.h"
-#include <unordered_set>
-#include <vector>
+#include "InputController.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
 namespace cocos2d {
     class RootLayer;
     class WorldController;
-    class ComplexObstacle;
-    class ObstacleSelector;
     class SceneManager;
 }
 
 // These forward declarations are in the project
-class InputController;
-class DudeModel;
-class KidModel;
-class BlenderModel;
-class RopeBridge;
-class Spinner;
-class CrushableModel;
+class LoadingScreenController;
+class LevelController;
+class LevelModel;
+class BackgroundView;
+class CollisionController;
 
 using namespace cocos2d;
 using namespace std;
-
-/** The number of kids */
-#define KID_COUNT 4
 
 #pragma mark -
 #pragma mark GameController
@@ -68,56 +53,35 @@ using namespace std;
  */
 class GameController {
 protected:
-    /** The scene manager for this game demo */
-    SceneManager* _assets;
-    
-    /** Controller for abstracting out input away from layer */
-    InputController _input;
+    /** The world scale (computed from root node) */
+    Vec2 _scale;
     
     /** Reference to the root node of the scene graph */
     RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
-	/** For hills background */
-	Node* _hillsnode;
-	/** For clouds background */
-	Node* _cloudsnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
     /** Reference to the win message label */
     Label* _winnode;
     /** Reference to the lose message label */
     Label* _losenode;
-
     /** The Box2D world */
     WorldController* _world;
-    /** The world scale (computed from root node) */
-    Vec2 _scale;
     
-    /** The front background (first copy), with no parallax */
-    PolygonNode* _frontBackground_1;
-    /** The front background (second copy), with no parallax */
-    PolygonNode* _frontBackground_2;
+    /** The scene manager for this game demo */
+    SceneManager* _assets;
+    /** The background view */
+    BackgroundView* _background;
+    /** Reference to current level */
+    LevelModel* _level;
     
-    /** The middle background (first copy), with some parallax */
-    PolygonNode* _middleBackground_1;
-    /** The middle background (second copy), with some parallax */
-    PolygonNode* _middleBackground_2;
-    
-    /** The back backBackground (first copy), with heavy parallax */
-    PolygonNode* _backBackground_1;
-    /** The back background (second copy), with heavy parallax */
-    PolygonNode* _backBackground_2;
-    
-    // Physics objects for the game
-    /** Reference to the goalDoor (for collision detection) */
-    BoxObstacle*    _goalDoor;
-    /** Reference to the player avatar */
-    DudeModel*      _avatar;
-    /** References to the kid avatars */
-    KidModel*     _kids[KID_COUNT];
-    /** Reference to the blender avatar */
-    BlenderModel* _blender;
+    /** Controller for abstracting out input away from layer */
+    InputController _input;
+    /** Controller for collision handling */
+    CollisionController* _collision;
+    /** Reference to the level controller */
+    LevelController* _levelController;
     
     /** Whether or note this game is still active */
     bool _active;
@@ -125,24 +89,12 @@ protected:
     bool _complete;
     /** Whether or not debug mode is active */
     bool _debug;
-    /** Count of remaining kids */
-    int _kidsRemaining;
     /** Whether we have failed at this world (and need a reset) */
     bool _failed;
     /** Countdown active for winning or losing */
     int _countdown;
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
-    /** Number of times front background has been flipped */
-    int _frontFlip;
-	/** Number of times middle background has been flipped */
-	int _middleFlip;
-	/** Number of times back background has been flipped */
-	int _backFlip;
-    
-    /** Mark set to handle more sophisticated collision callbacks */
-    unordered_set<b2Fixture*> _sensorFixtures;
-    
     
 #pragma mark Internal Object Management
     /**
@@ -163,9 +115,6 @@ protected:
      * @retain a reference to the obstacle
      */
     void addObstacle(Obstacle* obj, int zOrder);
-
-		void removeObstacle(Obstacle* obj);
-    
     
 public:
 #pragma mark -
@@ -313,10 +262,10 @@ public:
      */
     void dispose();
     
-    /**
-     * Preloads all of the assets necessary for this game world
-     */
-    void preload();
+    ///**
+    // * Preloads all of the assets necessary for this game world
+    // */
+    //void preload();
 
     
 #pragma mark -
@@ -324,24 +273,24 @@ public:
     
     /**
      * Kills the given player or child.
-     * This method is called when a dude or kid collides with the blender,
+     * This method is called when Will or one of his kids collides with the blender,
      * to trigger any blending animation and remove the given object from the world
      *
      * This method shouldn't do any checks for gameover, that should be handled elsewhere
      */
-    void blendAndKill(SimpleObstacle* dudeOrKid);
+    void blendAndKill(SimpleObstacle* pineappleOrKid);
     
     /**
      * Kills the given player or child.
-     * This method is called when a dude or kid collides with a spike,
+     * This method is called when Will or one of his kids collides with a spike,
      * to trigger any blending animation and remove the given object from the world
      *
      * This method shouldn't do any checks for gameover, that should be handled elsewhere
      *
      * If necesarry to enable different animations this can be separated into separate funcs for
-     * kid/dude
+     * kid/pineapple
      */
-    void handleSpikeCollision(SimpleObstacle* dudeOrKid);
+    void handleSpikeCollision(SimpleObstacle* pineappleOrKid);
     
     /**
      * Checks for victory, triggering it if it occurs
@@ -393,18 +342,6 @@ public:
      * @param  delta    Number of seconds since last animation frame
      */
     void update(float dt);
-    
-    /**
-     * Add a new bullet to the world and send it in the right direction.
-     */
-    void createBullet();
-    
-    /**
-     * Remove a new bullet from the world.
-     *
-     * @param  bullet   the bullet to remove
-     */
-    void removeBullet(Obstacle* bullet);
 
 	/**
 	* Compute offsets for horizontal scrolling.

@@ -3,11 +3,9 @@
 //
 
 #include "SpikeModel.h"
-#include <cornell/CUPolygonNode.h>
+//#include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
-
-#define SIGNUM(x)  ((x > 0) - (x < 0))
 
 #pragma mark -
 #pragma mark Physics Constants

@@ -1,5 +1,5 @@
 //
-//  PFInputController.cpp
+//  InputController.cpp
 //  PlatformerDemo
 //
 //  This input controller is primarily designed for keyboard control.  On mobile
@@ -12,7 +12,7 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#include "PFInputController.h"
+#include "InputController.h"
 
 
 #pragma mark -

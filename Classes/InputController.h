@@ -1,5 +1,5 @@
 //
-//  PFInputController.h
+//  InputController.h
 //  PlatformerDemo
 //
 //  This input controller is primarily designed for keyboard control.  On mobile

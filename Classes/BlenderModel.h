@@ -1,70 +1,28 @@
 //
-//  PFBlenderModel.h
-//  PlatformerDemo
+//  BlenderModel.h
+//  G.M.P.
 //
-//  This encapsulates all of the information for the character avatar.  Note how this
-//  class combines physics and animation.  This is a good template for models in
-//  your game.
-//
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt well
-//  to data driven design.  This demo has a lot of simplifications to make it a bit
-//  easier to see how everything fits together.  However, the model classes and how
-//  they are initialized will need to be changed if you add dynamic level loading.
-//
-//  Pay close attention to how this class designed.  Subclasses of Cocos2d classes
-//  (which are all subclasses of the class Ref) should never have normal public
-//  constructors.  Instead, you should organize their constructors into three parts,
-//  just like we have done in this class.
-//
-//  NORMAL CONSTRUCTOR:
-//  The standard constructor should be protected (not private).  It should only
-//  initialize pointers to nullptr and primitives to their defaults (pointers are
-//  not always nullptr to begin with).  It should NOT take any arguments and should
-//  not allocate any memory or call any methods.
-//
-//  STATIC CONSTRUCTOR
-//  This is a static method that allocates the object and initializes it.  If
-//  initialization fails, it immediately disposes of the object.  Otherwise, it
-//  returns an autoreleased object, starting the garbage collection system.
-//  These methods all look the same.  You can copy-and-paste them from sample code.
-//  The only difference is the init method called.
-//
-//  INIT METHOD
-//  This is a protected method that acts like what how would normally think a
-//  constructor might work.  It allocates memory and initializes all values
-//  according to provided arguments.  As memory allocation can fail, this method
-//  needs to return a boolean indicating whether or not initialization was
-//  successful.
-//
-//  This file is based on the CS 3152 PhysicsDemo Lab by Don Holden, 2007
-//
-//  Author: Walker White
-//  Version: 1/15/15
+//  Author: Flameingos
+//  Version: TODO
 //
 #ifndef __PF_BLENDER_MODEL_H__
 #define __PF_BLENDER_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
-
+#include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
  
 #pragma mark -
-#pragma mark Drawing Constants
-/** The texture for the character avatar */
-#define BLENDER_TEXTURE    "blender"
-
-#pragma mark -
 #pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define BLENDER_FORCE      50.0f
-/** The amount to slow the character down */
-#define BLENDER_DAMPING    10.0f
 /** The maximum character speed */
-#define BLENDER_MAXSPEED   0.5f
+#define BLENDER_SPEED   1.0f
 /** The Blender specific scaling */
 #define BLENDER_SCALE      0.75f
 
+#define BLENDER_MASK 0x0008
+#define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
 
 #pragma mark -
 #pragma mark BLENDER Model
@@ -81,8 +39,6 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
 
 protected:
-    /** The current horizontal movement of the character */
-    float _movement;
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
@@ -143,39 +99,6 @@ public:
 
     
 #pragma mark Attribute Properties
-    /**
-     * Returns left/right movement of this character.
-     *
-     * This is the result of input times blender force.
-     *
-     * @return left/right movement of this character.
-     */
-    float getMovement() const { return _movement; }
-    
-    /**
-     * Sets left/right movement of this character.
-     *
-     * This is the result of input times blender force.
-     *
-     * @param value left/right movement of this character.
-     */
-    void setMovement(float value);
-    
-    /**
-     * Returns how much force to apply to get the blender moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the blender moving
-     */
-    float getForce() const { return BLENDER_FORCE; }
-    
-    /**
-     * Returns ow hard the brakes are applied to get a blender to stop moving
-     *
-     * @return ow hard the brakes are applied to get a blender to stop moving
-     */
-    float getDamping() const { return BLENDER_DAMPING; }
     
     /**
      * Returns the upper limit on blender left-right movement.
@@ -184,7 +107,7 @@ public:
      *
      * @return the upper limit on blender left-right movement.
      */
-    float getMaxSpeed() const { return BLENDER_MAXSPEED; }
+    float getSpeed() const { return BLENDER_SPEED; }
     
     
 #pragma mark Physics Methods
@@ -214,13 +137,6 @@ public:
      * @param delta Number of seconds since last animation frame
      */
     void update(float dt) override;
-    
-    /**
-     * Applies the force to the body of this blender
-     *
-     * This method should be called after the force attribute is set.
-     */
-    void applyForce();
 
     
 CC_CONSTRUCTOR_ACCESS:

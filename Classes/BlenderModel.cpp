@@ -1,52 +1,14 @@
 //
-//  PFBlenderModel.cpp
+//  BlenderModel.cpp
 //  PlatformerDemo
 //
-//  This encapsulates all of the information for the character avatar.  Note how this
-//  class combines physics and animation.  This is a good template for models in
-//  your game.
+//  Author: Flameingos
+//  Version: TODO
 //
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt well
-//  to data driven design.  This demo has a lot of simplifications to make it a bit
-//  easier to see how everything fits together.  However, the model classes and how
-//  they are initialized will need to be changed if you add dynamic level loading.
-//
-//  Pay close attention to how this class designed.  Subclasses of Cocos2d classes
-//  (which are all subclasses of the class Ref) should never have normal public
-//  constructors.  Instead, you should organize their constructors into three parts,
-//  just like we have done in this class.
-//
-//  NORMAL CONSTRUCTOR:
-//  The standard constructor should be protected (not private).  It should only
-//  initialize pointers to nullptr and primitives to their defaults (pointers are
-//  not always nullptr to begin with).  It should NOT take any arguments and should
-//  not allocate any memory or call any methods.
-//
-//  STATIC CONSTRUCTOR
-//  This is a static method that allocates the object and initializes it.  If
-//  initialization fails, it immediately disposes of the object.  Otherwise, it
-//  returns an autoreleased object, starting the garbage collection system.
-//  These methods all look the same.  You can copy-and-paste them from sample code.
-//  The only difference is the init method called.
-//
-//  INIT METHOD
-//  This is a protected method that acts like what how would normally think a
-//  constructor might work.  It allocates memory and initializes all values
-//  according to provided arguments.  As memory allocation can fail, this method
-//  needs to return a boolean indicating whether or not initialization was
-//  successful.
-//
-//  This file is based on the CS 3152 PhysicsDemo Lab by Don Holden, 2007
-//
-//  Author: Walker White
-//  Version: 1/15/15
-//
-#include "PFBlenderModel.h"
+#include "BlenderModel.h"
 #include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
-
-#define SIGNUM(x)  ((x > 0) - (x < 0))
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -54,8 +16,6 @@
 #define BLENDER_VSHRINK  0.8f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define BLENDER_HSHRINK  0.72f
-/** The density of the character */
-#define BLENDER_DENSITY    0.5f
 
 
 #pragma mark -
@@ -158,33 +118,17 @@ bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     Size nsize = image->getContentSize()*cscale;
     
-    
     nsize.width  *= BLENDER_HSHRINK/scale.x;
     nsize.height *= BLENDER_VSHRINK/scale.y;
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(BLENDER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+        setVX(BLENDER_SPEED);
         
         // Gameplay attributes
         return true;
     }
     return false;
-}
-
-
-#pragma mark -
-#pragma mark Attribute Properties
-
-/**
- * Sets left/right movement of this character.
- *
- * This is the result of input times blender force.
- *
- * @param value left/right movement of this character.
- */
-void BlenderModel::setMovement(float value) {
-    _movement = value;
 }
 
 
@@ -214,31 +158,6 @@ void BlenderModel::releaseFixtures() {
     }
     
     BoxObstacle::releaseFixtures();
-}
-
-/**
- * Applies the force to the body of this blender
- *
- * This method should be called after the force attribute is set.
- */
-void BlenderModel::applyForce() {
-    if (!isActive()) {
-        return;
-    }
-    
-    // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f) {
-        b2Vec2 force(-getDamping()*getVX(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed()) {
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-    } else {
-        b2Vec2 force(getMovement(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-    }
 }
 
 /**

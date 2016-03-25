@@ -1,5 +1,5 @@
 //
-//  PFGameRoot.h
+//  GameRoot.h
 //  PlatformerDemo
 //
 //  This is the root class for a single game scene.  It shows how to subclass RootLayer to
@@ -17,7 +17,7 @@
 
 #include <cocos2d.h>
 #include <cornell.h>
-#include "PFGameController.h"
+#include "GameController.h"
 
 
 using namespace cocos2d;

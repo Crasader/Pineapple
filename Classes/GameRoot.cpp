@@ -1,5 +1,5 @@
 //
-//  PFGameRoot.cpp
+//  GameRoot.cpp
 //  PlatformerDemo
 //
 //  This is the root class for a single game scene.  It shows how to subclass RootLayer to
@@ -12,15 +12,8 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#include "PFGameRoot.h"
-
-/** Font size for loading message */
-#define DEFAULT_FONT_SIZE   64.0f
-/** Loading font name */
-#define LOADING_FONT_NAME   "felt"
-/** Loading font message */
-#define LOADING_MESSAGE     "Loading..."
-
+#include "GameRoot.h"
+#include "LoadingScreenController.h"
 
 using namespace cocos2d;
 
@@ -86,7 +79,9 @@ void PlatformRoot::update(float deltaTime) {
         _gameplay.update(deltaTime);
     } else if (!_preloaded) {
         _preloaded = true;
-        _gameplay.preload();
+				// TODO: PRELOAD: Check if this is right way to do things
+				LoadingScreenController loader = LoadingScreenController();
+				loader.preload();
     }
 }
 

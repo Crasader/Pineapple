@@ -1,6 +1,6 @@
 //
 //  KidModel.hpp
-//  Pineapple
+//  PineappleModel
 //
 //  Created by Michael Patashnik on 2/24/16.
 //
@@ -10,20 +10,12 @@
 #define KidModel_h
 
 #include <stdio.h>
-#include <cornell/CUBoxObstacle.h>
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
+#include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
-
-/** The texture for the first kid */
-#define KID_TEXTURE_1    "pineapplet_bow"
-/** The texture for the first kid */
-#define KID_TEXTURE_2    "pineapplet_glasses"
-/** The texture for the first kid */
-#define KID_TEXTURE_3    "pineapplet_hat"
-/** The texture for the first kid */
-#define KID_TEXTURE_4    "pineapplet_pirate"
 
 /** Identifier to allow us to track the sensor in ContactListener */
 #define KID_SENSOR     "kidsensor"
@@ -36,6 +28,9 @@ using namespace cocos2d;
 #define KID_SCALE 0.075f
 /** The kid walking speed */
 #define KID_WALKSPEED   1.5f
+
+#define KID_MASK 0x0004
+#define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
 
 #pragma mark -
 #pragma mark Dude Model

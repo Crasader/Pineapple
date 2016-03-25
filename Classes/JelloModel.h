@@ -43,9 +43,11 @@
 //
 #ifndef __PF_JELLO_MODEL_H__
 #define __PF_JELLO_MODEL_H__
+
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
-
+#include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
  
@@ -53,8 +55,7 @@ using namespace cocos2d;
 #pragma mark Drawing Constants
 /** The name for a jello, for identification purposes */
 #define JELLO_NAME       "jello"
-/** The texture for the character avatar */
-#define JELLO_TEXTURE    "jello_tex"
+
 
 #pragma mark -
 #pragma mark Physics Constants
