@@ -19,13 +19,13 @@
 #ifndef __PF_SPINNER_H__
 #define __PF_SPINNER_H__
 #include <cornell/CUComplexObstacle.h>
+#include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Spinner Constants
-/** The key for the spinner texture */
-#define SPINNER_TEXTURE "spinner"
 /** The debug name for the entire obstacle */
 #define SPINNER_NAME    "spinner"
 /** The debug name for the spinning barrier */

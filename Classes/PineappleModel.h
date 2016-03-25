@@ -10,14 +10,11 @@
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
 #include "Const.h"
+#include "Texture.h"
 
 
 using namespace cocos2d;
 
-#pragma mark -
-#pragma mark Drawing Constants
-/** The texture for the character avatar */
-#define PINEAPPLE_TEXTURE    "pineapple"
 /** Identifier to allow us to track the sensor in ContactListener */
 #define PINEAPPLE_SENSOR     "pineapple sensor"
 

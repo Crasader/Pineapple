@@ -167,6 +167,7 @@
 		406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BackgroundView.cpp; sourceTree = "<group>"; };
 		406E53E61CA4A72B001E2EBD /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
 		406E53E91CA4ACA4001E2EBD /* Const.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
+		406E53EA1CA4BA5F001E2EBD /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		4070BDD71C7E7289008AE7AF /* KidModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KidModel.cpp; sourceTree = "<group>"; };
 		4070BDD81C7E7289008AE7AF /* KidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KidModel.h; sourceTree = "<group>"; };
 		4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
@@ -443,6 +444,7 @@
 				4072DF851C9F44B800F7DAA4 /* Model */,
 				4072DF861C9F44BE00F7DAA4 /* View */,
 				406E53E91CA4ACA4001E2EBD /* Const.h */,
+				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
 			);
 			name = Classes;
 			path = ../Classes;

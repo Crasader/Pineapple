@@ -11,13 +11,7 @@
 
 #include <cornell.h>
 #include "Const.h"
-
-/** The key for the main background texture in the asset manager */
-#define FRONT_BACKGROUND    "background_1"
-/** The key for the further back background texture in the asset manager */
-#define MIDDLE_BACKGROUND   "background_2"
-/** The key for the furthest back background texture in the asset manager */
-#define BACK_BACKGROUND     "background_3"
+#include "Texture.h"
 
 using namespace cocos2d;
 

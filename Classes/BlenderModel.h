@@ -9,15 +9,11 @@
 #define __PF_BLENDER_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
-
+#include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
  
-#pragma mark -
-#pragma mark Drawing Constants
-/** The texture for the character avatar */
-#define BLENDER_TEXTURE    "blender"
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The maximum character speed */

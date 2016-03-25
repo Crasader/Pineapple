@@ -25,8 +25,6 @@
 #define PINEAPPLE_DENSITY   0.5f
 /** The impulse for the character jump */
 #define PINEAPPLE_JUMP      10.0f
-/** Debug color for the sensor */
-#define DEBUG_COLOR					Color3B::RED
 
 
 #pragma mark -

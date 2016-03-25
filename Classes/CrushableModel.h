@@ -15,11 +15,6 @@ using namespace cocos2d;
 
 #define CUP_NAME						"cup"
 
-#define RED_CUP_TEXTURE			"redcup"
-#define BLUE_CUP_TEXTURE		"bluecup"
-#define GREEN_CUP_TEXTURE		"greencup"
-#define CUPSTACK_TEXTURE	"stackedcups"
-
 #define RED_CUP_ID				0
 #define BLUE_CUP_ID				1
 #define GREEN_CUP_ID			2

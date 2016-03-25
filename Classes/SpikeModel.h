@@ -7,16 +7,13 @@
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
 #include "Const.h"
+#include "Texture.h"
 
 
 using namespace cocos2d;
 
-#pragma mark -
-#pragma mark Drawing Constants
 /** The name for a spike, for identification purposes */
 #define SPIKE_NAME       "spike"
-/** The texture for the character avatar */
-#define SPIKE_TEXTURE    "spikes_tex"
 
 #pragma mark -
 #pragma mark Physics Constants
