@@ -10,8 +10,10 @@ bin/**
 *.userosscache
 *.sln.docstates
 
-# User-specific files (MonoDevelop/Xamarin Studio)
+# User-specific files
 *.userprefs
+**/xcuserdata/
+
 
 # Build results
 [Dd]ebug/
