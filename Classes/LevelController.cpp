@@ -80,7 +80,6 @@ LevelModel* LevelController::read(string filename) {
     
     //------------ BEGIN DEFAULT LEVEL SECTION ------------------------------
 
-    
     float** walls = new float* [WALL_COUNT];
     walls[0] = new float[WALL_VERTS]{
                     -FLOOR_EXTRA_LENGTH, 0.0f,
@@ -130,6 +129,7 @@ LevelModel* LevelController::read(string filename) {
     //------------ END SECTION --------------------------------------------
     
     _level = LevelModel::create(_rootnode, _worldnode, _debugnode, _world);
+	_level->addLength(LEVEL_LENGTH);
     
     addGoal(GOAL_POS);
     addWalls(WALL_COUNT, walls);

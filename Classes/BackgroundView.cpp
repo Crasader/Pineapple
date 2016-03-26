@@ -95,14 +95,14 @@ void BackgroundView::init(Node* rootNode, Node* worldNode, Node* debugNode, Scen
     rootNode->addChild(_cloudsnode,1);
 }
 
-void BackgroundView::handleScrolling(float levelOffset, float oldLevelOffset, Vec2 scale) {
+void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {
     // Do parallax scrolling in _hillsnode and _cloudsnode
-    _hillsnode->setPositionX(_hillsnode->getPositionX() - (scale.x*levelOffset/HILLS_DAMPING_FACTOR));
-    _cloudsnode->setPositionX(_cloudsnode->getPositionX() - (scale.x*levelOffset/CLOUDS_DAMPING_FACTOR));
-    
+    _hillsnode->setPositionX(_hillsnode->getPositionX() - (scale.x*offset/HILLS_DAMPING_FACTOR));
+    _cloudsnode->setPositionX(_cloudsnode->getPositionX() - (scale.x*offset/CLOUDS_DAMPING_FACTOR));
+
     // Tile background layers when necessary
     float tolerance = 0.05f;
-    bool scrollRight = levelOffset >= oldLevelOffset; // true = right; false = left
+	bool scrollRight = levelOffset > oldLevelOffset;
     
     // Front
     float frontR = (_frontFlip + tolerance) * FRONT_BACKGROUND_WIDTH * FRONT_BACKGROUND_SCALE / scale.x;

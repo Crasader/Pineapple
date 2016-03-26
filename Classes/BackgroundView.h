@@ -53,7 +53,7 @@ public:
     
     int getBackFlip() const { return _backFlip; }
     
-    void handleScrolling (float levelOffset, float oldLevelOffset, Vec2 scale);
+    void handleScrolling (float offset, float levelOffset, float oldLevelOffset, Vec2 scale);
     
     void update(float dt);
     

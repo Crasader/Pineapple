@@ -406,11 +406,10 @@ void GameController::update(float dt) {
         }
     }
 
-
-    //Update the background
+    // Update the background (move the clouds)
     _background->update(dt);
 
-	// Scroll the screen if necessary
+	// Scroll the screen (with parallax) if necessary
 	handleScrolling();
 
     // Turn the physics engine crank
@@ -457,7 +456,8 @@ void GameController::handleScrolling() {
 	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
 	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
 
-    _background->handleScrolling(_levelOffset, oldLevelOffset, _scale);
+	// Do parallax scrolling of the background
+    _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _scale);
 }
 
 #pragma mark -
