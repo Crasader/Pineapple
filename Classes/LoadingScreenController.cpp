@@ -17,8 +17,8 @@ void LoadingScreenController::preload() {
 	SceneManager* assets = AssetManager::getInstance()->getCurrent();
 	TextureLoader* tloader = (TextureLoader*)assets->access<Texture2D>();
 
-	tloader->loadAsync(TILE_TEXTURE, "textures/tiling.png", params);
-	tloader->loadAsync(PLATFORM_TEXTURE, "textures/platform.png");
+	tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
+	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
 	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will2.png");
 
 	tloader->loadAsync(KID_TEXTURE_1, "textures/pineapplet_bow.png");
@@ -26,21 +26,26 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(KID_TEXTURE_3, "textures/pineapplet_hat.png");
 	tloader->loadAsync(KID_TEXTURE_4, "textures/pineapplet_pirate.png");
 
+	/*tloader->loadAsync(KID_TEXTURE_1, "textures/child_bow_walkcycle.png");
+	tloader->loadAsync(KID_TEXTURE_2, "textures/child_glasses_walkcycle.png");
+	tloader->loadAsync(KID_TEXTURE_3, "textures/child_hat_walkcycle.png");
+	tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle.png");*/
+
 	tloader->loadAsync(JELLO_TEXTURE, "textures/jello.png");
 	tloader->loadAsync(SPIKE_TEXTURE, "textures/spikes.png");
 
 	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
 
-	tloader->loadAsync(SPINNER_TEXTURE, "textures/barrier.png");
-	tloader->loadAsync(GOAL_TEXTURE, "textures/goal.png");
-	tloader->loadAsync(RED_CUP_TEXTURE, "textures/redcup.png");
-	tloader->loadAsync(BLUE_CUP_TEXTURE, "textures/bluecup.png");
+	tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
+	tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
+	tloader->loadAsync(RED_CUP_TEXTURE,   "textures/redcup.png");
+	tloader->loadAsync(BLUE_CUP_TEXTURE,  "textures/bluecup.png");
 	tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
-	tloader->loadAsync(CUPSTACK_TEXTURE, "textures/stackedcups.png");
+	tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
 
-	tloader->loadAsync(FRONT_BACKGROUND, "textures/background.png");
+	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
-	tloader->loadAsync(BACK_BACKGROUND, "textures/clouds.png");
+	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
 
 	//    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
 	//    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");

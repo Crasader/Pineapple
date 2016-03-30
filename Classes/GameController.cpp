@@ -368,6 +368,7 @@ void GameController::update(float dt) {
     for(int i = 0; i < KID_COUNT; i++) {
         if(_level->getKid(i) != nullptr) {
             _level->getKid(i)->dampTowardsWalkspeed();
+			//_level->getKid(i)->animate();
         }
     }
         

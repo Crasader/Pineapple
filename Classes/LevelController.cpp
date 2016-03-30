@@ -244,6 +244,8 @@ void LevelController::addKids(float* kidPos[POS_COORDS]) {
         PolygonNode* sprite = PolygonNode::createWithTexture(image);
         sprite->setScale(cscale * KID_SCALE);
         kids[i]->setSceneNode(sprite);
+
+		//kids[i]->initAnimation(image, cscale * KID_SCALE);
         
         kids[i]->setMovement(KID_WALKSPEED);
         

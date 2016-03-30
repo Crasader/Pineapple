@@ -192,6 +192,17 @@ void KidModel::setMovement(float value) {
     }
 }
 
+/**
+* Initialize the filmstrip for walking animation
+*/
+void KidModel::initAnimation(Texture2D* image, float scale) {
+	_kidWalkcycleFrame = 0;
+	_kidWalkcycle = AnimationNode::create(image, 1, 12, 12);
+	_kidWalkcycle->setScale(scale);
+	_kidWalkcycle->setFrame(_kidWalkcycleFrame);
+	setSceneNode(_kidWalkcycle);
+}
+
 
 #pragma mark -
 #pragma mark Physics Methods
@@ -290,6 +301,20 @@ void KidModel::dampTowardsWalkspeed() {
  */
 void KidModel::update(float dt) {
     CapsuleObstacle::update(dt);
+}
+
+/**
+* Animate the kid if they're moving
+*/
+void KidModel::animate() {
+	if (getVX() > 0.1f) {
+		_kidWalkcycleFrame++;
+		_kidWalkcycle->setFrame(_kidWalkcycleFrame % 12);
+	}
+	else {
+		_kidWalkcycleFrame = 0;
+		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
+	}
 }
 
 
