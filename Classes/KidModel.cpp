@@ -151,7 +151,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
     
     _index = idx;
     
-    nsize.width  *= KID_HSHRINK/scale.x;
+    nsize.width  *= KID_HSHRINK/(12.0f*scale.x);
     nsize.height *= KID_VSHRINK/scale.y;
     if (CapsuleObstacle::init(pos,nsize)) {
         setDensity(KID_DENSITY);
@@ -200,7 +200,7 @@ void KidModel::initAnimation(Texture2D* image, float scale) {
 	_kidWalkcycle = AnimationNode::create(image, 1, 12, 12);
 	_kidWalkcycle->setScale(scale);
 	_kidWalkcycle->setFrame(_kidWalkcycleFrame);
-	setSceneNode(_kidWalkcycle);
+	this->setSceneNode(_kidWalkcycle);
 }
 
 
@@ -307,7 +307,7 @@ void KidModel::update(float dt) {
 * Animate the kid if they're moving
 */
 void KidModel::animate() {
-	if (getVX() > 0.1f) {
+	if (getVX() > 0.2f) {
 		_kidWalkcycleFrame++;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame % 12);
 	}
@@ -337,7 +337,7 @@ void KidModel::resetDebugNode() {
     
     _sensorNode = WireNode::createWithPoly(poly);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-    _debug->addChild(_sensorNode);
+    _debug->addChild(_sensorNode);	
 }
 
 

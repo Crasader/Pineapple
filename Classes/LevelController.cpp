@@ -241,11 +241,9 @@ void LevelController::addKids(float* kidPos[POS_COORDS]) {
         kids[i] = KidModel::create(pos,_scale / KID_SCALE, i);
         kids[i]->setDrawScale(_scale);
         
-        PolygonNode* sprite = PolygonNode::createWithTexture(image);
+        /*PolygonNode* sprite = PolygonNode::createWithTexture(image);
         sprite->setScale(cscale * KID_SCALE);
-        kids[i]->setSceneNode(sprite);
-
-		//kids[i]->initAnimation(image, cscale * KID_SCALE);
+        kids[i]->setSceneNode(sprite);*/
         
         kids[i]->setMovement(KID_WALKSPEED);
         
@@ -256,6 +254,8 @@ void LevelController::addKids(float* kidPos[POS_COORDS]) {
         kids[i]->setName(KID_NAME);
         
         initDebugProperties(kids[i]);
+
+		kids[i]->initAnimation(image, cscale * KID_SCALE);
     }
     _level->addKids(kids);
 }
