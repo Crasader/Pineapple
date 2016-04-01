@@ -1,27 +1,27 @@
 #include "LevelController.h"
 
-#define WALL_NAME "wall"
+#define WALL_NAME     "wall"
 #define PLATFORM_NAME "platform"
-#define JELLO_NAME "jello"
-#define SPIKE_NAME "spike"
-#define CUP_NAME "cup"
+#define JELLO_NAME    "jello"
+#define SPIKE_NAME    "spike"
+#define CUP_NAME      "cup"
 
 #define WALL_VERTS      8
 #define PLATFORM_VERTS  8
 #define POS_COORDS      2
 
 #define MAIN_PLATFORM_Y         2.0f        //DELETE ONCE LEVEL READING IN
-#define SECOND_PLATFORM_Y       4.25f       //DELETE ONCE LEVEL READING IN
-#define SECOND_PLATFORM_HEIGHT  .5f         //DELETE ONCE LEVEL READING IN
+#define SECOND_PLATFORM_Y       4.5f        //DELETE ONCE LEVEL READING IN
+#define SECOND_PLATFORM_HEIGHT  0.5f        //DELETE ONCE LEVEL READING IN
 
 #define JELLO_COUNT 1                       //DELETE ONCE LEVEL READING IN
 #define SPIKE_COUNT 1                       //DELETE ONCE LEVEL READING IN
-#define CUP_COUNT 1                         //DELETE ONCE LEVEL READING IN
+#define CUP_COUNT   1                       //DELETE ONCE LEVEL READING IN
 
-#define LEVEL_LENGTH    40.0f               //DELETE ONCE LEVEL READING IN
-#define WALL_COUNT      3                   //DELETE ONCE LEVEL READING IN
-#define PLATFORM_COUNT  1                   //DELETE ONCE LEVEL READING IN
-#define FLOOR_EXTRA_LENGTH 5.0f             //DELETE ONCE LEVEL READING IN
+#define LEVEL_LENGTH            40.0f       //DELETE ONCE LEVEL READING IN
+#define WALL_COUNT              3           //DELETE ONCE LEVEL READING IN
+#define PLATFORM_COUNT          1           //DELETE ONCE LEVEL READING IN
+#define FLOOR_EXTRA_LENGTH      5.0f        //DELETE ONCE LEVEL READING IN
 #define OFFSCREEN_BARRIER_WIDTH 3.0f        //DELETE ONCE LEVEL READING IN
 
 
@@ -218,10 +218,9 @@ void LevelController::addPineapple(float pineapplePos[POS_COORDS]) {
     PineappleModel* will = PineappleModel::create(pineapplePos,_scale / PINEAPPLE_SCALE);
     will->setDrawScale(_scale);
     
-    PolygonNode* sprite = PolygonNode::createWithTexture(image);
+    /*PolygonNode* sprite = PolygonNode::createWithTexture(image);
     sprite->setScale(cscale * PINEAPPLE_SCALE);
-    will->setSceneNode(sprite);
-    
+    will->setSceneNode(sprite);*/
     
     b2Filter b = b2Filter();
     b.categoryBits = PINEAPPLE_MASK;
@@ -229,6 +228,7 @@ void LevelController::addPineapple(float pineapplePos[POS_COORDS]) {
     will->setFilterData(b);
     
     initDebugProperties(will);
+	will->initAnimation(image, cscale * PINEAPPLE_SCALE);
     _level->addPineapple(will);
 }
 

@@ -405,6 +405,8 @@ void GameController::update(float dt) {
             Sound* source = _assets->get<Sound>(JUMP_EFFECT);
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
+
+		_level->getPineapple()->animate();
     }
 
     // Update the background (move the clouds)
