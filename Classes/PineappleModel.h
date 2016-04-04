@@ -9,6 +9,7 @@
 #define __PINEAPPLE_H__
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
+#include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
 
@@ -83,6 +84,10 @@ protected:
 	std::string _sensorName;
 	/** The node for debugging the sensor */
 	WireNode* _sensorNode;
+	/** Filmstrip for walkcycle animation */
+	AnimationNode* _willWalkcycle;
+	/** Frame counter for walkcycle animation */
+	int _willWalkcycleFrame;
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
@@ -305,6 +310,11 @@ public:
 	*/
 	bool isFacingRight() const { return _faceRight; }
 
+	/**
+	* Initialize the filmstrip for walking animation
+	*/
+	void initAnimation(Texture2D* image, float scale);
+
 
 #pragma mark Physics Methods
 	/**
@@ -340,6 +350,11 @@ public:
 	* This method should be called after the force attribute is set.
 	*/
 	void applyForce();
+
+	/**
+	* Animate Will if he's moving
+	*/
+	void animate();
 
 
 CC_CONSTRUCTOR_ACCESS:

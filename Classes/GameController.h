@@ -96,6 +96,10 @@ protected:
 	/** Distance between start of level and left side of screen */
 	float _levelOffset;
     
+    /** Mark set to handle more sophisticated collision callbacks */
+    unordered_set<b2Fixture*> _sensorFixtures;
+
+    
 #pragma mark Internal Object Management
     /**
      * Lays out the game geography.

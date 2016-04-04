@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <cornell/CUCapsuleObstacle.h>
 #include <cornell/CUWireNode.h>
+#include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
 
@@ -63,6 +64,10 @@ protected:
     std::string _sensorName;
     /** The node for debugging the sensor */
     WireNode* _sensorNode;
+	/** Filmstrip for walkcycle animation */
+	AnimationNode* _kidWalkcycle;
+	/** Frame counter for walkcycle animation */
+	int _kidWalkcycleFrame;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -226,6 +231,11 @@ public:
      * @return true if this character is facing right
      */
     bool isFacingRight() const { return true; }
+
+	/**
+	* Initialize the filmstrip for walking animation
+	*/
+	void initAnimation(Texture2D* image, float scale);
     
     
 #pragma mark Physics Methods
@@ -263,6 +273,11 @@ public:
      */
     void dampTowardsWalkspeed();
     
+	/**
+	* Animate the kid if they're moving
+	*/
+	void animate();
+
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors

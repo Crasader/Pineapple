@@ -1,27 +1,27 @@
 #include "LevelController.h"
 
-#define WALL_NAME "wall"
+#define WALL_NAME     "wall"
 #define PLATFORM_NAME "platform"
-#define JELLO_NAME "jello"
-#define SPIKE_NAME "spike"
-#define CUP_NAME "cup"
+#define JELLO_NAME    "jello"
+#define SPIKE_NAME    "spike"
+#define CUP_NAME      "cup"
 
 #define WALL_VERTS      8
 #define PLATFORM_VERTS  8
 #define POS_COORDS      2
 
 #define MAIN_PLATFORM_Y         2.0f        //DELETE ONCE LEVEL READING IN
-#define SECOND_PLATFORM_Y       4.25f       //DELETE ONCE LEVEL READING IN
-#define SECOND_PLATFORM_HEIGHT  .5f         //DELETE ONCE LEVEL READING IN
+#define SECOND_PLATFORM_Y       4.5f        //DELETE ONCE LEVEL READING IN
+#define SECOND_PLATFORM_HEIGHT  0.5f        //DELETE ONCE LEVEL READING IN
 
 #define JELLO_COUNT 1                       //DELETE ONCE LEVEL READING IN
 #define SPIKE_COUNT 1                       //DELETE ONCE LEVEL READING IN
-#define CUP_COUNT 1                         //DELETE ONCE LEVEL READING IN
+#define CUP_COUNT   1                       //DELETE ONCE LEVEL READING IN
 
-#define LEVEL_LENGTH    40.0f               //DELETE ONCE LEVEL READING IN
-#define WALL_COUNT      3                   //DELETE ONCE LEVEL READING IN
-#define PLATFORM_COUNT  1                   //DELETE ONCE LEVEL READING IN
-#define FLOOR_EXTRA_LENGTH 5.0f             //DELETE ONCE LEVEL READING IN
+#define LEVEL_LENGTH            40.0f       //DELETE ONCE LEVEL READING IN
+#define WALL_COUNT              3           //DELETE ONCE LEVEL READING IN
+#define PLATFORM_COUNT          1           //DELETE ONCE LEVEL READING IN
+#define FLOOR_EXTRA_LENGTH      5.0f        //DELETE ONCE LEVEL READING IN
 #define OFFSCREEN_BARRIER_WIDTH 3.0f        //DELETE ONCE LEVEL READING IN
 
 
@@ -80,7 +80,6 @@ LevelModel* LevelController::read(string filename) {
     
     //------------ BEGIN DEFAULT LEVEL SECTION ------------------------------
 
-    
     float** walls = new float* [WALL_COUNT];
     walls[0] = new float[WALL_VERTS]{
                     -FLOOR_EXTRA_LENGTH, 0.0f,
@@ -130,6 +129,7 @@ LevelModel* LevelController::read(string filename) {
     //------------ END SECTION --------------------------------------------
     
     _level = LevelModel::create(_rootnode, _worldnode, _debugnode, _world);
+	_level->addLength(LEVEL_LENGTH);
     
     addGoal(GOAL_POS);
     addWalls(WALL_COUNT, walls);
@@ -218,10 +218,9 @@ void LevelController::addPineapple(float pineapplePos[POS_COORDS]) {
     PineappleModel* will = PineappleModel::create(pineapplePos,_scale / PINEAPPLE_SCALE);
     will->setDrawScale(_scale);
     
-    PolygonNode* sprite = PolygonNode::createWithTexture(image);
+    /*PolygonNode* sprite = PolygonNode::createWithTexture(image);
     sprite->setScale(cscale * PINEAPPLE_SCALE);
-    will->setSceneNode(sprite);
-    
+    will->setSceneNode(sprite);*/
     
     b2Filter b = b2Filter();
     b.categoryBits = PINEAPPLE_MASK;
@@ -229,6 +228,7 @@ void LevelController::addPineapple(float pineapplePos[POS_COORDS]) {
     will->setFilterData(b);
     
     initDebugProperties(will);
+	will->initAnimation(image, cscale * PINEAPPLE_SCALE);
     _level->addPineapple(will);
 }
 
@@ -241,9 +241,9 @@ void LevelController::addKids(float* kidPos[POS_COORDS]) {
         kids[i] = KidModel::create(pos,_scale / KID_SCALE, i);
         kids[i]->setDrawScale(_scale);
         
-        PolygonNode* sprite = PolygonNode::createWithTexture(image);
+        /*PolygonNode* sprite = PolygonNode::createWithTexture(image);
         sprite->setScale(cscale * KID_SCALE);
-        kids[i]->setSceneNode(sprite);
+        kids[i]->setSceneNode(sprite);*/
         
         kids[i]->setMovement(KID_WALKSPEED);
         
@@ -254,6 +254,8 @@ void LevelController::addKids(float* kidPos[POS_COORDS]) {
         kids[i]->setName(KID_NAME);
         
         initDebugProperties(kids[i]);
+
+		kids[i]->initAnimation(image, cscale * KID_SCALE);
     }
     _level->addKids(kids);
 }
