@@ -14,6 +14,7 @@
 //
 #include "GameRoot.h"
 #include "LoadingScreenController.h"
+#include <cornell/CUGenericLoader.h>
 
 using namespace cocos2d;
 
@@ -34,6 +35,8 @@ void PlatformRoot::start() {
     AssetManager::getInstance()->at(scene)->attach<TTFont>(fonts);
     AssetManager::getInstance()->at(scene)->attach<Texture2D>(TextureLoader::create());
     AssetManager::getInstance()->at(scene)->attach<Sound>(SoundLoader::create());
+    GenericLoader<LevelModel>* levels = GenericLoader<LevelModel>::create();
+    AssetManager::getInstance()->at(scene)->attach<LevelModel>(levels);
     AssetManager::getInstance()->startScene(scene);
     
     // Create a "loading" screen

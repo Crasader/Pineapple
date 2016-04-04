@@ -55,5 +55,6 @@ void LoadingScreenController::preload() {
 	//    _assets->loadAsync<Sound>(PEW_EFFECT,   "sounds/pew.mp3");
 	//    _assets->loadAsync<Sound>(POP_EFFECT,   "sounds/plop.mp3");
 	assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
-
+    
+    assets->loadAsync<LevelModel>(LEVEL_ONE, "levels/testLevel.tmx");
 }

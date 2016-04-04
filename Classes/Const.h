@@ -36,5 +36,9 @@
 #define BASIC_RESTITUTION   0.1f
 
 
+/** Level One Key */
+#define LEVEL_ONE "level_one"
+
+
 
 #endif /* Const_h */

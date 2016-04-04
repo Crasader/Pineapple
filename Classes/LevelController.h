@@ -60,7 +60,7 @@ public:
                  
     /** Reads in a level from a .tmx file into a LevelModel object
      */
-    LevelModel* read(std::string levelName);
+    LevelModel* read(std::string file);
     
     /** Return a reference to the current level */
     LevelModel* getLevel() { return _level; }

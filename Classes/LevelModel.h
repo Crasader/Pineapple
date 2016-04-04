@@ -34,7 +34,7 @@
 
 using namespace cocos2d;
 
-class LevelModel {
+class LevelModel : public Asset {
 protected:
 	/** Reference to the goalDoor (for collision detection) */
 	BoxObstacle*    _goalDoor;
@@ -48,6 +48,10 @@ protected:
 	RootLayer* _rootnode;
 	/** Reference to the physics root of the scene graph */
 	Node* _worldnode;
+    /** The bounds of this level in physics coordinates */
+    Rect _bounds;
+    /** The global gravity for this level */
+    Vec2 _gravity;
 	/** Reference to the debug root of the scene graph */
 	Node* _debugnode;
 
@@ -157,10 +161,25 @@ public:
 
 #pragma mark -
 #pragma mark Allocation
-	/**
-	*
-	*/
-	static LevelModel* create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world);
+    /**
+     * Creates a new game level with no source file.
+     *
+     * The source file can be set at any time via the setFile() method. This method
+     * does NOT load the asset.  You must call the load() method to do that.
+     *
+     * @return  an autoreleased level file
+     */
+    static LevelModel* create();
+    
+    /**
+     * Creates a new game level with the given source file.
+     *
+     * This method does NOT load the level. You must call the load() method to do that.
+     * This method returns false if file does not exist.
+     *
+     * @return  an autoreleased level file
+     */
+    static LevelModel* create(std::string file);
     
 	/** Reference to the goalDoor (for collision detection) */
 	void addGoal(BoxObstacle* goal);
@@ -185,6 +204,55 @@ public:
      * an obstacle not in the above list, i.e. a jello or a cup */
     void addAnonymousObstacle(Obstacle* obj, int zOrder);
 
+#pragma mark -
+#pragma mark Asset Loading
+    /**
+     * Loads this game level from the source file
+     *
+     * This load method should NEVER access the AssetManager.  Assets are loaded in
+     * parallel, not in sequence.  If an asset (like a game level) has references to
+     * other assets, then these should be connected later, during scene initialization.
+     *
+     * @return true if successfully loaded the asset from a file
+     */
+    virtual bool load() override;
+    
+    /**
+     * Unloads this game level, releasing all sources
+     *
+     * This load method should NEVER access the AssetManager.  Assets are loaded and
+     * unloaded in parallel, not in sequence.  If an asset (like a game level) has
+     * references to other assets, then these should be disconnected earlier.
+     */
+    virtual void unload() override;
+    
+    /**
+     * Resets this game level, restoring all objects to their original position.
+     */
+    void reset();
+    
+#pragma mark Physics Attributes
+    /**
+     * Returns the bounds of this level in physics coordinates
+     *
+     * @return the bounds of this level in physics coordinates
+     */
+    const Rect& getBounds() const   { return _bounds; }
+    
+    /**
+     * Returns the global gravity for this level
+     *
+     * @return the global gravity for this level
+     */
+    const Vec2& getGravity() const { return _gravity; }
+    
+    /**
+     * Activates all of the physics objects in this level
+     *
+     * @param  controller  the world controller to manage physics
+     */
+    void activate(WorldController* controller);
+    
 #pragma mark -
 #pragma mark Deallocation
     

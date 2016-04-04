@@ -18,14 +18,67 @@ _platformCount(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _wallCount(UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT),
 _kidsRemaining(KID_COUNT) {}
 
-LevelModel* LevelModel::create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world) {
-	LevelModel* l = new (std::nothrow) LevelModel();
-    l->_rootnode = rootnode;
-    l->_worldnode = worldnode;
-    l->_debugnode = debugnode;
-    l->_world = world;
-    return l;
+/**
+ * Creates a new game level with no source file.
+ *
+ * The source file can be set at any time via the setFile() method. This method
+ * does NOT load the asset.  You must call the load() method to do that.
+ *
+ * @return  an autoreleased level file
+ */
+LevelModel* LevelModel::create() {
+    LevelModel* level = new (std::nothrow) LevelModel();
+    if (level && level->init()) {
+        level->autorelease();
+        return level;
+    }
+    CC_SAFE_DELETE(level);
+    return nullptr;
+    
 }
+
+/**
+ * Creates a new game level with the given source file.
+ *
+ * This method does NOT load the level. You must call the load() method to do that.
+ * This method returns false if file does not exist.
+ *
+ * @return  an autoreleased level file
+ */
+LevelModel* LevelModel::create(std::string file) {
+    LevelModel* level = new (std::nothrow) LevelModel();
+    if (level && level->init(file)) {
+        level->autorelease();
+        return level;
+    }
+    CC_SAFE_DELETE(level);
+    return nullptr;
+}
+
+bool LevelModel::load() {
+    TMXTiledMap *map = TMXTiledMap::create(FileUtils::getInstance()->fullPathForFilename(_file));
+    if(map == nullptr) {
+        CCASSERT(false, "Failed to load level file");
+        return false;
+    }
+    
+    
+    printf("%f\n", map->getMapSize().width);
+    
+    
+    
+    
+    return true;
+}
+
+void LevelModel::unload() {
+    
+}
+
+void LevelModel::reset() {
+    
+}
+
 
 void LevelModel::dispose() {
     //TODO - pre-nulling cleanup
