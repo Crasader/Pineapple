@@ -223,7 +223,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     
     // Now populate the physics objects
     _levelController = LevelController::create(_assets, _rootnode, _worldnode, _debugnode, _world, _scale);
-    _levelController->read("");
+    _levelController->read("testLevel.tmx"); //TODO - replace this
     _collision->setLevel(_levelController->getLevel());
     _level = _levelController->getLevel();
     populate();

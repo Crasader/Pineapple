@@ -57,8 +57,8 @@
 		40C8F6F01CB20F50000D9055 /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
 		40C8F7A01CB21591000D9055 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7791CB21591000D9055 /* miniz.c */; };
 		40C8F7A11CB21591000D9055 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7791CB21591000D9055 /* miniz.c */; };
-		40C8F7A21CB21591000D9055 /* Tmx.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F77A1CB21591000D9055 /* Tmx.h.in */; };
-		40C8F7A31CB21591000D9055 /* Tmx.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F77A1CB21591000D9055 /* Tmx.h.in */; };
+		40C8F7A21CB21591000D9055 /* Tmx.h in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F77A1CB21591000D9055 /* Tmx.h */; };
+		40C8F7A31CB21591000D9055 /* Tmx.h in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F77A1CB21591000D9055 /* Tmx.h */; };
 		40C8F7A41CB21591000D9055 /* TmxEllipse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */; };
 		40C8F7A51CB21591000D9055 /* TmxEllipse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */; };
 		40C8F7A61CB21591000D9055 /* TmxImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77D1CB21591000D9055 /* TmxImage.cpp */; };
@@ -235,7 +235,7 @@
 		40C8F6ED1CB20F50000D9055 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		40C8F6EE1CB20F50000D9055 /* tiledTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tiledTextures; sourceTree = "<group>"; };
 		40C8F7791CB21591000D9055 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = miniz.c; sourceTree = "<group>"; };
-		40C8F77A1CB21591000D9055 /* Tmx.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Tmx.h.in; sourceTree = "<group>"; };
+		40C8F77A1CB21591000D9055 /* Tmx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tmx.h; sourceTree = "<group>"; };
 		40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxEllipse.cpp; sourceTree = "<group>"; };
 		40C8F77C1CB21591000D9055 /* TmxEllipse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxEllipse.h; sourceTree = "<group>"; };
 		40C8F77D1CB21591000D9055 /* TmxImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxImage.cpp; sourceTree = "<group>"; };
@@ -518,7 +518,7 @@
 			children = (
 				40C8F7781CB21591000D9055 /* base64 */,
 				40C8F7791CB21591000D9055 /* miniz.c */,
-				40C8F77A1CB21591000D9055 /* Tmx.h.in */,
+				40C8F77A1CB21591000D9055 /* Tmx.h */,
 				40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */,
 				40C8F77C1CB21591000D9055 /* TmxEllipse.h */,
 				40C8F77D1CB21591000D9055 /* TmxImage.cpp */,
@@ -778,7 +778,7 @@
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				40C8F6F01CB20F50000D9055 /* tiledTextures in Resources */,
 				405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */,
-				40C8F7A21CB21591000D9055 /* Tmx.h.in in Resources */,
+				40C8F7A21CB21591000D9055 /* Tmx.h in Resources */,
 				40C8F7B21CB21591000D9055 /* tmxparser.pc.in in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
@@ -807,7 +807,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40C8F7B31CB21591000D9055 /* tmxparser.pc.in in Resources */,
-				40C8F7A31CB21591000D9055 /* Tmx.h.in in Resources */,
+				40C8F7A31CB21591000D9055 /* Tmx.h in Resources */,
 				EB24EB911C5B10C60069DBBE /* textures in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
