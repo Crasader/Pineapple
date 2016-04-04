@@ -55,6 +55,48 @@
 		4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */; };
 		40C8F6EF1CB20F50000D9055 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
 		40C8F6F01CB20F50000D9055 /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
+		40C8F7A01CB21591000D9055 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7791CB21591000D9055 /* miniz.c */; };
+		40C8F7A11CB21591000D9055 /* miniz.c in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7791CB21591000D9055 /* miniz.c */; };
+		40C8F7A21CB21591000D9055 /* Tmx.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F77A1CB21591000D9055 /* Tmx.h.in */; };
+		40C8F7A31CB21591000D9055 /* Tmx.h.in in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F77A1CB21591000D9055 /* Tmx.h.in */; };
+		40C8F7A41CB21591000D9055 /* TmxEllipse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */; };
+		40C8F7A51CB21591000D9055 /* TmxEllipse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */; };
+		40C8F7A61CB21591000D9055 /* TmxImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77D1CB21591000D9055 /* TmxImage.cpp */; };
+		40C8F7A71CB21591000D9055 /* TmxImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77D1CB21591000D9055 /* TmxImage.cpp */; };
+		40C8F7A81CB21591000D9055 /* TmxImageLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77F1CB21591000D9055 /* TmxImageLayer.cpp */; };
+		40C8F7A91CB21591000D9055 /* TmxImageLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F77F1CB21591000D9055 /* TmxImageLayer.cpp */; };
+		40C8F7AA1CB21591000D9055 /* TmxLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7811CB21591000D9055 /* TmxLayer.cpp */; };
+		40C8F7AB1CB21591000D9055 /* TmxLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7811CB21591000D9055 /* TmxLayer.cpp */; };
+		40C8F7AC1CB21591000D9055 /* TmxMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7831CB21591000D9055 /* TmxMap.cpp */; };
+		40C8F7AD1CB21591000D9055 /* TmxMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7831CB21591000D9055 /* TmxMap.cpp */; };
+		40C8F7AE1CB21591000D9055 /* TmxObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7861CB21591000D9055 /* TmxObject.cpp */; };
+		40C8F7AF1CB21591000D9055 /* TmxObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7861CB21591000D9055 /* TmxObject.cpp */; };
+		40C8F7B01CB21591000D9055 /* TmxObjectGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7881CB21591000D9055 /* TmxObjectGroup.cpp */; };
+		40C8F7B11CB21591000D9055 /* TmxObjectGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7881CB21591000D9055 /* TmxObjectGroup.cpp */; };
+		40C8F7B21CB21591000D9055 /* tmxparser.pc.in in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F78A1CB21591000D9055 /* tmxparser.pc.in */; };
+		40C8F7B31CB21591000D9055 /* tmxparser.pc.in in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F78A1CB21591000D9055 /* tmxparser.pc.in */; };
+		40C8F7B41CB21591000D9055 /* TmxPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F78C1CB21591000D9055 /* TmxPolygon.cpp */; };
+		40C8F7B51CB21591000D9055 /* TmxPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F78C1CB21591000D9055 /* TmxPolygon.cpp */; };
+		40C8F7B61CB21591000D9055 /* TmxPolyline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F78E1CB21591000D9055 /* TmxPolyline.cpp */; };
+		40C8F7B71CB21591000D9055 /* TmxPolyline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F78E1CB21591000D9055 /* TmxPolyline.cpp */; };
+		40C8F7B81CB21591000D9055 /* TmxPropertySet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7901CB21591000D9055 /* TmxPropertySet.cpp */; };
+		40C8F7B91CB21591000D9055 /* TmxPropertySet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7901CB21591000D9055 /* TmxPropertySet.cpp */; };
+		40C8F7BA1CB21591000D9055 /* TmxTerrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7921CB21591000D9055 /* TmxTerrain.cpp */; };
+		40C8F7BB1CB21591000D9055 /* TmxTerrain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7921CB21591000D9055 /* TmxTerrain.cpp */; };
+		40C8F7BC1CB21591000D9055 /* TmxTerrainArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7941CB21591000D9055 /* TmxTerrainArray.cpp */; };
+		40C8F7BD1CB21591000D9055 /* TmxTerrainArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7941CB21591000D9055 /* TmxTerrainArray.cpp */; };
+		40C8F7BE1CB21591000D9055 /* TmxTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7961CB21591000D9055 /* TmxTile.cpp */; };
+		40C8F7BF1CB21591000D9055 /* TmxTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7961CB21591000D9055 /* TmxTile.cpp */; };
+		40C8F7C01CB21591000D9055 /* TmxTileLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7981CB21591000D9055 /* TmxTileLayer.cpp */; };
+		40C8F7C11CB21591000D9055 /* TmxTileLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7981CB21591000D9055 /* TmxTileLayer.cpp */; };
+		40C8F7C21CB21591000D9055 /* TmxTileOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F79A1CB21591000D9055 /* TmxTileOffset.cpp */; };
+		40C8F7C31CB21591000D9055 /* TmxTileOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F79A1CB21591000D9055 /* TmxTileOffset.cpp */; };
+		40C8F7C41CB21591000D9055 /* TmxTileset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F79C1CB21591000D9055 /* TmxTileset.cpp */; };
+		40C8F7C51CB21591000D9055 /* TmxTileset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F79C1CB21591000D9055 /* TmxTileset.cpp */; };
+		40C8F7C61CB21591000D9055 /* TmxUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F79E1CB21591000D9055 /* TmxUtil.cpp */; };
+		40C8F7C71CB21591000D9055 /* TmxUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F79E1CB21591000D9055 /* TmxUtil.cpp */; };
+		40C8F7CA1CB215A5000D9055 /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7C81CB215A5000D9055 /* base64.cpp */; };
+		40C8F7CB1CB215A5000D9055 /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40C8F7C81CB215A5000D9055 /* base64.cpp */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 503AE0F617EB97AB00D1A890 /* Icon.icns */; };
 		503AE10017EB989F00D1A890 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 503AE0FB17EB989F00D1A890 /* AppController.mm */; };
@@ -192,6 +234,47 @@
 		407625C51C8E13F2005A0651 /* BlenderModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlenderModel.cpp; sourceTree = "<group>"; };
 		40C8F6ED1CB20F50000D9055 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		40C8F6EE1CB20F50000D9055 /* tiledTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tiledTextures; sourceTree = "<group>"; };
+		40C8F7791CB21591000D9055 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = miniz.c; sourceTree = "<group>"; };
+		40C8F77A1CB21591000D9055 /* Tmx.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Tmx.h.in; sourceTree = "<group>"; };
+		40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxEllipse.cpp; sourceTree = "<group>"; };
+		40C8F77C1CB21591000D9055 /* TmxEllipse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxEllipse.h; sourceTree = "<group>"; };
+		40C8F77D1CB21591000D9055 /* TmxImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxImage.cpp; sourceTree = "<group>"; };
+		40C8F77E1CB21591000D9055 /* TmxImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxImage.h; sourceTree = "<group>"; };
+		40C8F77F1CB21591000D9055 /* TmxImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxImageLayer.cpp; sourceTree = "<group>"; };
+		40C8F7801CB21591000D9055 /* TmxImageLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxImageLayer.h; sourceTree = "<group>"; };
+		40C8F7811CB21591000D9055 /* TmxLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxLayer.cpp; sourceTree = "<group>"; };
+		40C8F7821CB21591000D9055 /* TmxLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxLayer.h; sourceTree = "<group>"; };
+		40C8F7831CB21591000D9055 /* TmxMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxMap.cpp; sourceTree = "<group>"; };
+		40C8F7841CB21591000D9055 /* TmxMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxMap.h; sourceTree = "<group>"; };
+		40C8F7851CB21591000D9055 /* TmxMapTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxMapTile.h; sourceTree = "<group>"; };
+		40C8F7861CB21591000D9055 /* TmxObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxObject.cpp; sourceTree = "<group>"; };
+		40C8F7871CB21591000D9055 /* TmxObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxObject.h; sourceTree = "<group>"; };
+		40C8F7881CB21591000D9055 /* TmxObjectGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxObjectGroup.cpp; sourceTree = "<group>"; };
+		40C8F7891CB21591000D9055 /* TmxObjectGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxObjectGroup.h; sourceTree = "<group>"; };
+		40C8F78A1CB21591000D9055 /* tmxparser.pc.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tmxparser.pc.in; sourceTree = "<group>"; };
+		40C8F78B1CB21591000D9055 /* TmxPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxPoint.h; sourceTree = "<group>"; };
+		40C8F78C1CB21591000D9055 /* TmxPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxPolygon.cpp; sourceTree = "<group>"; };
+		40C8F78D1CB21591000D9055 /* TmxPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxPolygon.h; sourceTree = "<group>"; };
+		40C8F78E1CB21591000D9055 /* TmxPolyline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxPolyline.cpp; sourceTree = "<group>"; };
+		40C8F78F1CB21591000D9055 /* TmxPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxPolyline.h; sourceTree = "<group>"; };
+		40C8F7901CB21591000D9055 /* TmxPropertySet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxPropertySet.cpp; sourceTree = "<group>"; };
+		40C8F7911CB21591000D9055 /* TmxPropertySet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxPropertySet.h; sourceTree = "<group>"; };
+		40C8F7921CB21591000D9055 /* TmxTerrain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxTerrain.cpp; sourceTree = "<group>"; };
+		40C8F7931CB21591000D9055 /* TmxTerrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxTerrain.h; sourceTree = "<group>"; };
+		40C8F7941CB21591000D9055 /* TmxTerrainArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxTerrainArray.cpp; sourceTree = "<group>"; };
+		40C8F7951CB21591000D9055 /* TmxTerrainArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxTerrainArray.h; sourceTree = "<group>"; };
+		40C8F7961CB21591000D9055 /* TmxTile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxTile.cpp; sourceTree = "<group>"; };
+		40C8F7971CB21591000D9055 /* TmxTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxTile.h; sourceTree = "<group>"; };
+		40C8F7981CB21591000D9055 /* TmxTileLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxTileLayer.cpp; sourceTree = "<group>"; };
+		40C8F7991CB21591000D9055 /* TmxTileLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxTileLayer.h; sourceTree = "<group>"; };
+		40C8F79A1CB21591000D9055 /* TmxTileOffset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxTileOffset.cpp; sourceTree = "<group>"; };
+		40C8F79B1CB21591000D9055 /* TmxTileOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxTileOffset.h; sourceTree = "<group>"; };
+		40C8F79C1CB21591000D9055 /* TmxTileset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxTileset.cpp; sourceTree = "<group>"; };
+		40C8F79D1CB21591000D9055 /* TmxTileset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxTileset.h; sourceTree = "<group>"; };
+		40C8F79E1CB21591000D9055 /* TmxUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TmxUtil.cpp; sourceTree = "<group>"; };
+		40C8F79F1CB21591000D9055 /* TmxUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TmxUtil.h; sourceTree = "<group>"; };
+		40C8F7C81CB215A5000D9055 /* base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base64.cpp; sourceTree = "<group>"; };
+		40C8F7C91CB215A5000D9055 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
@@ -430,6 +513,70 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
+		40C8F7141CB2137C000D9055 /* TMXParser */ = {
+			isa = PBXGroup;
+			children = (
+				40C8F7781CB21591000D9055 /* base64 */,
+				40C8F7791CB21591000D9055 /* miniz.c */,
+				40C8F77A1CB21591000D9055 /* Tmx.h.in */,
+				40C8F77B1CB21591000D9055 /* TmxEllipse.cpp */,
+				40C8F77C1CB21591000D9055 /* TmxEllipse.h */,
+				40C8F77D1CB21591000D9055 /* TmxImage.cpp */,
+				40C8F77E1CB21591000D9055 /* TmxImage.h */,
+				40C8F77F1CB21591000D9055 /* TmxImageLayer.cpp */,
+				40C8F7801CB21591000D9055 /* TmxImageLayer.h */,
+				40C8F7811CB21591000D9055 /* TmxLayer.cpp */,
+				40C8F7821CB21591000D9055 /* TmxLayer.h */,
+				40C8F7831CB21591000D9055 /* TmxMap.cpp */,
+				40C8F7841CB21591000D9055 /* TmxMap.h */,
+				40C8F7851CB21591000D9055 /* TmxMapTile.h */,
+				40C8F7861CB21591000D9055 /* TmxObject.cpp */,
+				40C8F7871CB21591000D9055 /* TmxObject.h */,
+				40C8F7881CB21591000D9055 /* TmxObjectGroup.cpp */,
+				40C8F7891CB21591000D9055 /* TmxObjectGroup.h */,
+				40C8F78A1CB21591000D9055 /* tmxparser.pc.in */,
+				40C8F78B1CB21591000D9055 /* TmxPoint.h */,
+				40C8F78C1CB21591000D9055 /* TmxPolygon.cpp */,
+				40C8F78D1CB21591000D9055 /* TmxPolygon.h */,
+				40C8F78E1CB21591000D9055 /* TmxPolyline.cpp */,
+				40C8F78F1CB21591000D9055 /* TmxPolyline.h */,
+				40C8F7901CB21591000D9055 /* TmxPropertySet.cpp */,
+				40C8F7911CB21591000D9055 /* TmxPropertySet.h */,
+				40C8F7921CB21591000D9055 /* TmxTerrain.cpp */,
+				40C8F7931CB21591000D9055 /* TmxTerrain.h */,
+				40C8F7941CB21591000D9055 /* TmxTerrainArray.cpp */,
+				40C8F7951CB21591000D9055 /* TmxTerrainArray.h */,
+				40C8F7961CB21591000D9055 /* TmxTile.cpp */,
+				40C8F7971CB21591000D9055 /* TmxTile.h */,
+				40C8F7981CB21591000D9055 /* TmxTileLayer.cpp */,
+				40C8F7991CB21591000D9055 /* TmxTileLayer.h */,
+				40C8F79A1CB21591000D9055 /* TmxTileOffset.cpp */,
+				40C8F79B1CB21591000D9055 /* TmxTileOffset.h */,
+				40C8F79C1CB21591000D9055 /* TmxTileset.cpp */,
+				40C8F79D1CB21591000D9055 /* TmxTileset.h */,
+				40C8F79E1CB21591000D9055 /* TmxUtil.cpp */,
+				40C8F79F1CB21591000D9055 /* TmxUtil.h */,
+				40C8F7771CB21583000D9055 /* base64 */,
+			);
+			name = TMXParser;
+			sourceTree = "<group>";
+		};
+		40C8F7771CB21583000D9055 /* base64 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = base64;
+			sourceTree = "<group>";
+		};
+		40C8F7781CB21591000D9055 /* base64 */ = {
+			isa = PBXGroup;
+			children = (
+				40C8F7C81CB215A5000D9055 /* base64.cpp */,
+				40C8F7C91CB215A5000D9055 /* base64.h */,
+			);
+			path = base64;
+			sourceTree = "<group>";
+		};
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +593,7 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				40C8F7141CB2137C000D9055 /* TMXParser */,
 				4072DF871C9F44C900F7DAA4 /* Controller */,
 				4072DF851C9F44B800F7DAA4 /* Model */,
 				4072DF861C9F44BE00F7DAA4 /* View */,
@@ -630,6 +778,8 @@
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				40C8F6F01CB20F50000D9055 /* tiledTextures in Resources */,
 				405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */,
+				40C8F7A21CB21591000D9055 /* Tmx.h.in in Resources */,
+				40C8F7B21CB21591000D9055 /* tmxparser.pc.in in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
 				50EF629917ECD46A001EB2F8 /* Icon-100.png in Resources */,
 				5087E78317EB970100C73F5D /* Icon-152.png in Resources */,
@@ -656,6 +806,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40C8F7B31CB21591000D9055 /* tmxparser.pc.in in Resources */,
+				40C8F7A31CB21591000D9055 /* Tmx.h.in in Resources */,
 				EB24EB911C5B10C60069DBBE /* textures in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
@@ -669,30 +821,49 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40C8F7B01CB21591000D9055 /* TmxObjectGroup.cpp in Sources */,
+				40C8F7AC1CB21591000D9055 /* TmxMap.cpp in Sources */,
 				403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */,
 				405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */,
 				405CBEB81C7D14DF004AB5A0 /* GameRoot.cpp in Sources */,
 				403B05731CA37B5E003F47CB /* SpinnerModel.cpp in Sources */,
 				403B05701CA37B5E003F47CB /* LevelModel.cpp in Sources */,
+				40C8F7AE1CB21591000D9055 /* TmxObject.cpp in Sources */,
+				40C8F7C21CB21591000D9055 /* TmxTileOffset.cpp in Sources */,
+				40C8F7C41CB21591000D9055 /* TmxTileset.cpp in Sources */,
 				4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */,
+				40C8F7BA1CB21591000D9055 /* TmxTerrain.cpp in Sources */,
 				4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */,
 				403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				40C8F7CA1CB215A5000D9055 /* base64.cpp in Sources */,
+				40C8F7BC1CB21591000D9055 /* TmxTerrainArray.cpp in Sources */,
+				40C8F7AA1CB21591000D9055 /* TmxLayer.cpp in Sources */,
 				403B05751CA37B5E003F47CB /* PineappleModel.cpp in Sources */,
 				403B05761CA37B5E003F47CB /* PlatformModel.cpp in Sources */,
 				403B05721CA37B5E003F47CB /* BlenderModel.cpp in Sources */,
+				40C8F7C01CB21591000D9055 /* TmxTileLayer.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
+				40C8F7BE1CB21591000D9055 /* TmxTile.cpp in Sources */,
 				403B05741CA37B5E003F47CB /* PhysicalObstacleModel.cpp in Sources */,
 				405CBEB31C7D14DF004AB5A0 /* GameController.cpp in Sources */,
+				40C8F7A61CB21591000D9055 /* TmxImage.cpp in Sources */,
 				403B056E1CA37B5E003F47CB /* JelloModel.cpp in Sources */,
+				40C8F7C61CB21591000D9055 /* TmxUtil.cpp in Sources */,
 				4072DF841C9F43F900F7DAA4 /* LevelController.cpp in Sources */,
 				403B05771CA37B5E003F47CB /* SpikeModel.cpp in Sources */,
 				4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				40C8F7A01CB21591000D9055 /* miniz.c in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
+				40C8F7B61CB21591000D9055 /* TmxPolyline.cpp in Sources */,
+				40C8F7B81CB21591000D9055 /* TmxPropertySet.cpp in Sources */,
+				40C8F7B41CB21591000D9055 /* TmxPolygon.cpp in Sources */,
+				40C8F7A41CB21591000D9055 /* TmxEllipse.cpp in Sources */,
 				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
 				406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */,
+				40C8F7A81CB21591000D9055 /* TmxImageLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,27 +871,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40C8F7C31CB21591000D9055 /* TmxTileOffset.cpp in Sources */,
+				40C8F7B11CB21591000D9055 /* TmxObjectGroup.cpp in Sources */,
 				4072DF911C9F68B300F7DAA4 /* CollisionController.cpp in Sources */,
+				40C8F7B51CB21591000D9055 /* TmxPolygon.cpp in Sources */,
 				4072DFA61C9F68C500F7DAA4 /* JelloModel.cpp in Sources */,
+				40C8F7B91CB21591000D9055 /* TmxPropertySet.cpp in Sources */,
 				4072DFA31C9F68C500F7DAA4 /* PhysicalObstacleModel.cpp in Sources */,
+				40C8F7B71CB21591000D9055 /* TmxPolyline.cpp in Sources */,
+				40C8F7A11CB21591000D9055 /* miniz.c in Sources */,
+				40C8F7A71CB21591000D9055 /* TmxImage.cpp in Sources */,
 				403B05781CA37B5E003F47CB /* LevelModel.cpp in Sources */,
 				4072DFA51C9F68C500F7DAA4 /* PlatformModel.cpp in Sources */,
+				40C8F7C51CB21591000D9055 /* TmxTileset.cpp in Sources */,
 				4072DFA91C9F68C500F7DAA4 /* SpikeModel.cpp in Sources */,
 				4072DFA71C9F68C500F7DAA4 /* KidModel.cpp in Sources */,
+				40C8F7A91CB21591000D9055 /* TmxImageLayer.cpp in Sources */,
 				4072DF921C9F68B300F7DAA4 /* LoadingScreenController.cpp in Sources */,
 				406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				4072DF971C9F68B300F7DAA4 /* InputController.cpp in Sources */,
 				4072DF961C9F68B300F7DAA4 /* GameRoot.cpp in Sources */,
 				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,
+				40C8F7BF1CB21591000D9055 /* TmxTile.cpp in Sources */,
+				40C8F7BB1CB21591000D9055 /* TmxTerrain.cpp in Sources */,
+				40C8F7BD1CB21591000D9055 /* TmxTerrainArray.cpp in Sources */,
+				40C8F7AB1CB21591000D9055 /* TmxLayer.cpp in Sources */,
 				4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */,
 				4072DF931C9F68B300F7DAA4 /* LevelController.cpp in Sources */,
+				40C8F7C71CB21591000D9055 /* TmxUtil.cpp in Sources */,
 				4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */,
 				4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */,
 				4072DFA01C9F68C500F7DAA4 /* CollisionObjectModel.cpp in Sources */,
 				4072DF981C9F68B600F7DAA4 /* ProgressHUD.cpp in Sources */,
 				4072DF951C9F68B300F7DAA4 /* GameController.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				40C8F7AF1CB21591000D9055 /* TmxObject.cpp in Sources */,
+				40C8F7C11CB21591000D9055 /* TmxTileLayer.cpp in Sources */,
 				4072DF9F1C9F68C500F7DAA4 /* CrushableModel.cpp in Sources */,
+				40C8F7A51CB21591000D9055 /* TmxEllipse.cpp in Sources */,
+				40C8F7CB1CB215A5000D9055 /* base64.cpp in Sources */,
+				40C8F7AD1CB21591000D9055 /* TmxMap.cpp in Sources */,
 				4072DFA21C9F68C500F7DAA4 /* NonPhysicalObstacleModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
