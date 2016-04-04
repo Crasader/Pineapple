@@ -9,10 +9,8 @@ bin/**
 *.user
 *.userosscache
 *.sln.docstates
-
-# User-specific files
 *.userprefs
-**/xcuserdata/
+*.xcuserdatad
 
 
 # Build results
