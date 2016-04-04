@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="12" tilewidth="64" tileheight="64" nextobjectid="25">
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
+  <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
+ </tileset>
+ <objectgroup name="Walls and Platforms">
+  <object id="1" name="wall" x="0" y="640" width="4096" height="128"/>
+  <object id="22" name="platform" x="320" y="192" width="192" height="64"/>
+  <object id="24" name="platform" x="576" y="192" width="192" height="64"/>
+ </objectgroup>
+ <objectgroup name="Objects">
+  <object id="10" name="will" gid="1" x="256" y="640" width="64" height="64"/>
+  <object id="11" name="kids" gid="2" x="128" y="640" width="64" height="64"/>
+  <object id="13" name="jello" gid="11" x="576" y="640" width="64" height="64"/>
+  <object id="14" name="jello" gid="11" x="960" y="640" width="64" height="64"/>
+  <object id="15" name="jello" gid="11" x="1280" y="640" width="64" height="64"/>
+  <object id="16" name="cup" gid="21" x="512" y="640" width="64" height="64"/>
+  <object id="17" name="cup" gid="21" x="896" y="640" width="64" height="64"/>
+  <object id="18" name="spikes" gid="12" x="1024" y="640" width="64" height="64"/>
+  <object id="19" name="cup" gid="21" x="1024" y="576" width="64" height="64"/>
+  <object id="21" name="goal" gid="51" x="1984" y="640" width="64" height="64"/>
+ </objectgroup>
+</map>
