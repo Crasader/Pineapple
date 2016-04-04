@@ -10,7 +10,7 @@ bin/**
 *.userosscache
 *.sln.docstates
 *.userprefs
-*.xcuserdatad
+*.xcuserdatad/
 
 
 # Build results
