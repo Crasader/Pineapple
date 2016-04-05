@@ -140,6 +140,7 @@ LevelModel* LevelController::read(string filename) {
     addJello(JELLO_COUNT, JELLO_POS);
     addSpikes(SPIKE_COUNT, SPIKE_POS);
     addBlender(BLENDER_POS);
+    addButtonSwitch(Vec2(0,0), true);
     
     return _level;
 }
@@ -337,3 +338,28 @@ void LevelController::addBlender(float blenderPos[POS_COORDS]) {
     _level->addBlender(blender);
 }
 
+void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
+    float cscale = Director::getInstance()->getContentScaleFactor();
+    Texture2D* image  = _assets->get<Texture2D>(PLATFORM_TEXTURE);
+    float scale;
+    if (isSwitch) {
+        scale = SWITCH_SCALE;
+    } else {
+        scale = BUTTON_SCALE;
+    }
+    ButtonSwitchModel* button_switch = ButtonSwitchModel::create(pos,_scale / scale, isSwitch);
+    button_switch->setDrawScale(_scale.x, _scale.y);
+    
+    PolygonNode* sprite = PolygonNode::createWithTexture(image);
+    sprite->setScale(cscale * BLENDER_SCALE);
+    button_switch->setSceneNode(sprite);
+    
+    b2Filter b = b2Filter();
+    b.categoryBits = BLENDER_MASK;
+    b.maskBits = BLENDER_COLLIDES_WITH;
+    button_switch->setFilterData(b);
+    
+    initDebugProperties(button_switch);
+    initSensor(button_switch);
+    _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
+}

@@ -32,6 +32,8 @@
 #define PINEAPPLE_Z_INDEX       35
 #define BLENDER_Z_INDEX         36
 
+#define BUTTON_SWITCH_Z_INDEX   37
+
 using namespace cocos2d;
 
 class LevelModel {

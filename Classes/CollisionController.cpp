@@ -8,6 +8,7 @@
 #include "SpikeModel.h"
 #include "CrushableModel.h"
 #include "LevelModel.h"
+#include "ButtonSwitchModel.h"
 
 #pragma mark -
 #pragma mark Initialization
@@ -96,6 +97,18 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
+    
+    // BUTTON and SWITCH
+    if ((bd1 == _level->getPineapple() && bd2->getName() == BUTTON_SWITCH_NAME) ||
+        (bd2 == _level->getPineapple() && bd1->getName() == BUTTON_SWITCH_NAME)) {
+        ButtonSwitchModel* button_switch;
+        if (bd1 == _level->getPineapple()) {
+            button_switch = (ButtonSwitchModel*) bd2;
+        } else {
+            button_switch = (ButtonSwitchModel*) bd1;
+        }
+        button_switch->handleContact();
+    }
 
 	// See if we have landed on the ground.
 	// TODO this is super shitty.  we should make sure bd1/bd2 is a platform rather than not a kid
@@ -222,6 +235,18 @@ void CollisionController::endContact(b2Contact* contact) {
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
 
+    // BUTTON / SWITCH
+    
+    if ((bd1 == _level->getPineapple() && bd2->getName() == BUTTON_SWITCH_NAME) ||
+        (bd2 == _level->getPineapple() && bd1->getName() == BUTTON_SWITCH_NAME)) {
+        ButtonSwitchModel* button_switch;
+        if (bd1 == _level->getPineapple()) {
+            button_switch = (ButtonSwitchModel*) bd2;
+        } else {
+            button_switch = (ButtonSwitchModel*) bd1;
+        }
+        button_switch->handleEndContact();
+    }
 
 	if ((_level->getPineapple()->getSensorName() == fd2 && _level->getPineapple() != bd1) ||
 		(_level->getPineapple()->getSensorName() == fd1 && _level->getPineapple() != bd2)) {

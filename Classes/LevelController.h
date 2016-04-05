@@ -10,6 +10,7 @@
 #include "PineappleModel.h"
 #include "JelloModel.h"
 #include "KidModel.h"
+#include "ButtonSwitchModel.h"
 
 //Forward class declarations
 
@@ -51,6 +52,8 @@ protected:
     void addSpikes(int spikeCount, float* spikePos[]);
     
     void addBlender(float blenderPos[]);
+    
+    void addButtonSwitch(const Vec2 pos, const bool isSwitch);
     
 public:
 

@@ -45,6 +45,10 @@
 #define GREEN_CUP_TEXTURE "greencup"
 /** The key for the cupstack texture */
 #define CUPSTACK_TEXTURE  "stackedcups"
+/** The key for the switch texture */
+#define SWITCH_TEXTURE  "switch"
+/** The key for the button texture */
+#define BUTTON_TEXTURE  "button"
 
 /** The key for the main background texture in the asset manager */
 #define FRONT_BACKGROUND  "background_1"

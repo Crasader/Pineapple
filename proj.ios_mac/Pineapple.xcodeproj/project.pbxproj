@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0313B5E91CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5E71CB3325000C9CD4C /* ButtonSwitchModel.cpp */; };
+		0313B5EA1CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5E71CB3325000C9CD4C /* ButtonSwitchModel.cpp */; };
+		0313B5ED1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */; };
+		0313B5EE1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */; };
 		1AC6FB21180E996B004C840B /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */; };
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -141,6 +145,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0313B5E71CB3325000C9CD4C /* ButtonSwitchModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonSwitchModel.cpp; sourceTree = "<group>"; };
+		0313B5E81CB3325000C9CD4C /* ButtonSwitchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonSwitchModel.h; sourceTree = "<group>"; };
+		0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoveablePlatformModel.cpp; sourceTree = "<group>"; };
+		0313B5EC1CB336D500C9CD4C /* MoveablePlatformModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveablePlatformModel.h; sourceTree = "<group>"; };
 		037D90E31C98FA0C001C332F /* SpikeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpikeModel.cpp; sourceTree = "<group>"; };
 		037D90E41C98FA0C001C332F /* SpikeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpikeModel.h; sourceTree = "<group>"; };
 		03E256121C991AF0002FB07E /* CrushableModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrushableModel.cpp; sourceTree = "<group>"; };
@@ -390,6 +398,10 @@
 				4072DF761C9F43F900F7DAA4 /* PlatformModel.h */,
 				037D90E31C98FA0C001C332F /* SpikeModel.cpp */,
 				037D90E41C98FA0C001C332F /* SpikeModel.h */,
+				0313B5E71CB3325000C9CD4C /* ButtonSwitchModel.cpp */,
+				0313B5E81CB3325000C9CD4C /* ButtonSwitchModel.h */,
+				0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */,
+				0313B5EC1CB336D500C9CD4C /* MoveablePlatformModel.h */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -670,6 +682,7 @@
 				4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */,
 				403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
+				0313B5ED1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */,
 				403B05751CA37B5E003F47CB /* PineappleModel.cpp in Sources */,
 				403B05761CA37B5E003F47CB /* PlatformModel.cpp in Sources */,
 				403B05721CA37B5E003F47CB /* BlenderModel.cpp in Sources */,
@@ -683,6 +696,7 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
+				0313B5E91CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */,
 				406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */,
 			);
@@ -703,10 +717,12 @@
 				406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				4072DF971C9F68B300F7DAA4 /* InputController.cpp in Sources */,
 				4072DF961C9F68B300F7DAA4 /* GameRoot.cpp in Sources */,
+				0313B5EE1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */,
 				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,
 				4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */,
 				4072DF931C9F68B300F7DAA4 /* LevelController.cpp in Sources */,
 				4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */,
+				0313B5EA1CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */,
 				4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */,
 				4072DFA01C9F68C500F7DAA4 /* CollisionObjectModel.cpp in Sources */,
 				4072DF981C9F68B600F7DAA4 /* ProgressHUD.cpp in Sources */,
