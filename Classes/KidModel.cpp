@@ -116,12 +116,12 @@ KidModel* KidModel::create(const Vec2& pos, int idx) {
  * @param  scale    The drawing scale
  * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
  *
- * @return  An released physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create(const Vec2& pos, const Vec2& scale, int idx) {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init(pos,scale,idx)) {
-        dude->release();
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);

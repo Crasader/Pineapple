@@ -24,12 +24,12 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 GoalModel* GoalModel::create() {
     GoalModel* goal = new (std::nothrow) GoalModel();
     if (goal && goal->init()) {
-        goal->release();
+        goal->retain();
         return goal;
     }
     CC_SAFE_DELETE(goal);
@@ -54,7 +54,8 @@ GoalModel* GoalModel::create(const Vec2& pos) {
     GoalModel* goal = new (std::nothrow) GoalModel();
     if (goal && goal->init(pos)) {
         goal->setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        goal->setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE        goal->autorelease();
+        goal->setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+        goal->retain();
         return goal;
     }
     CC_SAFE_DELETE(goal);
@@ -79,7 +80,7 @@ GoalModel* GoalModel::create(const Vec2& pos) {
 GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
     GoalModel* goal = new (std::nothrow) GoalModel();
     if (goal && goal->init(pos,scale)) {
-        goal->release();
+        goal->retain();
         return goal;
     }
     CC_SAFE_DELETE(goal);

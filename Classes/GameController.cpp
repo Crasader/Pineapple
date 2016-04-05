@@ -181,10 +181,7 @@ GameController::~GameController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameController::dispose() {
-    if (_world != nullptr) {
-        _world->clear();
-        _world->release();
-    }
+    _level->unload();
     _worldnode = nullptr;
     _background = nullptr;
     _debugnode = nullptr;
