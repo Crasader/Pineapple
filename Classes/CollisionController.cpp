@@ -245,6 +245,7 @@ void CollisionController::endContact(b2Contact* contact) {
         } else {
             button_switch = (ButtonSwitchModel*) bd1;
         }
+        
         button_switch->handleEndContact();
     }
 

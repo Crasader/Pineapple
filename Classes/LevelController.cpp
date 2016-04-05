@@ -347,7 +347,7 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     } else {
         scale = BUTTON_SCALE;
     }
-    ButtonSwitchModel* button_switch = ButtonSwitchModel::create(pos,_scale / scale, isSwitch);
+    ButtonSwitchModel* button_switch = ButtonSwitchModel::create(pos,_scale / scale, isSwitch, Color::red);
     button_switch->setDrawScale(_scale.x, _scale.y);
     
     PolygonNode* sprite = PolygonNode::createWithTexture(image);

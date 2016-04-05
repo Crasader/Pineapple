@@ -17,9 +17,9 @@
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define BUTTON_HSHRINK  1.0f
 
-ButtonSwitchModel* ButtonSwitchModel::create(const Vec2& pos, const Vec2& scale, const bool isSwitch) {
+ButtonSwitchModel* ButtonSwitchModel::create(const Vec2& pos, const Vec2& scale, const bool isSwitch, const Color color) {
     ButtonSwitchModel* button_switch = new (std::nothrow) ButtonSwitchModel();
-    if (button_switch && button_switch->init(pos,scale, isSwitch)) {
+    if (button_switch && button_switch->init(pos,scale, isSwitch, color)) {
         button_switch->setPosition(pos + Vec2(button_switch->getWidth()/2, button_switch->getHeight()/2));
         button_switch->autorelease();
         return button_switch;
@@ -28,10 +28,12 @@ ButtonSwitchModel* ButtonSwitchModel::create(const Vec2& pos, const Vec2& scale,
     return nullptr;
 }
 
-bool ButtonSwitchModel::init(const Vec2& pos, const Vec2& scale, const bool isSwitch) {
+bool ButtonSwitchModel::init(const Vec2& pos, const Vec2& scale, const bool isSwitch, const Color color) {
     if (isSwitch) {
         setName(BUTTON_SWITCH_NAME);
     }
+    
+    _color = color;
     
     SceneManager* scene = AssetManager::getInstance()->getCurrent();
     Texture2D* image;

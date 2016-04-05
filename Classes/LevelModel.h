@@ -25,6 +25,7 @@
 
 #define CUP_Z_INDEX             20
 #define JELLO_Z_INDEX           21
+#define BUTTON_SWITCH_Z_INDEX   28
 #define SPIKES_Z_INDEX          29
 
 #define KID_Z_INDEX             30 //30...30+NUM_CHILDREN-1 used by Kids
@@ -32,7 +33,6 @@
 #define PINEAPPLE_Z_INDEX       35
 #define BLENDER_Z_INDEX         36
 
-#define BUTTON_SWITCH_Z_INDEX   37
 
 using namespace cocos2d;
 

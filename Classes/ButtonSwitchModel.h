@@ -27,11 +27,12 @@ private:
     
 protected:
     // true if switch, false if button
-    bool isSwitch;
+    bool _isSwitch;
     // true if button is pressed or level is switched on
-    bool isPressed;
+    bool _isPressed;
     // never has ownership
-    MoveablePlatformModel* linkedPlatform;
+    MoveablePlatformModel* _linkedPlatform;
+    Color _color;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -60,7 +61,16 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static ButtonSwitchModel* create(const Vec2& pos, const Vec2& scale, const bool isSwitch);
+    static ButtonSwitchModel* create(const Vec2& pos, const Vec2& scale, const bool isSwitch, const Color color);
+    
+    void linkToPlatform(MoveablePlatformModel* platform) {
+        if (platform == nullptr) {
+            return;
+        } else if (platform->getColor() != _color) {
+            return;
+        }
+        _linkedPlatform = platform;
+    }
     
     
 #pragma mark Physics Methods
@@ -92,24 +102,24 @@ public:
     void update(float dt) override;
     
     void handleContact() {
-        if (!isPressed) {
-            isPressed = true;
-            if (linkedPlatform != nullptr) {
-                linkedPlatform->open();
+        if (!_isPressed) {
+            _isPressed = true;
+            if (_linkedPlatform != nullptr) {
+                _linkedPlatform->open();
             }
         } else {
-            isPressed = false;
-            if (linkedPlatform != nullptr) {
-                linkedPlatform->close();
+            _isPressed = false;
+            if (_linkedPlatform != nullptr) {
+                _linkedPlatform->close();
             }
         }
     }
     
     void handleEndContact() {
-        if (!isSwitch) {
-            isPressed = false;
-            if (linkedPlatform != nullptr) {
-                linkedPlatform->close();
+        if (!_isSwitch) {
+            _isPressed = false;
+            if (_linkedPlatform != nullptr) {
+                _linkedPlatform->close();
             }
         }
     }
@@ -122,9 +132,9 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the ButtonSwitchModel values beyond
      * the defaults.  To use a ButtonSwitchModel, you must call init().
      */
-    ButtonSwitchModel() : BoxObstacle(), isSwitch(false), isPressed(false), linkedPlatform(nullptr) { }
+    ButtonSwitchModel() : BoxObstacle(), _isSwitch(false), _isPressed(false), _linkedPlatform(nullptr) { }
     
-    virtual bool init(const Vec2& pos, const Vec2& scale, const bool isSwitch);
+    virtual bool init(const Vec2& pos, const Vec2& scale, const bool isSwitch, const Color color);
 };
 
 
