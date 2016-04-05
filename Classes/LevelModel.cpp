@@ -115,21 +115,20 @@ bool LevelModel::load() {
     float* position = new float[WALL_VERTS];
     
     _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
+    
     float tileX = map->getTileSize().width;
     float tileY = map->getTileSize().height;
     
     for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
         TMXObjectGroup* objectGroup = *it;
-        
-        if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
-            for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
-                ValueMap object = (*it2).asValueMap();
-                float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
-                float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
-                float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
-                float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
-                
+        for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
+            ValueMap object = (*it2).asValueMap();
+            float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
+            float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
+            float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
+            float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
+            
+            if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
                 position[0] = x;
                 position[1] = y;
                 position[2] = x;
@@ -139,6 +138,10 @@ bool LevelModel::load() {
                 position[6] = x+w;
                 position[7] = y;
                 addWall(position);
+            } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
+                position[0] = x;
+                position[1] = y;
+                addGoal(position);
             }
         }
         
@@ -257,7 +260,6 @@ void LevelModel::addGoal(float goalPos[POS_COORDS]) {
     if (_goalDoor == nullptr) {
         _goalDoor = GoalModel::create(goalPos);
         
-        initDebugProperties(_goalDoor);
         initSensor(_goalDoor);
         initDebugProperties(_goalDoor);
         _goalDoor->setName(GOAL_NAME);
@@ -364,7 +366,7 @@ void LevelModel::setDrawScale(const Vec2& value) {
     _scale = value;
     
     //TODO - iterate over all objects, set the scale using setDrawScale
-
+    
 }
 
 void LevelModel::addAnonymousObstacle(cocos2d::Obstacle *obj, int zOrder) {
@@ -404,7 +406,7 @@ void LevelModel::setRootNode(Node* node) {
     
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
-
+        
         wall->setDrawScale(_scale.x , _scale.y);
         poly = PolygonNode::create();
         wall->setSceneNode(poly);
@@ -458,7 +460,7 @@ void LevelModel::setRootNode(Node* node) {
     
     for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
         SpikeModel* spike = *it;
- 
+        
         
         spike->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::create();

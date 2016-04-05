@@ -31,7 +31,7 @@
 GoalModel* GoalModel::create() {
     GoalModel* goal = new (std::nothrow) GoalModel();
     if (goal && goal->init()) {
-        goal->autorelease();
+        goal->release();
         return goal;
     }
     CC_SAFE_DELETE(goal);
@@ -55,8 +55,8 @@ GoalModel* GoalModel::create() {
 GoalModel* GoalModel::create(const Vec2& pos) {
     GoalModel* goal = new (std::nothrow) GoalModel();
     if (goal && goal->init(pos)) {
-        goal->setPosition(pos + Vec2(goal->getWidth()/2, goal->getHeight()/2));
-        goal->autorelease();
+        goal->setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
+        goal->setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE        goal->autorelease();
         return goal;
     }
     CC_SAFE_DELETE(goal);
@@ -109,17 +109,7 @@ GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool GoalModel::init(const Vec2& pos, const Vec2& scale) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(GOAL_TEXTURE);
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    
-    nsize.width  *= GOAL_HSHRINK/scale.x;
-    nsize.height *= GOAL_VSHRINK/scale.y;
-    if (BoxObstacle::init(pos,nsize)) {
+    if (BoxObstacle::init(pos, Size(1,1))) {
         setFriction(0.0f);
         setFixedRotation(true);
         
@@ -192,11 +182,13 @@ void GoalModel::resetSceneNode() {
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
         
-        //Poly2 poly = getPolygon();
-        //poly *= _drawScale/cscale;
+        Rect bounds;
+        bounds.size = getDimension();
+        bounds.size.width  *= _drawScale.x/cscale;
+        bounds.size.height *= _drawScale.y/cscale;
         
         pnode->setTexture(image);
-        //pnode->setPolygon(poly);
+        pnode->setPolygon(bounds);
         pnode->setScale(cscale);
     }
 }

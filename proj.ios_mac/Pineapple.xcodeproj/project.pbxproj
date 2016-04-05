@@ -11,8 +11,8 @@
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		4039B4DE1CB33B3E001E8B6E /* GoalModel.cp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cp */; };
-		4039B4DF1CB33B3E001E8B6E /* GoalModel.cp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cp */; };
+		4039B4DE1CB33B3E001E8B6E /* GoalModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */; };
+		4039B4DF1CB33B3E001E8B6E /* GoalModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */; };
 		4039B4E21CB34015001E8B6E /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
 		4039B4E31CB3401C001E8B6E /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
 		4039B4E41CB3401E001E8B6E /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
@@ -202,7 +202,7 @@
 		4016BA721CA36D9700557450 /* CollisionObjectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionObjectModel.h; sourceTree = "<group>"; };
 		4016BA771CA36D9700557450 /* NonPhysicalObstacleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonPhysicalObstacleModel.h; sourceTree = "<group>"; };
 		4016BAAB1CA3745100557450 /* LevelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelModel.cpp; sourceTree = "<group>"; };
-		4039B4DD1CB33B3E001E8B6E /* GoalModel.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoalModel.cp; sourceTree = "<group>"; };
+		4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoalModel.cpp; sourceTree = "<group>"; };
 		4039B4E01CB33B47001E8B6E /* GoalModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoalModel.h; sourceTree = "<group>"; };
 		405CBEA71C7D14DF004AB5A0 /* GameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameController.cpp; sourceTree = "<group>"; };
 		405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpinnerModel.cpp; sourceTree = "<group>"; };
@@ -462,7 +462,7 @@
 				4016BA721CA36D9700557450 /* CollisionObjectModel.h */,
 				03E256121C991AF0002FB07E /* CrushableModel.cpp */,
 				03E256131C991AF0002FB07E /* CrushableModel.h */,
-				4039B4DD1CB33B3E001E8B6E /* GoalModel.cp */,
+				4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */,
 				4039B4E01CB33B47001E8B6E /* GoalModel.h */,
 				400C68501C94E32800C141C3 /* JelloModel.cpp */,
 				400C684F1C94E32200C141C3 /* JelloModel.h */,
@@ -827,7 +827,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4039B4DE1CB33B3E001E8B6E /* GoalModel.cp in Sources */,
+				4039B4DE1CB33B3E001E8B6E /* GoalModel.cpp in Sources */,
 				40C8F7B01CB21591000D9055 /* TmxObjectGroup.cpp in Sources */,
 				40C8F7AC1CB21591000D9055 /* TmxMap.cpp in Sources */,
 				403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */,
@@ -912,7 +912,7 @@
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				40C8F7AF1CB21591000D9055 /* TmxObject.cpp in Sources */,
 				40C8F7C11CB21591000D9055 /* TmxTileLayer.cpp in Sources */,
-				4039B4DF1CB33B3E001E8B6E /* GoalModel.cp in Sources */,
+				4039B4DF1CB33B3E001E8B6E /* GoalModel.cpp in Sources */,
 				4072DF9F1C9F68C500F7DAA4 /* CrushableModel.cpp in Sources */,
 				40C8F7A51CB21591000D9055 /* TmxEllipse.cpp in Sources */,
 				40C8F7CB1CB215A5000D9055 /* base64.cpp in Sources */,

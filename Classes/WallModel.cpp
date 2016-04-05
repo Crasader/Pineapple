@@ -101,10 +101,7 @@ WallModel* WallModel::create(const Poly2& poly, const Vec2& anchor) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool WallModel::init(const Poly2& poly, const Vec2& anchor) {
-    PolygonObstacle::init(poly,anchor);
-    string name("wall");
-    setName(name);
-    return true;
+    return PolygonObstacle::init(poly,anchor);
 }
 
 
