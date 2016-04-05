@@ -149,7 +149,7 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
-    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _debugnode, _assets);
+    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
     
     _active = true;
     setComplete(false);
@@ -194,14 +194,10 @@ void GameController::dispose() {
  * This method disposes of the world and creates a new one.
  */
 void GameController::reset() {
-    _world->clear();
-    _worldnode->removeAllChildren();
-    _background->removeAllChildren();
-    _debugnode->removeAllChildren();
-    
     setFailure(false);
     setComplete(false);
     _level->reset();
+    _background->reset();
 }
 
 /**
