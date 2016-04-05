@@ -130,8 +130,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
 	float cscale = Director::getInstance()->getContentScaleFactor();
 	Size nsize = image->getContentSize()*cscale;
 
-
-	nsize.width *= PINEAPPLE_HSHRINK / (12.0f * scale.x);
+	nsize.width *= PINEAPPLE_HSHRINK / (24.0f * scale.x);
 	nsize.height *= PINEAPPLE_VSHRINK / scale.y;
 	if (CapsuleObstacle::init(pos, nsize)) {
 		_normalSize = nsize;
@@ -139,7 +138,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
 		setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
 		setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
 
-														// Gameplay attributes
+		// Gameplay attributes
 		_isGrounded = false;
 		_isJumping = false;
 		_isCollidingWithJello = false;
@@ -179,7 +178,7 @@ void PineappleModel::setMovement(float value) {
 */
 void PineappleModel::initAnimation(Texture2D* image, float scale) {
 	_willWalkcycleFrame = 0;
-	_willWalkcycle = AnimationNode::create(image, 1, 12, 12);
+	_willWalkcycle = AnimationNode::create(image, 1, 24, 24);
 	_willWalkcycle->setScale(scale);
 	_willWalkcycle->setFrame(0);
 	setSceneNode(_willWalkcycle);
@@ -303,16 +302,34 @@ void PineappleModel::update(float dt) {
 * Animate Will if he's moving
 */
 void PineappleModel::animate() {
-	if (getVX() > 0.5f) {
+	// in the air
+	if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = 12;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}
+	// moving
+	else if (abs(getVX()) > 0.5f) {
 		_willWalkcycleFrame++;
-		_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
+		if (_faceRight) {
+			_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
+		}
+		else {
+			_willWalkcycle->setFrame((_willWalkcycleFrame % 12) + 12);
+		}
 	}
-	else if (getVX() < -0.5f) {
-		_willWalkcycleFrame += 11;
-		_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-	}
+	// at rest
 	else {
-		_willWalkcycleFrame = 0;
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = 12;
+		}
 		_willWalkcycle->setFrame(_willWalkcycleFrame);
 	}
 }
