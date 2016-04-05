@@ -191,20 +191,34 @@ public:
     void dispose();
     
 	/**
-	* Kills the given player or child.
-	* This method is called when Will or one of his kids collides with the blender,
-	* to trigger any blending animation and remove the given object from the world
-	*
-	* This method shouldn't do any checks for gameover, that should be handled elsewhere
-	*
-	* TODO: Putting this here for the sake of completing CollisionController, but should be moved to LevelController when it is made
-	*				Since this is just here temporarily, the full implementation is in the header.
-	*/
-	void blendAndKill(SimpleObstacle* pineappleOrKid) {
-		removeObstacle(pineappleOrKid);
+	 * Kills will, removing him from the game world.
+	 */
+	void kill(PineappleModel * will);
 
-		//TODO: Animation and sounds
-	}
+	/**
+	 * Kills kid, removing it from the game world.
+	 */
+	void kill(KidModel* kid);
+
+	/**
+	* Kills will and triggers blending animations and sounds
+	*/
+	void blendAndKill(PineappleModel* will);
+
+	/**
+	* Kills the given kid and triggers blending animations and sounds
+	*/
+	void blendAndKill(KidModel* kid);
+
+	/**
+	* Kills will and triggers death-by-spikes animations and sounds
+	*/
+	void spikeAndKill(PineappleModel* will);
+
+	/**
+	* Kills the given kid and triggers death-by-spikes animations and sounds
+	*/
+	void spikeAndKill(KidModel* kid);
 
 	/**
 	* Removes obstacle from level world

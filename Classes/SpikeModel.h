@@ -8,6 +8,7 @@
 #include <cornell/CUWireNode.h>
 #include "Const.h"
 #include "Texture.h"
+//#include "CollisionObjectModel.h"
 
 
 using namespace cocos2d;
@@ -30,7 +31,7 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class SpikeModel : public BoxObstacle {
+class SpikeModel : public BoxObstacle/*, public CollisionObjectModel*/ {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(SpikeModel);
@@ -46,6 +47,10 @@ protected:
     virtual void resetDebugNode() override;
     
 public:
+	/**
+	*	returns collision class
+	*/
+	int getCollisionClass() { return SPIKES_C; };
 #pragma mark Static Constructors
     /**
      * Creates a new spike at the origin.

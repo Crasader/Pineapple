@@ -12,6 +12,7 @@
 #include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
+//#include "CollisionObjectModel.h"
 
 
 using namespace cocos2d;
@@ -50,7 +51,7 @@ using namespace cocos2d;
 /**
 * William the Papa PineappleModel.
 */
-class PineappleModel : public CapsuleObstacle {
+class PineappleModel : public CapsuleObstacle/*, public CollisionObjectModel*/ {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
 	CC_DISALLOW_COPY_AND_ASSIGN(PineappleModel);
@@ -99,6 +100,12 @@ protected:
 	virtual void resetDebugNode() override;
 
 public:
+
+	/**
+	*	returns collision class
+	*/
+	int getCollisionClass() { return PINEAPPLE_C; };
+
 #pragma mark Static Constructors
 	/**
 	* Creates a new pineapple at the origin.

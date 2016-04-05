@@ -148,7 +148,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\BackgroundView.cpp" />
     <ClCompile Include="..\Classes\BlenderModel.cpp" />
     <ClCompile Include="..\Classes\CollisionController.cpp" />
-    <ClCompile Include="..\Classes\CollisionObjectModel.cpp" />
     <ClCompile Include="..\Classes\CrushableModel.cpp" />
     <ClCompile Include="..\Classes\GameController.cpp" />
     <ClCompile Include="..\Classes\GameRoot.cpp" />
