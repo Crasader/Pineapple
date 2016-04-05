@@ -27,8 +27,6 @@ using namespace cocos2d;
 #define PINEAPPLE_NORMAL_MASS				1.5f
 #define PINEAPPLE_SHRUNK_MASS				1.0f
 #define PINEAPPLE_DENSITY						0.5f
-/** The amount to shrink the whole body, including image */
-#define PINEAPPLE_SCALE							0.1f
 /** The factor to multiply by the input */
 #define PINEAPPLE_FORCE							50.0f
 /** The amount to slow the character down */
@@ -41,6 +39,11 @@ using namespace cocos2d;
 #define PINEAPPLE_GROW_SCALE				1.5f
 /** The relative size of smaller pineapple */
 #define PINEAPPLE_SHRINK_SCALE			0.75f
+/** The amount to shrink the whole body, including image */
+#define PINEAPPLE_SCALE							0.1f
+
+/** Number of frames in the walk animation */
+#define PINEAPPLE_FRAME_COUNT 12
 
 #define PINEAPPLE_MASK 0x0002
 #define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
@@ -375,7 +378,10 @@ CC_CONSTRUCTOR_ACCESS:
 	* This constructor does not initialize any of the pineapple values beyond
 	* the defaults.  To use a PineappleModel, you must call init().
 	*/
-	PineappleModel() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(PINEAPPLE_SENSOR) { }
+	PineappleModel() : CapsuleObstacle(),
+    _sensorFixture(nullptr),
+    _sensorName(PINEAPPLE_SENSOR),
+    _willWalkcycle(nullptr){ }
 	~PineappleModel() { }
 
 	/**
