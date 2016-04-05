@@ -4,8 +4,8 @@
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="1" name="wall" x="0" y="640" width="320" height="128"/>
-  <object id="30" name="wall" x="448" y="640" width="320" height="128"/>
+  <object id="1" name="wall" x="0" y="640" width="1984" height="128"/>
+  <object id="30" name="wall" x="2432" y="640" width="320" height="128"/>
  </objectgroup>
  <objectgroup name="Will">
   <object id="10" name="will" gid="1" x="256" y="640" width="64" height="64"/>
@@ -17,7 +17,7 @@
   <object id="29" name="kid" gid="2" x="224" y="640" width="32" height="64"/>
  </objectgroup>
  <objectgroup name="Spikes">
-  <object id="18" name="spike" gid="12" x="1024" y="640" width="64" height="64"/>
+  <object id="18" name="spike" gid="12" x="1088" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Jello">
   <object id="13" name="jello" gid="11" x="576" y="640" width="64" height="64"/>

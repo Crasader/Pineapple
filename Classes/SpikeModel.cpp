@@ -9,10 +9,8 @@
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define SPIKE_VSHRINK  0.8f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define SPIKE_HSHRINK  0.72f
+
+#define SPIKE_SCALE 0.38
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -26,12 +24,12 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An released physics object
+ * @return  An retained physics object
  */
 SpikeModel* SpikeModel::create() {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init()) {
-        spike->release();
+        spike->retain();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -50,13 +48,13 @@ SpikeModel* SpikeModel::create() {
  *
  * @param  pos      Initial position in world coordinates
  *
- * @return  An released physics object
+ * @return  An retained physics object
  */
 SpikeModel* SpikeModel::create(const Vec2& pos) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos)) {
         spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->release();
+        spike->retain();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -76,13 +74,13 @@ SpikeModel* SpikeModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates(of bottom left point)
  * @param  scale    The drawing scale
  *
- * @return  An released physics object
+ * @return  An retained physics object
  */
 SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos,scale)) {
         spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->release();
+        spike->retain();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -109,20 +107,7 @@ SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool SpikeModel::init(const Vec2& pos, const Vec2& scale) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(SPIKE_TEXTURE);
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    
-    nsize.width  *= SPIKE_HSHRINK/scale.x;
-    nsize.height *= SPIKE_VSHRINK/scale.y;
-    if (BoxObstacle::init(pos,nsize)) {
-        setFriction(0.0f);
-        setFixedRotation(true);
-        
+    if (BoxObstacle::init(pos,Size(scale))) {
         // Gameplay attributes
         return true;
     }
@@ -189,15 +174,14 @@ void SpikeModel::resetSceneNode() {
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
         
-        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
-        Texture2D* image = assets->get<Texture2D>(SPIKE_TEXTURE);
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
         
-        //        Poly2 poly = getPolygon();
-        //        poly *= _drawScale/cscale;
-        //
-        //        pnode->setTexture(image);
-        //        pnode->setPolygon(poly);
-        //        pnode->setScale(cscale);
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale * SPIKE_SCALE);
+        
+        setDimension(pnode->getContentSize().width * SPIKE_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * SPIKE_SCALE / _drawScale.y);
     }
 }
 

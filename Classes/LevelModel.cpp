@@ -149,6 +149,8 @@ bool LevelModel::load() {
                 addGoal(position);
             } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
                 addJello(position);
+            } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
+                addSpikes(position);
             }
         }
         
@@ -347,6 +349,7 @@ void LevelModel::addSpikes(float spikesPos[POS_COORDS]) {
     initDebugProperties(spike);
     initSensor(spike);
     spike->setName(SPIKE_NAME);
+    _spikes.push_back(spike);
 }
 
 void LevelModel::addBlender(float blenderPos[POS_COORDS]) {
@@ -475,8 +478,9 @@ void LevelModel::setRootNode(Node* node) {
         SpikeModel* spike = *it;
         
         
+        Texture2D* image = assets->get<Texture2D>(SPIKE_TEXTURE);
         spike->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::create();
+        poly = PolygonNode::createWithTexture(image);
         spike->setSceneNode(poly);
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);

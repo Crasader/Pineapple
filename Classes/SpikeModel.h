@@ -12,13 +12,8 @@
 
 using namespace cocos2d;
 
-/** The name for a spike, for identification purposes */
-#define SPIKE_NAME       "spike"
-
 #pragma mark -
 #pragma mark Physics Constants
-/** The Spike specific scaling */
-#define SPIKE_SCALE         0.75f
 
 
 #pragma mark -
