@@ -129,7 +129,8 @@ bool LevelModel::load() {
     for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
         TMXObjectGroup* objectGroup = *it;
         for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
-            ValueMap object = (*it2).asValueMap();
+            Value obj = (*it2);
+            ValueMap object = obj.asValueMap();
             float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
             float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
             float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
