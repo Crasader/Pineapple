@@ -381,7 +381,8 @@ CC_CONSTRUCTOR_ACCESS:
 	PineappleModel() : CapsuleObstacle(),
     _sensorFixture(nullptr),
     _sensorName(PINEAPPLE_SENSOR),
-    _willWalkcycle(nullptr){ }
+    _willWalkcycle(nullptr),
+    _jumpCooldown(0){ }
 	~PineappleModel() { }
 
 	/**
