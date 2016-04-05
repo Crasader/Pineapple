@@ -121,6 +121,23 @@ public:
      * according to the drawing scale.
      *
      * @param  pos      Initial position in world coordinates
+     * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
+     *
+     * @return  An autoreleased physics object
+     */
+    static KidModel* create(const Vec2& pos, int idx);
+    
+    /**
+     * Creates a new dude at the given position.
+     *
+     * The dude is sized according to the given drawing scale.
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param  pos      Initial position in world coordinates
      * @param  scale    The drawing scale
      * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
      *
@@ -278,6 +295,16 @@ public:
 	*/
 	void animate();
 
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
+    
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
@@ -318,6 +345,23 @@ CC_CONSTRUCTOR_ACCESS:
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
     virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE, 0); }
+    
+    /**
+     * Initializes a new dude at the given position.
+     *
+     * The dude is scaled so that 1 pixel = 1 Box2d unit
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param  pos      Initial position in world coordinates
+     * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
+     *
+     * @return  true if the obstacle is initialized properly, false otherwise.
+     */
+    virtual bool init(const Vec2& pos, int idx) { return init(pos, Vec2::ONE, idx); }
     
     /**
      * Initializes a new dude at the given position.

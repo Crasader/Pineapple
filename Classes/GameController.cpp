@@ -21,69 +21,16 @@
 #include <string>
 #include <cornell.h>
 #include "GameController.h"
-#include "LevelController.h"
 #include "CollisionController.h"
+#include "Const.h"
+#include "Texture.h"
 
 
 using namespace cocos2d;
 //using namespace std;
 
-#pragma mark -
-#pragma mark LevelModel Geography
-
-/** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   32.0f
-/** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT  12.0f
-/** Half-width of scrolling window in Box2d units */
-#define WINDOW_SIZE     5.0f
-
-#pragma mark -
-#pragma mark Collision Constants
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The new heavier gravity for this world (so it is not so floaty) */
-#define DEFAULT_GRAVITY -14.7f
-
-/** Offset for bullet when firing */
-#define BULLET_OFFSET   0.5f
-/** The speed of the bullet after firing */
-#define BULLET_SPEED   20.0f
 /** The number of frame to wait before reinitializing the game */
 #define EXIT_COUNT      240
-
-
-#pragma mark -
-#pragma mark Asset Constants
-/** The name of a wall (for object identification) */
-#define WALL_NAME       "wall"
-/** The name of a platform (for object identification) */
-#define PLATFORM_NAME   "platform"
-/** The message for winning the game */
-#define WIN_MESSAGE     "VICTORY"
-/** The color of the win message */
-#define WIN_COLOR       Color3B::YELLOW
-/** The message for losing the game */
-#define LOSE_MESSAGE    "BLENDED"
-/** The color of the lose message */
-#define LOSE_COLOR      Color3B::RED
-/** The key the basic game music */
-#define GAME_MUSIC      "game"
-/** The key the victory game music */
-#define WIN_MUSIC       "win"
-/** The key the failure game music */
-#define LOSE_MUSIC      "lose"
-/** The sound effect for firing a bullet */
-#define PEW_EFFECT      "pew"
-/** The sound effect for a bullet collision */
-#define POP_EFFECT      "pop"
-/** The sound effect for jumping */
-#define JUMP_EFFECT     "jump"
-/** The volume for the music */
-#define MUSIC_VOLUME    0.7f
-/** The volume for sound effects */
-#define EFFECT_VOLUME   0.8f
 
 
 #pragma mark -
@@ -222,11 +169,16 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _rootnode->retain();
     
     // Now populate the physics objects
-    _levelController = LevelController::create(_assets, _rootnode, _worldnode, _debugnode, _world, _scale);
-    _levelController->read("testLevel.tmx"); //TODO - replace this
-    _collision->setLevel(_levelController->getLevel());
-    _level = _levelController->getLevel();
-    populate();
+    _level = _assets->get<LevelModel>(LEVEL_ONE);
+    _level->setRootNode(root);
+    _collision->setLevel(_level);
+    
+    
+    _levelOffset = 0.0f;
+    _worldnode->setPositionX(0.0f);
+    _debugnode->setPositionX(0.0f);
+    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _debugnode, _assets);
+    
     _active = true;
     setDebug(false);
     setFailure(false);
@@ -260,25 +212,6 @@ void GameController::dispose() {
     _rootnode = nullptr;
 }
 
-
-#pragma mark -
-#pragma mark LevelModel Creation
-/**
- * Lays out the game geography.
- *
- * This method is really, really long.  In practice, you would replace this
- * with your serialization loader, which would process a level file.
- */
-void GameController::populate() {
-    _levelOffset = 0.0f;
-    _worldnode->setPositionX(0.0f);
-    _debugnode->setPositionX(0.0f);
-    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _debugnode, _assets);
-}
-
-
-
-
 #pragma mark -
 #pragma mark Gameplay Handling
 
@@ -295,10 +228,7 @@ void GameController::reset() {
     
     setFailure(false);
     setComplete(false);
-    _levelController->read("");
-    _collision->setLevel(_levelController->getLevel());
-    _level = _levelController->getLevel();
-    populate();
+    _level->reset();
 }
 
 /**

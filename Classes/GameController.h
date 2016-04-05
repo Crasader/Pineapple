@@ -21,6 +21,8 @@
 #define __PF_GAME_CONTROLLER_H__
 
 #include "InputController.h"
+#include "LevelModel.h"
+#include "BackgroundView.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -32,9 +34,6 @@ namespace cocos2d {
 
 // These forward declarations are in the project
 class LoadingScreenController;
-class LevelController;
-class LevelModel;
-class BackgroundView;
 class CollisionController;
 
 using namespace cocos2d;
@@ -80,8 +79,6 @@ protected:
     InputController _input;
     /** Controller for collision handling */
     CollisionController* _collision;
-    /** Reference to the level controller */
-    LevelController* _levelController;
     
     /** Whether or note this game is still active */
     bool _active;

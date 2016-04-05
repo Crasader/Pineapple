@@ -88,6 +88,31 @@ KidModel* KidModel::create(const Vec2& pos) {
  * according to the drawing scale.
  *
  * @param  pos      Initial position in world coordinates
+ * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
+ *
+ * @return  An autoreleased physics object
+ */
+KidModel* KidModel::create(const Vec2& pos, int idx) {
+    KidModel* dude = new (std::nothrow) KidModel();
+    if (dude && dude->init(pos,idx)) {
+        dude->autorelease();
+        return dude;
+    }
+    CC_SAFE_DELETE(dude);
+    return nullptr;
+}
+
+/**
+ * Creates a new dude at the given position.
+ *
+ * The dude is sized according to the given drawing scale.
+ *
+ * The scene graph is completely decoupled from the physics system.
+ * The node does not have to be the same size as the physics body. We
+ * only guarantee that the scene graph node is positioned correctly
+ * according to the drawing scale.
+ *
+ * @param  pos      Initial position in world coordinates
  * @param  scale    The drawing scale
  * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
  *
@@ -320,6 +345,31 @@ void KidModel::animate() {
 
 #pragma mark -
 #pragma mark Scene Graph Methods
+
+void KidModel::resetSceneNode() {
+    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    if (pnode != nullptr) {
+        // We need to know the content scale for resolution independence
+        // If the device is higher resolution than 1024x576, Cocos2d will scale it
+        // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
+        // If you are using a device with a 3:2 aspect ratio, you will need to
+        // completely redo the level layout.  We can help if this is an issue.
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        
+        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
+        Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(_index));
+        
+        Size poly = getDimension();
+        poly.width *= _drawScale.x/cscale;
+        poly.height *= _drawScale.y/cscale;
+
+        pnode->setTexture(image);
+        //pnode->setPolygon(poly);
+        pnode->setScale(cscale);
+        initAnimation(image, cscale * KID_SCALE);
+    }
+}
+
 
 /**
  * Redraws the outline of the physics fixtures to the debug node
