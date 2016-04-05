@@ -76,6 +76,10 @@ LevelModel* LevelModel::create(std::string file) {
     return nullptr;
 }
 
+void initFootSensorProperties(Obstacle* obstacle) {
+    
+}
+
 /** Helper method for creating all level elements that initializes the
  * debug properties of the object to be added */
 void initDebugProperties(Obstacle* obstacle) {
@@ -108,19 +112,18 @@ void initPhysicalObstacle(Obstacle* obstacle) {
 
 
 bool LevelModel::load() {
+    _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
+    _world->retain();
+    
+    float* position = new float[WALL_VERTS];
+    
+    _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    
     TMXTiledMap *map = TMXTiledMap::create(_file);
     if(map == nullptr) {
         CCASSERT(false, "Failed to load level file");
         return false;
     }
-    
-    _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
-    _world->retain();
-    
-    
-    float* position = new float[WALL_VERTS];
-    
-    _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     
     float tileX = map->getTileSize().width;
     float tileY = map->getTileSize().height;
@@ -129,7 +132,8 @@ bool LevelModel::load() {
     
     for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
         TMXObjectGroup* objectGroup = *it;
-        for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
+        ValueVector objects = objectGroup->getObjects();
+        for(auto it2 = objects.begin(); it2 != objects.end(); ++it2) {
             
             //Casting bug occurs here
             Value obj = (*it2);
@@ -189,7 +193,6 @@ bool LevelModel::load() {
     }
     addWall(position);
     
-    delete[] position;
     return true;
 }
 
@@ -273,6 +276,10 @@ void LevelModel::unload() {
     }
     
     _length = UNSET_LENGTH;
+    _kidsRemaining=0;
+    _worldnode=nullptr;
+    _debugnode=nullptr;
+    _rootnode=nullptr;
 }
 
 LevelModel::~LevelModel(){

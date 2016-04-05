@@ -317,8 +317,6 @@ void KidModel::animate() {
 	else if (getVX() > 0.2f) {
 		_kidWalkcycleFrame += 0.5f;
 		int tmp = (int)rint(_kidWalkcycleFrame);
-		CCLOG("frame: %f", _kidWalkcycleFrame);
-		CCLOG("frame no. is: %d", tmp);
 		_kidWalkcycle->setFrame(tmp % 12);
 	}
 	// at rest
@@ -373,9 +371,14 @@ void KidModel::resetDebugNode() {
     Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));
     poly.traverse(Poly2::Traversal::INTERIOR);
     
+    if(_sensorNode != nullptr) {
+        _debug->removeChild(_sensorNode);
+    }
+    
     _sensorNode = WireNode::createWithPoly(poly);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-    _debug->addChild(_sensorNode);	
+    _sensorNode->setColor(DEBUG_COLOR);
+    _debug->addChild(_sensorNode);
 }
 
 

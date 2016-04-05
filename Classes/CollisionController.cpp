@@ -223,6 +223,7 @@ void CollisionController::endContact(b2Contact* contact) {
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
 
 
+    //See if you have left the ground
 	if ((_level->getPineapple()->getSensorName() == fd2 && _level->getPineapple() != bd1) ||
 		(_level->getPineapple()->getSensorName() == fd1 && _level->getPineapple() != bd2)) {
 		_sensorFixtures.erase(_level->getPineapple() == bd1 ? fix2 : fix1);

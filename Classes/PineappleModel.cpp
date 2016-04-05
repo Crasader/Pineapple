@@ -139,12 +139,12 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
 }
 
 /**
-* Sets left/right movement of this character.
-*
-* This is the result of input times pineapple force.
-*
-* @param value left/right movement of this character.
-*/
+ * Sets left/right movement of this character.
+ *
+ * This is the result of input times pineapple force.
+ *
+ * @param value left/right movement of this character.
+ */
 void PineappleModel::setMovement(float value) {
     _movement = value;
     bool face = _movement > 0;
@@ -266,8 +266,8 @@ void PineappleModel::update(float dt) {
     if (isJumping()) {
         _jumpCooldown = JUMP_COOLDOWN;
     }
-    else {
-        // Only cooldown while grounded
+    // Only cooldown while grounded
+    else if (isGrounded()){
         _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown - 1 : 0);
     }
     
@@ -278,36 +278,36 @@ void PineappleModel::update(float dt) {
  * Animate Will if he's moving
  */
 void PineappleModel::animate() {
-	// in the air
-	if (!_isGrounded || _isJumping || getVY() < -0.2f) {
-		if (_faceRight) {
-			_willWalkcycleFrame = 0;
-		}
-		else {
-			_willWalkcycleFrame = 12;
-		}
-		_willWalkcycle->setFrame(_willWalkcycleFrame);
-	}
-	// moving
-	else if (abs(getVX()) > 0.5f) {
-		_willWalkcycleFrame++;
-		if (_faceRight) {
-			_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-		}
-		else {
-			_willWalkcycle->setFrame((_willWalkcycleFrame % 12) + 12);
-		}
-	}
-	// at rest
-	else {
-		if (_faceRight) {
-			_willWalkcycleFrame = 0;
-		}
-		else {
-			_willWalkcycleFrame = 12;
-		}
-		_willWalkcycle->setFrame(_willWalkcycleFrame);
-	}
+    // in the air
+    if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+        if (_faceRight) {
+            _willWalkcycleFrame = 0;
+        }
+        else {
+            _willWalkcycleFrame = 12;
+        }
+        _willWalkcycle->setFrame(_willWalkcycleFrame);
+    }
+    // moving
+    else if (abs(getVX()) > 0.5f) {
+        _willWalkcycleFrame++;
+        if (_faceRight) {
+            _willWalkcycle->setFrame(_willWalkcycleFrame % 12);
+        }
+        else {
+            _willWalkcycle->setFrame((_willWalkcycleFrame % 12) + 12);
+        }
+    }
+    // at rest
+    else {
+        if (_faceRight) {
+            _willWalkcycleFrame = 0;
+        }
+        else {
+            _willWalkcycleFrame = 12;
+        }
+        _willWalkcycle->setFrame(_willWalkcycleFrame);
+    }
 }
 
 
@@ -357,16 +357,20 @@ void PineappleModel::resetSceneNode() {
 void PineappleModel::resetDebugNode() {
     CapsuleObstacle::resetDebugNode();
     
-    if (_willWalkcycle != nullptr) {
-        float w = PINEAPPLE_SSHRINK*_dimension.width*_drawScale.x;
-        float h = SENSOR_HEIGHT*_drawScale.y;
-        Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
-        poly.traverse(Poly2::Traversal::INTERIOR);
-        _sensorNode = WireNode::createWithPoly(poly);
-        _sensorNode->setColor(DEBUG_COLOR);
-        _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
-        _debug->addChild(_sensorNode);
+    float w = PINEAPPLE_SSHRINK*_dimension.width*_drawScale.x;
+    float h = SENSOR_HEIGHT*_drawScale.y;
+    Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+    poly.traverse(Poly2::Traversal::INTERIOR);
+    
+    if(_sensorNode != nullptr) {
+        _debug->removeChild(_sensorNode);
     }
+    
+    _sensorNode = WireNode::createWithPoly(poly);
+    _sensorNode->setColor(DEBUG_COLOR);
+    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    
+    _debug->addChild(_sensorNode);
 }
 
 
