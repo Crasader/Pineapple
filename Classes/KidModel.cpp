@@ -201,10 +201,10 @@ void KidModel::setMovement(float value) {
     }
     
     // Change facing
-    TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
+    /*TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
     if (image != nullptr) {
         image->flipHorizontal(!image->isFlipHorizontal());
-    }
+    }*/
 }
 
 
@@ -271,8 +271,7 @@ void KidModel::dampTowardsWalkspeed() {
         return;
     }
 
-    
-    if(_isGrounded && getVX() != KID_WALKSPEED) {
+    if (_isGrounded && getVX() != KID_WALKSPEED) {
         if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
             setVX(KID_WALKSPEED);
         } else if (getVX() > getWalkingSpeed()) {
@@ -284,8 +283,6 @@ void KidModel::dampTowardsWalkspeed() {
             _body->ApplyForce(force,_body->GetPosition(),true);
         }
     }
-    
-    
     
 //    // Velocity too high, clamp it
 //    if (fabs(getVX()) >= getMaxWalkingSpeed() && _isGrounded) {
@@ -311,12 +308,22 @@ void KidModel::update(float dt) {
 * Animate the kid if they're moving
 */
 void KidModel::animate() {
-	if (getVX() > 0.2f) {
-		_kidWalkcycleFrame++;
-		_kidWalkcycle->setFrame(_kidWalkcycleFrame % 12);
+	// in the air
+	if (!_isGrounded || getVY() < -0.2f) {
+		_kidWalkcycleFrame = 0.0f;
+		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
+	// moving
+	else if (getVX() > 0.2f) {
+		_kidWalkcycleFrame += 0.5f;
+		int tmp = (int)rint(_kidWalkcycleFrame);
+		CCLOG("frame: %f", _kidWalkcycleFrame);
+		CCLOG("frame no. is: %d", tmp);
+		_kidWalkcycle->setFrame(tmp % 12);
+	}
+	// at rest
 	else {
-		_kidWalkcycleFrame = 0;
+		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
 }

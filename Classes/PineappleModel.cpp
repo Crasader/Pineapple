@@ -278,18 +278,36 @@ void PineappleModel::update(float dt) {
  * Animate Will if he's moving
  */
 void PineappleModel::animate() {
-    if (getVX() > 0.5f) {
-        _willWalkcycleFrame++;
-        _willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-    }
-    else if (getVX() < -0.5f) {
-        _willWalkcycleFrame += 11;
-        _willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-    }
-    else {
-        _willWalkcycleFrame = 0;
-        _willWalkcycle->setFrame(_willWalkcycleFrame);
-    }
+	// in the air
+	if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = 12;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}
+	// moving
+	else if (abs(getVX()) > 0.5f) {
+		_willWalkcycleFrame++;
+		if (_faceRight) {
+			_willWalkcycle->setFrame(_willWalkcycleFrame % 12);
+		}
+		else {
+			_willWalkcycle->setFrame((_willWalkcycleFrame % 12) + 12);
+		}
+	}
+	// at rest
+	else {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = 12;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}
 }
 
 
