@@ -342,6 +342,23 @@ void GameController::setFailure(bool value){
     
 }
 
+void handleAvatarGrowth(float cscale, InputController& _input, PineappleModel* _avatar) {
+    int size = 0;
+    float scale = 1.0f;
+    if (_input.didGrow()) {
+        size = _avatar->grow();
+        if (size == 2)
+            scale = PINEAPPLE_GROW_SCALE;
+    } else if (_input.didShrink()) {
+        size = _avatar->shrink();
+        if (size == 2)
+            scale = PINEAPPLE_SHRINK_SCALE;
+    }
+    if (size) {
+        _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * scale);
+    }
+}
+
 /**
  * Executes the core gameplay loop of this world.
  *
@@ -384,20 +401,8 @@ void GameController::update(float dt) {
         _level->getPineapple()->setMovement(_input.getHorizontal()*_level->getPineapple()->getForce());
         _level->getPineapple()->setJumping( _input.didJump());
         float cscale = Director::getInstance()->getContentScaleFactor();
-        if (_input.didGrow()) {
-            if (_level->getPineapple()->grow()) {
-                _level->getPineapple()->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_GROW_SCALE);
-            }
-        }
-        if (_input.didShrink()) {
-            if (_level->getPineapple()->shrink()) {
-                _level->getPineapple()->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * PINEAPPLE_SHRINK_SCALE);
-            }
-        }
-        
-        if ( _level->getPineapple()->updateSize(dt)) {
-            _level->getPineapple()->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE);
-        }
+
+        handleAvatarGrowth(cscale, _input, _level->getPineapple());
         
         _level->getPineapple()->applyForce();
         

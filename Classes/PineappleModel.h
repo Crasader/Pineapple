@@ -179,19 +179,39 @@ public:
 		_isLarge = isLarge;
 	}
 
-	/**
-	* Grows the pineapple, returns 1 if grown
-	*/
-	int grow();
+    /**
+     * Grows the pineapple, returns 1 if now normal size, 2 if large
+     */
+    int grow() {
+        if (_isSmall) {
+            setDimension(_normalSize);
+            _isSmall = false;
+            return 1;
+        } else if (!_isLarge  && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
+            _isLarge = true;
+            return 2;
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * Shrinks the pineapple, returns 1 if normal size, 2 if small
+     */
+    int shrink() {
+        if (_isLarge) {
+            setDimension(_normalSize);
+            _isLarge = false;
+            return 1;
+        } else if (!_isLarge && !_isSmall) {
+            setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
+            setIsSmall(true);
+            return 2;
+        }
+        return 0;
+    }
 
-	/**
-	* Shrinks the pineapple, returns 1 if shrunk
-	*/
-	int shrink();
-
-	/**
-	* TODO: method spec
-	*/
 	bool isSmall() const { return _isSmall; }
 
 	/**
