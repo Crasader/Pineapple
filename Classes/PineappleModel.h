@@ -22,28 +22,28 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
-#define PINEAPPLE_DENSITY						0.5f
-#define PINEAPPLE_GROWN_MASS				2.0f
-#define PINEAPPLE_NORMAL_MASS				1.5f
-#define PINEAPPLE_SHRUNK_MASS				1.0f
-#define PINEAPPLE_DENSITY						0.5f
+#define PINEAPPLE_DENSITY					   0.5f
+#define PINEAPPLE_GROWN_MASS				   2.0f
+#define PINEAPPLE_NORMAL_MASS				   1.5f
+#define PINEAPPLE_SHRUNK_MASS				   1.0f
+#define PINEAPPLE_DENSITY					   0.5f
 /** The amount to shrink the whole body, including image */
-#define PINEAPPLE_SCALE							0.1f
+#define PINEAPPLE_SCALE						   0.1f
 /** The factor to multiply by the input */
-#define PINEAPPLE_FORCE							50.0f
+#define PINEAPPLE_FORCE						   50.0f
 /** The amount to slow the character down */
-#define PINEAPPLE_DAMPING						10.0f
+#define PINEAPPLE_DAMPING					   10.0f
 /** The maximum character speed */
-#define PINEAPPLE_MAXSPEED					5.0f
+#define PINEAPPLE_MAXSPEED					   5.0f
 /** The maximum duration of pineapple size */
-#define PINEAPPLE_MAX_SIZE_DURATION 3.0f
+#define PINEAPPLE_MAX_SIZE_DURATION            3.0f
 /** The relative size of enlarged pineapple */
-#define PINEAPPLE_GROW_SCALE				1.5f
+#define PINEAPPLE_GROW_SCALE				   1.5f
 /** The relative size of smaller pineapple */
-#define PINEAPPLE_SHRINK_SCALE			0.75f
+#define PINEAPPLE_SHRINK_SCALE			       0.75f
 
-#define PINEAPPLE_MASK 0x0002
-#define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
+#define PINEAPPLE_MASK                         0x0002
+#define PINEAPPLE_COLLIDES_WITH                0xFFFB // All but 0x0004
 
 #pragma mark -
 #pragma mark PineappleModel Model

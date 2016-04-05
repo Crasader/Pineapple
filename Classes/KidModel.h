@@ -67,7 +67,7 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _kidWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _kidWalkcycleFrame;
+	float _kidWalkcycleFrame;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
