@@ -416,8 +416,10 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
         
+        Texture2D* image = assets->get<Texture2D>(TILE_TEXTURE);
+        
         wall->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::create();
+        poly = PolygonNode::createWithTexture(image);
         wall->setSceneNode(poly);
         
         addObstacle(wall, WALL_Z_INDEX);
@@ -456,6 +458,7 @@ void LevelModel::setRootNode(Node* node) {
             addObstacle(_kids[i], KID_Z_INDEX+i);
         }
     }
+    
     
     for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
         JelloModel* jello = *it;

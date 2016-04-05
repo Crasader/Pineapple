@@ -22,6 +22,8 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
+#define WALL_SCALE 1
+
 #pragma mark -
 #pragma mark Static Constructors
 /**
@@ -123,15 +125,15 @@ void WallModel::resetSceneNode() {
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
+                
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
         
-        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
-        Texture2D* image = assets->get<Texture2D>(TILE_TEXTURE);
+        pnode->setPolygon(bounds);
+        pnode->setScaleX(getSize().width / pnode->getContentSize().width * _drawScale.x);
+        pnode->setScaleY(getSize().height / pnode->getContentSize().height * _drawScale.y);
         
-        Poly2 poly = getPolygon();
-        poly *= _drawScale/cscale;
-        
-        pnode->setTexture(image);
-        pnode->setPolygon(poly);
-        pnode->setScale(cscale);
+//        setSize(pnode->getContentSize().width * WALL_SCALE / _drawScale.x,
+//                pnode->getContentSize().height * WALL_SCALE / _drawScale.y);
     }
 }

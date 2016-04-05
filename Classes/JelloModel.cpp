@@ -49,7 +49,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SIZE Size(5,5) //Size in box2d units
+#define JELLO_SCALe 0.078
 
 
 #pragma mark -
@@ -216,16 +216,14 @@ void JelloModel::resetSceneNode() {
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
         
-        setDimension(Size(JELLO_SIZE.width /cscale,
-                          JELLO_SIZE.height/cscale));
-        
         Rect bounds;
-        bounds.size = getDimension();
-        bounds.size.width *= _drawScale.x;
-        bounds.size.height *= _drawScale.y;
+        bounds.size = pnode->getContentSize();
         
         pnode->setPolygon(bounds);
-        pnode->setScale(cscale);
+        pnode->setScale(cscale * JELLO_SCALE);
+        
+        setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
     }
 }
 
