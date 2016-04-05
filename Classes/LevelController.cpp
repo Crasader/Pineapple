@@ -140,7 +140,7 @@ LevelModel* LevelController::read(string filename) {
     addJello(JELLO_COUNT, JELLO_POS);
     addSpikes(SPIKE_COUNT, SPIKE_POS);
     addBlender(BLENDER_POS);
-    addButtonSwitch(Vec2(0,0), true);
+    addButtonSwitch(Vec2(5,5), true);
     
     return _level;
 }
@@ -340,7 +340,7 @@ void LevelController::addBlender(float blenderPos[POS_COORDS]) {
 
 void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     float cscale = Director::getInstance()->getContentScaleFactor();
-    Texture2D* image  = _assets->get<Texture2D>(PLATFORM_TEXTURE);
+    Texture2D* image  = _assets->get<Texture2D>(SWITCH_TEXTURE_RED);
     float scale;
     if (isSwitch) {
         scale = SWITCH_SCALE;
@@ -351,7 +351,7 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     button_switch->setDrawScale(_scale.x, _scale.y);
     
     PolygonNode* sprite = PolygonNode::createWithTexture(image);
-    sprite->setScale(cscale * BLENDER_SCALE);
+    sprite->setScale(cscale * scale);
     button_switch->setSceneNode(sprite);
     
     b2Filter b = b2Filter();
@@ -362,4 +362,8 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     initDebugProperties(button_switch);
     initSensor(button_switch);
     _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
+    
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(4, 10), Vec2(1,1), 5.0f, false, true, Color::red);
+    
+    button_switch->linkToPlatform(platform);
 }

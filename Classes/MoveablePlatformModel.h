@@ -8,6 +8,7 @@
 #ifndef MoveablePlatformModel_hpp
 #define MoveablePlatformModel_hpp
 
+#include <cornell/CUComplexObstacle.h>
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
 #include "Const.h"
@@ -16,15 +17,28 @@
 
 using namespace cocos2d;
 
+#define MOVEABLE_PLATFORM_NAME      "moveable"
+// outer marking nubbins that arent active
+#define NUBBIN_NAME                 "nubbin"
+// Inner moveable boxes
+#define BOX_NAME                    "inner box"
+
+
 #define CLOSING_OPENING_SPEED         1.0f
 #define OPEN_DISTANCE                 2.5f
 
 #define MOVEABLE_PLATFORM_WIDTH       .25f
 #define NUBBIN_LENGTH                 .125f
 
-enum Color {purple = 1, red = 2, green = 3};
+enum Color {blue = 1, red = 2, green = 3};
 
-class MoveablePlatformModel {
+class MoveablePlatformModel : ComplexObstacle {
+protected:
+    virtual void resetSceneNode() override;
+
+    virtual void resetDebugNode() override;
+
+    
 private:
     bool _isClosed;
     bool _isOpening;
@@ -43,6 +57,7 @@ private:
     BoxObstacle* _box2;
     
     // center of movable platform (if open it is the center between the two).
+    //   <nubbin> [_box1] _pos [_box2] <nubbin>
     Vec2 _pos;
     
     Color _color;
@@ -116,18 +131,13 @@ public:
         }
     }
 
+    static MoveablePlatformModel* create(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color);
+    
+CC_CONSTRUCTOR_ACCESS:
+    virtual bool init(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color);
+    
     // pos is center of obstacle
-    MoveablePlatformModel(Vec2 pos, float length, bool closed, bool vertical) : _isClosed(closed), _isOpening(false), _isClosing(false), _isOpen(!closed), _isVertical(vertical) {
-        if (_isVertical) {
-            _pos = pos;
-            _nubbin1 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + length/2.0f), Size(MOVEABLE_PLATFORM_WIDTH, NUBBIN_LENGTH));
-            _nubbin1->setActive(false);
-            _nubbin2 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - length/2.0f + _nubbin1->getHeight()), Size(MOVEABLE_PLATFORM_WIDTH, NUBBIN_LENGTH));
-            _nubbin2->setActive(false);
-            _box1 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y), Size(MOVEABLE_PLATFORM_WIDTH, length/2.0f));
-            _box2 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - length / 2.0f), Size(MOVEABLE_PLATFORM_WIDTH, length/2.0f));
-        }
-    }
+    MoveablePlatformModel() : _isClosed(false), _isOpening(false), _isClosing(false), _isOpen(false), _isVertical(false) { }
 };
 
 #endif /* MoveablePlatformModel_hpp */

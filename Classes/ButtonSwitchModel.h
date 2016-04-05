@@ -18,7 +18,7 @@ using namespace cocos2d;
 #define BUTTON_SWITCH_NAME       "button_switch"
 
 #define BUTTON_SCALE         1.0f
-#define SWITCH_SCALE         1.0f
+#define SWITCH_SCALE         .25f
 
 class ButtonSwitchModel : public BoxObstacle {
 private:

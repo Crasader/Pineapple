@@ -47,7 +47,29 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
+    
+    // MOVEABLE PLATFORMS
+    
+    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_RED,  "textures/left-door-red.png");
+    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_RED, "textures/right-door-red.png");
+    tloader->loadAsync(MIDDLE_TEXTURE_RED,   "textures/center-door-red.png");
+    
+    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_BLUE,  "textures/left-door-blue.png");
+    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_BLUE, "textures/right-door-blue.png");
+    tloader->loadAsync(MIDDLE_TEXTURE_BLUE,   "textures/center-door-blue.png");
+    
+    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_GREEN,  "textures/left-door.png");
+    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_GREEN, "textures/right-door.png");
+    tloader->loadAsync(MIDDLE_TEXTURE_GREEN,   "textures/center-door.png");
 
+    tloader->loadAsync(SWITCH_TEXTURE_RED,  "textures/lever-red.png");
+    tloader->loadAsync(SWITCH_TEXTURE_GREEN, "textures/lever-green.png");
+    tloader->loadAsync(SWITCH_TEXTURE_BLUE,   "textures/lever-blue.png");
+    
+    tloader->loadAsync(SWITCH_REVERSE_TEXTURE_RED,  "textures/lever-red-reverse.png");
+    tloader->loadAsync(SWITCH_REVERSE_TEXTURE_GREEN, "textures/lever-green-reverse.png");
+    tloader->loadAsync(SWITCH_REVERSE_TEXTURE_BLUE,   "textures/lever-blue-reverse.png");
+    
 	//    _assets->loadAsync<Sound>(GAME_MUSIC,   "sounds/DD_Main.mp3");
 	//    _assets->loadAsync<Sound>(WIN_MUSIC,    "sounds/DD_Victory.mp3");
 	//    _assets->loadAsync<Sound>(LOSE_MUSIC,   "sounds/DD_Failure.mp3");
