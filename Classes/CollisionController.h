@@ -45,7 +45,7 @@ protected:
 	* This method is called when will collides with a jello
 	* to trigger upward momentum, and a jello quiver animation
 	*/
-	void handleJelloCollision(JelloModel* jello);
+	void handleJelloCollision(PineappleModel* will, JelloModel* jello);
 
 	/**
 	* Applies the jello force to the given kid.
@@ -75,7 +75,7 @@ protected:
 	/**
 	 * Crushes cup if will is large and above it
 	 */
-	void handleCupCollision(CrushableModel* cup);
+	void handleCupCollision(PineappleModel* will, CrushableModel* cup);
 
 	/**
 	 * Helper function to determine if an object is in a position to be crushed by a large Will

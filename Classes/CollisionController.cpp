@@ -42,8 +42,7 @@ void CollisionController::ground(KidModel* kid, b2Fixture* fix) {
 * This method is called when the given pineapple collides with a jello
 * to trigger upward momentum, and a jello quiver animation
 */
-void CollisionController::handleJelloCollision(JelloModel* jello) {
-	PineappleModel* will = _level->getPineapple();
+void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel* jello) {
 	if (!will->isCollidingWithJello()) {
 		will->setCollidingWithJello(true);
 		if (!will->isLarge()) {
@@ -56,7 +55,7 @@ void CollisionController::handleJelloCollision(JelloModel* jello) {
 		}
 		else {
 			//Squish
-			if (isBelowChar(jello, _level->getPineapple())) {
+			if (isBelowChar(jello, will)) {
 				_level->removeObstacle(jello);
 			}
 		}
@@ -94,8 +93,8 @@ void CollisionController::handleSpikeCollision(KidModel* kid) {
 	_level->spikeAndKill(kid);
 }
 
-void CollisionController::handleCupCollision(CrushableModel* cup) {
-	if (isBelowChar(cup, _level->getPineapple())) {
+void CollisionController::handleCupCollision(PineappleModel* will, CrushableModel* cup) {
+	if (isBelowChar(cup, will)) {
 		_level->removeObstacle(cup);
 	}
 }
@@ -134,22 +133,22 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
-		PineappleModel* will = _level->getPineapple();
+		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
 		// Will  x Ground
 		if (bd1->getCollisionClass() == UNASSIGNED_C || bd2->getCollisionClass() == UNASSIGNED_C) {
 			ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1);
 		}
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
-			handleJelloCollision(bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
+			handleJelloCollision(will, bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
 		}
 		// Will x Cup
 		if (will->isLarge() && (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C)) {
 			CrushableModel* cup = bd1->getCollisionClass() == CUP_C ? (CrushableModel*)bd1 : (CrushableModel*)bd2;
-			handleCupCollision(cup);
+			handleCupCollision(will, cup);
 		}
 		// Will x Goal
-		if (bd1 == _level->getGoal() || bd2 == _level->getGoal()) {
+		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
 			will->setReachedGoal(true);
 		}
 		// Will x Blender
@@ -170,7 +169,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 			handleJelloCollision(kid);
 		}
 		// Kid x Goal
-		if (bd1 == _level->getGoal() || bd2 == _level->getGoal()) {
+		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
 			kid->setReachedGoal(true);
 		}
 		// Kid x Blender
@@ -202,7 +201,7 @@ void CollisionController::endContact(b2Contact* contact) {
 
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
-		PineappleModel* will = _level->getPineapple();
+		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
 		// Will x Ground
 		if (bd1->getCollisionClass() == UNASSIGNED_C || bd2->getCollisionClass() == UNASSIGNED_C) {
 			_sensorFixtures.erase(bd1 == will ? fix2 : fix1);
@@ -215,7 +214,7 @@ void CollisionController::endContact(b2Contact* contact) {
 			will->setCollidingWithJello(false);
 		}
 		// Will x Goal
-		if (bd1 == _level->getGoal() || bd2 == _level->getGoal()) {
+		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
 			will->setReachedGoal(false);
 		}
 	} // END WILL COLLISIONS
