@@ -317,11 +317,6 @@ public:
      */
     void showDebug(bool flag);
     
-#pragma mark -
-#pragma mark Deallocation
-    
-    void dispose();
-    
 	/**
 	* Kills the given player or child.
 	* This method is called when Will or one of his kids collides with the blender,

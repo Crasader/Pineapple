@@ -13,6 +13,9 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		4039B4DE1CB33B3E001E8B6E /* GoalModel.cp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cp */; };
 		4039B4DF1CB33B3E001E8B6E /* GoalModel.cp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cp */; };
+		4039B4E21CB34015001E8B6E /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
+		4039B4E31CB3401C001E8B6E /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
+		4039B4E41CB3401E001E8B6E /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
 		403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */; };
 		403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
 		403B056E1CA37B5E003F47CB /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
@@ -808,9 +811,12 @@
 			files = (
 				40C8F7B31CB21591000D9055 /* tmxparser.pc.in in Resources */,
 				40C8F7A31CB21591000D9055 /* Tmx.h in Resources */,
+				4039B4E31CB3401C001E8B6E /* sounds in Resources */,
+				4039B4E41CB3401E001E8B6E /* tiledTextures in Resources */,
 				EB24EB911C5B10C60069DBBE /* textures in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
+				4039B4E21CB34015001E8B6E /* levels in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

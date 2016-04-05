@@ -15,7 +15,11 @@ _pineapple(nullptr),
 _blender(nullptr),
 _failed(false),
 _length(UNSET_LENGTH),
-_kidsRemaining(KID_COUNT) {}
+_kidsRemaining(KID_COUNT),
+_world(nullptr),
+_rootnode(nullptr),
+_debugnode(nullptr),
+_worldnode(nullptr){}
 
 /**
  * Creates a new game level with no source file.
@@ -93,22 +97,10 @@ bool LevelModel::load() {
     
     printf("%f\n", map->getMapSize().width);
     
-    
-    
-    
     return true;
 }
 
 void LevelModel::unload() {
-    
-}
-
-void LevelModel::reset() {
-    
-}
-
-
-void LevelModel::dispose() {
     //TODO - pre-nulling cleanup
     
     if (_pineapple != nullptr) {
@@ -169,9 +161,13 @@ void LevelModel::dispose() {
     _length = UNSET_LENGTH;
 }
 
+void LevelModel::reset() {
+    
+}
+
+
 LevelModel::~LevelModel(){
     unload();
-    dispose();
 }
 
 /**
@@ -351,8 +347,6 @@ void LevelModel::setRootNode(Node* node) {
     if (_rootnode != nullptr) {
         clearRootNode();
     }
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    SceneManager* assets =  AssetManager::getInstance()->getCurrent();
     
     _rootnode = node;
     _rootnode->retain();
@@ -367,7 +361,6 @@ void LevelModel::setRootNode(Node* node) {
     
     // Add the individual elements
     PolygonNode* poly;
-    WireNode* draw;
     
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
