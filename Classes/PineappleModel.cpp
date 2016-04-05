@@ -123,21 +123,8 @@ PineappleModel* PineappleModel::create(const Vec2& pos, const Vec2& scale) {
 * @return  true if the obstacle is initialized properly, false otherwise.
 */
 bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
-	SceneManager* scene = AssetManager::getInstance()->getCurrent();
-	Texture2D* image = scene->get<Texture2D>(PINEAPPLE_TEXTURE);
-
-	// Multiply by the scaling factor so we can be resolution independent
-	float cscale = Director::getInstance()->getContentScaleFactor();
-	Size nsize = image->getContentSize()*cscale;
-
-
-	nsize.width *= PINEAPPLE_HSHRINK / (12.0f * scale.x);
-	nsize.height *= PINEAPPLE_VSHRINK / scale.y;
-	if (CapsuleObstacle::init(pos, nsize)) {
-		_normalSize = nsize;
+    if (CapsuleObstacle::init(pos, Size(scale))) {
 		setDensity(PINEAPPLE_DENSITY);
-		setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-		setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
 
 														// Gameplay attributes
 		_isGrounded = false;
@@ -380,16 +367,19 @@ void PineappleModel::resetSceneNode() {
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
         
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
+        
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale * PINEAPPLE_SCALE);
+        
+        setDimension(pnode->getContentSize().width * PINEAPPLE_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * PINEAPPLE_SCALE / _drawScale.y);
+        
+        _normalSize = getDimension();
+        
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(PINEAPPLE_TEXTURE);
-        
-//        Poly2 poly = getPolygon();
-//        poly *= _drawScale/cscale;
-//        
-//        pnode->setTexture(image);
-//        pnode->setPolygon(poly);
-//        pnode->setScale(cscale);
-        
         initAnimation(image, cscale * PINEAPPLE_SCALE);
     }
 }

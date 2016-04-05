@@ -26,7 +26,10 @@
 /** Opacity of the physics outlines */
 #define DEBUG_OPACITY   192
 
+/** The default screen size, in box2d units */
 #define SCREEN Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT)
+/** The default drawing scale of the game */
+#define DEFAULT_DRAW_SCALE Vec2(32,32)
 
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -14.7f

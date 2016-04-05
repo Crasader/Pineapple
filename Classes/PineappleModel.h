@@ -390,7 +390,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE); }
+	virtual bool init() override { return init(Vec2::ZERO, DEFAULT_DRAW_SCALE); }
 
 	/**
 	* Initializes a new pineapple at the given position.
@@ -406,7 +406,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE); }
+	virtual bool init(const Vec2& pos) override { return init(pos, DEFAULT_DRAW_SCALE); }
 
 	/**
 	* Initializes a new pineapple at the given position.

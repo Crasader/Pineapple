@@ -32,7 +32,7 @@ _pineapple(nullptr),
 _blender(nullptr),
 _failed(false),
 _length(UNSET_LENGTH),
-_kidsRemaining(KID_COUNT),
+_kidsRemaining(0),
 _world(nullptr),
 _rootnode(nullptr),
 _debugnode(nullptr),
@@ -154,6 +154,10 @@ bool LevelModel::load() {
                 addJello(position);
             } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
                 addSpikes(position);
+            } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
+                //addPineapple(position);
+            } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
+                //addKid(position);
             }
         }
         
@@ -313,26 +317,20 @@ void LevelModel::addPineapple(float pineapplePos[POS_COORDS]) {
     }
 }
 
-void LevelModel::addKids(float* kidPos[POS_COORDS]) {
-    if (_kids[0] == nullptr) {
-        KidModel** kids = new KidModel* [KID_COUNT];
-        for (int i = 0; i < KID_COUNT; i++) {
-            Vec2 pos = kidPos[i];
-            kids[i] = KidModel::create(pos,i);
-            
-            kids[i]->setMovement(KID_WALKSPEED);
-            
-            b2Filter b = b2Filter();
-            b.categoryBits = KID_MASK;
-            b.maskBits = KID_COLLIDES_WITH;
-            kids[i]->setFilterData(b);
-            kids[i]->setName(KID_NAME);
-            
-            initDebugProperties(kids[i]);
-        }
-        for (int i = 0; i < KID_COUNT; i++) {
-            _kids[i] = kids[i];
-        }
+void LevelModel::addKid(float kidPos[POS_COORDS]) {
+    if (_kids[_kidsRemaining] == nullptr && _kidsRemaining < KID_COUNT) {
+        KidModel *kid = KidModel::create(kidPos,_kidsRemaining);
+        kid->setMovement(KID_WALKSPEED);
+        
+        b2Filter b = b2Filter();
+        b.categoryBits = KID_MASK;
+        b.maskBits = KID_COLLIDES_WITH;
+        kid->setFilterData(b);
+        kid->setName(KID_NAME);
+        
+        initDebugProperties(kid);
+        _kids[_kidsRemaining] = kid;
+        _kidsRemaining++;
     } else {
         CC_ASSERT(false);
     }
@@ -444,8 +442,9 @@ void LevelModel::setRootNode(Node* node) {
     }
     
     if (_pineapple != nullptr) {
+        Texture2D* image = assets->get<Texture2D>(PINEAPPLE_TEXTURE);
         _pineapple->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::create();
+        poly = PolygonNode::createWithTexture(image);
         _pineapple->setSceneNode(poly);
         
         addObstacle(_pineapple, PINEAPPLE_Z_INDEX);
@@ -462,8 +461,9 @@ void LevelModel::setRootNode(Node* node) {
     
     for(int i = 0; i < KID_COUNT; i++) {
         if(_kids[i] != nullptr) {
+            Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(i));
             _kids[i]->setDrawScale(_scale);
-            poly = PolygonNode::create();
+            poly = PolygonNode::createWithTexture(image);
             _kids[i]->setSceneNode(poly);
             
             addObstacle(_kids[i], KID_Z_INDEX+i);

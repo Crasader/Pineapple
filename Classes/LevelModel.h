@@ -196,7 +196,7 @@ public:
         
     void addPineapple(float pineapplePos[]);
     
-    void addKids(float* kidPos[]);
+    void addKid(float kidPos[]);
     
     void addJello(float jelloPos[]);
     

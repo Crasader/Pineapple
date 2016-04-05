@@ -167,23 +167,11 @@ string KidModel::getTexture(int idx) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(getTexture(idx));
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    _index = idx;
-    
-    nsize.width  *= KID_HSHRINK/(12.0f*scale.x);
-    nsize.height *= KID_VSHRINK/scale.y;
-    if (CapsuleObstacle::init(pos,nsize)) {
+    if (CapsuleObstacle::init(pos,Size(scale))) {
         setDensity(KID_DENSITY);
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
+        _index = idx;
         _isCollidingWithJello = false;
         _isGrounded = false;
 		_reachedGoal = false;
@@ -354,18 +342,19 @@ void KidModel::resetSceneNode() {
         // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
-        float cscale = Director::getInstance()->getContentScaleFactor();
         
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(_index));
+        float cscale = Director::getInstance()->getContentScaleFactor();
         
-        Size poly = getDimension();
-        poly.width *= _drawScale.x/cscale;
-        poly.height *= _drawScale.y/cscale;
-
-        pnode->setTexture(image);
-        //pnode->setPolygon(poly);
-        pnode->setScale(cscale);
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
+        
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale * KID_SCALE);
+        
+        setDimension(pnode->getContentSize().width * KID_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * KID_SCALE / _drawScale.y);
         initAnimation(image, cscale * KID_SCALE);
     }
 }
