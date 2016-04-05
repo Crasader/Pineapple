@@ -163,6 +163,8 @@ public:
      *
      */
     float getLength() { return _length; }
+    
+    WorldController* getWorld() { return _world; }
 
 #pragma mark -
 #pragma mark Allocation

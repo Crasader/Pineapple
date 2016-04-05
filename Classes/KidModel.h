@@ -21,8 +21,6 @@ using namespace cocos2d;
 /** Identifier to allow us to track the sensor in ContactListener */
 #define KID_SENSOR     "kidsensor"
 
-#define KID_NAME       "kid"
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The amount to shrink the whole body, including image */

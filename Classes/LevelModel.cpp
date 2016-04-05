@@ -3,8 +3,22 @@
 #define UNSET_LENGTH -2
 
 #define WALL_VERTS      8
-#define PLATFORM_VERTS  8
 #define POS_COORDS      2
+
+/** Layer groups used in Tiled Maps */
+#define WALL_OBJECT_GROUP   "Walls"
+#define GOAL_OBJECT_GROUP   "Goal"
+#define JELLO_OBJECT_GROUP  "Jello"
+#define SPIKES_OBJECT_GROUP "Spikes"
+#define KIDS_OBJECT_GROUP   "Kids"
+#define WILL_OBJECT_GROUP   "Will"
+
+/** Properties that Tiled Objects and maps posess */
+#define WIDTH_PROPERTY      "width"
+#define HEIGHT_PROPERTY     "height"
+#define X_PROPERTY          "x"
+#define Y_PROPERTY          "y"
+
 /**
  *	Will replace this constructor with some kind of populate/build level via levelController
  */
@@ -88,15 +102,48 @@ void initPhysicalObstacle(Obstacle* obstacle) {
 
 
 bool LevelModel::load() {
-    TMXTiledMap *map = TMXTiledMap::create(FileUtils::getInstance()->fullPathForFilename(_file));
+    TMXTiledMap *map = TMXTiledMap::create(_file);
     if(map == nullptr) {
         CCASSERT(false, "Failed to load level file");
         return false;
     }
     
+    _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
+    _world->retain();
     
-    printf("%f\n", map->getMapSize().width);
+    float* position = new float[WALL_VERTS];
     
+    float mapWidth = map->getMapSize().width;
+    float mapHeight = map->getMapSize().height;
+    float tileX = map->getTileSize().width;
+    float tileY = map->getTileSize().height;
+    
+    for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
+        TMXObjectGroup* objectGroup = *it;
+        
+        if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
+            for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
+                ValueMap object = (*it2).asValueMap();
+                float x = (float) object.at(X_PROPERTY).asFloat();
+                float y = (float) object.at(Y_PROPERTY).asFloat();
+                float h = (float) object.at(HEIGHT_PROPERTY).asFloat();
+                float w = (float) object.at(WIDTH_PROPERTY).asFloat();
+                
+                position[0] = x;
+                position[1] = y;
+                position[2] = x;
+                position[3] = y+h;
+                position[4] = x+w;
+                position[5] = y+h;
+                position[6] = x+w;
+                position[7] = y;
+                addWall(position);
+            }
+        }
+        
+    }
+    
+    delete[] position;
     return true;
 }
 
@@ -213,8 +260,6 @@ void LevelModel::addGoal(float goalPos[POS_COORDS]) {
         initSensor(_goalDoor);
         initDebugProperties(_goalDoor);
         _goalDoor->setName(GOAL_NAME);
-        addObstacle(_goalDoor, GOAL_Z_INDEX);
-        
     } else {
         CC_ASSERT(false);
     }
@@ -229,7 +274,6 @@ void LevelModel::addWall(float wallPos[WALL_VERTS]) {
     initPhysicalObstacle(wallobj);
     wallobj->setName(WALL_NAME);
     _walls.push_back(wallobj);
-    addObstacle(wallobj, WALL_Z_INDEX);
 }
 
 
@@ -244,7 +288,6 @@ void LevelModel::addPineapple(float pineapplePos[POS_COORDS]) {
         
         initDebugProperties(will);
         _pineapple = will;
-        addObstacle(_pineapple, PINEAPPLE_Z_INDEX);
     } else {
         
         CC_ASSERT(false);
@@ -270,7 +313,6 @@ void LevelModel::addKids(float* kidPos[POS_COORDS]) {
         }
         for (int i = 0; i < KID_COUNT; i++) {
             _kids[i] = kids[i];
-            addObstacle(_kids[i], KID_Z_INDEX+i);
         }
     } else {
         CC_ASSERT(false);
@@ -283,7 +325,6 @@ void LevelModel::addJello(float jelloPos[POS_COORDS]) {
     initDebugProperties(jello);
     jello->setName(JELLO_NAME);
     _jellos.push_back(jello);
-    addAnonymousObstacle(jello, JELLO_Z_INDEX);
 }
 
 void LevelModel::addCup(float cupPos[POS_COORDS]) {
@@ -296,7 +337,6 @@ void LevelModel::addSpikes(float spikesPos[POS_COORDS]) {
     initDebugProperties(spike);
     initSensor(spike);
     spike->setName(SPIKE_NAME);
-    addAnonymousObstacle(spike, SPIKES_Z_INDEX);
 }
 
 void LevelModel::addBlender(float blenderPos[POS_COORDS]) {
@@ -311,7 +351,6 @@ void LevelModel::addBlender(float blenderPos[POS_COORDS]) {
         initDebugProperties(blender);
         initSensor(blender);
         _blender = blender;
-        addObstacle(_blender, BLENDER_Z_INDEX);
     } else {
         CC_ASSERT(false);
     }
@@ -368,18 +407,32 @@ void LevelModel::setRootNode(Node* node) {
         wall->setDrawScale(_scale.x , _scale.y);
         poly = PolygonNode::create();
         wall->setSceneNode(poly);
+        
+        addObstacle(wall, WALL_Z_INDEX);
+    }
+    
+    if (_goalDoor != nullptr) {
+        _goalDoor->setDrawScale(_scale.x, _scale.y);
+        poly = PolygonNode::create();
+        _goalDoor->setSceneNode(poly);
+        
+        addObstacle(_goalDoor, WALL_Z_INDEX);
     }
     
     if (_pineapple != nullptr) {
         _pineapple->setDrawScale(_scale.x , _scale.y);
         poly = PolygonNode::create();
         _pineapple->setSceneNode(poly);
+        
+        addObstacle(_pineapple, PINEAPPLE_Z_INDEX);
     }
     
     if (_blender != nullptr) {
         _blender->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::create();
         _blender->setSceneNode(poly);
+        
+        addObstacle(_blender, BLENDER_Z_INDEX);
     }
     
     for(int i = 0; i < KID_COUNT; i++) {
@@ -387,6 +440,8 @@ void LevelModel::setRootNode(Node* node) {
             _kids[i]->setDrawScale(_scale);
             poly = PolygonNode::create();
             _kids[i]->setSceneNode(poly);
+            
+            addObstacle(_kids[i], KID_Z_INDEX+i);
         }
     }
     
@@ -396,6 +451,8 @@ void LevelModel::setRootNode(Node* node) {
         jello->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::create();
         jello->setSceneNode(poly);
+        
+        addAnonymousObstacle(jello, JELLO_Z_INDEX);
     }
     
     for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
@@ -405,6 +462,8 @@ void LevelModel::setRootNode(Node* node) {
         spike->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::create();
         spike->setSceneNode(poly);
+        
+        addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }
     
     //    cup->setDrawScale(_scale);

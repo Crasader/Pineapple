@@ -38,10 +38,12 @@
 /** The restitution for all physics objects */
 #define BASIC_RESTITUTION   0.1f
 
+/** The name given to the pineapple object */
+#define PINEAPPLE_NAME "will"
+/** The name given to a kid object, plus its index */
+#define KID_NAME       "kid" //i.e. kid_2
 /** The name given to wall objects */
 #define WALL_NAME     "wall"
-/** The name given to platform objects */
-#define PLATFORM_NAME "platform"
 /** The name given to jello objects */
 #define JELLO_NAME    "jello"
 /** The name given to spike objects */
