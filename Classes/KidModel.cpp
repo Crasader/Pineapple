@@ -167,10 +167,12 @@ string KidModel::getTexture(int idx) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
-    if (CapsuleObstacle::init(pos,Size(scale))) {
+    if (CapsuleObstacle::init(pos,Size(100, 101))) {
         setDensity(KID_DENSITY);
         
         // Gameplay attributes
+        setFixedRotation(true);
+        setFriction(0.0f);
         _index = idx;
         _isCollidingWithJello = false;
         _isGrounded = false;
@@ -203,17 +205,6 @@ void KidModel::setMovement(float value) {
     if (image != nullptr) {
         image->flipHorizontal(!image->isFlipHorizontal());
     }
-}
-
-/**
-* Initialize the filmstrip for walking animation
-*/
-void KidModel::initAnimation(Texture2D* image, float scale) {
-	_kidWalkcycleFrame = 0;
-	_kidWalkcycle = AnimationNode::create(image, 1, 12, 12);
-	_kidWalkcycle->setScale(scale);
-	_kidWalkcycle->setFrame(_kidWalkcycleFrame);
-	this->setSceneNode(_kidWalkcycle);
 }
 
 
@@ -335,7 +326,7 @@ void KidModel::animate() {
 #pragma mark Scene Graph Methods
 
 void KidModel::resetSceneNode() {
-    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
@@ -343,8 +334,6 @@ void KidModel::resetSceneNode() {
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
         
-        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
-        Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(_index));
         float cscale = Director::getInstance()->getContentScaleFactor();
         
         Rect bounds;
@@ -352,10 +341,13 @@ void KidModel::resetSceneNode() {
         
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * KID_SCALE);
+        pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * KID_SCALE / _drawScale.x,
                      pnode->getContentSize().height * KID_SCALE / _drawScale.y);
-        initAnimation(image, cscale * KID_SCALE);
+        
+        _kidWalkcycleFrame = 0;
+        _kidWalkcycle = pnode;
     }
 }
 

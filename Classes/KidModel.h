@@ -27,6 +27,8 @@ using namespace cocos2d;
 #define KID_SCALE 0.075f
 /** The kid walking speed */
 #define KID_WALKSPEED   1.5f
+/** The number of frames in the kids animation strip */
+#define KID_ANIMATION_FRAMES 12
 
 #define KID_MASK 0x0004
 #define KID_COLLIDES_WITH 0xFFFD //All but 0x0002

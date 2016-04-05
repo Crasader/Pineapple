@@ -157,7 +157,7 @@ bool LevelModel::load() {
             } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
                 addPineapple(position);
             } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
-                //addKid(position);
+                addKid(position);
             }
         }
         
@@ -462,8 +462,8 @@ void LevelModel::setRootNode(Node* node) {
     for(int i = 0; i < KID_COUNT; i++) {
         if(_kids[i] != nullptr) {
             Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(i));
-            _kids[i]->setDrawScale(_scale);
-            poly = PolygonNode::createWithTexture(image);
+            _kids[i]->setDrawScale(_scale.x, _scale.y);
+            poly = AnimationNode::create(image, 1, KID_ANIMATION_FRAMES, KID_ANIMATION_FRAMES);
             _kids[i]->setSceneNode(poly);
             
             addObstacle(_kids[i], KID_Z_INDEX+i);

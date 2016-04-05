@@ -360,12 +360,12 @@ void PineappleModel::resetSceneNode() {
         
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * PINEAPPLE_SCALE);
+        pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * PINEAPPLE_SCALE / _drawScale.x,
                      pnode->getContentSize().height * PINEAPPLE_SCALE / _drawScale.y);
         
         _willWalkcycleFrame = 0;
-        
         _willWalkcycle = pnode;
         
         _normalSize = getDimension();
