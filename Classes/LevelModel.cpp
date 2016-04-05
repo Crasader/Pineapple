@@ -189,7 +189,6 @@ bool LevelModel::load() {
     }
     addWall(position);
     
-    delete map;
     delete[] position;
     return true;
 }
