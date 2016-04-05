@@ -167,6 +167,21 @@ bool LevelModel::load() {
     position[1] = map->getProperties().at(BLENDER_Y_PROPERTY).asFloat();
     addBlender(position);
     
+    //Add walls that are offscreen and prevent you from going past end of level
+    position[0] = 0;
+    position[1] = 0;
+    position[2] = 0;
+    position[3] = DEFAULT_HEIGHT;
+    position[4] = -2;
+    position[5] = DEFAULT_HEIGHT;
+    position[6] = -2;
+    position[7] = 0;
+    addWall(position);
+    for(int i = 0; i < WALL_VERTS; i++) {
+        position[i] += 2 + _length;
+    }
+    addWall(position);
+    
     delete[] position;
     return true;
 }
