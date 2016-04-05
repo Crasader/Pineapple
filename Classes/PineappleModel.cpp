@@ -138,56 +138,13 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
     return false;
 }
 
-#pragma mark -
-#pragma mark Attribute Properties
 /**
- * TODO: method spec
- */
-int PineappleModel::updateSize(float dt) {
-    if (_isLarge || _isSmall) {
-        _durationSinceGrowOrShrink += dt;
-    }
-    if (_durationSinceGrowOrShrink > PINEAPPLE_MAX_SIZE_DURATION) {
-        _isLarge = false;
-        _isSmall = false;
-        _durationSinceGrowOrShrink = 0.0f;
-        toNormalSize();
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * Grows the pineapple, returns 1 if grown
- */
-int PineappleModel::grow() {
-    if (!_isLarge  && !_isSmall) {
-        setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-        setIsLarge(true);
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * Shrinks the pineapple, returns 1 if shrunk
- */
-int PineappleModel::shrink() {
-    if (!_isLarge && !_isSmall) {
-        setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
-        setIsSmall(true);
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * Sets left/right movement of this character.
- *
- * This is the result of input times pineapple force.
- *
- * @param value left/right movement of this character.
- */
+* Sets left/right movement of this character.
+*
+* This is the result of input times pineapple force.
+*
+* @param value left/right movement of this character.
+*/
 void PineappleModel::setMovement(float value) {
     _movement = value;
     bool face = _movement > 0;
