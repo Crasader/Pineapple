@@ -1,4 +1,5 @@
 #include "LevelModel.h"
+#include <base/CCValue.h>
 
 #define UNSET_LENGTH -2
 
@@ -129,36 +130,37 @@ bool LevelModel::load() {
     for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
         TMXObjectGroup* objectGroup = *it;
         for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
-            Value obj = (*it2);
-            ValueMap object = obj.asValueMap();
-            float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
-            float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
-            float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
-            float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
-            
-            position[0] = x;
-            position[1] = y+1;
-            
-            if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
+            if ((*it2).getType() == Value::Type::MAP) {
+                ValueMap object = (*it2).asValueMap();
+                float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
+                float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
+                float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
+                float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
+                
                 position[0] = x;
-                position[1] = y;
-                position[2] = x;
-                position[3] = y+h;
-                position[4] = x+w;
-                position[5] = y+h;
-                position[6] = x+w;
-                position[7] = y;
-                addWall(position);
-            } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
-                addGoal(position);
-            } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
-                addJello(position);
-            } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
-                addSpikes(position);
-            } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
-                addPineapple(position);
-            } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
-                addKid(position);
+                position[1] = y+1;
+                
+                if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
+                    position[0] = x;
+                    position[1] = y;
+                    position[2] = x;
+                    position[3] = y+h;
+                    position[4] = x+w;
+                    position[5] = y+h;
+                    position[6] = x+w;
+                    position[7] = y;
+                    addWall(position);
+                } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
+                    addGoal(position);
+                } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
+                    addJello(position);
+                } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
+                    addSpikes(position);
+                } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
+                    addPineapple(position);
+                } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
+                    addKid(position);
+                }
             }
         }
         
