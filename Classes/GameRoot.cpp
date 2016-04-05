@@ -55,7 +55,7 @@ void PlatformRoot::start() {
 void PlatformRoot::stop() {
     RootLayer::stop();  // YOU MUST BEGIN with call to parent
     int scene = AssetManager::getInstance()->getCurrentIndex();
-
+    
     SoundEngine::getInstance()->stopAll();
     AssetManager::getInstance()->stopScene(scene);
 }
@@ -72,7 +72,7 @@ void PlatformRoot::stop() {
 void PlatformRoot::update(float deltaTime) {
     RootLayer::update(deltaTime);  // YOU MUST BEGIN with call to parent
     bool complete = true;
-
+    
     complete = complete && AssetManager::getInstance()->getCurrent()->isComplete();
     if (_preloaded && !_gameplay.isActive() && complete) {
         // Transfer control to the gameplay subcontroller
@@ -82,9 +82,8 @@ void PlatformRoot::update(float deltaTime) {
         _gameplay.update(deltaTime);
     } else if (!_preloaded) {
         _preloaded = true;
-				// TODO: PRELOAD: Check if this is right way to do things
-				LoadingScreenController loader = LoadingScreenController();
-				loader.preload();
+        LoadingScreenController loader = LoadingScreenController();
+        loader.preload();
     }
 }
 
@@ -107,7 +106,7 @@ void PlatformRoot::displayLoader() {
     
     Size size = getContentSize();
     Vec2 center(size.width/2.0f,size.height/2.0f);
-
+    
     // Create the message label.
     auto label = Label::create();
     label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());

@@ -66,7 +66,7 @@ GameController::GameController() :
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root) {
-    return init(root,Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY));
+    return init(root,SCREEN);
 }
 
 /**
@@ -88,48 +88,28 @@ bool GameController::init(RootLayer* root) {
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root, const Rect& rect) {
-    return init(root,rect,Vec2(0,DEFAULT_GRAVITY));
-}
-
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  The bounds are in terms of the Box2d
- * world, not the screen.
- *
- * @param bounds The game bounds in Box2d coordinates
- * @param scale  The difference between screen and Box2d coordinates
- * @param gravity The gravitational force on this Box2d world
- *
- * @retain a reference to the root layer
- * @return  true if the controller is initialized properly, false otherwise.
- */
-bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity) {
-		// TODO: PRELOAD: Check if this is right way to do things
-		_assets = AssetManager::getInstance()->getCurrent();
+    _assets = AssetManager::getInstance()->getCurrent();
+    _level = _assets->get<LevelModel>(LEVEL_ONE);
+    
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
     Vec2 center(dimen.width/2.0f,dimen.height/2.0f);
     
     // Create the scale and notify the input handler
-    _scale.set(root->getContentSize().width/rect.size.width,
+    Vec2 scale = Vec2(root->getContentSize().width/rect.size.width,
                root->getContentSize().height/rect.size.height);
     Rect screen = rect;
-    screen.origin.x *= _scale.x;    screen.origin.y *= _scale.y;
-    screen.size.width *= _scale.x;  screen.size.height *= _scale.y;
+    screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
+    screen.size.width *= scale.x;  screen.size.height *= scale.y;
 
     _input.init(screen);
     _input.start();
     
+    _level->setRootNode(root);
+    
     // Create the world; there are no listeners this time.
     _collision = CollisionController::create();
-    _world = WorldController::create(rect,gravity);
-    _world->retain();
+    _world = _level->getWorld();
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collision->beginContact(contact);
@@ -139,8 +119,8 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     };
 
     // Create the scene graph
-    _worldnode = Node::create();
-    _debugnode = Node::create();
+    _worldnode = _level->getWorldNode();
+    _debugnode = _level->getDebugNode();
     _winnode = Label::create();
     
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
@@ -149,7 +129,6 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _winnode->setPosition(root->getContentSize().width/2.0f,
                           root->getContentSize().height/2.0f);
     _winnode->setColor(WIN_COLOR);
-    setComplete(false);
 
     _losenode = Label::create();
     
@@ -160,19 +139,12 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
     
-    // Add everything to the root and retain
-    root->addChild(_worldnode,2);
-    root->addChild(_debugnode,3);
     root->addChild(_winnode,4);
     root->addChild(_losenode,5);
     _rootnode = root;
     _rootnode->retain();
     
-    // Now populate the physics objects
-    _level = _assets->get<LevelModel>(LEVEL_ONE);
-    _level->setRootNode(root);
     _collision->setLevel(_level);
-    
     
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
@@ -180,6 +152,7 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _debugnode, _assets);
     
     _active = true;
+    setComplete(false);
     setDebug(false);
     setFailure(false);
     return true;
@@ -386,11 +359,11 @@ void GameController::handleScrolling() {
 	}
 
 	// Move all the objects in _worldnode
-	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
-	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
+	_worldnode->setPositionX(_worldnode->getPositionX() - (_level->getDrawScale().x*offset));
+	_debugnode->setPositionX(_debugnode->getPositionX() - (_level->getDrawScale().x*offset));
 
 	// Do parallax scrolling of the background
-    _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _scale);
+    _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
 }
 
 #pragma mark -

@@ -4,7 +4,7 @@
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="1" name="wall" x="0" y="640" width="4096" height="128"/>
+  <object id="1" name="wall" x="0" y="640" width="256" height="128"/>
  </objectgroup>
  <objectgroup name="Will">
   <object id="10" name="will" gid="1" x="256" y="640" width="64" height="64"/>

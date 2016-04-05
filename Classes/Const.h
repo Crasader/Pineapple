@@ -26,6 +26,7 @@
 /** Opacity of the physics outlines */
 #define DEBUG_OPACITY   192
 
+#define SCREEN Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT)
 
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -14.7f

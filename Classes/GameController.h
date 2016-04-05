@@ -51,10 +51,7 @@ using namespace std;
  * desired aspect ratio).
  */
 class GameController {
-protected:
-    /** The world scale (computed from root node) */
-    Vec2 _scale;
-    
+protected:    
     /** Reference to the root node of the scene graph */
     RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
@@ -148,32 +145,11 @@ public:
      *
      * @param bounds The game bounds in Box2d coordinates
      * @param scale  The difference between screen and Box2d coordinates
-     * @param gravity The gravitational force on this Box2d world
      *
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
     bool init(RootLayer* root, const Rect& rect);
-    
-    /**
-     * Initializes the controller contents, and starts the game
-     *
-     * The constructor does not allocate any objects or memory.  This allows
-     * us to have a non-pointer reference to this controller, reducing our
-     * memory allocation.  Instead, allocation happens in this method.
-     *
-     * The game world is scaled so that the screen coordinates do not agree
-     * with the Box2d coordinates.  The bounds are in terms of the Box2d
-     * world, not the screen.
-     *
-     * @param bounds The game bounds in Box2d coordinates
-     * @param scale  The difference between screen and Box2d coordinates
-     * @param gravity The gravitational force on this Box2d world
-     *
-     * @retain a reference to the root layer
-     * @return  true if the controller is initialized properly, false otherwise.
-     */
-    bool init(RootLayer* root, const Rect& rect, const Vec2& gravity);
     
     
 #pragma mark -
@@ -273,54 +249,12 @@ public:
 #pragma mark Collision Handling
     
     /**
-     * Kills the given player or child.
-     * This method is called when Will or one of his kids collides with the blender,
-     * to trigger any blending animation and remove the given object from the world
-     *
-     * This method shouldn't do any checks for gameover, that should be handled elsewhere
-     */
-    void blendAndKill(SimpleObstacle* pineappleOrKid);
-    
-    /**
-     * Kills the given player or child.
-     * This method is called when Will or one of his kids collides with a spike,
-     * to trigger any blending animation and remove the given object from the world
-     *
-     * This method shouldn't do any checks for gameover, that should be handled elsewhere
-     *
-     * If necesarry to enable different animations this can be separated into separate funcs for
-     * kid/pineapple
-     */
-    void handleSpikeCollision(SimpleObstacle* pineappleOrKid);
-    
-    /**
      * Checks for victory, triggering it if it occurs
      * Specifically, sees if every living child has reached the goal
      *
      * @return true if victory has occurred
      */
     bool checkForVictory();
-    
-    /**
-     * Processes the start of a collision
-     *
-     * This method is called when we first get a collision between two objects.  We use
-     * this method to test if it is the "right" kind of collision.  In particular, we
-     * use it to test if we make it to the win door.  We also us it to eliminate bullets.
-     *
-     * @param  contact  The two bodies that collided
-     */
-    void beginContact(b2Contact* contact);
-
-    /**
-     * Processes the end of a collision
-     *
-     * This method is called when we no longer have a collision between two objects.  
-     * We use this method allow the character to jump again.
-     *
-     * @param  contact  The two bodies that collided
-     */
-    void endContact(b2Contact* contact);
 
     
 #pragma mark -

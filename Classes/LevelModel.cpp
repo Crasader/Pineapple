@@ -111,10 +111,11 @@ bool LevelModel::load() {
     _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
     _world->retain();
     
+    
     float* position = new float[WALL_VERTS];
     
-    float mapWidth = map->getMapSize().width;
-    float mapHeight = map->getMapSize().height;
+    _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
     float tileX = map->getTileSize().width;
     float tileY = map->getTileSize().height;
     
@@ -124,10 +125,10 @@ bool LevelModel::load() {
         if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
             for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
                 ValueMap object = (*it2).asValueMap();
-                float x = (float) object.at(X_PROPERTY).asFloat();
-                float y = (float) object.at(Y_PROPERTY).asFloat();
-                float h = (float) object.at(HEIGHT_PROPERTY).asFloat();
-                float w = (float) object.at(WIDTH_PROPERTY).asFloat();
+                float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
+                float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
+                float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
+                float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
                 
                 position[0] = x;
                 position[1] = y;
@@ -395,8 +396,8 @@ void LevelModel::setRootNode(Node* node) {
     // Create, but transfer ownership to root
     _worldnode = Node::create();
     _debugnode = Node::create();
-    _rootnode->addChild(_worldnode,0);
-    _rootnode->addChild(_debugnode,1);
+    _rootnode->addChild(_worldnode,2);
+    _rootnode->addChild(_debugnode,3);
     
     // Add the individual elements
     PolygonNode* poly;
@@ -465,14 +466,6 @@ void LevelModel::setRootNode(Node* node) {
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }
-    
-    //    cup->setDrawScale(_scale);
-    //
-    //    cup->setName(CUP_NAME);
-    //    initDebugProperties(cup);
-    //    PolygonNode* sprite = PolygonNode::createWithTexture(image);
-    //    sprite->setScale(cscale * CRUSHABLE_SCALE);
-    //    cup->setSceneNode(sprite);
 }
 
 /**
