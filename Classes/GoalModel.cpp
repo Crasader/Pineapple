@@ -79,8 +79,7 @@ GoalModel* GoalModel::create(const Vec2& pos) {
 GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
     GoalModel* goal = new (std::nothrow) GoalModel();
     if (goal && goal->init(pos,scale)) {
-        goal->setPosition(pos + Vec2(goal->getWidth()/2, goal->getHeight()/2));
-        goal->autorelease();
+        goal->release();
         return goal;
     }
     CC_SAFE_DELETE(goal);
@@ -108,10 +107,6 @@ GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
  */
 bool GoalModel::init(const Vec2& pos, const Vec2& scale) {
     if (BoxObstacle::init(pos, Size(scale))) {
-        setFriction(0.0f);
-        setFixedRotation(true);
-        
-        // Gameplay attributes
         return true;
     }
     return false;
@@ -180,11 +175,13 @@ void GoalModel::resetSceneNode() {
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
         
-        setDimension(Size(_drawScale.x/cscale * GOAL_SIZE.width,
-                          _drawScale.y/cscale * GOAL_SIZE.height));
+        setDimension(Size(GOAL_SIZE.width /cscale,
+                          GOAL_SIZE.height/cscale));
         
         Rect bounds;
         bounds.size = getDimension();
+        bounds.size.width *= _drawScale.x;
+        bounds.size.height *= _drawScale.y;
         
         pnode->setTexture(image);
         pnode->setPolygon(bounds);

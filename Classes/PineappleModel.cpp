@@ -39,12 +39,12 @@
 * only guarantee that the scene graph node is positioned correctly
 * according to the drawing scale.
 *
-* @return  An autoreleased physics object
+* @return  An retained physics object
 */
 PineappleModel* PineappleModel::create() {
 	PineappleModel* pineapple = new (std::nothrow) PineappleModel();
 	if (pineapple && pineapple->init()) {
-		pineapple->autorelease();
+		pineapple->retain();
 		return pineapple;
 	}
 	CC_SAFE_DELETE(pineapple);
@@ -63,12 +63,12 @@ PineappleModel* PineappleModel::create() {
 *
 * @param  pos      Initial position in world coordinates
 *
-* @return  An autoreleased physics object
+* @return  An retained physics object
 */
 PineappleModel* PineappleModel::create(const Vec2& pos) {
 	PineappleModel* pineapple = new (std::nothrow) PineappleModel();
 	if (pineapple && pineapple->init(pos)) {
-		pineapple->autorelease();
+		pineapple->retain();
 		return pineapple;
 	}
 	CC_SAFE_DELETE(pineapple);
@@ -88,7 +88,7 @@ PineappleModel* PineappleModel::create(const Vec2& pos) {
 * @param  pos      Initial position in world coordinates
 * @param  scale    The drawing scale
 *
-* @return  An autoreleased physics object
+* @return  An retained physics object
 */
 PineappleModel* PineappleModel::create(const Vec2& pos, const Vec2& scale) {
 	PineappleModel* pineapple = new (std::nothrow) PineappleModel();
@@ -96,7 +96,7 @@ PineappleModel* PineappleModel::create(const Vec2& pos, const Vec2& scale) {
 		pineapple->setDensity(PINEAPPLE_DENSITY);
 		pineapple->cocos2d::Obstacle::setMass(PINEAPPLE_NORMAL_MASS);
 		pineapple->resetMass();
-		pineapple->autorelease();
+		pineapple->retain();
 		return pineapple;
 	}
 	CC_SAFE_DELETE(pineapple);

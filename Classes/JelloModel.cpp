@@ -48,10 +48,9 @@
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define JELLO_VSHRINK  0.8f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define JELLO_HSHRINK  0.72f
+
+#define JELLO_SIZE Size(5,5) //Size in box2d units
+
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -65,13 +64,13 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 JelloModel* JelloModel::create() {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init()) {
         
-        jello->autorelease();
+        jello->retain();
         return jello;
     }
     CC_SAFE_DELETE(jello);
@@ -90,13 +89,13 @@ JelloModel* JelloModel::create() {
  *
  * @param  pos      Initial position in world coordinates (of bottom left)
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 JelloModel* JelloModel::create(const Vec2& pos) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos)) {
         jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
-        jello->autorelease();
+        jello->retain();
         return jello;
     }
     CC_SAFE_DELETE(jello);
@@ -116,13 +115,13 @@ JelloModel* JelloModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates (of bottom left)
  * @param  scale    The drawing scale
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos,scale)) {
         jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
-        jello->autorelease();
+        jello->retain();
         return jello;
     }
     CC_SAFE_DELETE(jello);
@@ -149,19 +148,7 @@ JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool JelloModel::init(const Vec2& pos, const Vec2& scale) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(JELLO_TEXTURE);
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    
-    nsize.width  *= JELLO_HSHRINK/scale.x;
-    nsize.height *= JELLO_VSHRINK/scale.y;
-    if (BoxObstacle::init(pos,nsize)) {
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+    if (BoxObstacle::init(pos,Size(scale))) {
         
         // Gameplay attributes
         return true;
@@ -232,12 +219,17 @@ void JelloModel::resetSceneNode() {
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(JELLO_TEXTURE);
         
-//        Poly2 poly = getPolygon();
-//        poly *= _drawScale/cscale;
-//        
-//        pnode->setTexture(image);
-//        pnode->setPolygon(poly);
-//        pnode->setScale(cscale);        
+        setDimension(Size(JELLO_SIZE.width /cscale,
+                          JELLO_SIZE.height/cscale));
+        
+        Rect bounds;
+        bounds.size = getDimension();
+        bounds.size.width *= _drawScale.x;
+        bounds.size.height *= _drawScale.y;
+        
+        pnode->setTexture(image);
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale);        
     }
 }
 

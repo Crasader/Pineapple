@@ -85,6 +85,7 @@ void initDebugProperties(Obstacle* obstacle) {
 void initSensor(Obstacle* obstacle) {
     obstacle->setDensity(0.0f);
     obstacle->setFriction(0.0f);
+    obstacle->setFixedRotation(true);
     obstacle->setRestitution(0.0f);
     obstacle->setGravityScale(0);
     obstacle->setSensor(true);
@@ -95,6 +96,7 @@ void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setBodyType(b2_staticBody);
     obstacle->setDensity(BASIC_DENSITY);
     obstacle->setFriction(BASIC_FRICTION);
+    obstacle->setFixedRotation(true);
     obstacle->setRestitution(BASIC_RESTITUTION);
     obstacle->setGravityScale(0);
     obstacle->setSensor(false);
@@ -130,6 +132,9 @@ bool LevelModel::load() {
             float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
             float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
             
+            position[0] = x;
+            position[1] = y+1;
+            
             if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
                 position[0] = x;
                 position[1] = y;
@@ -141,9 +146,9 @@ bool LevelModel::load() {
                 position[7] = y;
                 addWall(position);
             } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
-                position[0] = x;
-                position[1] = y+1;
                 addGoal(position);
+            } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
+                addJello(position);
             }
         }
         
@@ -326,8 +331,8 @@ void LevelModel::addKids(float* kidPos[POS_COORDS]) {
 
 void LevelModel::addJello(float jelloPos[POS_COORDS]) {
     JelloModel* jello = JelloModel::create(jelloPos);
-    initSensor(jello);
     initDebugProperties(jello);
+    initSensor(jello);
     jello->setName(JELLO_NAME);
     _jellos.push_back(jello);
 }

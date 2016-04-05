@@ -26,12 +26,12 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An released physics object
  */
 SpikeModel* SpikeModel::create() {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init()) {
-        spike->autorelease();
+        spike->release();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -50,13 +50,13 @@ SpikeModel* SpikeModel::create() {
  *
  * @param  pos      Initial position in world coordinates
  *
- * @return  An autoreleased physics object
+ * @return  An released physics object
  */
 SpikeModel* SpikeModel::create(const Vec2& pos) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos)) {
         spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->autorelease();
+        spike->release();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -76,13 +76,13 @@ SpikeModel* SpikeModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates(of bottom left point)
  * @param  scale    The drawing scale
  *
- * @return  An autoreleased physics object
+ * @return  An released physics object
  */
 SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos,scale)) {
         spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->autorelease();
+        spike->release();
         return spike;
     }
     CC_SAFE_DELETE(spike);

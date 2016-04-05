@@ -41,12 +41,12 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create() {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init()) {
-        dude->autorelease();
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);
@@ -65,12 +65,12 @@ KidModel* KidModel::create() {
  *
  * @param  pos      Initial position in world coordinates
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create(const Vec2& pos) {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init(pos)) {
-        dude->autorelease();
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);
@@ -90,12 +90,12 @@ KidModel* KidModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates
  * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create(const Vec2& pos, int idx) {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init(pos,idx)) {
-        dude->autorelease();
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);
@@ -116,12 +116,12 @@ KidModel* KidModel::create(const Vec2& pos, int idx) {
  * @param  scale    The drawing scale
  * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
  *
- * @return  An autoreleased physics object
+ * @return  An released physics object
  */
 KidModel* KidModel::create(const Vec2& pos, const Vec2& scale, int idx) {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init(pos,scale,idx)) {
-        dude->autorelease();
+        dude->release();
         return dude;
     }
     CC_SAFE_DELETE(dude);
