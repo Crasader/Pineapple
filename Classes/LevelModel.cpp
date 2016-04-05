@@ -14,6 +14,9 @@
 #define WILL_OBJECT_GROUP   "Will"
 
 /** Properties that Tiled Objects and maps posess */
+#define BLENDER_START_X_PROPERTY    "BlenderStartX"
+#define BLENDER_Y_PROPERTY          "BlenderStartY"
+
 #define WIDTH_PROPERTY      "width"
 #define HEIGHT_PROPERTY     "height"
 #define X_PROPERTY          "x"
@@ -155,6 +158,10 @@ bool LevelModel::load() {
         }
         
     }
+    
+    position[0] = map->getProperties().at(BLENDER_START_X_PROPERTY).asFloat();
+    position[1] = map->getProperties().at(BLENDER_Y_PROPERTY).asFloat();
+    addBlender(position);
     
     delete[] position;
     return true;
@@ -445,8 +452,9 @@ void LevelModel::setRootNode(Node* node) {
     }
     
     if (_blender != nullptr) {
+        Texture2D* image = assets->get<Texture2D>(BLENDER_TEXTURE);
         _blender->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::create();
+        poly = PolygonNode::createWithTexture(image);
         _blender->setSceneNode(poly);
         
         addObstacle(_blender, BLENDER_Z_INDEX);

@@ -18,8 +18,6 @@ using namespace cocos2d;
 #pragma mark Physics Constants
 /** The maximum character speed */
 #define BLENDER_SPEED   1.0f
-/** The Blender specific scaling */
-#define BLENDER_SCALE      0.75f
 
 #define BLENDER_MASK 0x0008
 #define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
