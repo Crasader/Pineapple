@@ -1,9 +1,9 @@
 //
-//  SpikeModel.h
+//  GoalModel.h
 //
 
-#ifndef __SPIKE_MODEL_H__
-#define __SPIKE_MODEL_H__
+#ifndef __GOAL_MODEL_H__
+#define __GOAL_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
 #include "Const.h"
@@ -15,9 +15,8 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Physics Constants
 
-
 #pragma mark -
-#pragma mark Spike Model
+#pragma mark Goal Model
 /**
  * Player avatar for the plaform game.
  *
@@ -25,10 +24,10 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class SpikeModel : public BoxObstacle {
+class GoalModel : public BoxObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
-    CC_DISALLOW_COPY_AND_ASSIGN(SpikeModel);
+    CC_DISALLOW_COPY_AND_ASSIGN(GoalModel);
     
 protected:
     /**
@@ -43,9 +42,9 @@ protected:
 public:
 #pragma mark Static Constructors
     /**
-     * Creates a new spike at the origin.
+     * Creates a new goal at the origin.
      *
-     * The spike is scaled so that 1 pixel = 1 Box2d unit
+     * The goal is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -54,12 +53,12 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static SpikeModel* create();
+    static GoalModel* create();
     
     /**
-     * Creates a new spike at the given position.
+     * Creates a new goal at the given position.
      *
-     * The spike is scaled so that 1 pixel = 1 Box2d unit
+     * The goal is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -70,12 +69,12 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static SpikeModel* create(const Vec2& pos);
+    static GoalModel* create(const Vec2& pos);
     
     /**
-     * Creates a new spike at the given position.
+     * Creates a new goal at the given position.
      *
-     * The spike is sized according to the given drawing scale.
+     * The goal is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -87,7 +86,7 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static SpikeModel* create(const Vec2& pos, const Vec2& scale);
+    static GoalModel* create(const Vec2& pos, const Vec2& scale);
     
     
 #pragma mark Physics Methods
@@ -119,7 +118,7 @@ public:
     void update(float dt) override;
     
     /**
-     * Applies the force to the body of this spike
+     * Applies the force to the body of this goal
      *
      * This method should be called after the force attribute is set.
      */
@@ -138,17 +137,17 @@ public:
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
     /**
-     * Creates a degenerate spike object.
+     * Creates a degenerate goal object.
      *
-     * This constructor does not initialize any of the spike values beyond
-     * the defaults.  To use a spikeModel, you must call init().
+     * This constructor does not initialize any of the goal values beyond
+     * the defaults.  To use a goalModel, you must call init().
      */
-    SpikeModel() : BoxObstacle() { }
+    GoalModel() : BoxObstacle() { }
     
     /**
-     * Initializes a new spike at the origin.
+     * Initializes a new goal at the origin.
      *
-     * The spike is scaled so that 1 pixel = 1 Box2d unit
+     * The goal is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -160,9 +159,9 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE); }
     
     /**
-     * Initializes a new spike at the given position.
+     * Initializes a new goal at the given position.
      *
-     * The spike is scaled so that 1 pixel = 1 Box2d unit
+     * The goal is scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -176,9 +175,9 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE); }
     
     /**
-     * Initializes a new spike at the given position.
+     * Initializes a new goal at the given position.
      *
-     * The spike is sized according to the given drawing scale.
+     * The goal is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -193,4 +192,4 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init(const Vec2& pos, const Vec2& scale);
 };
 
-#endif /* __PF_spike_MODEL_H__ */
+#endif /* __PF_goal_MODEL_H__ */

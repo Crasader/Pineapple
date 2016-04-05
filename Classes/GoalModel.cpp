@@ -1,8 +1,8 @@
 //
-//  SpikeModel.cpp
+//  GoalModel.cpp
 //
 
-#include "SpikeModel.h"
+#include "GoalModel.h"
 #include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
@@ -10,36 +10,36 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define SPIKE_SCALE 0.38
+#define GOAL_SIZE Size(3.2,2) //Size in box2d units
 
 #pragma mark -
 #pragma mark Static Constructors
 /**
- * Creates a new spike at the origin.
+ * Creates a new goal at the origin.
  *
- * The spike is scaled so that 1 pixel = 1 Box2d unit
+ * The goal is scaled so that 1 pixel = 1 Box2d unit
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An retained physics object
+ * @return  An autoreleased physics object
  */
-SpikeModel* SpikeModel::create() {
-    SpikeModel* spike = new (std::nothrow) SpikeModel();
-    if (spike && spike->init()) {
-        spike->retain();
-        return spike;
+GoalModel* GoalModel::create() {
+    GoalModel* goal = new (std::nothrow) GoalModel();
+    if (goal && goal->init()) {
+        goal->release();
+        return goal;
     }
-    CC_SAFE_DELETE(spike);
+    CC_SAFE_DELETE(goal);
     return nullptr;
 }
 
 /**
- * Creates a new spike at the given position.
+ * Creates a new goal at the given position.
  *
- * The spike is scaled so that 1 pixel = 1 Box2d unit
+ * The goal is scaled so that 1 pixel = 1 Box2d unit
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -48,23 +48,23 @@ SpikeModel* SpikeModel::create() {
  *
  * @param  pos      Initial position in world coordinates
  *
- * @return  An retained physics object
+ * @return  An autoreleased physics object
  */
-SpikeModel* SpikeModel::create(const Vec2& pos) {
-    SpikeModel* spike = new (std::nothrow) SpikeModel();
-    if (spike && spike->init(pos)) {
-        spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->retain();
-        return spike;
+GoalModel* GoalModel::create(const Vec2& pos) {
+    GoalModel* goal = new (std::nothrow) GoalModel();
+    if (goal && goal->init(pos)) {
+        goal->setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
+        goal->setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE        goal->autorelease();
+        return goal;
     }
-    CC_SAFE_DELETE(spike);
+    CC_SAFE_DELETE(goal);
     return nullptr;
 }
 
 /**
- * Creates a new spike at the given position.
+ * Creates a new goal at the given position.
  *
- * The spike is sized according to the given drawing scale.
+ * The goal is sized according to the given drawing scale.
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -74,16 +74,15 @@ SpikeModel* SpikeModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates(of bottom left point)
  * @param  scale    The drawing scale
  *
- * @return  An retained physics object
+ * @return  An autoreleased physics object
  */
-SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
-    SpikeModel* spike = new (std::nothrow) SpikeModel();
-    if (spike && spike->init(pos,scale)) {
-        spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->retain();
-        return spike;
+GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
+    GoalModel* goal = new (std::nothrow) GoalModel();
+    if (goal && goal->init(pos,scale)) {
+        goal->release();
+        return goal;
     }
-    CC_SAFE_DELETE(spike);
+    CC_SAFE_DELETE(goal);
     return nullptr;
 }
 
@@ -92,9 +91,9 @@ SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
 #pragma mark Initializers
 
 /**
- * Initializes a new spike at the given position.
+ * Initializes a new goal at the given position.
  *
- * The spike is sized according to the given drawing scale.
+ * The goal is sized according to the given drawing scale.
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -106,9 +105,8 @@ SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool SpikeModel::init(const Vec2& pos, const Vec2& scale) {
-    if (BoxObstacle::init(pos,Size(scale))) {
-        // Gameplay attributes
+bool GoalModel::init(const Vec2& pos, const Vec2& scale) {
+    if (BoxObstacle::init(pos, Size(scale))) {
         return true;
     }
     return false;
@@ -122,7 +120,7 @@ bool SpikeModel::init(const Vec2& pos, const Vec2& scale) {
  *
  * This is the primary method to override for custom physics objects
  */
-void SpikeModel::createFixtures() {
+void GoalModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
@@ -135,7 +133,7 @@ void SpikeModel::createFixtures() {
  *
  * This is the primary method to override for custom physics objects.
  */
-void SpikeModel::releaseFixtures() {
+void GoalModel::releaseFixtures() {
     if (_body != nullptr) {
         return;
     }
@@ -150,7 +148,7 @@ void SpikeModel::releaseFixtures() {
  *
  * @param delta Number of seconds since last animation frame
  */
-void SpikeModel::update(float dt) {
+void GoalModel::update(float dt) {
     BoxObstacle::update(dt);
 }
 
@@ -164,7 +162,7 @@ void SpikeModel::update(float dt) {
  * of multiple scene graph nodes.  In this case, it is because we
  * manage our own afterburner animations.
  */
-void SpikeModel::resetSceneNode() {
+void GoalModel::resetSceneNode() {
     PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
@@ -174,14 +172,20 @@ void SpikeModel::resetSceneNode() {
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
         
+        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
+        Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
+        
+        setDimension(Size(GOAL_SIZE.width /cscale,
+                          GOAL_SIZE.height/cscale));
+        
         Rect bounds;
-        bounds.size = pnode->getContentSize();
+        bounds.size = getDimension();
+        bounds.size.width *= _drawScale.x;
+        bounds.size.height *= _drawScale.y;
         
+        pnode->setTexture(image);
         pnode->setPolygon(bounds);
-        pnode->setScale(cscale * SPIKE_SCALE);
-        
-        setDimension(pnode->getContentSize().width * SPIKE_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * SPIKE_SCALE / _drawScale.y);
+        pnode->setScale(cscale);
     }
 }
 
@@ -192,6 +196,6 @@ void SpikeModel::resetSceneNode() {
  * This is very useful when the fixtures have a very different shape than
  * the texture (e.g. a circular shape attached to a square texture).
  */
-void SpikeModel::resetDebugNode() {
+void GoalModel::resetDebugNode() {
     BoxObstacle::resetDebugNode();
 }

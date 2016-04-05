@@ -17,6 +17,11 @@ using namespace cocos2d;
 
 class BackgroundView {
 protected:
+    /** A reference to the root node */
+    Node* _rootNode;
+    /** A reference to the world node */
+    Node* _worldNode;
+    
     /** The front background (first copy), with no parallax */
     PolygonNode* _frontBackground_1;
     /** The front background (second copy), with no parallax */
@@ -45,7 +50,7 @@ protected:
     int _backFlip;
     
 public:
-    static BackgroundView* createAndAddTo(Node* rootNode, Node* worldNode, Node* debugNode, SceneManager* assets);
+    static BackgroundView* createAndAddTo(Node* rootNode, Node* worldNode, SceneManager* assets);
     
     int getFrontFlip() const { return _frontFlip; }
     
@@ -59,8 +64,10 @@ public:
     
     void removeAllChildren();
     
+    void reset();
+    
 private:
-    void init(Node* rootNode, Node* worldNode, Node* debugNode, SceneManager* assets);
+    void init(Node* rootNode, Node* worldNode, SceneManager* assets);
 };
 
 #endif /* BackgroundView_hpp */

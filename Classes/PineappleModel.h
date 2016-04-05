@@ -42,8 +42,11 @@ using namespace cocos2d;
 /** The relative size of smaller pineapple */
 #define PINEAPPLE_SHRINK_SCALE			       0.75f
 
-#define PINEAPPLE_MASK                         0x0002
-#define PINEAPPLE_COLLIDES_WITH                0xFFFB // All but 0x0004
+/** Number of frames in the walk animation */
+#define PINEAPPLE_FRAME_COUNT 24
+
+#define PINEAPPLE_MASK 0x0002
+#define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
 
 #pragma mark -
 #pragma mark PineappleModel Model
@@ -333,9 +336,19 @@ public:
 	/**
 	* Initialize the filmstrip for walking animation
 	*/
-	void initAnimation(Texture2D* image, float scale);
+    void initAnimation(Texture2D* image, float scale);
 
-
+    
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
+    
 #pragma mark Physics Methods
 	/**
 	* Creates the physics Body(s) for this object, adding them to the world.
@@ -385,7 +398,11 @@ CC_CONSTRUCTOR_ACCESS:
 	* This constructor does not initialize any of the pineapple values beyond
 	* the defaults.  To use a PineappleModel, you must call init().
 	*/
-	PineappleModel() : CapsuleObstacle(), _sensorFixture(nullptr), _sensorName(PINEAPPLE_SENSOR) { }
+	PineappleModel() : CapsuleObstacle(),
+    _sensorFixture(nullptr),
+    _sensorName(PINEAPPLE_SENSOR),
+    _willWalkcycle(nullptr),
+    _jumpCooldown(0){ }
 	~PineappleModel() { }
 
 	/**
@@ -400,7 +417,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE); }
+	virtual bool init() override { return init(Vec2::ZERO, DEFAULT_DRAW_SCALE); }
 
 	/**
 	* Initializes a new pineapple at the given position.
@@ -416,7 +433,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE); }
+	virtual bool init(const Vec2& pos) override { return init(pos, DEFAULT_DRAW_SCALE); }
 
 	/**
 	* Initializes a new pineapple at the given position.
