@@ -14,9 +14,6 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The Goal specific scaling */
-#define GOAL_SCALE         0.75f
-
 
 #pragma mark -
 #pragma mark Goal Model

@@ -119,6 +119,8 @@ bool LevelModel::load() {
     float tileX = map->getTileSize().width;
     float tileY = map->getTileSize().height;
     
+    //For all imaged layers, need to add 1 to y coordinate because tiled is weird
+    
     for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
         TMXObjectGroup* objectGroup = *it;
         for(auto it2 = objectGroup->getObjects().begin(); it2 != objectGroup->getObjects().end(); ++it2) {
@@ -140,7 +142,7 @@ bool LevelModel::load() {
                 addWall(position);
             } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
                 position[0] = x;
-                position[1] = y;
+                position[1] = y+1;
                 addGoal(position);
             }
         }

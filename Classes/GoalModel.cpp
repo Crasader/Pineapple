@@ -9,10 +9,8 @@
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define GOAL_VSHRINK  0.8f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define GOAL_HSHRINK  0.72f
+
+#define GOAL_SIZE Size(3.2,2) //Size in box2d units
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -109,7 +107,7 @@ GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool GoalModel::init(const Vec2& pos, const Vec2& scale) {
-    if (BoxObstacle::init(pos, Size(1,1))) {
+    if (BoxObstacle::init(pos, Size(scale))) {
         setFriction(0.0f);
         setFixedRotation(true);
         
@@ -182,10 +180,11 @@ void GoalModel::resetSceneNode() {
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
         
+        setDimension(Size(_drawScale.x/cscale * GOAL_SIZE.width,
+                          _drawScale.y/cscale * GOAL_SIZE.height));
+        
         Rect bounds;
         bounds.size = getDimension();
-        bounds.size.width  *= _drawScale.x/cscale;
-        bounds.size.height *= _drawScale.y/cscale;
         
         pnode->setTexture(image);
         pnode->setPolygon(bounds);

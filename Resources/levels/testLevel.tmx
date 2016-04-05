@@ -25,6 +25,6 @@
   <object id="15" name="jello" gid="11" x="1280" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="1984" y="640" width="64" height="64"/>
+  <object id="21" name="goal" gid="51" x="1536" y="640" width="64" height="64"/>
  </objectgroup>
 </map>
