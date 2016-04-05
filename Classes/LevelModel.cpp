@@ -397,6 +397,8 @@ void LevelModel::setRootNode(Node* node) {
         clearRootNode();
     }
     
+    SceneManager* assets =  AssetManager::getInstance()->getCurrent();
+    
     _rootnode = node;
     _rootnode->retain();
     _scale.set(_rootnode->getContentSize().width/_bounds.size.width,
@@ -458,8 +460,9 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
         JelloModel* jello = *it;
         
+        Texture2D* image = assets->get<Texture2D>(JELLO_TEXTURE);
         jello->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::create();
+        poly = PolygonNode::createWithTexture(image);
         jello->setSceneNode(poly);
         
         addAnonymousObstacle(jello, JELLO_Z_INDEX);
