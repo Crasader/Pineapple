@@ -177,6 +177,8 @@ void LevelModel::unload() {
     if (_pineapple != nullptr) {
         if (_world != nullptr) {
             _world->removeObstacle(_pineapple);
+            _worldnode->removeChild(_pineapple->getSceneNode());
+            _debugnode->removeChild(_pineapple->getDebugNode());
         }
         _pineapple->release();
         _pineapple = nullptr;
@@ -184,15 +186,28 @@ void LevelModel::unload() {
     if (_goalDoor != nullptr) {
         if (_world != nullptr) {
             _world->removeObstacle(_goalDoor);
+            _worldnode->removeChild(_goalDoor->getSceneNode());
+            _debugnode->removeChild(_goalDoor->getDebugNode());
         }
         _goalDoor->release();
         _goalDoor = nullptr;
+    }
+    if(_blender != nullptr) {
+        if (_world != nullptr) {
+            _world->removeObstacle(_blender);
+            _worldnode->removeChild(_blender->getSceneNode());
+            _debugnode->removeChild(_blender->getDebugNode());
+        }
+        _blender->release();
+        _blender = nullptr;
     }
     
     for(int i = 0; i < KID_COUNT; i++) {
         if (_kids[i] != nullptr) {
             if (_world != nullptr) {
                 _world->removeObstacle(_kids[i]);
+                _worldnode->removeChild(_kids[i]->getSceneNode());
+                _debugnode->removeChild(_kids[i]->getDebugNode());
             }
             _kids[i]->release();
             _kids[i] = nullptr;
@@ -202,6 +217,8 @@ void LevelModel::unload() {
     for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
         if (_world != nullptr) {
             _world->removeObstacle(*it);
+            _worldnode->removeChild((*it)->getSceneNode());
+            _debugnode->removeChild((*it)->getDebugNode());
         }
         (*it)->release();
     }
@@ -210,6 +227,8 @@ void LevelModel::unload() {
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         if (_world != nullptr) {
             _world->removeObstacle(*it);
+            _worldnode->removeChild((*it)->getSceneNode());
+            _debugnode->removeChild((*it)->getDebugNode());
         }
         (*it)->release();
     }
@@ -218,6 +237,8 @@ void LevelModel::unload() {
     for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
         if (_world != nullptr) {
             _world->removeObstacle(*it);
+            _worldnode->removeChild((*it)->getSceneNode());
+            _debugnode->removeChild((*it)->getDebugNode());
         }
         (*it)->release();
     }
@@ -231,11 +252,6 @@ void LevelModel::unload() {
     
     _length = UNSET_LENGTH;
 }
-
-void LevelModel::reset() {
-    
-}
-
 
 LevelModel::~LevelModel(){
     unload();
@@ -513,4 +529,8 @@ void LevelModel::clearRootNode() {
     }
     _rootnode->release();
     _rootnode = nullptr;
+}
+
+void LevelModel::showDebug(bool flag) {
+    _debugnode->setVisible(flag);
 }

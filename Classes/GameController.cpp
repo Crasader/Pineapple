@@ -24,6 +24,7 @@
 #include "CollisionController.h"
 #include "Const.h"
 #include "Texture.h"
+#include "Levels.h"
 
 
 using namespace cocos2d;
@@ -89,7 +90,7 @@ bool GameController::init(RootLayer* root) {
  */
 bool GameController::init(RootLayer* root, const Rect& rect) {
     _assets = AssetManager::getInstance()->getCurrent();
-    _level = _assets->get<LevelModel>(LEVEL_ONE);
+    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -121,26 +122,34 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     // Create the scene graph
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
-    _winnode = Label::create();
     
+    _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _winnode->setString(WIN_MESSAGE);
-    
     _winnode->setPosition(root->getContentSize().width/2.0f,
                           root->getContentSize().height/2.0f);
     _winnode->setColor(WIN_COLOR);
 
     _losenode = Label::create();
-    
     _losenode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _losenode->setString(LOSE_MESSAGE);
-    
     _losenode->setPosition(root->getContentSize().width/2.0f,
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
     
+    _loadnode = Label::create();
+    _loadnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
+    _loadnode->setString(LOAD_MESSAGE);
+    _loadnode->setPosition(root->getContentSize().width/2.0f,
+                           root->getContentSize().height/2.0f);
+    _loadnode->setColor(LOAD_COLOR);
+    
     root->addChild(_winnode,4);
     root->addChild(_losenode,5);
+    root->addChild(_loadnode,6);
+    
+    _loadnode->setVisible(false);
+    
     _rootnode = root;
     _rootnode->retain();
     
@@ -196,8 +205,35 @@ void GameController::dispose() {
 void GameController::reset() {
     setFailure(false);
     setComplete(false);
-    _level->reset();
+    
+    // Unload the level but keep in memory temporarily
+    _level->retain();
+    _assets->unload<LevelModel>(LEVEL_ONE_KEY);
+    
+    // Load a new level and quit update
+    _assets->loadAsync<LevelModel>(LEVEL_ONE_KEY,LEVEL_ONE_FILE);
+    _loadnode->setVisible(true);
+}
+
+/** Called after the loadAsync for the level finishes */
+void GameController::onReset() {
+    
+    // Release the old level permanently
+    _level->release();
+    
+    // Access and initialize level
+    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    _level->setRootNode(_rootnode);
+    _level->showDebug(_debug);
+    _world = _level->getWorld();
+    _worldnode = _level->getWorldNode();
+    _debugnode = _level->getDebugNode();
+    _collision->setLevel(_level);
+    _levelOffset = 0.0f;
+    _worldnode->setPositionX(0.0f);
+    _debugnode->setPositionX(0.0f);
     _background->reset();
+    _loadnode->setVisible(false);
 }
 
 /**
@@ -252,6 +288,20 @@ void GameController::setFailure(bool value){
  * @param  delta    Number of seconds since last animation frame
  */
 void GameController::update(float dt) {
+    if (_level == nullptr) {
+        return;
+    }
+    
+    // Check to see if new level loaded yet
+    if (_loadnode->isVisible()) {
+        if (_assets->isComplete()) {
+            onReset();
+        } else {
+            // Level is not loaded yet; refuse input
+            return;
+        }
+    }
+    
     _input.update(dt);
     
 		if (_level->haveFailed()) {
@@ -273,7 +323,10 @@ void GameController::update(float dt) {
         
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
+    if (_input.didReset()) {
+        reset();
+        return;
+    }
     if (_input.didExit())  {
         _rootnode->shutdown();
     }

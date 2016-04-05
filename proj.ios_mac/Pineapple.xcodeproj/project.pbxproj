@@ -235,6 +235,7 @@
 		4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
 		407625C41C8E13E6005A0651 /* BlenderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlenderModel.h; sourceTree = "<group>"; };
 		407625C51C8E13F2005A0651 /* BlenderModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlenderModel.cpp; sourceTree = "<group>"; };
+		4085B3961CB44EA900C7BD81 /* Levels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Levels.h; sourceTree = "<group>"; };
 		40C8F6ED1CB20F50000D9055 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		40C8F6EE1CB20F50000D9055 /* tiledTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tiledTextures; sourceTree = "<group>"; };
 		40C8F7791CB21591000D9055 /* miniz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = miniz.c; sourceTree = "<group>"; };
@@ -602,6 +603,7 @@
 				4072DF861C9F44BE00F7DAA4 /* View */,
 				406E53E91CA4ACA4001E2EBD /* Const.h */,
 				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4085B3961CB44EA900C7BD81 /* Levels.h */,
 			);
 			name = Classes;
 			path = ../Classes;

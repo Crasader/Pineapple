@@ -65,6 +65,10 @@
 #define LOSE_MESSAGE    "BLENDED"
 /** The color of the lose message */
 #define LOSE_COLOR      Color3B::RED
+/** The message for resetting the game */
+#define LOAD_MESSAGE    "Loading"
+/** The color of the lose message */
+#define LOAD_COLOR      Color3B::WHITE
 
 /** The key the basic game music */
 #define GAME_MUSIC      "game"
@@ -82,10 +86,6 @@
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */
 #define EFFECT_VOLUME   0.8f
-
-
-/** Level One Key */
-#define LEVEL_ONE "level_one"
 
 
 #endif /* Const_h */

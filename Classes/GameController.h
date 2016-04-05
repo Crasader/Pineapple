@@ -62,6 +62,8 @@ protected:
     Label* _winnode;
     /** Reference to the lose message label */
     Label* _losenode;
+    /** Reference to the reset message label */
+    Label* _loadnode;
     /** The Box2D world */
     WorldController* _world;
     
@@ -265,6 +267,10 @@ public:
      * This method disposes of the world and creates a new one.
      */
     void reset() ;
+    
+    /** Called after the asynced level reloading finishes.
+      * a helper for reset() */
+    void onReset();
 
     /**
      * Executes the core gameplay loop of this world.
