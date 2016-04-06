@@ -24,7 +24,7 @@
 /** The density of the character */
 #define KID_DENSITY    .5f
 /** The amount kids change force to get back to max speed */
-#define KID_FORCE    5.0f
+#define KID_FORCE    2.0f
 /** Epsilon on Kid Speed - if within this amount, just set to max speed */
 #define KID_SPEED_EPSILON   .1f
 
@@ -160,7 +160,6 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         
         // Gameplay attributes
         _isCollidingWithJello = false;
-        _isGrounded = false;
 		_reachedGoal = false;
         return true;
     }
@@ -268,7 +267,7 @@ void KidModel::dampTowardsWalkspeed() {
     }
 
     
-    if(_isGrounded && getVX() != KID_WALKSPEED) {
+    if(getVX() != KID_WALKSPEED) {
         if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
             setVX(KID_WALKSPEED);
         } else if (getVX() > getWalkingSpeed()) {

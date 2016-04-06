@@ -36,14 +36,14 @@
 #define BASIC_RESTITUTION   0.1f
 
 /** Collision Class Names */
-#define BLENDER_C			0
+#define BLENDER_C			5
 #define PINEAPPLE_C		1
-#define KID_C					2
-#define JELLO_C				3
+#define KID_C					3
+#define JELLO_C				2
 #define SPIKES_C			4
-#define CUP_C					5
-#define PLATFORM_C		6
-#define UNASSIGNED_C	-1
+#define CUP_C					6
+#define PLATFORM_C		8
+#define UNASSIGNED_C	100
 /** End Collision Class Names */
 
 #endif /* Const_h */

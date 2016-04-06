@@ -26,7 +26,7 @@ protected:
 	LevelModel* _level;
 	LevelController* _levelCtrlr;
 	/** Mark set to handle more sophisticated collision callbacks */
-	unordered_set<b2Fixture*> _sensorFixtures;
+	unordered_set<b2Fixture*> _pSensorFixtures;
 #pragma mark -
 #pragma mark Collision Handling
 
@@ -34,11 +34,6 @@ protected:
 	 * grounds will for jump enabling
 	 */
 	void ground(PineappleModel * will, b2Fixture* fix);
-
-	/**
-	 * grounds kids because ???
-	 */
-	void ground(KidModel * kid, b2Fixture * fix);
 
 	/**
 	* Applies the jello force to william if he's small or crushes the jello if he's big.

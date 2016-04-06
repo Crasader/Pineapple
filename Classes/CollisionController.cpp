@@ -29,12 +29,7 @@ void CollisionController::setLevel(LevelModel* level) {
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix) {
 	will->setGrounded(true);
-	_sensorFixtures.emplace(fix);
-}
-
-void CollisionController::ground(KidModel* kid, b2Fixture* fix) {
-	kid->setGrounded(true);
-	_sensorFixtures.emplace(fix);
+	_pSensorFixtures.emplace(fix);
 }
 
 /**
@@ -71,14 +66,14 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 	//Jump!
 	if (!kid->isCollidingWithJello()) {
 		kid->setVY(10);
-		kid->setVX(KID_WALKSPEED + 2);
-		kid->setGrounded(false);
+		kid->setVX(KID_WALKSPEED + 4);
 		kid->setCollidingWithJello(true);
 	}
 }
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	_level->blendAndKill(will);
+	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
@@ -87,6 +82,7 @@ void CollisionController::handleBlenderCollision(KidModel* kid) {
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
 	_level->spikeAndKill(will);
+	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleSpikeCollision(KidModel* kid) {
@@ -135,7 +131,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
 		// Will  x Ground
-		if (bd1->getCollisionClass() == UNASSIGNED_C || bd2->getCollisionClass() == UNASSIGNED_C) {
+		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
 			ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1);
 		}
 		// Will x Jello
@@ -155,15 +151,15 @@ void CollisionController::beginContact(b2Contact* contact) {
 		if (bd1->getCollisionClass() == BLENDER_C || bd2->getCollisionClass() == BLENDER_C) {
 			handleBlenderCollision(will);
 		}
+		// Will x Spikes
+		if (bd1->getCollisionClass() == SPIKES_C || bd2->getCollisionClass() == SPIKES_C) {
+			handleSpikeCollision(will);
+		}
 	} // END WILL COLLISIONS
 
 	// KID COLLISIONS
 	else if (bd1->getCollisionClass() == KID_C || bd2->getCollisionClass() == KID_C) {
 		KidModel* kid = bd1->getCollisionClass() == KID_C ? (KidModel*)bd1 : (KidModel*)bd2;
-		// Will  x Ground
-		if (bd1->getCollisionClass() == UNASSIGNED_C || bd2->getCollisionClass() == UNASSIGNED_C) {
-			ground(kid, bd1->getCollisionClass() == KID_C ? fix2 : fix1);
-		}
 		// Kid x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			handleJelloCollision(kid);
@@ -175,6 +171,10 @@ void CollisionController::beginContact(b2Contact* contact) {
 		// Kid x Blender
 		if (bd1->getCollisionClass() == BLENDER_C || bd2->getCollisionClass() == BLENDER_C) {
 			handleBlenderCollision(kid);
+		}
+		// Kid x Spikes
+		if (bd1->getCollisionClass() == SPIKES_C || bd2->getCollisionClass() == SPIKES_C) {
+			handleSpikeCollision(kid);
 		}
 	} // END KID COLLISIONS
 }
@@ -203,9 +203,9 @@ void CollisionController::endContact(b2Contact* contact) {
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
 		// Will x Ground
-		if (bd1->getCollisionClass() == UNASSIGNED_C || bd2->getCollisionClass() == UNASSIGNED_C) {
-			_sensorFixtures.erase(bd1 == will ? fix2 : fix1);
-			if (_sensorFixtures.empty()) {
+		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+			_pSensorFixtures.erase(bd1 == will ? fix2 : fix1);
+			if (_pSensorFixtures.empty()) {
 				will->setGrounded(false);
 			}
 		}

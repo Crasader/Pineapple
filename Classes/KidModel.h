@@ -53,8 +53,6 @@ protected:
     float _index;
     /** The current horizontal movement of the character */
     float _movement;
-    /** Whether our feet are on the ground */
-    bool _isGrounded;
     /** Whether this kid is currently colliding with jello */
     bool _isCollidingWithJello;
 	/** Whether or not this kid has reached the goal */
@@ -161,20 +159,6 @@ public:
      * @param value left/right movement of this character.
      */
     void setMovement(float value);
-    
-    /**
-     * Returns true if the dude is on the ground.
-     *
-     * @return true if the dude is on the ground.
-     */
-    bool isGrounded() const { return _isGrounded; }
-    
-    /**
-     * Sets whether the dude is on the ground.
-     *
-     * @param value whether the dude is on the ground.
-     */
-    void setGrounded(bool value) { _isGrounded = value; }
     
     /**
      * Returns true if the dude is actively colliding with jello
