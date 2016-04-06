@@ -299,7 +299,9 @@ public:
 	*
 	* @param value whether the pineapple is on the ground.
 	*/
-	void setGrounded(bool value) { _isGrounded = value; }
+	void setGrounded(bool value) {
+        _isGrounded = value;
+    }
 
 	/**
 	* Returns true if Will has reached the goal.

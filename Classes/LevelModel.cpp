@@ -678,6 +678,8 @@ void LevelModel::setRootNode(Node* node) {
             }
         }
     }
+    
+    _pineapple->setGrounded(true);
 }
 
 /**

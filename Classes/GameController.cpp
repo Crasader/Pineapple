@@ -111,13 +111,6 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     // Create the world; there are no listeners this time.
     _collision = CollisionController::create();
     _world = _level->getWorld();
-    _world->activateCollisionCallbacks(true);
-    _world->onBeginContact = [this](b2Contact* contact) {
-        _collision->beginContact(contact);
-    };
-    _world->onEndContact = [this](b2Contact* contact) {
-        _collision->endContact(contact);
-    };
     
     // Create the scene graph
     _worldnode = _level->getWorldNode();
@@ -159,6 +152,14 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
+    
+    _world->activateCollisionCallbacks(true);
+    _world->onBeginContact = [this](b2Contact* contact) {
+        _collision->beginContact(contact);
+    };
+    _world->onEndContact = [this](b2Contact* contact) {
+        _collision->endContact(contact);
+    };
     
     _active = true;
     setComplete(false);

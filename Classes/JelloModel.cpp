@@ -222,9 +222,6 @@ void JelloModel::resetSceneNode() {
         
         setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
                      pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
-        
-        //HACKY YAY
-        setPosition(getPosition() - Vec2(0, getHeight()/4));
     }
 }
 
