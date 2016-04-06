@@ -21,10 +21,10 @@
   <object id="10" name="will" gid="1" x="512" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Kids">
-  <object id="11" name="kid" gid="2" x="64" y="640" width="32" height="64"/>
-  <object id="27" name="kid" gid="2" x="192" y="640" width="32" height="64"/>
-  <object id="28" name="kid" gid="2" x="320" y="640" width="32" height="64"/>
-  <object id="29" name="kid" gid="2" x="448" y="640" width="32" height="64"/>
+  <object id="11" name="kid" gid="2" x="64" y="640" width="64" height="64"/>
+  <object id="27" name="kid" gid="2" x="192" y="640" width="64" height="64"/>
+  <object id="28" name="kid" gid="2" x="320" y="640" width="64" height="64"/>
+  <object id="29" name="kid" gid="2" x="448" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Spikes">
   <object id="42" gid="12" x="704" y="704" width="64" height="64"/>

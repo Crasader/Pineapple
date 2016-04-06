@@ -89,8 +89,11 @@ bool GameController::init(RootLayer* root) {
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root, const Rect& rect) {
+    _levelKey = LEVEL_TWO_KEY;
+    _levelFile = LEVEL_TWO_FILE;
+    
     _assets = AssetManager::getInstance()->getCurrent();
-    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    _level = _assets->get<LevelModel>(_levelKey);
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -206,10 +209,10 @@ void GameController::reset() {
     
     // Unload the level but keep in memory temporarily
     _level->retain();
-    _assets->unload<LevelModel>(LEVEL_ONE_KEY);
+    _assets->unload<LevelModel>(_levelKey);
     
     // Load a new level and quit update
-    _assets->loadAsync<LevelModel>(LEVEL_ONE_KEY,LEVEL_ONE_FILE);
+    _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
     _loadnode->setVisible(true);
 }
 
@@ -220,7 +223,7 @@ void GameController::onReset() {
     _level->release();
     
     // Access and initialize level
-    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    _level = _assets->get<LevelModel>(_levelKey);
     _level->setRootNode(_rootnode);
     _level->showDebug(_debug);
     _world = _level->getWorld();

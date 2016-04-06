@@ -13,6 +13,10 @@
 #define LEVEL_ONE_KEY "level_one"
 /** Level One File */
 #define LEVEL_ONE_FILE "levels/testLevel.tmx"
+/** Level Two Key */
+#define LEVEL_TWO_KEY "level_two"
+/** Level Two File */
+#define LEVEL_TWO_FILE "levels/testLevel2.tmx"
 
 
 #endif /* Level_h */
