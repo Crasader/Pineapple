@@ -45,14 +45,17 @@
 
 /** Collision Class Names */
 #define PINEAPPLE_C             1
-#define JELLO_C                 2
 #define KID_C					3
-#define SPIKES_C                4
 #define BLENDER_C               5
-#define CUP_C					6
-#define PLATFORM_C              8
 #define BUTTON_SWITCH_C         9
+
+//Elements that count as ground
+#define JELLO_C                 2
+#define SPIKES_C                4
+#define CUP_C					6
 #define MOVEABLE_PLATFORM_C     10
+#define WALL_C                  12
+
 #define UNASSIGNED_C            100
 /** End Collision Class Names */
 

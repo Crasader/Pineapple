@@ -505,9 +505,9 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     initDebugProperties(platform);
     initPhysicalObstacle(platform);
     
-//    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
-//        initPhysicalObstacle(platform->getBodies()[ii]);
-//    }
+    //    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
+    //        initPhysicalObstacle(platform->getBodies()[ii]);
+    //    }
     
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
@@ -659,6 +659,7 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
         MoveablePlatformModel* platform = *it;
         
+        Texture2D* image = assets->get<Texture2D>(MIDDLE_TEXTURE_RED);
         platform->storeDrawScale(_scale);
         platform->setDrawScale(_scale);
         poly = PolygonNode::create();
@@ -670,7 +671,7 @@ void LevelModel::setRootNode(Node* node) {
     //Hook up switches to platforms
     for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
         ButtonSwitchModel* button = *it;
-
+        
         Color c = button->getColor();
         for(auto it2 = _moveablePlatforms.begin(); it2 != _moveablePlatforms.end(); ++it2) {
             MoveablePlatformModel* platform = *it2;
@@ -709,41 +710,43 @@ void LevelModel::showDebug(bool flag) {
 }
 
 void LevelModel::kill(PineappleModel* will) {
-	removeObstacle(will);
-	clearPineapple();
-	setFailure(true); //TODO: Move failure to main game loop?
+    removeObstacle(will);
+    clearPineapple();
+    setFailure(true); //TODO: Move failure to main game loop?
 }
 
 void LevelModel::kill(KidModel* kid) {
-	removeObstacle(kid);
-	clearKid(kid->getIndex());
-	subtractKidFromCount();
-	// TODO: Move failure check to main game loop?
-	if (_kidsRemaining == 0) {
-		setFailure(true);
-	}
+    if (_kids[kid->getIndex()] != nullptr) {
+        removeObstacle(kid);
+        clearKid(kid->getIndex());
+        subtractKidFromCount();
+        // TODO: Move failure check to main game loop?
+        if (_kidsRemaining == 0) {
+            setFailure(true);
+        }
+    }
 }
 
 void LevelModel::blendAndKill(PineappleModel* will) {
-	kill(will);
-
-	//TODO: Animation and sounds
+    kill(will);
+    
+    //TODO: Animation and sounds
 }
 
 void LevelModel::blendAndKill(KidModel* kid) {
-	kill(kid);
-
-	//TODO: Animation and sounds
+    kill(kid);
+    
+    //TODO: Animation and sounds
 }
 
 void LevelModel::spikeAndKill(PineappleModel* will) {
-	kill(will);
-
-	//TODO: Animation and sounds
+    kill(will);
+    
+    //TODO: Animation and sounds
 }
 
 void LevelModel::spikeAndKill(KidModel* kid) {
-	kill(kid);
-
-	//TODO: Animation and sounds
+    kill(kid);
+    
+    //TODO: Animation and sounds
 }
