@@ -13,6 +13,7 @@
 #define SPIKES_OBJECT_GROUP "Spikes"
 #define KIDS_OBJECT_GROUP   "Kids"
 #define WILL_OBJECT_GROUP   "Will"
+#define CUP_OBJECT_GROUP    "Cups"
 
 /** Properties that Tiled Objects and maps posess */
 #define BLENDER_START_X_PROPERTY    "BlenderStartX"
@@ -168,6 +169,8 @@ bool LevelModel::load() {
                     addPineapple(position);
                 } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
                     addKid(position);
+                } else if (objectGroup->getGroupName() == CUP_OBJECT_GROUP) {
+                    addCup(position);
                 }
             }
         }
@@ -260,7 +263,7 @@ void LevelModel::unload() {
     _walls.clear();
     
     for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
-        if (_world != nullptr) {
+        if (_world != nullptr && ! (*it)->isRemoved()) {
             _world->removeObstacle(*it);
             _worldnode->removeChild((*it)->getSceneNode());
             _debugnode->removeChild((*it)->getDebugNode());
@@ -268,6 +271,16 @@ void LevelModel::unload() {
         (*it)->release();
     }
     _jellos.clear();
+    
+    for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
+        if (_world != nullptr && ! (*it)->isRemoved()) {
+            _world->removeObstacle(*it);
+            _worldnode->removeChild((*it)->getSceneNode());
+            _debugnode->removeChild((*it)->getDebugNode());
+        }
+        (*it)->release();
+    }
+    _crushables.clear();
     
     if (_world != nullptr) {
         _world->clear();
@@ -390,7 +403,11 @@ void LevelModel::addJello(float jelloPos[POS_COORDS]) {
 }
 
 void LevelModel::addCup(float cupPos[POS_COORDS]) {
-    CC_ASSERT(false);
+    CrushableModel* cup = CrushableModel::create(RED_CUP_TEXTURE, cupPos);
+    initDebugProperties(cup);
+    initPhysicalObstacle(cup);
+    cup->setName(CUP_NAME);
+    _crushables.push_back(cup);
 }
 
 void LevelModel::addSpikes(float spikesPos[POS_COORDS]) {
@@ -537,6 +554,18 @@ void LevelModel::setRootNode(Node* node) {
         spike->setSceneNode(poly);
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
+    }
+    
+    for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
+        CrushableModel* cup = *it;
+        
+        
+        Texture2D* image = assets->get<Texture2D>(cup->getTextureName());
+        cup->setDrawScale(_scale.x, _scale.y);
+        poly = PolygonNode::createWithTexture(image);
+        cup->setSceneNode(poly);
+        
+        addAnonymousObstacle(cup, CUP_Z_INDEX);
     }
 }
 

@@ -8,6 +8,7 @@
 #include "WallModel.h"
 #include "SpikeModel.h"
 #include "JelloModel.h"
+#include "CrushableModel.h"
 #include "Const.h"
 #include "Texture.h"
 #include <cornell.h>
@@ -66,11 +67,12 @@ protected:
     
     /** Reference to all the walls */
     std::vector<WallModel*> _walls;
-    
     /** Reference to all the jellos */
     std::vector<JelloModel*> _jellos;
     /** Reference to all the spikes */
     std::vector<SpikeModel*> _spikes;
+    /** Reference to all the crushables */
+    std::vector<CrushableModel*> _crushables;
 
 	/** The Box2D world */
 	WorldController* _world;

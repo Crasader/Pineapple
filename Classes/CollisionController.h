@@ -13,6 +13,7 @@ class LevelModel;
 class LevelController;
 class PineappleModel;
 class KidModel;
+class JelloModel;
 
 using namespace cocos2d;
 using namespace std;
@@ -30,7 +31,7 @@ protected:
 	* This method is called when will collides with a jello
 	* to trigger upward momentum, and a jello quiver animation
 	*/
-	void handleJelloCollision(PineappleModel* will);
+	void handleJelloCollision(PineappleModel* will, JelloModel* jello);
 
 	/**
 	* Applies the jello force to the given kid.
