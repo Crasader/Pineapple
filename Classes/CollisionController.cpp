@@ -31,7 +31,7 @@ void CollisionController::setLevel(LevelModel* level) {
 * This method is called when the given pineapple collides with a jello
 * to trigger upward momentum, and a jello quiver animation
 */
-void CollisionController::handleJelloCollision(PineappleModel* will) {
+void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel* jello) {
 	will->setCollidingWithJello(true);
 	if (!will->isLarge()) {
 		//Jump!
@@ -42,7 +42,7 @@ void CollisionController::handleJelloCollision(PineappleModel* will) {
 		will->setGrounded(false);
 	}
 	else {
-		//Squish
+        _level->removeObstacle(jello);
 	}
 }
 
@@ -108,8 +108,9 @@ void CollisionController::beginContact(b2Contact* contact) {
 	}
 
 	if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
+        JelloModel* jello = bd1->getName() == JELLO_NAME ? (JelloModel*)bd1 : (JelloModel*)bd2;
 		if (_level->getPineapple() != nullptr && !_level->getPineapple()->isCollidingWithJello() && (_level->getPineapple() == bd1 || _level->getPineapple() == bd2)) {
-			handleJelloCollision(_level->getPineapple());
+			handleJelloCollision(_level->getPineapple(), jello);
 		}
 		else {
 			for (int i = 0; i < KID_COUNT; i++) {

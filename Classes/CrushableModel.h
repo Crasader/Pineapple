@@ -44,8 +44,14 @@ protected:
 	* the texture (e.g. a circular shape attached to a square texture).
 	*/
 	virtual void resetDebugNode() override;
+    
+    /** The name of this texture that will be attached to the crushableObject */
+    const char* _textureName;
 
 public:
+    /** Return the name of the texture that should be used for this */
+    const char* getTextureName() { return _textureName; }
+    
 #pragma mark Static Constructors
 	/**
 	* Creates a new crushable at the origin.
@@ -129,6 +135,16 @@ public:
 	*/
 	void applyForce();
 
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
+    
 
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
