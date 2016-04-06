@@ -218,6 +218,8 @@ public:
     
     void addButtonSwitch(float buttonSwitchPos[], bool isSwitch, Color color);
     
+    void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, Color color);
+    
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
     void addAnonymousObstacle(Obstacle* obj, int zOrder);

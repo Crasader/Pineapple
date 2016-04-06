@@ -30,8 +30,15 @@
 #define Y_PROPERTY          "y"
 
 /** ButtonSwitch + MoveablePlatform Properties */
-#define IS_SWITCH_PROPERTY  "isSwitch"
 #define COLOR_PROPERTY      "linkID"
+
+/** ButtonSwitch Properties */
+#define IS_SWITCH_PROPERTY  "isSwitch"
+
+/** MoveablePlatform Properties */
+#define LENGTH_PROPERTY         "length"
+#define IS_OPEN_PROPERTY        "isOpen"
+#define IS_VERTICAL_PROPERTY    "isVertical"
 
 /**
  *	Will replace this constructor with some kind of populate/build level via levelController
@@ -184,6 +191,12 @@ bool LevelModel::load() {
                     bool isSwitch = object.at(IS_SWITCH_PROPERTY).asBool();
                     Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
                     addButtonSwitch(position, isSwitch, color);
+                } else if (objectGroup->getGroupName() == MOVEABLE_PLATFORMS_GROUP) {
+                    int length = object.at(LENGTH_PROPERTY).asInt();
+                    bool isOpen = object.at(IS_OPEN_PROPERTY).asBool();
+                    bool isVertical = object.at(IS_VERTICAL_PROPERTY).asBool();
+                    Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
+                    addMoveablePlatform(position, length, isOpen, isVertical, color);
                 }
             }
         }
@@ -478,6 +491,15 @@ void LevelModel::addButtonSwitch(float buttonSwitchPos[POS_COORDS], bool isSwitc
     _buttonSwitches.push_back(button);
 }
 
+void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length, bool isOpen, bool vertical, Color color) {
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, color);
+    
+    initDebugProperties(platform);
+    initPhysicalObstacle(platform);
+    platform->setName(MOVEABLE_PLATFORM_NAME);
+    _moveablePlatforms.push_back(platform);
+}
+
 void LevelModel::setDrawScale(const Vec2& value) {
     if (value.x <= 0 || value.y <= 0) {
         CC_ASSERT(false);
@@ -619,6 +641,16 @@ void LevelModel::setRootNode(Node* node) {
         button->setSceneNode(poly);
         
         addAnonymousObstacle(button, BUTTON_SWITCH_Z_INDEX);
+    }
+    
+    for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
+        MoveablePlatformModel* platform = *it;
+        
+        platform->setDrawScale(_scale.x, _scale.y);
+        poly = PolygonNode::create(Rect(0,0,1,1));
+        platform->setSceneNode(poly);
+        
+        addAnonymousObstacle(platform, BUTTON_SWITCH_Z_INDEX);
     }
 }
 

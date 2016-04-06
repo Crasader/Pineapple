@@ -140,9 +140,7 @@ void MoveablePlatformModel::resetSceneNode() {
     centerSize.height *= cscale;
     
     _maxXStretch = _length/2 / centerSize.width;
-    
-    float nintyDegrees = 1.5708; //in radians
-    
+        
     Rect bounds;
     BoxObstacle *ob;
     
