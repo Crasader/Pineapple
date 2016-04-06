@@ -496,6 +496,11 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     
     initDebugProperties(platform);
     initPhysicalObstacle(platform);
+    
+    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
+        initPhysicalObstacle(platform->getBodies()[ii]);
+    }
+    
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
 }

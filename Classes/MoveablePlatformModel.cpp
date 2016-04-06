@@ -61,7 +61,6 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
         _box1->setName(BOX_NAME);
         _box1->retain();
         _box1->setFixedRotation(true);
-        _box1->setBodyType(b2_staticBody);
         _box1->setAngle(nintyDegrees);
         _bodies.push_back(_box1);
         
@@ -69,7 +68,6 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
         _box2->setName(BOX_NAME);
         _box2->retain();
         _box2->setFixedRotation(true);
-        _box2->setBodyType(b2_staticBody);
         _box2->setAngle(nintyDegrees);
         _bodies.push_back(_box2);
     } else {
@@ -87,14 +85,12 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
         _box1->setName(BOX_NAME);
         _box1->retain();
         _box1->setFixedRotation(true);
-        _box1->setBodyType(b2_staticBody);
         _bodies.push_back(_box1);
         
         _box2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
         _box2->setName(BOX_NAME);
         _box2->retain();
         _box2->setFixedRotation(true);
-        _box2->setBodyType(b2_staticBody);
         _bodies.push_back(_box2);
     }
     

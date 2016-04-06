@@ -73,6 +73,8 @@ private:
     void update(float dt) override;
     
 public:
+    virtual int getCollisionClass() { return MOVEABLE_PLATFORM_C; }
+    
     static Color getColor(int index) {
         if (index == 1) {
             return Color::blue;
