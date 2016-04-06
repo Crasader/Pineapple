@@ -35,7 +35,7 @@
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -14.7f
 /** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
+#define BASIC_DENSITY   1.0f
 /** The density for a bullet */
 #define HEAVY_DENSITY   10.0f
 /** Friction of most platforms */
@@ -61,6 +61,8 @@
 
 /** The name given to the pineapple object */
 #define PINEAPPLE_NAME "will"
+/** The name given to the blender object */
+#define BLENDER_NAME   "blender"
 /** The name given to a kid object, plus its index */
 #define KID_NAME       "kid" //i.e. kid_2
 /** The name given to wall objects */
@@ -72,7 +74,7 @@
 /** The name given to cup objects */
 #define CUP_NAME      "cup"
 /** The name given to the goal object */
-#define GOAL_NAME       "goal"
+#define GOAL_NAME     "goal"
 
 /** The message for winning the game */
 #define WIN_MESSAGE     "VICTORY"

@@ -138,6 +138,10 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
+    
+    cout << bd1->getName() << "\n";
+    cout << bd2->getName() << "\n";
+
 
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {

@@ -123,13 +123,7 @@ void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setFriction(BASIC_FRICTION);
     obstacle->setFixedRotation(true);
     obstacle->setRestitution(BASIC_RESTITUTION);
-    obstacle->setGravityScale(0);
-    
-    b2Filter b = b2Filter();
-    b.maskBits = KID_MASK | PINEAPPLE_MASK;
-    b.categoryBits = 0x0001;
-    
-    obstacle->setFilterData(b);
+    obstacle->setGravityScale(1);
     obstacle->setSensor(false);
 }
 
@@ -420,6 +414,7 @@ void LevelModel::addPineapple(float pineapplePos[POS_COORDS]) {
         b.categoryBits = PINEAPPLE_MASK;
         b.maskBits = PINEAPPLE_COLLIDES_WITH;
         will->setFilterData(b);
+        will->setName(PINEAPPLE_NAME);
         
         initDebugProperties(will);
         _pineapple = will;
@@ -482,6 +477,8 @@ void LevelModel::addBlender(float blenderPos[POS_COORDS]) {
         b.maskBits = BLENDER_COLLIDES_WITH;
         blender->setFilterData(b);
         
+        blender->setName(BLENDER_NAME);
+        
         initDebugProperties(blender);
         initSensor(blender);
         _blender = blender;
@@ -503,11 +500,10 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, color);
     
     initDebugProperties(platform);
-    initPhysicalObstacle(platform);
     
-    //    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
-    //        initPhysicalObstacle(platform->getBodies()[ii]);
-    //    }
+    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
+        initPhysicalObstacle(platform->getBodies()[ii]);
+    }
     
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
@@ -659,13 +655,12 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
         MoveablePlatformModel* platform = *it;
         
-        Texture2D* image = assets->get<Texture2D>(MIDDLE_TEXTURE_RED);
         platform->storeDrawScale(_scale);
         platform->setDrawScale(_scale);
         poly = PolygonNode::create();
         platform->setSceneNode(poly);
         
-        addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);
+        addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);        
     }
     
     //Hook up switches to platforms

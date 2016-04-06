@@ -126,7 +126,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         setDensity(PINEAPPLE_DENSITY);
         
         // Gameplay attributes
-        _isGrounded = false;
+        _isGrounded = true;
         _isJumping = false;
         _isCollidingWithJello = false;
         _isCollidingWithButtonSwitch = false;

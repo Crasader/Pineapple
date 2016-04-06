@@ -202,8 +202,6 @@ void MoveablePlatformModel::resetSceneNode() {
         _box2->setAngle(nintyDegrees);
     }
     
-    _node->setContentSize(Size(_length,MOVEABLE_PLATFORM_WIDTH));
-    
 }
 
 void MoveablePlatformModel::open() {
