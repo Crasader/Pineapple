@@ -592,3 +592,43 @@ void LevelModel::clearRootNode() {
 void LevelModel::showDebug(bool flag) {
     _debugnode->setVisible(flag);
 }
+
+void LevelModel::kill(PineappleModel* will) {
+	removeObstacle(will);
+	clearPineapple();
+	setFailure(true); //TODO: Move failure to main game loop?
+}
+
+void LevelModel::kill(KidModel* kid) {
+	removeObstacle(kid);
+	clearKid(kid->getIndex());
+	subtractKidFromCount();
+	// TODO: Move failure check to main game loop?
+	if (_kidsRemaining == 0) {
+		setFailure(true);
+	}
+}
+
+void LevelModel::blendAndKill(PineappleModel* will) {
+	kill(will);
+
+	//TODO: Animation and sounds
+}
+
+void LevelModel::blendAndKill(KidModel* kid) {
+	kill(kid);
+
+	//TODO: Animation and sounds
+}
+
+void LevelModel::spikeAndKill(PineappleModel* will) {
+	kill(will);
+
+	//TODO: Animation and sounds
+}
+
+void LevelModel::spikeAndKill(KidModel* kid) {
+	kill(kid);
+
+	//TODO: Animation and sounds
+}

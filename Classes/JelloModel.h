@@ -48,6 +48,7 @@
 #include <cornell/CUWireNode.h>
 #include "Const.h"
 #include "Texture.h"
+//#include "CollisionObjectModel.h"
 
 using namespace cocos2d;
  
@@ -76,7 +77,7 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class JelloModel : public BoxObstacle {
+class JelloModel : public BoxObstacle/*, public CollisionObjectModel*/ {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(JelloModel);
@@ -92,6 +93,10 @@ protected:
     virtual void resetDebugNode() override;
 
 public:
+	/**
+	*	returns collision class
+	*/
+	int getCollisionClass() { return JELLO_C; };
 #pragma mark Static Constructors
     /**
      * Creates a new jello at the origin.

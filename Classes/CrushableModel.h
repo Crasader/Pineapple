@@ -2,6 +2,8 @@
 #define __CRUSHABLE_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
+//#include "CollisionObjectModel.h"
+#include "Const.h"
 
 using namespace cocos2d;
 
@@ -30,7 +32,7 @@ using namespace cocos2d;
 * experience, using a rectangular shape for a character will regularly snag
 * on a platform.  The round shapes on the end caps lead to smoother movement.
 */
-class CrushableModel : public BoxObstacle {
+class CrushableModel : public BoxObstacle/*, public CollisionObjectModel*/ {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
 	CC_DISALLOW_COPY_AND_ASSIGN(CrushableModel);
@@ -49,6 +51,11 @@ protected:
     const char* _textureName;
 
 public:
+	/**
+	*	returns collision class
+	*/
+	int getCollisionClass() { return CUP_C; };
+
     /** Return the name of the texture that should be used for this */
     const char* getTextureName() { return _textureName; }
     

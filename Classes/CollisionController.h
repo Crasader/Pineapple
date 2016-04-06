@@ -7,6 +7,8 @@
 #include <Box2D/Dynamics/b2Fixture.h>
 #include <unordered_set>
 #include <cornell/CUSimpleObstacle.h>
+#include <cornell/CUBoxObstacle.h>
+#include <cornell/CUCapsuleObstacle.h>
 
 // Forward declarations in the project
 class LevelModel;
@@ -14,6 +16,7 @@ class LevelController;
 class PineappleModel;
 class KidModel;
 class JelloModel;
+class CrushableModel;
 
 using namespace cocos2d;
 using namespace std;
@@ -23,11 +26,17 @@ protected:
 	LevelModel* _level;
 	LevelController* _levelCtrlr;
 	/** Mark set to handle more sophisticated collision callbacks */
-	unordered_set<b2Fixture*> _sensorFixtures;
+	unordered_set<b2Fixture*> _pSensorFixtures;
 #pragma mark -
 #pragma mark Collision Handling
+
 	/**
-	* Applies the jello force to the given pineapple.
+	 * grounds will for jump enabling
+	 */
+	void ground(PineappleModel * will, b2Fixture* fix);
+
+	/**
+	* Applies the jello force to william if he's small or crushes the jello if he's big.
 	* This method is called when will collides with a jello
 	* to trigger upward momentum, and a jello quiver animation
 	*/
@@ -41,16 +50,32 @@ protected:
 	void handleJelloCollision(KidModel* kid);
 
 	/**
-	* Kills the given player or child.
-	* This method is called when Will or one of his kids collides with a spike,
-	* to trigger any blending animation and remove the given object from the world
-	*
-	* This method shouldn't do any checks for gameover, that should be handled elsewhere
-	*
-	* If necesarry to enable different animations this can be separated into separate funcs for
-	* kid/pineapple
+	 * Triggers blending of will
+	 */
+	void handleBlenderCollision(PineappleModel * will);
+
+	/**
+	 * Triggers blending of kid
+	 */
+	void handleBlenderCollision(KidModel* kid);
+
+	/**
+	* Kills will and triggers any associated death-by-spikes animations and sound
 	*/
-	void handleSpikeCollision(SimpleObstacle* pineappleOrKid);
+	void handleSpikeCollision(PineappleModel* will);
+	/**
+	* Kills kid and triggers any associated death-by-spikes animations and sound
+	*/
+	void handleSpikeCollision(KidModel* kid);
+	/**
+	 * Crushes cup if will is large and above it
+	 */
+	void handleCupCollision(PineappleModel* will, CrushableModel* cup);
+
+	/**
+	 * Helper function to determine if an object is in a position to be crushed by a large Will
+	 */
+	bool isBelowChar(BoxObstacle * obj, CapsuleObstacle * character);
 
 public:
 	/**

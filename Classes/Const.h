@@ -42,6 +42,17 @@
 /** The restitution for all physics objects */
 #define BASIC_RESTITUTION   0.1f
 
+/** Collision Class Names */
+#define BLENDER_C			5
+#define PINEAPPLE_C		1
+#define KID_C					3
+#define JELLO_C				2
+#define SPIKES_C			4
+#define CUP_C					6
+#define PLATFORM_C		8
+#define UNASSIGNED_C	100
+/** End Collision Class Names */
+
 /** The name given to the pineapple object */
 #define PINEAPPLE_NAME "will"
 /** The name given to a kid object, plus its index */
