@@ -364,7 +364,7 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     initSensor(button_switch);
     _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
     
-    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(20.0f, 10.0f), Vec2(1.0f,1.0f), 0.5f, false, false, Color::red);
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(2.0f, 2.0f), _scale, 3.0f, false, false, Color::red);
     Node* node = Node::create();
 
     platform->setSceneNode(node);
