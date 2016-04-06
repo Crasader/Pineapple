@@ -11,7 +11,7 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define MOVEABLE_PLATFORM_SCALE 0.01
+#define MOVEABLE_PLATFORM_SCALE 0.18
 
 MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float length, bool isOpen, bool vertical, Color color) {
     MoveablePlatformModel* platform = new (std::nothrow) MoveablePlatformModel();
@@ -135,7 +135,12 @@ void MoveablePlatformModel::resetSceneNode() {
     centerSize.width  *= cscale;
     centerSize.height *= cscale;
     
-    _maxXStretch = _length/2 / centerSize.width;
+    _maxXStretch = _length/2 * _drawScale.x / centerSize.width;
+    if (_isOpen) {
+        setOpen();
+    } else {
+        setClosed();
+    }
     
     Rect bounds;
     BoxObstacle *ob;
@@ -144,17 +149,17 @@ void MoveablePlatformModel::resetSceneNode() {
     PolygonNode* pnode = PolygonNode::createWithTexture(leftNubbin);
     bounds.size = pnode->getContentSize();
     pnode->setPolygon(bounds);
-    //pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
     _bodies[0]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[0];
     if (_isVertical) {
         ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + _length/2.0f));
     } else {
-        ob->setPosition(Vec2(_pos.x - nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE - _length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x - nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE/ _drawScale.x - _length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
-    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE,
-                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE/ _drawScale.y);
     
     _node->addChild(pnode);
     
@@ -164,17 +169,17 @@ void MoveablePlatformModel::resetSceneNode() {
     bounds.size = pnode->getContentSize();
     
     pnode->setPolygon(bounds);
-    //pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
     _bodies[1]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[1];
     if(_isVertical) {
         ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length/2.0f + _nubbin1->getHeight()));
     } else {
-        ob->setPosition(Vec2(_pos.x + nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE  + _length / 2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x + nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE/ _drawScale.x  + _length / 2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
-    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE,
-                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
     
     _node->addChild(pnode);
     
@@ -186,7 +191,7 @@ void MoveablePlatformModel::resetSceneNode() {
         ob->setPosition(Vec2(_pos.x - _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
     ob->setDimension(_length/2,
-                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
     
     pnode = PolygonNode::createWithTexture(box);
     bounds.size = pnode->getContentSize();
@@ -206,7 +211,7 @@ void MoveablePlatformModel::resetSceneNode() {
         ob->setPosition(Vec2(_pos.x + _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
     ob->setDimension(_length/2,
-                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
     pnode = PolygonNode::createWithTexture(box);
     bounds.size = pnode->getContentSize();
     
@@ -216,12 +221,6 @@ void MoveablePlatformModel::resetSceneNode() {
     _bodies[3]->setSceneNode(pnode);
     
     _node->addChild(pnode);
-    
-    if (_isOpen) {
-        setOpen();
-    } else {
-        setClosed();
-    }
 }
 
 void MoveablePlatformModel::open() {
