@@ -84,6 +84,8 @@ protected:
 	int _kidsRemaining;
 	/** Whether we have failed at this level (and need a reset) */
 	bool _failed;
+    
+    bool _isLoaded;
 
 public:
 #pragma mark -

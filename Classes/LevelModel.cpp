@@ -37,7 +37,8 @@ _kidsRemaining(0),
 _world(nullptr),
 _rootnode(nullptr),
 _debugnode(nullptr),
-_worldnode(nullptr){}
+_worldnode(nullptr),
+_isLoaded(false){}
 
 /**
  * Creates a new game level with no source file.
@@ -112,6 +113,10 @@ void initPhysicalObstacle(Obstacle* obstacle) {
 
 
 bool LevelModel::load() {
+    if (_isLoaded) {
+        return true;
+    }
+    
     _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
     _world->retain();
     
@@ -140,7 +145,7 @@ bool LevelModel::load() {
         for(auto it2 = objects.begin(); it2 != objects.end(); ++it2) {
             
             //Casting bug occurs here
-            obj  = (*it2);
+            obj = (*it2);
             if (obj.getType() == Value::Type::MAP) {
                 object = obj.asValueMap();
                 
@@ -197,12 +202,16 @@ bool LevelModel::load() {
     }
     addWall(position);
     
+    _isLoaded = true;
     return true;
 }
 
 void LevelModel::unload() {
-    //TODO - pre-nulling cleanup
+    if (! _isLoaded) {
+        return;
+    }
     
+    //TODO - pre-nulling cleanup
     if (_pineapple != nullptr) {
         if (_world != nullptr) {
             _world->removeObstacle(_pineapple);
@@ -284,6 +293,7 @@ void LevelModel::unload() {
     _worldnode=nullptr;
     _debugnode=nullptr;
     _rootnode=nullptr;
+    _isLoaded = false;
 }
 
 LevelModel::~LevelModel(){
