@@ -9,6 +9,8 @@
 #include "SpikeModel.h"
 #include "JelloModel.h"
 #include "CrushableModel.h"
+#include "ButtonSwitchModel.h"
+#include "MoveablePlatformModel.h"
 #include "Const.h"
 #include "Texture.h"
 #include <cornell.h>
@@ -75,6 +77,10 @@ protected:
     std::vector<SpikeModel*> _spikes;
     /** Reference to all the crushables */
     std::vector<CrushableModel*> _crushables;
+    /** Reference to all of the buttonSwitches */
+    std::vector<ButtonSwitchModel*> _buttonSwitches;
+    /** Reference to all of the moveable platforms */
+    std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
 	/** The Box2D world */
 	WorldController* _world;
@@ -209,6 +215,9 @@ public:
     void addSpikes(float spikePos[]);
     
     void addBlender(float blenderPos[]);
+    
+    void addButtonSwitch(float buttonSwitchPos[], bool isSwitch, Color color);
+    
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
     void addAnonymousObstacle(Obstacle* obj, int zOrder);

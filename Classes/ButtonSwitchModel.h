@@ -44,6 +44,13 @@ protected:
     virtual void resetDebugNode() override;
     
 public:
+    bool isSwitch() { return _isSwitch; }
+    
+    /**
+     *	returns collision class
+     */
+    int getCollisionClass() { return BUTTON_SWITCH_C; };
+    
 #pragma mark Static Constructors
     
     /**
@@ -123,6 +130,16 @@ public:
             }
         }
     }
+
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors

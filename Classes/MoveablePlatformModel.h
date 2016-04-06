@@ -74,6 +74,18 @@ private:
     void update(float dt) override;
     
 public:
+    static Color getColor(int index) {
+        if (index == 1) {
+            return Color::blue;
+        } else if (index == 2) {
+            return Color::red;
+        } else if (index == 3) {
+            return Color::green;
+        } else {
+            CC_ASSERT(false);
+        }
+    }
+    
     Color getColor() { return _color; }
     
     BoxObstacle* getNubbin1() {

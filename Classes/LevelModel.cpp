@@ -8,22 +8,30 @@
 #define POS_COORDS      2
 
 /** Layer groups used in Tiled Maps */
-#define WALL_OBJECT_GROUP   "Walls"
-#define GOAL_OBJECT_GROUP   "Goal"
-#define JELLO_OBJECT_GROUP  "Jello"
-#define SPIKES_OBJECT_GROUP "Spikes"
-#define KIDS_OBJECT_GROUP   "Kids"
-#define WILL_OBJECT_GROUP   "Will"
-#define CUP_OBJECT_GROUP    "Cups"
+#define WALL_OBJECT_GROUP               "Walls"
+#define GOAL_OBJECT_GROUP               "Goal"
+#define JELLO_OBJECT_GROUP              "Jello"
+#define SPIKES_OBJECT_GROUP             "Spikes"
+#define KIDS_OBJECT_GROUP               "Kids"
+#define WILL_OBJECT_GROUP               "Will"
+#define CUP_OBJECT_GROUP                "Cups"
+#define BUTTON_SWITCH_OBJECT_GROUP      "Switches"
+#define MOVEABLE_PLATFORMS_GROUP        "Bridges"
 
 /** Properties that Tiled Objects and maps posess */
+/** Level Properties */
 #define BLENDER_START_X_PROPERTY    "BlenderStartX"
 #define BLENDER_Y_PROPERTY          "BlenderStartY"
 
+/** All Object Properties */
 #define WIDTH_PROPERTY      "width"
 #define HEIGHT_PROPERTY     "height"
 #define X_PROPERTY          "x"
 #define Y_PROPERTY          "y"
+
+/** ButtonSwitch + MoveablePlatform Properties */
+#define IS_SWITCH_PROPERTY  "isSwitch"
+#define COLOR_PROPERTY      "linkID"
 
 /**
  *	Will replace this constructor with some kind of populate/build level via levelController
@@ -172,6 +180,9 @@ bool LevelModel::load() {
                     addKid(position);
                 } else if (objectGroup->getGroupName() == CUP_OBJECT_GROUP) {
                     addCup(position);
+                } else if (objectGroup->getGroupName() == BUTTON_SWITCH_OBJECT_GROUP) {
+                    bool isSwitch = object.at(IS_SWITCH_PROPERTY).asBool();
+                    int colorID = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
                 }
             }
         }
@@ -282,6 +293,26 @@ void LevelModel::unload() {
         (*it)->release();
     }
     _crushables.clear();
+    
+    for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
+        if (_world != nullptr && ! (*it)->isRemoved()) {
+            _world->removeObstacle(*it);
+            _worldnode->removeChild((*it)->getSceneNode());
+            _debugnode->removeChild((*it)->getDebugNode());
+        }
+        (*it)->release();
+    }
+    _buttonSwitches.clear();
+    
+    for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
+        if (_world != nullptr && ! (*it)->isRemoved()) {
+            _world->removeObstacle(*it);
+            _worldnode->removeChild((*it)->getSceneNode());
+            _debugnode->removeChild((*it)->getDebugNode());
+        }
+        (*it)->release();
+    }
+    _moveablePlatforms.clear();
     
     if (_world != nullptr) {
         _world->clear();
@@ -437,6 +468,15 @@ void LevelModel::addBlender(float blenderPos[POS_COORDS]) {
     }
 }
 
+void LevelModel::addButtonSwitch(float buttonSwitchPos[POS_COORDS], bool isSwitch, Color color) {
+    ButtonSwitchModel* button = ButtonSwitchModel::create(buttonSwitchPos, Vec2(1,1), isSwitch, color);
+    
+    initDebugProperties(button);
+    initSensor(button);
+    button->setName(BUTTON_SWITCH_NAME);
+    _buttonSwitches.push_back(button);
+}
+
 void LevelModel::setDrawScale(const Vec2& value) {
     if (value.x <= 0 || value.y <= 0) {
         CC_ASSERT(false);
@@ -567,6 +607,17 @@ void LevelModel::setRootNode(Node* node) {
         cup->setSceneNode(poly);
         
         addAnonymousObstacle(cup, CUP_Z_INDEX);
+    }
+    
+    for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
+        ButtonSwitchModel* button = *it;
+        
+        Texture2D* image = assets->get<Texture2D>(button->isSwitch() ? SWITCH_TEXTURE_RED : BUTTON_TEXTURE_RED);
+        button->setDrawScale(_scale.x, _scale.y);
+        poly = PolygonNode::createWithTexture(image);
+        button->setSceneNode(poly);
+        
+        addAnonymousObstacle(button, BUTTON_SWITCH_Z_INDEX);
     }
 }
 
