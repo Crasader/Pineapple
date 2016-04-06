@@ -651,7 +651,23 @@ void LevelModel::setRootNode(Node* node) {
         poly = PolygonNode::create();
         platform->setSceneNode(poly);
         
-        addAnonymousObstacle(platform, BUTTON_SWITCH_Z_INDEX);
+        addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);
+    }
+    
+    //Hook up switches to platforms
+    for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
+        ButtonSwitchModel* button = *it;
+
+        Color c = button->getColor();
+        for(auto it2 = _moveablePlatforms.begin(); it2 != _moveablePlatforms.end(); ++it2) {
+            MoveablePlatformModel* platform = *it2;
+            
+            Color c2 = platform->getColor();
+            if(c == c2) {
+                button->linkToPlatform(platform);
+                break;
+            }
+        }
     }
 }
 

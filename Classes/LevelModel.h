@@ -26,19 +26,20 @@
  * \------------------------------------/
  */
 
-#define GOAL_Z_INDEX            0
+#define GOAL_Z_INDEX                0
  
-#define WALL_Z_INDEX            10
+#define WALL_Z_INDEX                10
+#define MOVEABLE_PLATFORM_Z_INDEX   11
 
-#define CUP_Z_INDEX             20
-#define JELLO_Z_INDEX           21
-#define BUTTON_SWITCH_Z_INDEX   28
-#define SPIKES_Z_INDEX          29
+#define CUP_Z_INDEX                 20
+#define JELLO_Z_INDEX               21
+#define BUTTON_SWITCH_Z_INDEX       28
+#define SPIKES_Z_INDEX              29
 
-#define KID_Z_INDEX             30 //30...30+NUM_CHILDREN-1 used by Kids
+#define KID_Z_INDEX                 30 //30...30+NUM_CHILDREN-1 used by Kids
 
-#define PINEAPPLE_Z_INDEX       35
-#define BLENDER_Z_INDEX         36
+#define PINEAPPLE_Z_INDEX           35
+#define BLENDER_Z_INDEX             36
 
 
 using namespace cocos2d;

@@ -46,6 +46,8 @@ protected:
 public:
     bool isSwitch() { return _isSwitch; }
     
+    Color getColor() { return _color; }
+    
     /**
      *	returns collision class
      */
