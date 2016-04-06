@@ -85,6 +85,8 @@ public:
         }
     }
     
+    void storeDrawScale(Vec2 scale) { _drawScale = scale; }
+    
     Color getColor() { return _color; }
     
     BoxObstacle* getNubbin1() {

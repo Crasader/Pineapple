@@ -47,7 +47,7 @@
    <properties>
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="false"/>
-    <property name="length" value="5"/>
+    <property name="length" value="9"/>
     <property name="linkID" value="1"/>
    </properties>
   </object>

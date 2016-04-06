@@ -646,8 +646,9 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
         MoveablePlatformModel* platform = *it;
         
-        platform->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::create(Rect(0,0,1,1));
+        platform->storeDrawScale(_scale);
+        platform->setDrawScale(_scale);
+        poly = PolygonNode::create();
         platform->setSceneNode(poly);
         
         addAnonymousObstacle(platform, BUTTON_SWITCH_Z_INDEX);

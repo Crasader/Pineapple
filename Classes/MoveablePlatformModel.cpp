@@ -11,7 +11,7 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define MOVEABLE_PLATFORM_SCALE 0.18
+#define MOVEABLE_PLATFORM_SCALE 0.01
 
 MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float length, bool isOpen, bool vertical, Color color) {
     MoveablePlatformModel* platform = new (std::nothrow) MoveablePlatformModel();
@@ -48,14 +48,12 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
         _nubbin1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
         _nubbin1->setName(NUBBIN_NAME);
         _nubbin1->retain();
-        _nubbin1->setActive(false);
         _nubbin1->setAngle(nintyDegrees);
         _bodies.push_back(_nubbin1);
         
         _nubbin2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
         _nubbin2->setName(NUBBIN_NAME);
         _nubbin2->retain();
-        _nubbin2->setActive(false);
         _nubbin2->setAngle(nintyDegrees);
         _bodies.push_back(_nubbin2);
         
@@ -78,13 +76,11 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
         _nubbin1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
         _nubbin1->setName(NUBBIN_NAME);
         _nubbin1->retain();
-        _nubbin1->setActive(false);
         _bodies.push_back(_nubbin1);
         
         _nubbin2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
         _nubbin2->setName(NUBBIN_NAME);
         _nubbin2->retain();
-        _nubbin2->setActive(false);
         _bodies.push_back(_nubbin2);
         
         _box1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
@@ -140,7 +136,7 @@ void MoveablePlatformModel::resetSceneNode() {
     centerSize.height *= cscale;
     
     _maxXStretch = _length/2 / centerSize.width;
-        
+    
     Rect bounds;
     BoxObstacle *ob;
     
@@ -148,7 +144,7 @@ void MoveablePlatformModel::resetSceneNode() {
     PolygonNode* pnode = PolygonNode::createWithTexture(leftNubbin);
     bounds.size = pnode->getContentSize();
     pnode->setPolygon(bounds);
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    //pnode->setScale(MOVEABLE_PLATFORM_SCALE);
     _bodies[0]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[0];
@@ -168,7 +164,7 @@ void MoveablePlatformModel::resetSceneNode() {
     bounds.size = pnode->getContentSize();
     
     pnode->setPolygon(bounds);
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    //pnode->setScale(MOVEABLE_PLATFORM_SCALE);
     _bodies[1]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[1];
@@ -205,9 +201,9 @@ void MoveablePlatformModel::resetSceneNode() {
     //Right Center
     ob = (BoxObstacle*) _bodies[3];
     if(_isVertical) {
-        Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length / 2.0f);
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length / 2.0f));
     } else {
-        Vec2(_pos.x + _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f);
+        ob->setPosition(Vec2(_pos.x + _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
     ob->setDimension(_length/2,
                      pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
@@ -220,6 +216,12 @@ void MoveablePlatformModel::resetSceneNode() {
     _bodies[3]->setSceneNode(pnode);
     
     _node->addChild(pnode);
+    
+    if (_isOpen) {
+        setOpen();
+    } else {
+        setClosed();
+    }
 }
 
 void MoveablePlatformModel::open() {
