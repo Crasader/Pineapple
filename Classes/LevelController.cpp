@@ -139,7 +139,7 @@ LevelModel* LevelController::read(string filename) {
     addCups(CUP_COUNT, CUP_POS);
     addJello(JELLO_COUNT, JELLO_POS);
     addSpikes(SPIKE_COUNT, SPIKE_POS);
-    addBlender(BLENDER_POS);
+    //addBlender(BLENDER_POS);
     
     addButtonSwitch(Vec2(5,5), true);
     
@@ -364,7 +364,7 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     initSensor(button_switch);
     _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
     
-    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(2.0f, 2.0f), _scale, 3.0f, false, false, Color::red);
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(15.0f, 5.0f), _scale, 10.0f, false, false, Color::red);
     Node* node = Node::create();
 
     platform->setSceneNode(node);

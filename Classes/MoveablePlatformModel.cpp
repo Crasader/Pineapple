@@ -11,7 +11,7 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define MOVEABLE_PLATFORM_SCALE 1
+#define MOVEABLE_PLATFORM_SCALE 0.18
 
 // I suspect the design here will be two boxObjects that when opened will move away from eachother
 
@@ -55,17 +55,18 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
     _scale = scale;
     
     length = length * _scale.x;
+    _length = length;
     
     float cscale = Director::getInstance()->getContentScaleFactor();
     SceneManager* scene = AssetManager::getInstance()->getCurrent();
     Texture2D* nubImage = scene->get<Texture2D>(LEFT_NUBBIN_TEXTURE_RED);
     Texture2D* centerImage = scene->get<Texture2D>(MIDDLE_TEXTURE_RED);
     Size nubbinSize = nubImage->getContentSize();
-    nubbinSize.width  *= cscale/scale.x;
-    nubbinSize.height *= cscale/scale.y;
+    nubbinSize.width  *= cscale;
+    nubbinSize.height *= cscale;
     Size centerSize = centerImage->getContentSize();
-    centerSize.width  *= cscale/scale.x;
-    centerSize.height *= cscale/scale.y;
+    centerSize.width  *= cscale;
+    centerSize.height *= cscale;
     
     float nintyDegrees = 1.5708; //in radians
     
@@ -100,13 +101,13 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
         _box2->setAngle(nintyDegrees);
         _bodies.push_back(_box2);
     } else {
-        _nubbin1 = BoxObstacle::create(Vec2(_pos.x - NUBBIN_LENGTH/2.0f - length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f), nubbinSize);
+        _nubbin1 = BoxObstacle::create(Vec2(_pos.x - nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE - length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f), nubbinSize);
         _nubbin1->setName(NUBBIN_NAME);
         _nubbin1->retain();
         _nubbin1->setActive(false);
         _bodies.push_back(_nubbin1);
         
-        _nubbin2 = BoxObstacle::create(Vec2(_pos.x + NUBBIN_LENGTH/2.0f + length / 2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f), nubbinSize);
+        _nubbin2 = BoxObstacle::create(Vec2(_pos.x + nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE  + length / 2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f), nubbinSize);
         _nubbin2->setName(NUBBIN_NAME);
         _nubbin2->retain();
         _nubbin2->setActive(false);
@@ -151,35 +152,87 @@ void MoveablePlatformModel::resetSceneNode() {
         box = scene->get<Texture2D>(MIDDLE_TEXTURE_BLUE);
     }
     
+    
     float cscale = Director::getInstance()->getContentScaleFactor();
+    
     Texture2D* nubImage = scene->get<Texture2D>(LEFT_NUBBIN_TEXTURE_RED);
     Texture2D* centerImage = scene->get<Texture2D>(MIDDLE_TEXTURE_RED);
     Size nubbinSize = nubImage->getContentSize();
-    nubbinSize.width  *= cscale/_scale.x;
-    nubbinSize.height *= cscale/_scale.y;
+    nubbinSize.width  *= cscale;
+    nubbinSize.height *= cscale;
     Size centerSize = centerImage->getContentSize();
-    centerSize.width  *= cscale/_scale.x;
-    centerSize.height *= cscale/_scale.y;
+    centerSize.width  *= cscale;
+    centerSize.height *= cscale;
     
-    PolygonNode* sprite = PolygonNode::createWithTexture(leftNubbin);
-    //sprite->setScale(_scale);
-    _bodies[0]->setSceneNode(sprite);
-    _node->addChild(sprite);
+    Rect bounds;
+    BoxObstacle *ob;
     
-    sprite = PolygonNode::createWithTexture(rightNubbin);
-    //sprite->setScale(_scale);
-    _bodies[1]->setSceneNode(sprite);
-    _node->addChild(sprite);
+    PolygonNode* pnode = PolygonNode::createWithTexture(leftNubbin);
+    bounds.size = pnode->getContentSize();
     
-    sprite = PolygonNode::createWithTexture(box);
-    //sprite->setScale(_scale);
-    _bodies[2]->setSceneNode(sprite);
-    _node->addChild(sprite);
+    pnode->setPolygon(bounds);
+    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    _bodies[0]->setSceneNode(pnode);
     
-    sprite = PolygonNode::createWithTexture(box);
-    //sprite->setScale(_scale);
-    _bodies[3]->setSceneNode(sprite);
-    _node->addChild(sprite);
+    ob = (BoxObstacle*) _bodies[0];
+    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE,
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    
+    _node->addChild(pnode);
+    
+    pnode = PolygonNode::createWithTexture(rightNubbin);
+    bounds.size = pnode->getContentSize();
+    
+    pnode->setPolygon(bounds);
+    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    _bodies[1]->setSceneNode(pnode);
+    
+    ob = (BoxObstacle*) _bodies[1];
+    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE,
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    
+    _node->addChild(pnode);
+    
+    pnode = PolygonNode::createWithTexture(box);
+    bounds.size = pnode->getContentSize();
+    
+    pnode->setPolygon(bounds);
+    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    _bodies[2]->setSceneNode(pnode);
+    
+    ob = (BoxObstacle*) _bodies[2];
+    ob->setDimension(_length/2,
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    
+    _node->addChild(pnode);
+    
+    pnode = PolygonNode::createWithTexture(box);
+    bounds.size = pnode->getContentSize();
+    
+    pnode->setPolygon(bounds);
+    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    _bodies[3]->setSceneNode(pnode);
+    
+    ob = (BoxObstacle*) _bodies[3];
+    ob->setDimension(_length/2,
+                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    
+    _node->addChild(pnode);
+//
+//    sprite = PolygonNode::createWithTexture(rightNubbin);
+//    //sprite->setScale(_scale);
+//    _bodies[1]->setSceneNode(sprite);
+//    _node->addChild(sprite);
+//    
+//    sprite = PolygonNode::createWithTexture(box);
+//    //sprite->setScale(_scale);
+//    _bodies[2]->setSceneNode(sprite);
+//    _node->addChild(sprite);
+//    
+//    sprite = PolygonNode::createWithTexture(box);
+//    //sprite->setScale(_scale);
+//    _bodies[3]->setSceneNode(sprite);
+//    _node->addChild(sprite);
 }
 
 void MoveablePlatformModel::resetDebugNode() {

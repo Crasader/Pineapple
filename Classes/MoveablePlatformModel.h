@@ -28,7 +28,6 @@ using namespace cocos2d;
 #define OPEN_DISTANCE                 2.5f
 
 #define MOVEABLE_PLATFORM_WIDTH       2.0f
-#define NUBBIN_LENGTH                 1.0f
 
 enum Color {blue = 1, red = 2, green = 3};
 
@@ -45,6 +44,8 @@ private:
     bool _isOpen;
     
     bool _isVertical;
+    
+    float _length;
     
     // left if horizontal, top if vertical
     BoxObstacle* _nubbin1;
