@@ -130,15 +130,19 @@ bool LevelModel::load() {
     
     //For all imaged layers, need to add 1 to y coordinate because tiled is weird
     
+    ValueVector objects;
+    Value obj;
+    ValueMap object;
+    
     for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
         TMXObjectGroup* objectGroup = *it;
-        ValueVector objects = objectGroup->getObjects();
+        objects = objectGroup->getObjects();
         for(auto it2 = objects.begin(); it2 != objects.end(); ++it2) {
             
             //Casting bug occurs here
-            Value obj = (*it2);
+            obj  = (*it2);
             if (obj.getType() == Value::Type::MAP) {
-                ValueMap object = obj.asValueMap();
+                object = obj.asValueMap();
                 
                 float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
                 float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
