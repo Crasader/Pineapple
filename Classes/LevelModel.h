@@ -9,6 +9,8 @@
 #include "SpikeModel.h"
 #include "JelloModel.h"
 #include "CrushableModel.h"
+#include "ButtonSwitchModel.h"
+#include "MoveablePlatformModel.h"
 #include "Const.h"
 #include "Texture.h"
 #include <cornell.h>
@@ -24,18 +26,21 @@
  * \------------------------------------/
  */
 
-#define GOAL_Z_INDEX            0
+#define GOAL_Z_INDEX                0
  
-#define WALL_Z_INDEX            10
+#define WALL_Z_INDEX                10
+#define MOVEABLE_PLATFORM_Z_INDEX   11
 
-#define CUP_Z_INDEX             20
-#define JELLO_Z_INDEX           21
-#define SPIKES_Z_INDEX          29
+#define CUP_Z_INDEX                 20
+#define JELLO_Z_INDEX               21
+#define BUTTON_SWITCH_Z_INDEX       28
+#define SPIKES_Z_INDEX              29
 
-#define KID_Z_INDEX             30 //30...30+NUM_CHILDREN-1 used by Kids
+#define KID_Z_INDEX                 30 //30...30+NUM_CHILDREN-1 used by Kids
 
-#define PINEAPPLE_Z_INDEX       35
-#define BLENDER_Z_INDEX         36
+#define PINEAPPLE_Z_INDEX           35
+#define BLENDER_Z_INDEX             36
+
 
 using namespace cocos2d;
 
@@ -73,6 +78,10 @@ protected:
     std::vector<SpikeModel*> _spikes;
     /** Reference to all the crushables */
     std::vector<CrushableModel*> _crushables;
+    /** Reference to all of the buttonSwitches */
+    std::vector<ButtonSwitchModel*> _buttonSwitches;
+    /** Reference to all of the moveable platforms */
+    std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
 	/** The Box2D world */
 	WorldController* _world;
@@ -86,6 +95,11 @@ protected:
 	int _kidsRemaining;
 	/** Whether we have failed at this level (and need a reset) */
 	bool _failed;
+    
+    /** True once this level is loaded */
+    bool _isLoaded;
+    /** True once this level is unloaded */
+    bool _isUnloaded;
 
 public:
 #pragma mark -
@@ -207,6 +221,11 @@ public:
     void addSpikes(float spikePos[]);
     
     void addBlender(float blenderPos[]);
+    
+    void addButtonSwitch(float buttonSwitchPos[], bool isSwitch, Color color);
+    
+    void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, Color color);
+    
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
     void addAnonymousObstacle(Obstacle* obj, int zOrder);

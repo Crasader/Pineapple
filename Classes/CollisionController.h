@@ -17,6 +17,7 @@ class PineappleModel;
 class KidModel;
 class JelloModel;
 class CrushableModel;
+class ButtonSwitchModel;
 
 using namespace cocos2d;
 using namespace std;
@@ -33,7 +34,7 @@ protected:
 	/**
 	 * grounds will for jump enabling
 	 */
-	void ground(PineappleModel * will, b2Fixture* fix);
+	void ground(PineappleModel * will, b2Fixture* fix, BoxObstacle *ground);
 
 	/**
 	* Applies the jello force to william if he's small or crushes the jello if he's big.
@@ -71,6 +72,12 @@ protected:
 	 * Crushes cup if will is large and above it
 	 */
 	void handleCupCollision(PineappleModel* will, CrushableModel* cup);
+    
+    /** Turns button on, toggles switch */
+    void handleButtonSwitchStartCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch);
+    
+    /** Turns button off */
+    void handleButtonSwitchEndCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch);
 
 	/**
 	 * Helper function to determine if an object is in a position to be crushed by a large Will

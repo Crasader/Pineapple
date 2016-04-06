@@ -56,6 +56,8 @@ protected:
 #pragma mark -
 #pragma mark Static Constructors
 public:
+    
+    int getCollisionClass() { return WALL_C; };
     /**
      * Creates a wall from (not necessarily convex) polygon
      *

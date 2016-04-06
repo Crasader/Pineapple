@@ -94,7 +94,6 @@ JelloModel* JelloModel::create() {
 JelloModel* JelloModel::create(const Vec2& pos) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos)) {
-        jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
         jello->retain();
         return jello;
     }
@@ -120,7 +119,6 @@ JelloModel* JelloModel::create(const Vec2& pos) {
 JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos,scale)) {
-        jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
         jello->retain();
         return jello;
     }

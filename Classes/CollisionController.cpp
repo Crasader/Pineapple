@@ -8,6 +8,7 @@
 #include "SpikeModel.h"
 #include "CrushableModel.h"
 #include "LevelModel.h"
+#include "ButtonSwitchModel.h"
 
 #pragma mark -
 #pragma mark Initialization
@@ -27,9 +28,11 @@ void CollisionController::setLevel(LevelModel* level) {
 #pragma mark -
 #pragma mark Collision Handling
 
-void CollisionController::ground(PineappleModel* will, b2Fixture* fix) {
-	will->setGrounded(true);
-	_pSensorFixtures.emplace(fix);
+void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
+    if (isBelowChar(ground, will)) {
+        will->setGrounded(true);
+        _pSensorFixtures.emplace(fix);
+    }
 }
 
 /**
@@ -95,6 +98,20 @@ void CollisionController::handleCupCollision(PineappleModel* will, CrushableMode
 	}
 }
 
+void CollisionController::handleButtonSwitchStartCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
+    if (! will->isCollidingWithButtonSwitch()) {
+        buttonSwitch->handleContact();
+        will->setCollidingWithButtonSwitch(true);
+    }
+}
+
+void CollisionController::handleButtonSwitchEndCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
+    if (will->isCollidingWithButtonSwitch()) {
+        buttonSwitch->handleEndContact();
+        will->setCollidingWithButtonSwitch(false);
+    }
+}
+
 /**
 * helper to determine if a given Obstacle is below a given character
 */
@@ -121,9 +138,6 @@ void CollisionController::beginContact(b2Contact* contact) {
 	b2Body* body1 = fix1->GetBody();
 	b2Body* body2 = fix2->GetBody();
 
-	void* fd1 = fix1->GetUserData();
-	void* fd2 = fix2->GetUserData();
-
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
 
@@ -132,7 +146,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
 		// Will  x Ground
 		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
-			ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1);
+            ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
 		}
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
@@ -155,6 +169,12 @@ void CollisionController::beginContact(b2Contact* contact) {
 		if (bd1->getCollisionClass() == SPIKES_C || bd2->getCollisionClass() == SPIKES_C) {
 			handleSpikeCollision(will);
 		}
+        // Will x ButtonSwitch
+        if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+            ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
+            handleButtonSwitchStartCollision(will, buttonSwitch);
+        }
+        
 	} // END WILL COLLISIONS
 
 	// KID COLLISIONS
@@ -193,12 +213,9 @@ void CollisionController::endContact(b2Contact* contact) {
 	b2Body* body1 = fix1->GetBody();
 	b2Body* body2 = fix2->GetBody();
 
-	void* fd1 = fix1->GetUserData();
-	void* fd2 = fix2->GetUserData();
-
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-
+	
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
@@ -217,6 +234,11 @@ void CollisionController::endContact(b2Contact* contact) {
 		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
 			will->setReachedGoal(false);
 		}
+        // Will x ButtonSwitch
+        if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+            ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
+            handleButtonSwitchEndCollision(will, buttonSwitch);
+        }
 	} // END WILL COLLISIONS
 
 	// KID COLLISIONS
@@ -227,24 +249,4 @@ void CollisionController::endContact(b2Contact* contact) {
 			kid->setCollidingWithJello(false);
 		}
 	} // END KID COLLISIONS
-
-
-	//if ((_level->getPineapple()->getSensorName() == fd2 && _level->getPineapple() != bd1) ||
-	//	(_level->getPineapple()->getSensorName() == fd1 && _level->getPineapple() != bd2)) {
-	//	_sensorFixtures.erase(_level->getPineapple() == bd1 ? fix2 : fix1);
-	//	if (_sensorFixtures.empty()) {
-	//		_level->getPineapple()->setGrounded(false);
-	//	}
-	//}
-
-	//// See if a kid has left the ground.
-	//for (int i = 0; i < KID_COUNT; i++) {
-	//	if ((_level->getKid(i)->getSensorName() == fd2 && _level->getKid(i) != bd1) ||
-	//		(_level->getKid(i)->getSensorName() == fd1 && _level->getKid(i) != bd2)) {
-	//		_sensorFixtures.erase(_level->getKid(i) == bd1 ? fix2 : fix1);
-	//		if (_sensorFixtures.empty()) {
-	//			_level->getKid(i)->setGrounded(false);
-	//		}
-	//	}
-	//}
 }

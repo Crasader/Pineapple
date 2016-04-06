@@ -129,6 +129,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         _isGrounded = false;
         _isJumping = false;
         _isCollidingWithJello = false;
+        _isCollidingWithButtonSwitch = false;
         _faceRight = true;
         _reachedGoal = false;
         
@@ -231,6 +232,8 @@ void PineappleModel::applyForce() {
     if (!isActive()) {
         return;
     }
+    
+    cout << isJumping() << " " << isGrounded() << "\n";
     
     // Don't want to be moving. Damp out player motion
     if (getMovement() == 0.0f) {
@@ -344,6 +347,9 @@ void PineappleModel::resetSceneNode() {
         _willWalkcycle = pnode;
         
         _normalSize = getDimension();
+        
+        //HACKY YAY
+        setPosition(getPosition() + Vec2(0, getHeight() / 3 * 2));
     }
 }
 

@@ -353,6 +353,9 @@ void KidModel::resetSceneNode() {
         
         _kidWalkcycleFrame = 0;
         _kidWalkcycle = pnode;
+        
+        //HACKY YAY
+        setPosition(getPosition() + Vec2(0, getHeight() / 3 * 2));
     }
 }
 

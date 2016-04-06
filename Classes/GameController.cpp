@@ -31,7 +31,7 @@ using namespace cocos2d;
 //using namespace std;
 
 /** The number of frame to wait before reinitializing the game */
-#define EXIT_COUNT      240
+#define EXIT_COUNT      180
 
 
 #pragma mark -
@@ -89,8 +89,11 @@ bool GameController::init(RootLayer* root) {
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root, const Rect& rect) {
+    _levelKey = LEVEL_ONE_KEY;
+    _levelFile = LEVEL_ONE_FILE;
+    
     _assets = AssetManager::getInstance()->getCurrent();
-    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    _level = _assets->get<LevelModel>(_levelKey);
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -111,13 +114,6 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     // Create the world; there are no listeners this time.
     _collision = CollisionController::create();
     _world = _level->getWorld();
-    _world->activateCollisionCallbacks(true);
-    _world->onBeginContact = [this](b2Contact* contact) {
-        _collision->beginContact(contact);
-    };
-    _world->onEndContact = [this](b2Contact* contact) {
-        _collision->endContact(contact);
-    };
     
     // Create the scene graph
     _worldnode = _level->getWorldNode();
@@ -159,6 +155,14 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
+    
+    _world->activateCollisionCallbacks(true);
+    _world->onBeginContact = [this](b2Contact* contact) {
+        _collision->beginContact(contact);
+    };
+    _world->onEndContact = [this](b2Contact* contact) {
+        _collision->endContact(contact);
+    };
     
     _active = true;
     setComplete(false);
@@ -205,10 +209,10 @@ void GameController::reset() {
     
     // Unload the level but keep in memory temporarily
     _level->retain();
-    _assets->unload<LevelModel>(LEVEL_ONE_KEY);
+    _assets->unload<LevelModel>(_levelKey);
     
     // Load a new level and quit update
-    _assets->loadAsync<LevelModel>(LEVEL_ONE_KEY,LEVEL_ONE_FILE);
+    _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
     _loadnode->setVisible(true);
 }
 
@@ -219,7 +223,7 @@ void GameController::onReset() {
     _level->release();
     
     // Access and initialize level
-    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    _level = _assets->get<LevelModel>(_levelKey);
     _level->setRootNode(_rootnode);
     _level->showDebug(_debug);
     _world = _level->getWorld();
@@ -326,12 +330,12 @@ void GameController::update(float dt) {
     
     _input.update(dt);
     
-    if (_level->haveFailed()) {
+    if (_level->haveFailed() && _countdown == -1) {
         setFailure(true);
     }
     
     // Check for Victory
-    if (checkForVictory()) {
+    if (checkForVictory() && ! _level->haveFailed() && ! _winnode->isVisible()) {
         setComplete(true);
     }
     

@@ -74,6 +74,11 @@ protected:
     /** Reference to current level */
     LevelModel* _level;
     
+    /** Name of the level that is currently loaded */
+    string _levelKey;
+    /** Filename of the level that is currently loaded */
+    string _levelFile;
+    
     /** Controller for abstracting out input away from layer */
     InputController _input;
     /** Controller for collision handling */
