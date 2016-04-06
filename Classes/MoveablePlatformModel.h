@@ -27,8 +27,9 @@ using namespace cocos2d;
 #define CLOSING_OPENING_SPEED         1.0f
 #define OPEN_DISTANCE                 2.5f
 
-#define MOVEABLE_PLATFORM_WIDTH       1.0f
-#define NUBBIN_LENGTH                 .25f
+#define MOVEABLE_PLATFORM_HEIGHT      0.8f
+#define MOVEABLE_PLATFORM_WIDTH       5.0f
+#define NUBBIN_LENGTH                 1.0f
 
 enum Color {blue = 1, red = 2, green = 3};
 
@@ -59,12 +60,30 @@ private:
     //   <nubbin> [_box1] _pos [_box2] <nubbin>
     Vec2 _pos;
     
+    Vec2 _scale;
+    
     Color _color;
     
     void update();
     
 public:
     Color getColor() { return _color; }
+    
+    BoxObstacle* getNubbin1() {
+        return _nubbin1;
+    }
+    
+    BoxObstacle* getNubbin2() {
+        return _nubbin2;
+    }
+    
+    BoxObstacle* getBox1() {
+        return _box1;
+    }
+    
+    BoxObstacle* getBox2() {
+        return _box2;
+    }
     
     void open() {
         if (!_isOpen) {

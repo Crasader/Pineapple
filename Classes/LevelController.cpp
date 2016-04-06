@@ -140,6 +140,7 @@ LevelModel* LevelController::read(string filename) {
     addJello(JELLO_COUNT, JELLO_POS);
     addSpikes(SPIKE_COUNT, SPIKE_POS);
     addBlender(BLENDER_POS);
+    
     addButtonSwitch(Vec2(5,5), true);
     
     return _level;
@@ -363,19 +364,20 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     initSensor(button_switch);
     _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
     
-    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(2.0f, 2.0f), Vec2(1.0f,1.0f), 1.0f, false, true, Color::red);
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(20.0f, 10.0f), Vec2(1.0f,1.0f), 0.5f, false, false, Color::red);
     Node* node = Node::create();
 
     platform->setSceneNode(node);
     initDebugProperties(platform);
+    initPhysicalObstacle(platform);
     
     button_switch->linkToPlatform(platform);
     _level->addAnonymousObstacle(platform, BUTTON_SWITCH_Z_INDEX);
 
-    cout << platform->getBodies()[0]->getX() << "\n";
-    cout << platform->getBodies()[0]->getY() << "\n";
-    cout << platform->getBodies()[1]->getX() << "\n";
-    cout << platform->getBodies()[1]->getY() << "\n";
-    cout << platform->getBodies()[2]->getX() << "\n";
-    cout << platform->getBodies()[2]->getY() << "\n";
+//    cout << platform->getBodies()[0]->getX() << "\n";
+//    cout << platform->getBodies()[0]->getY() << "\n";
+//    cout << platform->getBodies()[1]->getX() << "\n";
+//    cout << platform->getBodies()[1]->getY() << "\n";
+//    cout << platform->getBodies()[2]->getX() << "\n";
+//    cout << platform->getBodies()[2]->getY() << "\n";
 }
