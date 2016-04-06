@@ -13,22 +13,6 @@
 
 #define MOVEABLE_PLATFORM_SCALE 0.18
 
-// I suspect the design here will be two boxObjects that when opened will move away from eachother
-
-void MoveablePlatformModel::update() {
-    if (_isOpening) {
-        // if two pieces are at or beyond open distance
-        if (getDistance() >= OPEN_DISTANCE) {
-            setOpen();
-        }
-    } else if (_isClosing) {
-        // if two pieces are touching or overlapping
-        if (getDistance() <= 0.0f) {
-            setClosed();
-        }
-    }
-}
-
 MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color) {
     MoveablePlatformModel* platform = new (std::nothrow) MoveablePlatformModel();
     if (platform && platform->init(pos, scale, length, isOpen, vertical, color)) {
@@ -52,9 +36,9 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
     _isVertical = vertical;
     _color = color;
     _pos = Vec2(pos.x * scale.x, pos.y * scale.y);
-    _scale = scale;
+    _drawScale = scale;
     
-    length = length * _scale.x;
+    length = length * _drawScale.x;
     _length = length;
     
     float cscale = Director::getInstance()->getContentScaleFactor();
@@ -67,6 +51,14 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
     Size centerSize = centerImage->getContentSize();
     centerSize.width  *= cscale;
     centerSize.height *= cscale;
+    
+    _maxXStretch = _length/2 / centerSize.width;
+    
+    if (isOpen) {
+        setOpen();
+    } else {
+        setClosed();
+    }
     
     float nintyDegrees = 1.5708; //in radians
     
@@ -193,46 +185,92 @@ void MoveablePlatformModel::resetSceneNode() {
     
     _node->addChild(pnode);
     
-    pnode = PolygonNode::createWithTexture(box);
-    bounds.size = pnode->getContentSize();
-    
-    pnode->setPolygon(bounds);
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
-    _bodies[2]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[2];
     ob->setDimension(_length/2,
                      pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
     
-    _node->addChild(pnode);
-    
     pnode = PolygonNode::createWithTexture(box);
     bounds.size = pnode->getContentSize();
     
     pnode->setPolygon(bounds);
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
-    _bodies[3]->setSceneNode(pnode);
+    pnode->setScaleX(_xStretch);
+    pnode->setScaleY(MOVEABLE_PLATFORM_SCALE);
+    _bodies[2]->setSceneNode(pnode);
+    
+    _node->addChild(pnode);
     
     ob = (BoxObstacle*) _bodies[3];
     ob->setDimension(_length/2,
                      pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE);
+    pnode = PolygonNode::createWithTexture(box);
+    bounds.size = pnode->getContentSize();
+    
+    pnode->setPolygon(bounds);
+    pnode->setScaleX(_xStretch);
+    pnode->setScaleY(MOVEABLE_PLATFORM_SCALE);
+    _bodies[3]->setSceneNode(pnode);
     
     _node->addChild(pnode);
-//
-//    sprite = PolygonNode::createWithTexture(rightNubbin);
-//    //sprite->setScale(_scale);
-//    _bodies[1]->setSceneNode(sprite);
-//    _node->addChild(sprite);
-//    
-//    sprite = PolygonNode::createWithTexture(box);
-//    //sprite->setScale(_scale);
-//    _bodies[2]->setSceneNode(sprite);
-//    _node->addChild(sprite);
-//    
-//    sprite = PolygonNode::createWithTexture(box);
-//    //sprite->setScale(_scale);
-//    _bodies[3]->setSceneNode(sprite);
-//    _node->addChild(sprite);
+}
+
+void MoveablePlatformModel::open() {
+    if (!_isOpen) {
+        _isClosing = false;
+        _isClosed = false;
+        _isOpening = true;
+    }
+}
+
+void MoveablePlatformModel::setOpen() {
+    _isOpen = true;
+    _isOpening = false;
+    _isClosed = false;
+    _isClosing = false;
+    _xStretch = MIN_X_STRETCH;
+}
+
+void MoveablePlatformModel::close() {
+    if (!_isClosed) {
+        _isOpening = false;
+        _isOpen = false;
+        _isClosing = true;
+    }
+}
+
+void MoveablePlatformModel::setClosed() {
+    _isClosed = true;
+    _isClosing = false;
+    _isOpen = false;
+    _isOpening = false;
+    _xStretch = _maxXStretch;
+}
+
+void MoveablePlatformModel::update(float dt) {
+    ComplexObstacle::update(dt);
+    
+    //Change the strech value
+    float oldStretch = _xStretch;
+    if (_isOpening) {
+        _xStretch = fmax(MIN_X_STRETCH, _xStretch - X_STRETCH_INC_PER_SEC * dt);
+        if (_xStretch == MIN_X_STRETCH) {
+            setOpen();
+        }
+    } else if (_isClosing) {
+        _xStretch = fmin(_maxXStretch, _xStretch + X_STRETCH_INC_PER_SEC * dt);
+        if (_xStretch == _maxXStretch) {
+            setClosed();
+        }
+    }
+    
+    if (oldStretch != _xStretch) {
+        _box1->getSceneNode()->setScaleX(_xStretch);
+        _box1->setWidth(_length/2.0f * _xStretch/_maxXStretch);
+        _box1->setX(_nubbin1->getX() + _nubbin1->getWidth()/2.0f + _box1->getWidth()/2.0f);
+        _box2->getSceneNode()->setScaleX(_xStretch);
+        _box2->setWidth(_length/2.0f * _xStretch/_maxXStretch);
+        _box2->setX(_nubbin2->getX() - _nubbin2->getWidth()/2.0f - _box2->getWidth()/2.0f);
+    }
 }
 
 void MoveablePlatformModel::resetDebugNode() {

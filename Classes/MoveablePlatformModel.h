@@ -27,6 +27,9 @@ using namespace cocos2d;
 #define CLOSING_OPENING_SPEED         1.0f
 #define OPEN_DISTANCE                 2.5f
 
+#define MIN_X_STRETCH                 0.05f
+#define X_STRETCH_INC_PER_SEC         1.0f
+
 #define MOVEABLE_PLATFORM_WIDTH       2.0f
 
 enum Color {blue = 1, red = 2, green = 3};
@@ -60,11 +63,15 @@ private:
     //   <nubbin> [_box1] _pos [_box2] <nubbin>
     Vec2 _pos;
     
-    Vec2 _scale;
+    Vec2 _drawScale;
     
     Color _color;
     
-    void update();
+    float _xStretch;
+    
+    float _maxXStretch;
+    
+    void update(float dt) override;
     
 public:
     Color getColor() { return _color; }
@@ -85,69 +92,13 @@ public:
         return _box2;
     }
     
-    void open() {
-        if (!_isOpen) {
-            _isClosing = false;
-            _isClosed = false;
-            _isOpening = true;
-            // TODO(ekotlikoff) - this won't be great, update coordinates in update instead
-            if (_isVertical) {
-                _box1->setVY(CLOSING_OPENING_SPEED);
-                _box2->setVY(-CLOSING_OPENING_SPEED);
-            } else {
-                _box1->setVX(CLOSING_OPENING_SPEED);
-                _box2->setVX(-CLOSING_OPENING_SPEED);
-            }
-        }
-    }
+    void open();
     
-    void close() {
-        if (!_isClosed) {
-            _isOpening = false;
-            _isOpen = false;
-            _isClosing = true;
-            // TODO(ekotlikoff) - this won't be great, update coordinates in update instead
-            if (_isVertical) {
-                _box1->setVY(-CLOSING_OPENING_SPEED);
-                _box2->setVY(CLOSING_OPENING_SPEED);
-            } else {
-                _box1->setVX(-CLOSING_OPENING_SPEED);
-                _box2->setVX(CLOSING_OPENING_SPEED);
-            }
-        }
-    }
+    void close();
+        
+    void setOpen();
     
-    float getDistance() {
-        if (_isVertical) {
-            return _box2->getY() + _box2->getHeight()/2.0f - _box1->getY() - _box1->getHeight()/2.0f;
-        } else {
-            return _box2->getX() + _box2->getWidth()/2.0f - _box1->getX() - _box1->getWidth()/2.0f;
-        }
-    }
-    
-    void setOpen() {
-        _isOpen = true;
-        _isOpening = false;
-        if (_isVertical) {
-            _box1->setY(_pos.y + OPEN_DISTANCE/2.0f + _box1->getHeight()/2.0f);
-            _box2->setY(_pos.y - OPEN_DISTANCE/2.0f - _box2->getHeight()/2.0f);
-        } else {
-            _box1->setX(_pos.x + OPEN_DISTANCE/2.0f - _box1->getWidth()/2.0f);
-            _box2->setX(_pos.x - OPEN_DISTANCE/2.0f + _box2->getWidth()/2.0f);
-        }
-    }
-    
-    void setClosed() {
-        _isClosed = true;
-        _isClosing = false;
-        if (_isVertical) {
-            _box1->setY(_pos.y + _box1->getHeight()/2.0f);
-            _box2->setY(_pos.y - _box2->getHeight()/2.0f);
-        } else {
-            _box1->setX(_pos.x - _box1->getWidth()/2.0f);
-            _box2->setX(_pos.x + _box2->getWidth()/2.0f);
-        }
-    }
+    void setClosed();
 
     // length is length of two middle boxes
     static MoveablePlatformModel* create(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color);

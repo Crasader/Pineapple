@@ -74,6 +74,8 @@ protected:
 	bool _isJumping;
 	/** Whether we are currently colliding with a jello */
 	bool _isCollidingWithJello;
+    /** Whether we are currently colliding with a buttonswitch */
+    bool _isCollidingWithButtonSwitch;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
 	/** Whether or not we have reached the goal */
@@ -253,6 +255,13 @@ public:
 	* @return true if the pineapple is actively colliding with jello
 	*/
 	bool isCollidingWithJello() { return _isCollidingWithJello; }
+    
+    /**
+     * Returns true if the pineapple is actively colliding with buttonSwitch
+     *
+     * @return true if the pineapple is actively colliding with buttonSwitch
+     */
+    bool isCollidingWithButtonSwitch() { return _isCollidingWithButtonSwitch; }
 
 	/**
 	* Sets whether the pineapple is currently colliding with a jello
@@ -260,7 +269,14 @@ public:
 	* @param value whether the pineapple is currently colliding with a jello
 	*/
 	void setCollidingWithJello(bool value) { _isCollidingWithJello = value; }
-
+    
+    /**
+     * Sets whether the pineapple is currently colliding with a jello
+     *
+     * @param value whether the pineapple is currently colliding with a jello
+     */
+    void setCollidingWithButtonSwitch(bool value) { _isCollidingWithButtonSwitch = value; }
+    
 	/**
 	* Returns true if the pineapple is on the ground.
 	*

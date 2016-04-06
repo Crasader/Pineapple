@@ -143,6 +143,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
 		_isGrounded = false;
 		_isJumping = false;
 		_isCollidingWithJello = false;
+        _isCollidingWithButtonSwitch = false;
 		_faceRight = true;
 		_reachedGoal = false;
 

@@ -107,7 +107,7 @@ LevelModel* LevelController::read(string filename) {
     
     float GOAL_POS[] = {38.0f, 3.0f};
 
-    float PINEAPPLE_POS[] = {10.0f, 7.0f};
+    float PINEAPPLE_POS[] = {10.0f, 8.0f};
 
     float** KID_POS = new float* [KID_COUNT];
     KID_POS[0] = new float[POS_COORDS]{MAIN_PLATFORM_Y, 5.1f};
@@ -364,20 +364,17 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     initSensor(button_switch);
     _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
     
-    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(15.0f, 5.0f), _scale, 10.0f, false, false, Color::red);
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(15.0f, 5.0f), _scale, 12.0f, false, false, Color::red);
     Node* node = Node::create();
 
     platform->setSceneNode(node);
     initDebugProperties(platform);
     initPhysicalObstacle(platform);
     
+    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
+        initPhysicalObstacle(platform->getBodies()[ii]);
+    }
+    
     button_switch->linkToPlatform(platform);
     _level->addAnonymousObstacle(platform, BUTTON_SWITCH_Z_INDEX);
-
-//    cout << platform->getBodies()[0]->getX() << "\n";
-//    cout << platform->getBodies()[0]->getY() << "\n";
-//    cout << platform->getBodies()[1]->getX() << "\n";
-//    cout << platform->getBodies()[1]->getY() << "\n";
-//    cout << platform->getBodies()[2]->getX() << "\n";
-//    cout << platform->getBodies()[2]->getY() << "\n";
 }

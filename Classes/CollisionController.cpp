@@ -101,13 +101,18 @@ void CollisionController::beginContact(b2Contact* contact) {
     // BUTTON and SWITCH
     if ((bd1 == _level->getPineapple() && bd2->getName() == BUTTON_SWITCH_NAME) ||
         (bd2 == _level->getPineapple() && bd1->getName() == BUTTON_SWITCH_NAME)) {
-        ButtonSwitchModel* button_switch;
-        if (bd1 == _level->getPineapple()) {
-            button_switch = (ButtonSwitchModel*) bd2;
-        } else {
-            button_switch = (ButtonSwitchModel*) bd1;
+        
+        if (! _level->getPineapple()->isCollidingWithButtonSwitch()) {
+        
+            ButtonSwitchModel* button_switch;
+            if (bd1 == _level->getPineapple()) {
+                button_switch = (ButtonSwitchModel*) bd2;
+            } else {
+                button_switch = (ButtonSwitchModel*) bd1;
+            }
+            button_switch->handleContact();
+            _level->getPineapple()->setCollidingWithButtonSwitch(true);
         }
-        button_switch->handleContact();
     }
 
 	// See if we have landed on the ground.
@@ -239,14 +244,16 @@ void CollisionController::endContact(b2Contact* contact) {
     
     if ((bd1 == _level->getPineapple() && bd2->getName() == BUTTON_SWITCH_NAME) ||
         (bd2 == _level->getPineapple() && bd1->getName() == BUTTON_SWITCH_NAME)) {
+        if (_level->getPineapple()->isCollidingWithButtonSwitch()) {
         ButtonSwitchModel* button_switch;
         if (bd1 == _level->getPineapple()) {
             button_switch = (ButtonSwitchModel*) bd2;
         } else {
             button_switch = (ButtonSwitchModel*) bd1;
         }
-        
-        button_switch->handleEndContact();
+            _level->getPineapple()->setCollidingWithButtonSwitch(false);
+            button_switch->handleEndContact();
+        }
     }
 
 	if ((_level->getPineapple()->getSensorName() == fd2 && _level->getPineapple() != bd1) ||

@@ -62,6 +62,7 @@ bool ButtonSwitchModel::init(const Vec2& pos, const Vec2& scale, const bool isSw
         setFixedRotation(true);
         
         // Gameplay attributes
+        _isSwitch = isSwitch;
         return true;
     }
     return false;
