@@ -39,7 +39,6 @@ protected:
     virtual void resetDebugNode() override;
 
     virtual void resetSceneNode() override;
-
 private:
     bool _isClosed;
     bool _isOpening;
@@ -113,10 +112,13 @@ public:
     void setClosed();
 
     // length is length of two middle boxes
-    static MoveablePlatformModel* create(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color);
+    static MoveablePlatformModel* create(const Vec2& pos, float length, bool isOpen, bool vertical, Color color);
+    
+#pragma mark Drawing Methods
+    
     
 CC_CONSTRUCTOR_ACCESS:
-    virtual bool init(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color);
+    virtual bool init(const Vec2& pos, float length, bool isOpen, bool vertical, Color color);
     
     // pos is center of obstacle
     MoveablePlatformModel() : _isClosed(false), _isOpening(false), _isClosing(false), _isOpen(false), _isVertical(false) { }

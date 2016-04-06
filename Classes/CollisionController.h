@@ -73,8 +73,10 @@ protected:
 	 */
 	void handleCupCollision(PineappleModel* will, CrushableModel* cup);
     
+    /** Turns button on, toggles switch */
     void handleButtonSwitchStartCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch);
     
+    /** Turns button off */
     void handleButtonSwitchEndCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch);
 
 	/**

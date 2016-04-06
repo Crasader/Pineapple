@@ -97,13 +97,17 @@ void CollisionController::handleCupCollision(PineappleModel* will, CrushableMode
 }
 
 void CollisionController::handleButtonSwitchStartCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
-    buttonSwitch->handleContact();
-    will->setCollidingWithButtonSwitch(true);
+    if (! will->isCollidingWithButtonSwitch()) {
+        buttonSwitch->handleContact();
+        will->setCollidingWithButtonSwitch(true);
+    }
 }
 
 void CollisionController::handleButtonSwitchEndCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
-    buttonSwitch->handleEndContact();
-    will->setCollidingWithButtonSwitch(false);
+    if (will->isCollidingWithButtonSwitch()) {
+        buttonSwitch->handleEndContact();
+        will->setCollidingWithButtonSwitch(false);
+    }
 }
 
 /**
@@ -131,9 +135,6 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 	b2Body* body1 = fix1->GetBody();
 	b2Body* body2 = fix2->GetBody();
-
-	void* fd1 = fix1->GetUserData();
-	void* fd2 = fix2->GetUserData();
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
@@ -209,9 +210,6 @@ void CollisionController::endContact(b2Contact* contact) {
 
 	b2Body* body1 = fix1->GetBody();
 	b2Body* body2 = fix2->GetBody();
-
-	void* fd1 = fix1->GetUserData();
-	void* fd2 = fix2->GetUserData();
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();

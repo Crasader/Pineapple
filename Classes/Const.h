@@ -10,6 +10,7 @@
 #define __CONST_H__
 
 #define SIGNUM(x)  ((x > 0) - (x < 0))
+#define SIZE_ONE    Size(1,1)
 
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH   32.0f
