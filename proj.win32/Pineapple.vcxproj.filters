@@ -75,9 +75,6 @@
     <ClCompile Include="..\Classes\SpinnerModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\CollisionObjectModel.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">

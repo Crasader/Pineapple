@@ -4,6 +4,8 @@
 #include <cornell.h>
 #include "BackgroundView.h"
 #include "Texture.h"
+#include "LevelModel.h"
+#include "Levels.h"
 
 /** Font size for loading message */
 #define DEFAULT_FONT_SIZE   64.0f

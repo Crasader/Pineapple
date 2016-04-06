@@ -1348,6 +1348,7 @@
 		3EACC9A519F5014D00EB3C5E /* CCLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EACC99E19F5014D00EB3C5E /* CCLight.cpp */; };
 		3EACC9A619F5014D00EB3C5E /* CCLight.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EACC99F19F5014D00EB3C5E /* CCLight.h */; };
 		3EACC9A719F5014D00EB3C5E /* CCLight.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EACC99F19F5014D00EB3C5E /* CCLight.h */; };
+		4039B4E11CB33FE7001E8B6E /* CUAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = EBFFB90C1C51753C00D8AB39 /* CUAsset.h */; };
 		43015DBF1B60DF4000E75161 /* CCComExtensionData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43015DBD1B60DF4000E75161 /* CCComExtensionData.cpp */; };
 		43015DC01B60DF4000E75161 /* CCComExtensionData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43015DBD1B60DF4000E75161 /* CCComExtensionData.cpp */; };
 		43015DC11B60DF4000E75161 /* CCComExtensionData.h in Headers */ = {isa = PBXBuildFile; fileRef = 43015DBE1B60DF4000E75161 /* CCComExtensionData.h */; };
@@ -11129,6 +11130,7 @@
 				B665E3CD1AA80A6600DDB1C5 /* CCPUScaleVelocityAffectorTranslator.h in Headers */,
 				B6CAB4321AF9AA1A00B9B856 /* btWheelInfo.h in Headers */,
 				B665E3711AA80A6500DDB1C5 /* CCPUOnVelocityObserverTranslator.h in Headers */,
+				4039B4E11CB33FE7001E8B6E /* CUAsset.h in Headers */,
 				5034CA3C191D591100CE6051 /* ccShader_PositionColor.vert in Headers */,
 				B665E3F51AA80A6600DDB1C5 /* CCPUSlaveEmitter.h in Headers */,
 				50ABC0181926664800A911A9 /* CCImage.h in Headers */,

@@ -27,23 +27,34 @@ void CollisionController::setLevel(LevelModel* level) {
 
 #pragma mark -
 #pragma mark Collision Handling
+
+void CollisionController::ground(PineappleModel* will, b2Fixture* fix) {
+	will->setGrounded(true);
+	_pSensorFixtures.emplace(fix);
+}
+
 /**
 * Applies the jello force to the given pinepple.
 * This method is called when the given pineapple collides with a jello
 * to trigger upward momentum, and a jello quiver animation
 */
-void CollisionController::handleJelloCollision(PineappleModel* will) {
-	will->setCollidingWithJello(true);
-	if (!will->isLarge()) {
-		//Jump!
-		b2Body* body = will->getBody();
-		will->setVY(0);
-		body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
-		will->setJumping(true);
-		will->setGrounded(false);
-	}
-	else {
-		//Squish
+void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel* jello) {
+	if (!will->isCollidingWithJello()) {
+		will->setCollidingWithJello(true);
+		if (!will->isLarge()) {
+			//Jump!
+			b2Body* body = will->getBody();
+			will->setVY(0);
+			body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
+			will->setJumping(true);
+			will->setGrounded(false);
+		}
+		else {
+			//Squish
+			if (isBelowChar(jello, will)) {
+				_level->removeObstacle(jello);
+			}
+		}
 	}
 }
 
@@ -54,22 +65,51 @@ void CollisionController::handleJelloCollision(PineappleModel* will) {
 */
 void CollisionController::handleJelloCollision(KidModel* kid) {
 	//Jump!
-	kid->setVY(10);
-	kid->setVX(KID_WALKSPEED + 2);
-	kid->setGrounded(false);
-	kid->setCollidingWithJello(true);
+	if (!kid->isCollidingWithJello()) {
+		kid->setVY(10);
+		kid->setVX(KID_WALKSPEED + 4);
+		kid->setCollidingWithJello(true);
+	}
 }
 
-void CollisionController::handleSpikeCollision(SimpleObstacle* PineappleOrKid) {
-	_level->removeObstacle(PineappleOrKid);
+void CollisionController::handleBlenderCollision(PineappleModel* will) {
+	_level->blendAndKill(will);
+	//_pSensorFixtures.clear();
+}
 
-	//TODO: animation and sounds
+void CollisionController::handleBlenderCollision(KidModel* kid) {
+	_level->blendAndKill(kid);
+}
+
+void CollisionController::handleSpikeCollision(PineappleModel* will) {
+	_level->spikeAndKill(will);
+	//_pSensorFixtures.clear();
+}
+
+void CollisionController::handleSpikeCollision(KidModel* kid) {
+	_level->spikeAndKill(kid);
+}
+
+void CollisionController::handleCupCollision(PineappleModel* will, CrushableModel* cup) {
+	if (isBelowChar(cup, will)) {
+		_level->removeObstacle(cup);
+	}
+}
+
+void CollisionController::handleButtonSwitchStartCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
+    buttonSwitch->handleContact();
+    will->setCollidingWithButtonSwitch(true);
+}
+
+void CollisionController::handleButtonSwitchEndCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
+    buttonSwitch->handleEndContact();
+    will->setCollidingWithButtonSwitch(false);
 }
 
 /**
 * helper to determine if a given Obstacle is below a given character
 */
-bool isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
+bool CollisionController::isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
 	float e = 0.01f;
 	float objTop = obj->getY() + (obj->getHeight() / 2);
 	float charBot = character->getY() - (character->getHeight() / 2);
@@ -97,127 +137,63 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-    
-    // BUTTON and SWITCH
-    if ((bd1 == _level->getPineapple() && bd2->getName() == BUTTON_SWITCH_NAME) ||
-        (bd2 == _level->getPineapple() && bd1->getName() == BUTTON_SWITCH_NAME)) {
-        
-        if (! _level->getPineapple()->isCollidingWithButtonSwitch()) {
-        
-            ButtonSwitchModel* button_switch;
-            if (bd1 == _level->getPineapple()) {
-                button_switch = (ButtonSwitchModel*) bd2;
-            } else {
-                button_switch = (ButtonSwitchModel*) bd1;
-            }
-            button_switch->handleContact();
-            _level->getPineapple()->setCollidingWithButtonSwitch(true);
+
+	// WILL COLLISIONS
+	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
+		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
+		// Will  x Ground
+		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+			ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1);
+		}
+		// Will x Jello
+		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
+			handleJelloCollision(will, bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
+		}
+		// Will x Cup
+		if (will->isLarge() && (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C)) {
+			CrushableModel* cup = bd1->getCollisionClass() == CUP_C ? (CrushableModel*)bd1 : (CrushableModel*)bd2;
+			handleCupCollision(will, cup);
+		}
+		// Will x Goal
+		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
+			will->setReachedGoal(true);
+		}
+		// Will x Blender
+		if (bd1->getCollisionClass() == BLENDER_C || bd2->getCollisionClass() == BLENDER_C) {
+			handleBlenderCollision(will);
+		}
+		// Will x Spikes
+		if (bd1->getCollisionClass() == SPIKES_C || bd2->getCollisionClass() == SPIKES_C) {
+			handleSpikeCollision(will);
+		}
+        // Will x ButtonSwitch
+        if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+            ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
+            handleButtonSwitchStartCollision(will, buttonSwitch);
         }
-    }
+        
+	} // END WILL COLLISIONS
 
-	// See if we have landed on the ground.
-	// TODO this is super shitty.  we should make sure bd1/bd2 is a platform rather than not a kid
-	if (_level->getPineapple() != nullptr && !_level->getPineapple()->isCollidingWithJello() &&
-		((_level->getPineapple()->getSensorName() == fd2 && _level->getPineapple() != bd1 && bd1->getName() != KID_NAME) ||
-			(_level->getPineapple()->getSensorName() == fd1 && _level->getPineapple() != bd2 && bd2->getName() != KID_NAME))) {
-		_level->getPineapple()->setGrounded(true);
-		// Could have more than one ground
-		_sensorFixtures.emplace(_level->getPineapple() == bd1 ? fix2 : fix1);
-	}
-
-	if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
-		if (_level->getPineapple() != nullptr && !_level->getPineapple()->isCollidingWithJello() && (_level->getPineapple() == bd1 || _level->getPineapple() == bd2)) {
-			handleJelloCollision(_level->getPineapple());
+	// KID COLLISIONS
+	else if (bd1->getCollisionClass() == KID_C || bd2->getCollisionClass() == KID_C) {
+		KidModel* kid = bd1->getCollisionClass() == KID_C ? (KidModel*)bd1 : (KidModel*)bd2;
+		// Kid x Jello
+		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
+			handleJelloCollision(kid);
 		}
-		else {
-			for (int i = 0; i < KID_COUNT; i++) {
-				if (_level->getKid(i) != nullptr && !_level->getKid(i)->isCollidingWithJello() &&
-					(_level->getKid(i) == bd1 || _level->getKid(i) == bd2)) {
-					handleJelloCollision(_level->getKid(i));
-				}
-			}
+		// Kid x Goal
+		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
+			kid->setReachedGoal(true);
 		}
-	}
-
-	// See if a kid has landed on the ground.
-	for (int i = 0; i < KID_COUNT; i++) {
-		if (_level->getKid(i) != nullptr && !_level->getKid(i)->isCollidingWithJello() &&
-			((_level->getKid(i)->getSensorName() == fd2 && _level->getKid(i) != bd1) ||
-				(_level->getKid(i)->getSensorName() == fd1 && _level->getKid(i) != bd2))) {
-			_level->getKid(i)->setGrounded(true);
-			// Could have more than one ground
-			_sensorFixtures.emplace(_level->getKid(i) == bd1 ? fix2 : fix1);
+		// Kid x Blender
+		if (bd1->getCollisionClass() == BLENDER_C || bd2->getCollisionClass() == BLENDER_C) {
+			handleBlenderCollision(kid);
 		}
-	}
-
-	// If a kid hits the "win" door, update the kid's status
-	for (int i = 0; i < KID_COUNT; i++) {
-		if ((bd1 == _level->getKid(i) && bd2 == _level->getGoal()) ||
-			(bd1 == _level->getGoal() && bd2 == _level->getKid(i))) {
-			_level->getKid(i)->setReachedGoal(true);
+		// Kid x Spikes
+		if (bd1->getCollisionClass() == SPIKES_C || bd2->getCollisionClass() == SPIKES_C) {
+			handleSpikeCollision(kid);
 		}
-	}
-
-	// If Will hits the "win" door, update the Will's status
-	if ((_level->getPineapple() == bd1 && bd2 == _level->getGoal()) || (_level->getPineapple() == bd2 && bd1 == _level->getGoal())) {
-		_level->getPineapple()->setReachedGoal(true);
-	}
-
-	//See if we have collided with the blender
-	if ((bd1 == _level->getPineapple() && bd2 == (Obstacle*)_level->getBlender()) || (bd2 == _level->getPineapple() && bd1 == (Obstacle*)_level->getBlender())) {
-		_level->blendAndKill(_level->getPineapple());
-		_level->clearPineapple();
-		_level->setFailure(true);
-	}
-
-	//See if a kid has collided with the blender
-	for (int i = 0; i < KID_COUNT; i++) {
-		if ((bd1 == _level->getKid(i) && bd2 == (Obstacle*)_level->getBlender()) || (bd2 == _level->getKid(i) && bd1 == (Obstacle*)_level->getBlender())) {
-			_level->blendAndKill(_level->getKid(i));
-			_level->clearKid(i);
-			_level->subtractKidFromCount();
-			if (_level->numKidsRemaining() == 0) {
-				_level->setFailure(true);
-			}
-		}
-	}
-
-	//See if we have collided with a spike!
-	if ((bd1 == _level->getPineapple() && bd2->getName() == SPIKE_NAME) ||
-		(bd2 == _level->getPineapple() && bd1->getName() == SPIKE_NAME)) {
-		handleSpikeCollision(_level->getPineapple());
-		_level->clearPineapple();
-		_level->setFailure(true);
-	}
-
-	//See if a kid has collided with a spike
-	for (int i = 0; i < KID_COUNT; i++) {
-		if ((bd1 == _level->getKid(i) && bd2->getName() == SPIKE_NAME) ||
-			(bd2 == _level->getKid(i) && bd1->getName() == SPIKE_NAME)) {
-			handleSpikeCollision(_level->getKid(i));
-			_level->clearKid(i);
-			_level->subtractKidFromCount();
-			if (_level->numKidsRemaining() == 0) {
-				_level->setFailure(true);
-			}
-		}
-	}
-
-	//CRUSHHHHHHHHHHHHHHHHHHH TODO: SO BAD
-	if (_level->getPineapple() != nullptr && _level->getPineapple()->isLarge()) {
-		Obstacle* cup = nullptr;
-		if (bd1 == _level->getPineapple() && bd2->getName() == CUP_NAME) {
-			cup = bd2;
-		}
-		else if (bd1->getName() == CUP_NAME && bd2 == _level->getPineapple()) {
-			cup = bd1;
-		}
-		if (cup != nullptr) {
-			if (isBelowChar((BoxObstacle*)cup, _level->getPineapple())) {
-				_level->removeObstacle(cup);
-			}
-		}
-	}
+	} // END KID COLLISIONS
 }
 
 /**
@@ -239,58 +215,38 @@ void CollisionController::endContact(b2Contact* contact) {
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-
-    // BUTTON / SWITCH
-    
-    if ((bd1 == _level->getPineapple() && bd2->getName() == BUTTON_SWITCH_NAME) ||
-        (bd2 == _level->getPineapple() && bd1->getName() == BUTTON_SWITCH_NAME)) {
-        if (_level->getPineapple()->isCollidingWithButtonSwitch()) {
-        ButtonSwitchModel* button_switch;
-        if (bd1 == _level->getPineapple()) {
-            button_switch = (ButtonSwitchModel*) bd2;
-        } else {
-            button_switch = (ButtonSwitchModel*) bd1;
-        }
-            _level->getPineapple()->setCollidingWithButtonSwitch(false);
-            button_switch->handleEndContact();
-        }
-    }
-
-	if ((_level->getPineapple()->getSensorName() == fd2 && _level->getPineapple() != bd1) ||
-		(_level->getPineapple()->getSensorName() == fd1 && _level->getPineapple() != bd2)) {
-		_sensorFixtures.erase(_level->getPineapple() == bd1 ? fix2 : fix1);
-		if (_sensorFixtures.empty()) {
-			_level->getPineapple()->setGrounded(false);
-		}
-	}
-
-	//See if you or a kid has stopped colliding with jello
-	if (bd1->getName() == JELLO_NAME || bd2->getName() == JELLO_NAME) {
-		if (_level->getPineapple() == bd1 || _level->getPineapple() == bd2) {
-			_level->getPineapple()->setCollidingWithJello(false);
-		}
-		else {
-			for (int i = 0; i < KID_COUNT; i++) {
-				if (_level->getKid(i) == bd1 || _level->getKid(i) == bd2) {
-					_level->getKid(i)->setCollidingWithJello(false);
-				}
+	
+	// WILL COLLISIONS
+	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
+		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
+		// Will x Ground
+		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+			_pSensorFixtures.erase(bd1 == will ? fix2 : fix1);
+			if (_pSensorFixtures.empty()) {
+				will->setGrounded(false);
 			}
 		}
-	}
-
-	// See if a kid has left the ground.
-	for (int i = 0; i < KID_COUNT; i++) {
-		if ((_level->getKid(i)->getSensorName() == fd2 && _level->getKid(i) != bd1) ||
-			(_level->getKid(i)->getSensorName() == fd1 && _level->getKid(i) != bd2)) {
-			_sensorFixtures.erase(_level->getKid(i) == bd1 ? fix2 : fix1);
-			if (_sensorFixtures.empty()) {
-				_level->getKid(i)->setGrounded(false);
-			}
+		// Will x Jello
+		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
+			will->setCollidingWithJello(false);
 		}
-	}
+		// Will x Goal
+		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
+			will->setReachedGoal(false);
+		}
+        // Will x ButtonSwitch
+        if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+            ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
+            handleButtonSwitchEndCollision(will, buttonSwitch);
+        }
+	} // END WILL COLLISIONS
 
-	// If Will leaves the "win" door, update the Will's status
-	if ((_level->getPineapple() == bd1 && bd2 == _level->getGoal()) || (_level->getPineapple() == bd2 && bd1 == _level->getGoal())) {
-		_level->getPineapple()->setReachedGoal(false);
-	}
+	// KID COLLISIONS
+	else if (bd1->getCollisionClass() == KID_C || bd2->getCollisionClass() == KID_C) {
+		KidModel* kid = bd1->getCollisionClass() == KID_C ? (KidModel*)bd1 : (KidModel*)bd2;
+		// Kid x Jello
+		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
+			kid->setCollidingWithJello(false);
+		}
+	} // END KID COLLISIONS
 }

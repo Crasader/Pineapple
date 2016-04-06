@@ -19,7 +19,7 @@ void LoadingScreenController::preload() {
 
 	tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
 	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
-	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle.png");
+	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_full.png");
 
 	/*tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will2.png");
 	tloader->loadAsync(KID_TEXTURE_1, "textures/pineapplet_bow.png");
@@ -44,7 +44,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
 	tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
 
-	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
+	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_full.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
@@ -77,5 +77,6 @@ void LoadingScreenController::preload() {
 	//    _assets->loadAsync<Sound>(PEW_EFFECT,   "sounds/pew.mp3");
 	//    _assets->loadAsync<Sound>(POP_EFFECT,   "sounds/plop.mp3");
 	assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
-
+    
+    assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
 }

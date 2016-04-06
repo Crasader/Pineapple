@@ -15,13 +15,12 @@
 #include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
+//#include "CollisionObjectModel.h"
 
 using namespace cocos2d;
 
 /** Identifier to allow us to track the sensor in ContactListener */
 #define KID_SENSOR     "kidsensor"
-
-#define KID_NAME       "kid"
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -29,6 +28,8 @@ using namespace cocos2d;
 #define KID_SCALE 0.075f
 /** The kid walking speed */
 #define KID_WALKSPEED   1.5f
+/** The number of frames in the kids animation strip */
+#define KID_ANIMATION_FRAMES 12
 
 #define KID_MASK 0x0004
 #define KID_COLLIDES_WITH 0xFFFD //All but 0x0002
@@ -42,7 +43,7 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class KidModel : public CapsuleObstacle {
+class KidModel : public CapsuleObstacle/*, public CollisionObjectModel*/ {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(KidModel);
@@ -52,8 +53,6 @@ protected:
     float _index;
     /** The current horizontal movement of the character */
     float _movement;
-    /** Whether our feet are on the ground */
-    bool _isGrounded;
     /** Whether this kid is currently colliding with jello */
     bool _isCollidingWithJello;
 	/** Whether or not this kid has reached the goal */
@@ -67,7 +66,7 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _kidWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _kidWalkcycleFrame;
+	float _kidWalkcycleFrame;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -79,6 +78,10 @@ protected:
     virtual void resetDebugNode() override;
     
 public:
+	/**
+	*	returns collision class
+	*/
+	int getCollisionClass() { return KID_C; };
 #pragma mark Static Constructors
     /**
      * Creates a new dude at the origin.
@@ -109,6 +112,23 @@ public:
      * @return  An autoreleased physics object
      */
     static KidModel* create(const Vec2& pos);
+    
+    /**
+     * Creates a new dude at the given position.
+     *
+     * The dude is sized according to the given drawing scale.
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param  pos      Initial position in world coordinates
+     * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
+     *
+     * @return  An autoreleased physics object
+     */
+    static KidModel* create(const Vec2& pos, int idx);
     
     /**
      * Creates a new dude at the given position.
@@ -156,20 +176,6 @@ public:
      * @param value left/right movement of this character.
      */
     void setMovement(float value);
-    
-    /**
-     * Returns true if the dude is on the ground.
-     *
-     * @return true if the dude is on the ground.
-     */
-    bool isGrounded() const { return _isGrounded; }
-    
-    /**
-     * Sets whether the dude is on the ground.
-     *
-     * @param value whether the dude is on the ground.
-     */
-    void setGrounded(bool value) { _isGrounded = value; }
     
     /**
      * Returns true if the dude is actively colliding with jello
@@ -278,6 +284,16 @@ public:
 	*/
 	void animate();
 
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
+    
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
@@ -318,6 +334,23 @@ CC_CONSTRUCTOR_ACCESS:
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
     virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE, 0); }
+    
+    /**
+     * Initializes a new dude at the given position.
+     *
+     * The dude is scaled so that 1 pixel = 1 Box2d unit
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param  pos      Initial position in world coordinates
+     * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
+     *
+     * @return  true if the obstacle is initialized properly, false otherwise.
+     */
+    virtual bool init(const Vec2& pos, int idx) { return init(pos, Vec2::ONE, idx); }
     
     /**
      * Initializes a new dude at the given position.

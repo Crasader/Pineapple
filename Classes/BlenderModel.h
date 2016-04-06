@@ -11,6 +11,7 @@
 #include <cornell/CUWireNode.h>
 #include "Const.h"
 #include "Texture.h"
+//#include "CollisionObjectModel.h"
 
 using namespace cocos2d;
  
@@ -18,8 +19,6 @@ using namespace cocos2d;
 #pragma mark Physics Constants
 /** The maximum character speed */
 #define BLENDER_SPEED   1.0f
-/** The Blender specific scaling */
-#define BLENDER_SCALE      0.75f
 
 #define BLENDER_MASK 0x0008
 #define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
@@ -33,7 +32,7 @@ using namespace cocos2d;
  * experience, using a rectangular shape for a character will regularly snag
  * on a platform.  The round shapes on the end caps lead to smoother movement.
  */
-class BlenderModel : public BoxObstacle {
+class BlenderModel : public BoxObstacle/*, public CollisionObjectModel*/ {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
@@ -49,6 +48,12 @@ protected:
     virtual void resetDebugNode() override;
 
 public:
+	
+		/**
+		*	returns collision class
+		*/
+		int getCollisionClass() { return BLENDER_C; };
+
 #pragma mark Static Constructors
     /**
      * Creates a new blender at the origin.
@@ -138,6 +143,15 @@ public:
      */
     void update(float dt) override;
 
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors

@@ -124,6 +124,11 @@ private:
     
     
 public:
+
+		/**
+		*	Returns identifying key for the object class, for use by the collision controller
+		*/
+		virtual int getCollisionClass() { return 100; };
 #pragma mark -
 #pragma mark BodyDef Methods
     

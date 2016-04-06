@@ -21,69 +21,17 @@
 #include <string>
 #include <cornell.h>
 #include "GameController.h"
-#include "LevelController.h"
 #include "CollisionController.h"
+#include "Const.h"
+#include "Texture.h"
+#include "Levels.h"
 
 
 using namespace cocos2d;
 //using namespace std;
 
-#pragma mark -
-#pragma mark LevelModel Geography
-
-/** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   32.0f
-/** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT  12.0f
-/** Half-width of scrolling window in Box2d units */
-#define WINDOW_SIZE     5.0f
-
-#pragma mark -
-#pragma mark Collision Constants
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The new heavier gravity for this world (so it is not so floaty) */
-#define DEFAULT_GRAVITY -14.7f
-
-/** Offset for bullet when firing */
-#define BULLET_OFFSET   0.5f
-/** The speed of the bullet after firing */
-#define BULLET_SPEED   20.0f
 /** The number of frame to wait before reinitializing the game */
 #define EXIT_COUNT      240
-
-
-#pragma mark -
-#pragma mark Asset Constants
-/** The name of a wall (for object identification) */
-#define WALL_NAME       "wall"
-/** The name of a platform (for object identification) */
-#define PLATFORM_NAME   "platform"
-/** The message for winning the game */
-#define WIN_MESSAGE     "VICTORY"
-/** The color of the win message */
-#define WIN_COLOR       Color3B::YELLOW
-/** The message for losing the game */
-#define LOSE_MESSAGE    "BLENDED"
-/** The color of the lose message */
-#define LOSE_COLOR      Color3B::RED
-/** The key the basic game music */
-#define GAME_MUSIC      "game"
-/** The key the victory game music */
-#define WIN_MUSIC       "win"
-/** The key the failure game music */
-#define LOSE_MUSIC      "lose"
-/** The sound effect for firing a bullet */
-#define PEW_EFFECT      "pew"
-/** The sound effect for a bullet collision */
-#define POP_EFFECT      "pop"
-/** The sound effect for jumping */
-#define JUMP_EFFECT     "jump"
-/** The volume for the music */
-#define MUSIC_VOLUME    0.7f
-/** The volume for sound effects */
-#define EFFECT_VOLUME   0.8f
 
 
 #pragma mark -
@@ -96,14 +44,14 @@ using namespace cocos2d;
  * This allows us to use a controller without a heap pointer.
  */
 GameController::GameController() :
-    _rootnode(nullptr),
-    _worldnode(nullptr),
-    _debugnode(nullptr),
-    _world(nullptr),
-    _active(false),
-	_collision(nullptr),
-    _background(nullptr),
-    _debug(false){}
+_rootnode(nullptr),
+_worldnode(nullptr),
+_debugnode(nullptr),
+_world(nullptr),
+_active(false),
+_collision(nullptr),
+_background(nullptr),
+_debug(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -119,7 +67,7 @@ GameController::GameController() :
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root) {
-    return init(root,Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY));
+    return init(root,SCREEN);
 }
 
 /**
@@ -141,48 +89,28 @@ bool GameController::init(RootLayer* root) {
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root, const Rect& rect) {
-    return init(root,rect,Vec2(0,DEFAULT_GRAVITY));
-}
-
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  The bounds are in terms of the Box2d
- * world, not the screen.
- *
- * @param bounds The game bounds in Box2d coordinates
- * @param scale  The difference between screen and Box2d coordinates
- * @param gravity The gravitational force on this Box2d world
- *
- * @retain a reference to the root layer
- * @return  true if the controller is initialized properly, false otherwise.
- */
-bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity) {
-		// TODO: PRELOAD: Check if this is right way to do things
-		_assets = AssetManager::getInstance()->getCurrent();
+    _assets = AssetManager::getInstance()->getCurrent();
+    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
     Vec2 center(dimen.width/2.0f,dimen.height/2.0f);
     
     // Create the scale and notify the input handler
-    _scale.set(root->getContentSize().width/rect.size.width,
-               root->getContentSize().height/rect.size.height);
+    Vec2 scale = Vec2(root->getContentSize().width/rect.size.width,
+                      root->getContentSize().height/rect.size.height);
     Rect screen = rect;
-    screen.origin.x *= _scale.x;    screen.origin.y *= _scale.y;
-    screen.size.width *= _scale.x;  screen.size.height *= _scale.y;
-
+    screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
+    screen.size.width *= scale.x;  screen.size.height *= scale.y;
+    
     _input.init(screen);
     _input.start();
     
+    _level->setRootNode(root);
+    
     // Create the world; there are no listeners this time.
     _collision = CollisionController::create();
-    _world = WorldController::create(rect,gravity);
-    _world->retain();
+    _world = _level->getWorld();
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collision->beginContact(contact);
@@ -190,44 +118,50 @@ bool GameController::init(RootLayer* root, const Rect& rect, const Vec2& gravity
     _world->onEndContact = [this](b2Contact* contact) {
         _collision->endContact(contact);
     };
-
-    // Create the scene graph
-    _worldnode = Node::create();
-    _debugnode = Node::create();
-    _winnode = Label::create();
     
+    // Create the scene graph
+    _worldnode = _level->getWorldNode();
+    _debugnode = _level->getDebugNode();
+    
+    _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _winnode->setString(WIN_MESSAGE);
-    
     _winnode->setPosition(root->getContentSize().width/2.0f,
                           root->getContentSize().height/2.0f);
     _winnode->setColor(WIN_COLOR);
-    setComplete(false);
-
-    _losenode = Label::create();
     
+    _losenode = Label::create();
     _losenode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _losenode->setString(LOSE_MESSAGE);
-    
     _losenode->setPosition(root->getContentSize().width/2.0f,
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
     
-    // Add everything to the root and retain
-    root->addChild(_worldnode,2);
-    root->addChild(_debugnode,3);
+    _loadnode = Label::create();
+    _loadnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
+    _loadnode->setString(LOAD_MESSAGE);
+    _loadnode->setPosition(root->getContentSize().width/2.0f,
+                           root->getContentSize().height/2.0f);
+    _loadnode->setColor(LOAD_COLOR);
+    
     root->addChild(_winnode,4);
     root->addChild(_losenode,5);
+    root->addChild(_loadnode,6);
+    
+    _loadnode->setVisible(false);
+    
     _rootnode = root;
     _rootnode->retain();
     
-    // Now populate the physics objects
-    _levelController = LevelController::create(_assets, _rootnode, _worldnode, _debugnode, _world, _scale);
-    _levelController->read("");
-    _collision->setLevel(_levelController->getLevel());
-    _level = _levelController->getLevel();
-    populate();
+    _collision->setLevel(_level);
+    
+    _levelOffset = 0.0f;
+    _worldnode->setPositionX(0.0f);
+    _debugnode->setPositionX(0.0f);
+    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
+    
     _active = true;
+    setComplete(false);
     setDebug(false);
     setFailure(false);
     return true;
@@ -247,10 +181,7 @@ GameController::~GameController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameController::dispose() {
-    if (_world != nullptr) {
-        _world->clear();
-        _world->release();
-    }
+    _level->unload();
     _worldnode = nullptr;
     _background = nullptr;
     _debugnode = nullptr;
@@ -259,25 +190,6 @@ void GameController::dispose() {
     _rootnode->release();
     _rootnode = nullptr;
 }
-
-
-#pragma mark -
-#pragma mark LevelModel Creation
-/**
- * Lays out the game geography.
- *
- * This method is really, really long.  In practice, you would replace this
- * with your serialization loader, which would process a level file.
- */
-void GameController::populate() {
-    _levelOffset = 0.0f;
-    _worldnode->setPositionX(0.0f);
-    _debugnode->setPositionX(0.0f);
-    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _debugnode, _assets);
-}
-
-
-
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -288,17 +200,45 @@ void GameController::populate() {
  * This method disposes of the world and creates a new one.
  */
 void GameController::reset() {
-    _world->clear();
-    _worldnode->removeAllChildren();
-    _background->removeAllChildren();
-    _debugnode->removeAllChildren();
-    
     setFailure(false);
     setComplete(false);
-    _levelController->read("");
-    _collision->setLevel(_levelController->getLevel());
-    _level = _levelController->getLevel();
-    populate();
+    
+    // Unload the level but keep in memory temporarily
+    _level->retain();
+    _assets->unload<LevelModel>(LEVEL_ONE_KEY);
+    
+    // Load a new level and quit update
+    _assets->loadAsync<LevelModel>(LEVEL_ONE_KEY,LEVEL_ONE_FILE);
+    _loadnode->setVisible(true);
+}
+
+/** Called after the loadAsync for the level finishes */
+void GameController::onReset() {
+    
+    // Release the old level permanently
+    _level->release();
+    
+    // Access and initialize level
+    _level = _assets->get<LevelModel>(LEVEL_ONE_KEY);
+    _level->setRootNode(_rootnode);
+    _level->showDebug(_debug);
+    _world = _level->getWorld();
+    _worldnode = _level->getWorldNode();
+    _debugnode = _level->getDebugNode();
+    
+    _collision->setLevel(_level);
+    _world->activateCollisionCallbacks(true);
+    _world->onBeginContact = [this](b2Contact* contact) {
+        _collision->beginContact(contact);
+    };
+    _world->onEndContact = [this](b2Contact* contact) {
+        _collision->endContact(contact);
+    };
+    _levelOffset = 0.0f;
+    _worldnode->setPositionX(0.0f);
+    _debugnode->setPositionX(0.0f);
+    _background->reset();
+    _loadnode->setVisible(false);
 }
 
 /**
@@ -370,28 +310,45 @@ void handleAvatarGrowth(float cscale, InputController& _input, PineappleModel* _
  * @param  delta    Number of seconds since last animation frame
  */
 void GameController::update(float dt) {
+    if (_level == nullptr) {
+        return;
+    }
+    
+    // Check to see if new level loaded yet
+    if (_loadnode->isVisible()) {
+        if (_assets->isComplete()) {
+            onReset();
+        } else {
+            // Level is not loaded yet; refuse input
+            return;
+        }
+    }
+    
     _input.update(dt);
     
-		if (_level->haveFailed()) {
-			setFailure(true);
-		}
-
-	// Check for Victory
-	if (checkForVictory()) {
-		setComplete(true);
-	}
-
+    if (_level->haveFailed()) {
+        setFailure(true);
+    }
+    
+    // Check for Victory
+    if (checkForVictory()) {
+        setComplete(true);
+    }
+    
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_level->getKid(i) != nullptr) {
             _level->getKid(i)->dampTowardsWalkspeed();
-			_level->getKid(i)->animate();
+            _level->getKid(i)->animate();
         }
     }
-        
+    
     // Process the toggled key commands
     if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
+    if (_input.didReset()) {
+        reset();
+        return;
+    }
     if (_input.didExit())  {
         _rootnode->shutdown();
     }
@@ -410,16 +367,16 @@ void GameController::update(float dt) {
             Sound* source = _assets->get<Sound>(JUMP_EFFECT);
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
-
-		_level->getPineapple()->animate();
+        
+        _level->getPineapple()->animate();
     }
-
+    
     // Update the background (move the clouds)
     _background->update(dt);
-
-	// Scroll the screen (with parallax) if necessary
-	handleScrolling();
-
+    
+    // Scroll the screen (with parallax) if necessary
+    handleScrolling();
+    
     // Turn the physics engine crank
     _world->update(dt);
     
@@ -435,43 +392,43 @@ void GameController::update(float dt) {
 }
 
 /**
-* Compute offsets for horizontal scrolling.
-*/
+ * Compute offsets for horizontal scrolling.
+ */
 void GameController::handleScrolling() {
-	// Parameters
-	float L = 0.5f*DEFAULT_WIDTH - WINDOW_SIZE +_levelOffset;
-	float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
-	float maxLevelOffset = _level->getLength() - DEFAULT_WIDTH;
-	float offset = 0.0f;
+    // Parameters
+    float L = 0.5f*DEFAULT_WIDTH - WINDOW_SIZE +_levelOffset;
+    float R = 0.5f*DEFAULT_WIDTH + WINDOW_SIZE +_levelOffset;
+    float maxLevelOffset = _level->getLength() - DEFAULT_WIDTH;
+    float offset = 0.0f;
     float oldLevelOffset = _levelOffset;
     
-	// Compute the offset
-	if (_level->getPineapple() != nullptr && (_levelOffset > 0) && (_level->getPineapple()->getPosition().x < L)) {
-		float tempOffset = L - _level->getPineapple()->getPosition().x;
-		float tempLevelOffset = _levelOffset - tempOffset;
-		_levelOffset = max(0.0f, tempLevelOffset);
-		offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
-		offset = -offset;
-	}
-	else if (_level->getPineapple() != nullptr && (_levelOffset < maxLevelOffset) && (_level->getPineapple()->getPosition().x > R)) {
-		float tempOffset = _level->getPineapple()->getPosition().x - R;
-		float tempLevelOffset = _levelOffset + tempOffset;
-		_levelOffset = min(maxLevelOffset, tempLevelOffset);
-		offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
-	}
-
-	// Move all the objects in _worldnode
-	_worldnode->setPositionX(_worldnode->getPositionX() - (_scale.x*offset));
-	_debugnode->setPositionX(_debugnode->getPositionX() - (_scale.x*offset));
-
-	// Do parallax scrolling of the background
-    _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _scale);
+    // Compute the offset
+    if (_level->getPineapple() != nullptr && (_levelOffset > 0) && (_level->getPineapple()->getPosition().x < L)) {
+        float tempOffset = L - _level->getPineapple()->getPosition().x;
+        float tempLevelOffset = _levelOffset - tempOffset;
+        _levelOffset = max(0.0f, tempLevelOffset);
+        offset = (tempLevelOffset > 0) ? tempOffset : _levelOffset;
+        offset = -offset;
+    }
+    else if (_level->getPineapple() != nullptr && (_levelOffset < maxLevelOffset) && (_level->getPineapple()->getPosition().x > R)) {
+        float tempOffset = _level->getPineapple()->getPosition().x - R;
+        float tempLevelOffset = _levelOffset + tempOffset;
+        _levelOffset = min(maxLevelOffset, tempLevelOffset);
+        offset = (tempLevelOffset < maxLevelOffset) ? tempOffset : (maxLevelOffset - _levelOffset);
+    }
+    
+    // Move all the objects in _worldnode
+    _worldnode->setPositionX(_worldnode->getPositionX() - (_level->getDrawScale().x*offset));
+    _debugnode->setPositionX(_debugnode->getPositionX() - (_level->getDrawScale().x*offset));
+    
+    // Do parallax scrolling of the background
+    _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
 }
 
 #pragma mark -
 #pragma mark Collision Handling
 
-/** 
+/**
  * Checks for victory, triggering it if it occurs
  * Specifically, sees if every living child has reached the goal
  *
@@ -479,20 +436,20 @@ void GameController::handleScrolling() {
  */
 bool GameController::checkForVictory() {
     int count = 0;
-
-	// count the number of kids who have reached the goal
+    
+    // count the number of kids who have reached the goal
     for(int i = 0; i < KID_COUNT; i++) {
-		if (_level->getKid(i) != nullptr) {
-			if (_level->getKid(i)->hasReachedGoal()) {
-				count++;
-			}
-		}
+        if (_level->getKid(i) != nullptr) {
+            if (_level->getKid(i)->hasReachedGoal()) {
+                count++;
+            }
+        }
     }
-	
-	// return true if avatar and remaining kids reached goal
-	if (_level->getPineapple() != nullptr) {
-		return _level->getPineapple()->hasReachedGoal() && count >= _level->numKidsRemaining();
-	}
-
-	return false;
+    
+    // return true if avatar and remaining kids reached goal
+    if (_level->getPineapple() != nullptr) {
+        return _level->getPineapple()->hasReachedGoal() && count >= _level->numKidsRemaining();
+    }
+    
+    return false;
 }

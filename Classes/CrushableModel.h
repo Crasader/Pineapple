@@ -2,6 +2,8 @@
 #define __CRUSHABLE_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
+//#include "CollisionObjectModel.h"
+#include "Const.h"
 
 using namespace cocos2d;
 
@@ -30,7 +32,7 @@ using namespace cocos2d;
 * experience, using a rectangular shape for a character will regularly snag
 * on a platform.  The round shapes on the end caps lead to smoother movement.
 */
-class CrushableModel : public BoxObstacle {
+class CrushableModel : public BoxObstacle/*, public CollisionObjectModel*/ {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
 	CC_DISALLOW_COPY_AND_ASSIGN(CrushableModel);
@@ -44,8 +46,19 @@ protected:
 	* the texture (e.g. a circular shape attached to a square texture).
 	*/
 	virtual void resetDebugNode() override;
+    
+    /** The name of this texture that will be attached to the crushableObject */
+    const char* _textureName;
 
 public:
+	/**
+	*	returns collision class
+	*/
+	int getCollisionClass() { return CUP_C; };
+
+    /** Return the name of the texture that should be used for this */
+    const char* getTextureName() { return _textureName; }
+    
 #pragma mark Static Constructors
 	/**
 	* Creates a new crushable at the origin.
@@ -129,6 +142,16 @@ public:
 	*/
 	void applyForce();
 
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
+    
 
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
