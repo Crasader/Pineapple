@@ -365,15 +365,13 @@ void LevelController::addButtonSwitch(const Vec2 pos, const bool isSwitch) {
     _level->addAnonymousObstacle(button_switch, BUTTON_SWITCH_Z_INDEX);
     
     MoveablePlatformModel* platform = MoveablePlatformModel::create(Vec2(15.0f, 5.0f), _scale, 12.0f, false, false, Color::red);
-    Node* node = Node::create();
-
-    platform->setSceneNode(node);
-    initDebugProperties(platform);
     initPhysicalObstacle(platform);
+    initDebugProperties(platform);
     
-    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
-        initPhysicalObstacle(platform->getBodies()[ii]);
-    }
+    platform->setFilterData(b);
+    
+    Node* node = Node::create();
+    platform->setSceneNode(node);
     
     button_switch->linkToPlatform(platform);
     _level->addAnonymousObstacle(platform, BUTTON_SWITCH_Z_INDEX);
