@@ -40,7 +40,7 @@ MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, const Vec2
 bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, float length, bool isOpen, bool vertical, Color color) {
     Obstacle::init(pos);
     setDrawScale(scale);
-    
+
     setName(MOVEABLE_PLATFORM_NAME);
     
     _isClosed = !isOpen;
@@ -49,6 +49,7 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
     _isOpen = isOpen;
     _isVertical = vertical;
     _color = color;
+    _pos = pos;
     
     float cscale = Director::getInstance()->getContentScaleFactor();
     
@@ -59,8 +60,33 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
     nubbinSize.height *= cscale/scale.y;
     
     if (_isVertical) {
-        _pos = pos;
         _nubbin1 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + length/2.0f), Size(MOVEABLE_PLATFORM_WIDTH, NUBBIN_LENGTH));
+        _nubbin1->setName(NUBBIN_NAME);
+        _nubbin1->retain();
+        _nubbin1->setActive(false);
+        _bodies.push_back(_nubbin1);
+        
+        _nubbin2 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - length/2.0f + _nubbin1->getHeight()), Size(MOVEABLE_PLATFORM_WIDTH, NUBBIN_LENGTH));
+        _nubbin2->setName(NUBBIN_NAME);
+        _nubbin2->retain();
+        _nubbin2->setActive(false);
+        _bodies.push_back(_nubbin2);
+        
+        _box1 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y), Size(MOVEABLE_PLATFORM_WIDTH, length/2.0f));
+        _box1->setName(BOX_NAME);
+        _box1->retain();
+        _box1->setFixedRotation(true);
+        _box1->setBodyType(b2_staticBody);
+        _bodies.push_back(_box1);
+        
+        _box2 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - length / 2.0f), Size(MOVEABLE_PLATFORM_WIDTH, length/2.0f));
+        _box2->setName(BOX_NAME);
+        _box2->retain();
+        _box2->setFixedRotation(true);
+        _box2->setBodyType(b2_staticBody);
+        _bodies.push_back(_box2);
+    } else {
+        _nubbin1 = BoxObstacle::create(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f - length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f), Size(MOVEABLE_PLATFORM_WIDTH, NUBBIN_LENGTH));
         _nubbin1->setName(NUBBIN_NAME);
         _nubbin1->retain();
         _nubbin1->setActive(false);
@@ -118,14 +144,17 @@ bool MoveablePlatformModel::init(const Vec2& pos, const cocos2d::Vec2& scale, fl
         _node->addChild(sprite);
         
         sprite = PolygonNode::createWithTexture(rightNubbin);
+        sprite->setScale(cscale);
         _bodies[1]->setSceneNode(sprite);
         _node->addChild(sprite);
         
         sprite = PolygonNode::createWithTexture(box);
+        sprite->setScale(cscale);
         _bodies[2]->setSceneNode(sprite);
         _node->addChild(sprite);
         
         sprite = PolygonNode::createWithTexture(box);
+        sprite->setScale(cscale);
         _bodies[3]->setSceneNode(sprite);
         _node->addChild(sprite);
     }

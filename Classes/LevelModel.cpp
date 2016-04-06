@@ -1,4 +1,5 @@
 #include "LevelModel.h"
+#include "MoveablePlatformModel.h"
 
 #define UNSET_LENGTH_PLATFORM_COUNT_WALL_COUNT -2
 

@@ -27,18 +27,17 @@ using namespace cocos2d;
 #define CLOSING_OPENING_SPEED         1.0f
 #define OPEN_DISTANCE                 2.5f
 
-#define MOVEABLE_PLATFORM_WIDTH       .25f
-#define NUBBIN_LENGTH                 .125f
+#define MOVEABLE_PLATFORM_WIDTH       1.0f
+#define NUBBIN_LENGTH                 .25f
 
 enum Color {blue = 1, red = 2, green = 3};
 
-class MoveablePlatformModel : ComplexObstacle {
+class MoveablePlatformModel : public ComplexObstacle {
 protected:
-    virtual void resetSceneNode() override;
-
     virtual void resetDebugNode() override;
 
-    
+    virtual void resetSceneNode() override;
+
 private:
     bool _isClosed;
     bool _isOpening;
@@ -56,7 +55,7 @@ private:
     // right if horizontal, bottom if vertical
     BoxObstacle* _box2;
     
-    // center of movable platform (if open it is the center between the two).
+    // pos is at center of movable platform (if open it is the center between the two).
     //   <nubbin> [_box1] _pos [_box2] <nubbin>
     Vec2 _pos;
     
@@ -131,6 +130,7 @@ public:
         }
     }
 
+    // length is length of two middle boxes
     static MoveablePlatformModel* create(const Vec2& pos, const Vec2& scale, float length, bool isOpen, bool vertical, Color color);
     
 CC_CONSTRUCTOR_ACCESS:
