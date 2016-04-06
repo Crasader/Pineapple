@@ -3,16 +3,14 @@
 //
 
 #include "SpikeModel.h"
-//#include <cornell/CUPolygonNode.h>
+#include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define SPIKE_VSHRINK  0.8f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define SPIKE_HSHRINK  0.72f
+
+#define SPIKE_SCALE 0.38
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -26,12 +24,12 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 SpikeModel* SpikeModel::create() {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init()) {
-        spike->autorelease();
+        spike->retain();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -50,13 +48,13 @@ SpikeModel* SpikeModel::create() {
  *
  * @param  pos      Initial position in world coordinates
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 SpikeModel* SpikeModel::create(const Vec2& pos) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos)) {
         spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->autorelease();
+        spike->retain();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -76,13 +74,13 @@ SpikeModel* SpikeModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates(of bottom left point)
  * @param  scale    The drawing scale
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos,scale)) {
         spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
-        spike->autorelease();
+        spike->retain();
         return spike;
     }
     CC_SAFE_DELETE(spike);
@@ -109,20 +107,7 @@ SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool SpikeModel::init(const Vec2& pos, const Vec2& scale) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(SPIKE_TEXTURE);
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    
-    nsize.width  *= SPIKE_HSHRINK/scale.x;
-    nsize.height *= SPIKE_VSHRINK/scale.y;
-    if (BoxObstacle::init(pos,nsize)) {
-        setFriction(0.0f);
-        setFixedRotation(true);
-        
+    if (BoxObstacle::init(pos,Size(scale))) {
         // Gameplay attributes
         return true;
     }
@@ -172,6 +157,33 @@ void SpikeModel::update(float dt) {
 
 #pragma mark -
 #pragma mark Scene Graph Methods
+/**
+ * Performs any necessary additions to the scene graph node.
+ *
+ * This method is necessary for custom physics objects that are composed
+ * of multiple scene graph nodes.  In this case, it is because we
+ * manage our own afterburner animations.
+ */
+void SpikeModel::resetSceneNode() {
+    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    if (pnode != nullptr) {
+        // We need to know the content scale for resolution independence
+        // If the device is higher resolution than 1024x576, Cocos2d will scale it
+        // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
+        // If you are using a device with a 3:2 aspect ratio, you will need to
+        // completely redo the level layout.  We can help if this is an issue.
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
+        
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale * SPIKE_SCALE);
+        
+        setDimension(pnode->getContentSize().width * SPIKE_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * SPIKE_SCALE / _drawScale.y);
+    }
+}
 
 /**
  * Redraws the outline of the physics fixtures to the debug node

@@ -13,13 +13,8 @@
 
 using namespace cocos2d;
 
-/** The name for a spike, for identification purposes */
-#define SPIKE_NAME       "spike"
-
 #pragma mark -
 #pragma mark Physics Constants
-/** The Spike specific scaling */
-#define SPIKE_SCALE         0.75f
 
 
 #pragma mark -
@@ -135,6 +130,15 @@ public:
      */
     void applyForce();
     
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors

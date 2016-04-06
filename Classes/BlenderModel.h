@@ -19,8 +19,6 @@ using namespace cocos2d;
 #pragma mark Physics Constants
 /** The maximum character speed */
 #define BLENDER_SPEED   1.0f
-/** The Blender specific scaling */
-#define BLENDER_SCALE      0.75f
 
 #define BLENDER_MASK 0x0008
 #define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
@@ -145,6 +143,15 @@ public:
      */
     void update(float dt) override;
 
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors

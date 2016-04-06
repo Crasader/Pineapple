@@ -13,7 +13,7 @@
 #define MIDDLE_BACKGROUND_SCALE  1.1f
 #define BACK_BACKGROUND_SCALE    1.0f
 /** The width of background assets */
-#define FRONT_BACKGROUND_WIDTH   1000.0f
+#define FRONT_BACKGROUND_WIDTH   4000.0f
 #define MIDDLE_BACKGROUND_WIDTH  1000.0f
 #define BACK_BACKGROUND_WIDTH    1500.0f
 /** Height of background assets */
@@ -21,7 +21,7 @@
 #define MIDDLE_BACKGROUND_HEIGHT 300.0f
 #define BACK_BACKGROUND_HEIGHT   300.0f
 /** Vertical offset of background assets */
-#define FRONT_BACKGROUND_VERTICAL_OFFSET  -190.0f
+#define FRONT_BACKGROUND_VERTICAL_OFFSET  -140.0f
 #define MIDDLE_BACKGROUND_VERTICAL_OFFSET  120.0f
 #define BACK_BACKGROUND_VERTICAL_OFFSET    170.0f
 /** Damping factor for parallax scrolling */
@@ -30,15 +30,25 @@
 /** Cloud velocity */
 #define CLOUD_VELOCITY           0.05f
 
-BackgroundView* BackgroundView::createAndAddTo(Node* rootNode, Node* worldNode, Node* debugNode, SceneManager *assets) {
+BackgroundView* BackgroundView::createAndAddTo(Node* rootNode, Node* worldNode, SceneManager *assets) {
     BackgroundView* view = new (std::nothrow) BackgroundView();
     view->_hillsnode = Node::create();
     view->_cloudsnode = Node::create();
-    view->init(rootNode, worldNode, debugNode, assets);
+    
+    view->init(rootNode, worldNode, assets);
+    
+    worldNode->addChild(view->_frontBackground_1);
+    worldNode->addChild(view->_frontBackground_2);
+    rootNode->addChild(view->_hillsnode,0);
+    rootNode->addChild(view->_cloudsnode,1);
+    
     return view;
 }
 
-void BackgroundView::init(Node* rootNode, Node* worldNode, Node* debugNode, SceneManager* assets) {
+void BackgroundView::init(Node* rootNode, Node* worldNode, SceneManager* assets) {
+    _rootNode = rootNode;
+    _worldNode = worldNode;
+    
     // We need to know the content scale for resolution independence
     // If the device is higher resolution than 1024x576, Cocos2d will scale it
     // This was set as the design resolution in AppDelegate
@@ -84,15 +94,10 @@ void BackgroundView::init(Node* rootNode, Node* worldNode, Node* debugNode, Scen
     _frontBackground_1->setScale(cscale*FRONT_BACKGROUND_SCALE);
     _frontBackground_1->setPosition(FRONT_BACKGROUND_WIDTH/2 * cscale*FRONT_BACKGROUND_SCALE,
                                     FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
-    worldNode->addChild(_frontBackground_1);
     _frontBackground_2 = PolygonNode::createWithTexture(image);
     _frontBackground_2->setScale(cscale*FRONT_BACKGROUND_SCALE);
     _frontBackground_2->setPosition(FRONT_BACKGROUND_WIDTH*3/2 * cscale*FRONT_BACKGROUND_SCALE,
                                     FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
-    worldNode->addChild(_frontBackground_2);
-    
-    rootNode->addChild(_hillsnode,0);
-    rootNode->addChild(_cloudsnode,1);
 }
 
 void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {
@@ -170,6 +175,14 @@ void BackgroundView::handleScrolling(float offset, float levelOffset, float oldL
 
 void BackgroundView::update(float dt) {
     _cloudsnode->setPositionX(_cloudsnode->getPositionX() - CLOUD_VELOCITY);
+}
+
+void BackgroundView::reset() {
+    _worldNode->removeChild(_frontBackground_1);
+    _worldNode->removeChild(_frontBackground_2);
+    init(_rootNode, _worldNode, AssetManager::getInstance()->getCurrent());
+    _worldNode->addChild(_frontBackground_1);
+    _worldNode->addChild(_frontBackground_2);
 }
 
 void BackgroundView::removeAllChildren() {

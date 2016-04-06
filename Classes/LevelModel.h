@@ -4,9 +4,15 @@
 #include "PineappleModel.h"
 #include "BlenderModel.h"
 #include "KidModel.h"
+#include "GoalModel.h"
+#include "WallModel.h"
 #include "SpikeModel.h"
+#include "JelloModel.h"
+#include "CrushableModel.h"
 #include "Const.h"
+#include "Texture.h"
 #include <cornell.h>
+#include <vector>
 
 /** 
  *          Z index table:
@@ -21,7 +27,6 @@
 #define GOAL_Z_INDEX            0
  
 #define WALL_Z_INDEX            10
-#define PLATFORM_Z_INDEX        11
 
 #define CUP_Z_INDEX             20
 #define JELLO_Z_INDEX           21
@@ -34,7 +39,7 @@
 
 using namespace cocos2d;
 
-class LevelModel {
+class LevelModel : public Asset {
 protected:
 	/** Reference to the goalDoor (for collision detection) */
 	BoxObstacle*    _goalDoor;
@@ -45,9 +50,11 @@ protected:
 	/** Reference to the blender avatar */
 	BlenderModel* _blender;
 	/** Reference to the root node of the scene graph */
-	RootLayer* _rootnode;
+	Node* _rootnode;
 	/** Reference to the physics root of the scene graph */
 	Node* _worldnode;
+    /** The bounds of this level in physics coordinates */
+    Rect _bounds;
 	/** Reference to the debug root of the scene graph */
 	Node* _debugnode;
 
@@ -56,12 +63,16 @@ protected:
 
 	/** Length of the level in box2d units */
 	float _length;
-	int _platformCount;
-	int _wallCount;
 
-	PolygonObstacle** _walls;
-	PolygonObstacle** _platforms;
-
+    
+    /** Reference to all the walls */
+    std::vector<WallModel*> _walls;
+    /** Reference to all the jellos */
+    std::vector<JelloModel*> _jellos;
+    /** Reference to all the spikes */
+    std::vector<SpikeModel*> _spikes;
+    /** Reference to all the crushables */
+    std::vector<CrushableModel*> _crushables;
 
 	/** The Box2D world */
 	WorldController* _world;
@@ -154,41 +165,161 @@ public:
      *
      */
     float getLength() { return _length; }
-
+    
+    WorldController* getWorld() { return _world; }
+    
 #pragma mark -
 #pragma mark Allocation
-	/**
-	*
-	*/
-	static LevelModel* create(RootLayer* rootnode, Node* worldnode, Node* debugnode, WorldController* world);
+    /**
+     * Creates a new game level with no source file.
+     *
+     * The source file can be set at any time via the setFile() method. This method
+     * does NOT load the asset.  You must call the load() method to do that.
+     *
+     * @return  an autoreleased level file
+     */
+    static LevelModel* create();
     
-	/** Reference to the goalDoor (for collision detection) */
-	void addGoal(BoxObstacle* goal);
-	/** Reference to the player avatar */
-	void addPineapple(PineappleModel* pineapple);
-	/** References to the kid avatars */
-	void addKids(KidModel* kids[KID_COUNT]);
-	/** Reference to the blender avatar */
-	void addBlender(BlenderModel* blender);
-
-	/** Length of the level in box2d units */
-	void addLength (float length);
-	void addPlatformCount(int platformCount);
-	void addWallCount(int wallCount);
-
-	void addWalls(PolygonObstacle* walls[]);
-	void addPlatforms(PolygonObstacle* platforms[]);
-	/** The world scale (computed from root node) */
-	void addScale(Vec2 _scale);
+    /**
+     * Creates a new game level with the given source file.
+     *
+     * This method does NOT load the level. You must call the load() method to do that.
+     * This method returns false if file does not exist.
+     *
+     * @return  an autoreleased level file
+     */
+    static LevelModel* create(std::string file);
     
+    void addLength(float length);
+    
+    void addGoal(float goalPos[]);
+    
+    void addWall(float wallPos[]);
+        
+    void addPineapple(float pineapplePos[]);
+    
+    void addKid(float kidPos[]);
+    
+    void addJello(float jelloPos[]);
+    
+    void addCup(float cupPos[]);
+    
+    void addSpikes(float spikePos[]);
+    
+    void addBlender(float blenderPos[]);
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
     void addAnonymousObstacle(Obstacle* obj, int zOrder);
 
 #pragma mark -
-#pragma mark Deallocation
+#pragma mark Asset Loading
+    /**
+     * Loads this game level from the source file
+     *
+     * This load method should NEVER access the AssetManager.  Assets are loaded in
+     * parallel, not in sequence.  If an asset (like a game level) has references to
+     * other assets, then these should be connected later, during scene initialization.
+     *
+     * @return true if successfully loaded the asset from a file
+     */
+    virtual bool load() override;
     
-    void dispose();
+    /**
+     * Unloads this game level, releasing all sources
+     *
+     * This load method should NEVER access the AssetManager.  Assets are loaded and
+     * unloaded in parallel, not in sequence.  If an asset (like a game level) has
+     * references to other assets, then these should be disconnected earlier.
+     */
+    virtual void unload() override;
+    
+    /**
+     * Resets this game level, restoring all objects to their original position.
+     */
+    void reset();
+    
+#pragma mark Physics Attributes
+    /**
+     * Returns the bounds of this level in physics coordinates
+     *
+     * @return the bounds of this level in physics coordinates
+     */
+    const Rect& getBounds() const   { return _bounds; }
+    
+    /**
+     * Activates all of the physics objects in this level
+     *
+     * @param  controller  the world controller to manage physics
+     */
+    void activate(WorldController* controller);
+    
+#pragma mark Drawing Methods
+    /**
+     * Returns the drawing scale for this game level
+     *
+     * The drawing scale is the number of pixels to draw before Box2D unit. Because
+     * mass is a function of area in Box2D, we typically want the physics objects
+     * to be small.  So we decouple that scale from the physics object.  However,
+     * we must track the scale difference to communicate with the scene graph.
+     *
+     * We allow for the scaling factor to be non-uniform.
+     *
+     * @return the drawing scale for this game level
+     */
+    const Vec2& getDrawScale() const { return _scale; }
+    
+    /**
+     * Sets the drawing scale for this game level
+     *
+     * The drawing scale is the number of pixels to draw before Box2D unit. Because
+     * mass is a function of area in Box2D, we typically want the physics objects
+     * to be small.  So we decouple that scale from the physics object.  However,
+     * we must track the scale difference to communicate with the scene graph.
+     *
+     * We allow for the scaling factor to be non-uniform.
+     *
+     * @param value  the drawing scale for this game level
+     */
+    void setDrawScale(const Vec2& value);
+    
+    /**
+     * Returns the scene graph node for drawing purposes.
+     *
+     * The scene graph is completely decoupled from the physics system.  The node
+     * does not have to be the same size as the physics body. We only guarantee
+     * that the node is positioned correctly according to the drawing scale.
+     *
+     * @return the scene graph node for drawing purposes.
+     */
+    Node* getRootNode() const { return _rootnode; }
+    
+    /**
+     * Sets the scene graph node for drawing purposes.
+     *
+     * The scene graph is completely decoupled from the physics system.  The node
+     * does not have to be the same size as the physics body. We only guarantee
+     * that the node is positioned correctly according to the drawing scale.
+     *
+     * @param value  the scene graph node for drawing purposes.
+     *
+     * @retain  a reference to this scene graph node
+     * @release the previous scene graph node used by this object
+     */
+    void setRootNode(Node* node);
+    
+    /**
+     * Clears the root scene graph node for this level
+     */
+    void clearRootNode();
+    
+    /**
+     * Toggles whether to show the debug layer of this game world.
+     *
+     * The debug layer displays wireframe outlines of the physics fixtures.
+     *
+     * @param  flag whether to show the debug layer of this game world
+     */
+    void showDebug(bool flag);
     
 	/**
 	 * Kills will, removing him from the game world.

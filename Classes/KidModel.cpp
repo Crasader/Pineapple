@@ -41,12 +41,12 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create() {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init()) {
-        dude->autorelease();
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);
@@ -65,12 +65,37 @@ KidModel* KidModel::create() {
  *
  * @param  pos      Initial position in world coordinates
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create(const Vec2& pos) {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init(pos)) {
-        dude->autorelease();
+        dude->retain();
+        return dude;
+    }
+    CC_SAFE_DELETE(dude);
+    return nullptr;
+}
+
+/**
+ * Creates a new dude at the given position.
+ *
+ * The dude is sized according to the given drawing scale.
+ *
+ * The scene graph is completely decoupled from the physics system.
+ * The node does not have to be the same size as the physics body. We
+ * only guarantee that the scene graph node is positioned correctly
+ * according to the drawing scale.
+ *
+ * @param  pos      Initial position in world coordinates
+ * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
+ *
+ * @return  An retained physics object
+ */
+KidModel* KidModel::create(const Vec2& pos, int idx) {
+    KidModel* dude = new (std::nothrow) KidModel();
+    if (dude && dude->init(pos,idx)) {
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);
@@ -91,12 +116,12 @@ KidModel* KidModel::create(const Vec2& pos) {
  * @param  scale    The drawing scale
  * @param  idx      The index of this kid, for selecting texture, in range [0..NUM_KIDS)
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 KidModel* KidModel::create(const Vec2& pos, const Vec2& scale, int idx) {
     KidModel* dude = new (std::nothrow) KidModel();
     if (dude && dude->init(pos,scale,idx)) {
-        dude->autorelease();
+        dude->retain();
         return dude;
     }
     CC_SAFE_DELETE(dude);
@@ -142,23 +167,13 @@ string KidModel::getTexture(int idx) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(getTexture(idx));
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    _index = idx;
-    
-    nsize.width  *= KID_HSHRINK/(12.0f*scale.x);
-    nsize.height *= KID_VSHRINK/scale.y;
-    if (CapsuleObstacle::init(pos,nsize)) {
+    if (CapsuleObstacle::init(pos,Size(100, 101))) {
         setDensity(KID_DENSITY);
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
+        setFixedRotation(true);
+        setFriction(0.0f);
+        _index = idx;
         _isCollidingWithJello = false;
 		_reachedGoal = false;
         return true;
@@ -185,21 +200,10 @@ void KidModel::setMovement(float value) {
     }
     
     // Change facing
-    TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
+    /*TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
     if (image != nullptr) {
         image->flipHorizontal(!image->isFlipHorizontal());
-    }
-}
-
-/**
-* Initialize the filmstrip for walking animation
-*/
-void KidModel::initAnimation(Texture2D* image, float scale) {
-	_kidWalkcycleFrame = 0;
-	_kidWalkcycle = AnimationNode::create(image, 1, 12, 12);
-	_kidWalkcycle->setScale(scale);
-	_kidWalkcycle->setFrame(_kidWalkcycleFrame);
-	this->setSceneNode(_kidWalkcycle);
+    }*/
 }
 
 
@@ -280,8 +284,6 @@ void KidModel::dampTowardsWalkspeed() {
         }
     }
     
-    
-    
 //    // Velocity too high, clamp it
 //    if (fabs(getVX()) >= getMaxWalkingSpeed() && _isGrounded) {
 //        setVX(SIGNUM(getVX())*getMaxWalkingSpeed());
@@ -306,12 +308,20 @@ void KidModel::update(float dt) {
 * Animate the kid if they're moving
 */
 void KidModel::animate() {
-	if (getVX() > 0.2f) {
-		_kidWalkcycleFrame++;
-		_kidWalkcycle->setFrame(_kidWalkcycleFrame % 12);
+	// in the air
+	if (getVY() < -0.2f) {
+		_kidWalkcycleFrame = 0.0f;
+		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
+	// moving
+	else if (getVX() > 0.2f) {
+		_kidWalkcycleFrame += 0.5f;
+		int tmp = (int)rint(_kidWalkcycleFrame);
+		_kidWalkcycle->setFrame(tmp % 12);
+	}
+	// at rest
 	else {
-		_kidWalkcycleFrame = 0;
+		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
 }
@@ -319,6 +329,33 @@ void KidModel::animate() {
 
 #pragma mark -
 #pragma mark Scene Graph Methods
+
+void KidModel::resetSceneNode() {
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
+    if (pnode != nullptr) {
+        // We need to know the content scale for resolution independence
+        // If the device is higher resolution than 1024x576, Cocos2d will scale it
+        // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
+        // If you are using a device with a 3:2 aspect ratio, you will need to
+        // completely redo the level layout.  We can help if this is an issue.
+        
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
+        
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale * KID_SCALE);
+        pnode->setFrame(0);
+        
+        setDimension(pnode->getContentSize().width * KID_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * KID_SCALE / _drawScale.y);
+        
+        _kidWalkcycleFrame = 0;
+        _kidWalkcycle = pnode;
+    }
+}
+
 
 /**
  * Redraws the outline of the physics fixtures to the debug node
@@ -334,9 +371,14 @@ void KidModel::resetDebugNode() {
     Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));
     poly.traverse(Poly2::Traversal::INTERIOR);
     
+    if(_sensorNode != nullptr) {
+        _debug->removeChild(_sensorNode);
+    }
+    
     _sensorNode = WireNode::createWithPoly(poly);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-    _debug->addChild(_sensorNode);	
+    _sensorNode->setColor(DEBUG_COLOR);
+    _debug->addChild(_sensorNode);
 }
 
 

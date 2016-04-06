@@ -145,6 +145,15 @@ public:
      */
     static JelloModel* create(const Vec2& pos, const Vec2& scale);
     
+#pragma mark Drawing Methods
+    /**
+     * Performs any necessary additions to the scene graph node.
+     *
+     * This method is necessary for custom physics objects that are composed
+     * of multiple scene graph nodes.  In this case, it is because we
+     * manage our own afterburner animations.
+     */
+    virtual void resetSceneNode() override;
     
 #pragma mark Physics Methods
     /**

@@ -48,10 +48,9 @@
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define JELLO_VSHRINK  0.8f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define JELLO_HSHRINK  0.72f
+
+#define JELLO_SCALe 0.078
+
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -65,13 +64,13 @@
  * only guarantee that the scene graph node is positioned correctly
  * according to the drawing scale.
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 JelloModel* JelloModel::create() {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init()) {
         
-        jello->autorelease();
+        jello->retain();
         return jello;
     }
     CC_SAFE_DELETE(jello);
@@ -90,13 +89,13 @@ JelloModel* JelloModel::create() {
  *
  * @param  pos      Initial position in world coordinates (of bottom left)
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 JelloModel* JelloModel::create(const Vec2& pos) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos)) {
         jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
-        jello->autorelease();
+        jello->retain();
         return jello;
     }
     CC_SAFE_DELETE(jello);
@@ -116,13 +115,13 @@ JelloModel* JelloModel::create(const Vec2& pos) {
  * @param  pos      Initial position in world coordinates (of bottom left)
  * @param  scale    The drawing scale
  *
- * @return  An autoreleased physics object
+ * @return  An retained physics object
  */
 JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
     JelloModel* jello = new (std::nothrow) JelloModel();
     if (jello && jello->init(pos,scale)) {
         jello->setPosition(pos + Vec2(0, jello->getHeight()/2));
-        jello->autorelease();
+        jello->retain();
         return jello;
     }
     CC_SAFE_DELETE(jello);
@@ -149,19 +148,7 @@ JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool JelloModel::init(const Vec2& pos, const Vec2& scale) {
-    SceneManager* scene = AssetManager::getInstance()->getCurrent();
-    Texture2D* image = scene->get<Texture2D>(JELLO_TEXTURE);
-    
-    // Multiply by the scaling factor so we can be resolution independent
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    Size nsize = image->getContentSize()*cscale;
-    
-    
-    nsize.width  *= JELLO_HSHRINK/scale.x;
-    nsize.height *= JELLO_VSHRINK/scale.y;
-    if (BoxObstacle::init(pos,nsize)) {
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+    if (BoxObstacle::init(pos,Size(scale))) {
         
         // Gameplay attributes
         return true;
@@ -181,7 +168,7 @@ void JelloModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
-
+    
     BoxObstacle::createFixtures();
 }
 
@@ -212,6 +199,34 @@ void JelloModel::update(float dt) {
 
 #pragma mark -
 #pragma mark Scene Graph Methods
+/**
+ * Performs any necessary additions to the scene graph node.
+ *
+ * This method is necessary for custom physics objects that are composed
+ * of multiple scene graph nodes.  In this case, it is because we
+ * manage our own afterburner animations.
+ */
+void JelloModel::resetSceneNode() {
+    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    if (pnode != nullptr) {
+        // We need to know the content scale for resolution independence
+        // If the device is higher resolution than 1024x576, Cocos2d will scale it
+        // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
+        // If you are using a device with a 3:2 aspect ratio, you will need to
+        // completely redo the level layout.  We can help if this is an issue.
+        float cscale = Director::getInstance()->getContentScaleFactor();
+        
+        Rect bounds;
+        bounds.size = pnode->getContentSize();
+        
+        pnode->setPolygon(bounds);
+        pnode->setScale(cscale * JELLO_SCALE);
+        
+        setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
+    }
+}
+
 
 /**
  * Redraws the outline of the physics fixtures to the debug node
