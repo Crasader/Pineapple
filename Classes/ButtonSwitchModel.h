@@ -108,30 +108,13 @@ public:
      */
     void update(float dt) override;
     
-    void handleContact() {
-        if (!_isPressed) {
-            _isPressed = true;
-            if (_linkedPlatform != nullptr) {
-                _linkedPlatform->open();
-            }
-        } else {
-            _isPressed = false;
-            if (_linkedPlatform != nullptr) {
-                _linkedPlatform->close();
-            }
-        }
-    }
+    void handleContact();
     
-    void handleEndContact() {
-        if (!_isSwitch) {
-            _isPressed = false;
-            if (_linkedPlatform != nullptr) {
-                _linkedPlatform->close();
-            }
-        }
-    }
+    void handleEndContact();
 
 #pragma mark Drawing Methods
+    void updateTexture();
+    
     /**
      * Performs any necessary additions to the scene graph node.
      *

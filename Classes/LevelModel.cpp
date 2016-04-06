@@ -182,7 +182,8 @@ bool LevelModel::load() {
                     addCup(position);
                 } else if (objectGroup->getGroupName() == BUTTON_SWITCH_OBJECT_GROUP) {
                     bool isSwitch = object.at(IS_SWITCH_PROPERTY).asBool();
-                    int colorID = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
+                    Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
+                    addButtonSwitch(position, isSwitch, color);
                 }
             }
         }

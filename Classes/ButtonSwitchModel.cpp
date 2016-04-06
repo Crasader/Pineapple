@@ -88,6 +88,47 @@ void ButtonSwitchModel::update(float dt) {
 
 #pragma mark -
 #pragma mark Scene Graph Methods
+/** Updates the texture to the correct color and status texture */
+void ButtonSwitchModel::updateTexture() {
+    std::string texName;
+    
+    if(_isSwitch) {
+        if (_color == Color::blue) {
+            if (_isPressed) {
+                texName = SWITCH_TEXTURE_BLUE;
+            } else {
+                texName = SWITCH_REVERSE_TEXTURE_BLUE;
+            }
+        } else if (_color == Color::green) {
+            if (_isPressed) {
+                texName = SWITCH_TEXTURE_GREEN;
+            } else {
+                texName = SWITCH_REVERSE_TEXTURE_GREEN;
+            }
+        } else {
+            if (_isPressed) {
+                texName = SWITCH_TEXTURE_RED;
+            } else {
+                texName = SWITCH_REVERSE_TEXTURE_RED;
+            }
+        }
+    } else {
+        if (_color == Color::blue) {
+            texName = BUTTON_TEXTURE_BLUE;
+        } else if (_color == Color::green) {
+            texName = BUTTON_TEXTURE_GREEN;
+        } else {
+            texName = BUTTON_TEXTURE_RED;
+        }
+    }
+    
+    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    SceneManager* assets =  AssetManager::getInstance()->getCurrent();
+    Texture2D* image = assets->get<Texture2D>(texName);
+    pnode->setTexture(image);
+}
+
+
 /**
  * Performs any necessary additions to the scene graph node.
  *
@@ -106,37 +147,45 @@ void ButtonSwitchModel::resetSceneNode() {
         float cscale = Director::getInstance()->getContentScaleFactor();
         float scale = _isSwitch ? SWITCH_SCALE : BUTTON_SCALE;
         
-        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
-        std::string texName;
-        if(_isSwitch) {
-            if (_color == Color::blue) {
-                texName = SWITCH_TEXTURE_BLUE;
-            } else if (_color == Color::green) {
-                texName = SWITCH_TEXTURE_GREEN;
-            } else {
-                texName = SWITCH_TEXTURE_RED;
-            }
-        } else {
-            if (_color == Color::blue) {
-                texName = BUTTON_TEXTURE_BLUE;
-            } else if (_color == Color::green) {
-                texName = BUTTON_TEXTURE_GREEN;
-            } else {
-                texName = BUTTON_TEXTURE_RED;
-            }
-        }
-        
-        Texture2D* image = assets->get<Texture2D>(texName);
-        
         Rect bounds;
         bounds.size = pnode->getContentSize();
         
         pnode->setPolygon(bounds);
-        pnode->setTexture(image);
         pnode->setScale(cscale * scale);
         
         setDimension(pnode->getContentSize().width * scale / _drawScale.x,
                      pnode->getContentSize().height * scale / _drawScale.y);
+        
+        updateTexture();
+    }
+}
+
+#pragma mark -
+#pragma mark Collision Handling
+
+void ButtonSwitchModel::handleContact()  {
+    if (!_isPressed) {
+        _isPressed = true;
+        updateTexture();
+        if (_linkedPlatform != nullptr) {
+            _linkedPlatform->open();
+        }
+    } else {
+        _isPressed = false;
+        updateTexture();
+        if (_linkedPlatform != nullptr) {
+            _linkedPlatform->close();
+        }
+    }
+}
+
+void ButtonSwitchModel::handleEndContact() {
+    if (!_isSwitch) {
+        _isPressed = false;
+        updateTexture();
+        if (_linkedPlatform != nullptr) {
+            _linkedPlatform->close();
+        }
     }
 }
 
