@@ -31,7 +31,7 @@ using namespace cocos2d;
 //using namespace std;
 
 /** The number of frame to wait before reinitializing the game */
-#define EXIT_COUNT      240
+#define EXIT_COUNT      180
 
 
 #pragma mark -
@@ -327,12 +327,12 @@ void GameController::update(float dt) {
     
     _input.update(dt);
     
-    if (_level->haveFailed()) {
+    if (_level->haveFailed() && _countdown == -1) {
         setFailure(true);
     }
     
     // Check for Victory
-    if (checkForVictory()) {
+    if (checkForVictory() && ! _level->haveFailed() && ! _winnode->isVisible()) {
         setComplete(true);
     }
     
