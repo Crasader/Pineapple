@@ -28,9 +28,11 @@ void CollisionController::setLevel(LevelModel* level) {
 #pragma mark -
 #pragma mark Collision Handling
 
-void CollisionController::ground(PineappleModel* will, b2Fixture* fix) {
-	will->setGrounded(true);
-	_pSensorFixtures.emplace(fix);
+void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
+    if (isBelowChar(ground, will)) {
+        will->setGrounded(true);
+        _pSensorFixtures.emplace(fix);
+    }
 }
 
 /**
@@ -138,17 +140,13 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
-    
-    cout << bd1->getName() << "\n";
-    cout << bd2->getName() << "\n";
-
 
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
 		// Will  x Ground
 		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
-			ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1);
+            ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
 		}
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {

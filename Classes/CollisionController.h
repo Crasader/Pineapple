@@ -34,7 +34,7 @@ protected:
 	/**
 	 * grounds will for jump enabling
 	 */
-	void ground(PineappleModel * will, b2Fixture* fix);
+	void ground(PineappleModel * will, b2Fixture* fix, BoxObstacle *ground);
 
 	/**
 	* Applies the jello force to william if he's small or crushes the jello if he's big.
