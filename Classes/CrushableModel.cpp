@@ -7,9 +7,9 @@
 #pragma mark -
 #pragma mark Physics Constants
 	/** The amount to shrink the body fixture (vertically) relative to the image */
-#define CRUSHABLE_VSHRINK  0.8f
+#define CRUSHABLE_VSHRINK  1.0f
 	/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define CRUSHABLE_HSHRINK  0.72f
+#define CRUSHABLE_HSHRINK  1.0f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -169,12 +169,14 @@ void CrushableModel::resetSceneNode() {
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
         // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
         // If you are using a device with a 3:2 aspect ratio, you will need to
-        // completely redo the level layout.  We can help if this is an issue.        
+        // completely redo the level layout.  We can help if this is an issue.
+        float cscale = Director::getInstance()->getContentScaleFactor();
+
         Rect bounds;
         bounds.size = pnode->getContentSize();
         
-        //Scale should be set already because this has multiple textures
         pnode->setPolygon(bounds);
+        pnode->setScale(cscale * CRUSHABLE_SCALE);
         
         setDimension(pnode->getContentSize().width * pnode->getScale() / _drawScale.x,
                      pnode->getContentSize().height * pnode->getScale() / _drawScale.y);

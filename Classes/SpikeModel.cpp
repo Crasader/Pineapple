@@ -10,7 +10,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define SPIKE_SCALE 0.38
+#define SPIKE_SCALE 0.25
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -79,7 +79,6 @@ SpikeModel* SpikeModel::create(const Vec2& pos) {
 SpikeModel* SpikeModel::create(const Vec2& pos, const Vec2& scale) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos,scale)) {
-        spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
         spike->retain();
         return spike;
     }
@@ -182,6 +181,9 @@ void SpikeModel::resetSceneNode() {
         
         setDimension(pnode->getContentSize().width * SPIKE_SCALE / _drawScale.x,
                      pnode->getContentSize().height * SPIKE_SCALE / _drawScale.y);
+        
+        //HACKY YAY
+        setPosition(getPosition() - Vec2(0, getHeight()/4));
     }
 }
 

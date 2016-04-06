@@ -148,6 +148,8 @@ bool LevelModel::load() {
         return false;
     }
     
+    addLength(map->getMapSize().width);
+    
     float tileX = map->getTileSize().width;
     float tileY = map->getTileSize().height;
     

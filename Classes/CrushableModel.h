@@ -10,7 +10,7 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Physics Constants
 /** The Crushable specific scaling */
-#define CRUSHABLE_SCALE      0.75f
+#define CRUSHABLE_SCALE      0.5f
 
 #pragma mark -
 #pragma mark Drawing Constants
