@@ -124,6 +124,12 @@ void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setFixedRotation(true);
     obstacle->setRestitution(BASIC_RESTITUTION);
     obstacle->setGravityScale(0);
+    
+    b2Filter b = b2Filter();
+    b.maskBits = KID_MASK | PINEAPPLE_MASK;
+    b.categoryBits = 0x0001;
+    
+    obstacle->setFilterData(b);
     obstacle->setSensor(false);
 }
 
@@ -497,9 +503,9 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     initDebugProperties(platform);
     initPhysicalObstacle(platform);
     
-    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
-        initPhysicalObstacle(platform->getBodies()[ii]);
-    }
+//    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
+//        initPhysicalObstacle(platform->getBodies()[ii]);
+//    }
     
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
