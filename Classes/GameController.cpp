@@ -89,8 +89,8 @@ bool GameController::init(RootLayer* root) {
  * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameController::init(RootLayer* root, const Rect& rect) {
-    _levelKey = LEVEL_TWO_KEY;
-    _levelFile = LEVEL_TWO_FILE;
+    _levelKey = LEVEL_ONE_KEY;
+    _levelFile = LEVEL_ONE_FILE;
     
     _assets = AssetManager::getInstance()->getCurrent();
     _level = _assets->get<LevelModel>(_levelKey);

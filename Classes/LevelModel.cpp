@@ -54,7 +54,9 @@ _kidsRemaining(0),
 _world(nullptr),
 _rootnode(nullptr),
 _debugnode(nullptr),
-_worldnode(nullptr){}
+_worldnode(nullptr),
+_isLoaded(false),
+_isUnloaded(false){}
 
 /**
  * Creates a new game level with no source file.
@@ -129,218 +131,225 @@ void initPhysicalObstacle(Obstacle* obstacle) {
 
 
 bool LevelModel::load() {
-    _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
-    _world->retain();
-    
-    float* position = new float[WALL_VERTS];
-    
-    _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    
-    TMXTiledMap *map = TMXTiledMap::create(_file);
-    if(map == nullptr) {
-        CCASSERT(false, "Failed to load level file");
-        return false;
-    }
-    
-    addLength(map->getMapSize().width);
-    
-    float tileX = map->getTileSize().width;
-    float tileY = map->getTileSize().height;
-    
-    //For all imaged layers, need to add 1 to y coordinate because tiled is weird
-    
-    for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
-        TMXObjectGroup* objectGroup = *it;
-        ValueVector objects = objectGroup->getObjects();
-        for(auto it2 = objects.begin(); it2 != objects.end(); ++it2) {
-            
-            //Casting bug occurs here
-            Value obj = (*it2);
-            if (obj.getType() == Value::Type::MAP) {
-                ValueMap object = obj.asValueMap();
-                
-                float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
-                float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
-                float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
-                float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
-                
-                position[0] = x;
-                position[1] = y+1;
-                
-                if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
-                    position[0] = x;
-                    position[1] = y;
-                    position[2] = x;
-                    position[3] = y+h;
-                    position[4] = x+w;
-                    position[5] = y+h;
-                    position[6] = x+w;
-                    position[7] = y;
-                    addWall(position);
-                } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
-                    addGoal(position);
-                } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
-                    addJello(position);
-                } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
-                    addSpikes(position);
-                } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
-                    addPineapple(position);
-                } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
-                    addKid(position);
-                } else if (objectGroup->getGroupName() == CUP_OBJECT_GROUP) {
-                    addCup(position);
-                } else if (objectGroup->getGroupName() == BUTTON_SWITCH_OBJECT_GROUP) {
-                    bool isSwitch = object.at(IS_SWITCH_PROPERTY).asBool();
-                    Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
-                    addButtonSwitch(position, isSwitch, color);
-                } else if (objectGroup->getGroupName() == MOVEABLE_PLATFORMS_GROUP) {
-                    int length = object.at(LENGTH_PROPERTY).asInt();
-                    bool isOpen = object.at(IS_OPEN_PROPERTY).asBool();
-                    bool isVertical = object.at(IS_VERTICAL_PROPERTY).asBool();
-                    Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
-                    addMoveablePlatform(position, length, isOpen, isVertical, color);
-                }
-            }
+    if (! _isLoaded) {
+        _world = WorldController::create(Rect(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT),Vec2(0,DEFAULT_GRAVITY)); //Replace if this ever changes
+        _world->retain();
+        
+        float* position = new float[WALL_VERTS];
+        
+        _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        
+        TMXTiledMap *map = TMXTiledMap::create(_file);
+        if(map == nullptr) {
+            CCASSERT(false, "Failed to load level file");
+            return false;
         }
         
+        addLength(map->getMapSize().width);
+        
+        float tileX = map->getTileSize().width;
+        float tileY = map->getTileSize().height;
+        
+        //For all imaged layers, need to add 1 to y coordinate because tiled is weird
+        
+        for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
+            TMXObjectGroup* objectGroup = *it;
+            ValueVector objects = objectGroup->getObjects();
+            for(auto it2 = objects.begin(); it2 != objects.end(); ++it2) {
+                
+                //Casting bug occurs here
+                Value obj = (*it2);
+                if (obj.getType() == Value::Type::MAP) {
+                    ValueMap object = obj.asValueMap();
+                    
+                    float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
+                    float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
+                    float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
+                    float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
+                    
+                    position[0] = x;
+                    position[1] = y+1;
+                    
+                    if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
+                        position[0] = x;
+                        position[1] = y;
+                        position[2] = x;
+                        position[3] = y+h;
+                        position[4] = x+w;
+                        position[5] = y+h;
+                        position[6] = x+w;
+                        position[7] = y;
+                        addWall(position);
+                    } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
+                        addGoal(position);
+                    } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
+                        addJello(position);
+                    } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
+                        addSpikes(position);
+                    } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
+                        addPineapple(position);
+                    } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
+                        addKid(position);
+                    } else if (objectGroup->getGroupName() == CUP_OBJECT_GROUP) {
+                        addCup(position);
+                    } else if (objectGroup->getGroupName() == BUTTON_SWITCH_OBJECT_GROUP) {
+                        bool isSwitch = object.at(IS_SWITCH_PROPERTY).asBool();
+                        Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
+                        addButtonSwitch(position, isSwitch, color);
+                    } else if (objectGroup->getGroupName() == MOVEABLE_PLATFORMS_GROUP) {
+                        int length = object.at(LENGTH_PROPERTY).asInt();
+                        bool isOpen = object.at(IS_OPEN_PROPERTY).asBool();
+                        bool isVertical = object.at(IS_VERTICAL_PROPERTY).asBool();
+                        Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
+                        addMoveablePlatform(position, length, isOpen, isVertical, color);
+                    }
+                }
+            }
+            
+        }
+        
+        position[0] = map->getProperties().at(BLENDER_START_X_PROPERTY).asFloat();
+        position[1] = map->getProperties().at(BLENDER_Y_PROPERTY).asFloat();
+        addBlender(position);
+        
+        //Add walls that are offscreen and prevent you from going past end of level
+        position[0] = 0;
+        position[1] = 0;
+        position[2] = 0;
+        position[3] = DEFAULT_HEIGHT;
+        position[4] = -2;
+        position[5] = DEFAULT_HEIGHT;
+        position[6] = -2;
+        position[7] = 0;
+        addWall(position);
+        for(int i = 0; i < WALL_VERTS; i += 2) {
+            position[i] += 2 + _length;
+        }
+        addWall(position);
+        _isLoaded = true;
     }
-    
-    position[0] = map->getProperties().at(BLENDER_START_X_PROPERTY).asFloat();
-    position[1] = map->getProperties().at(BLENDER_Y_PROPERTY).asFloat();
-    addBlender(position);
-    
-    //Add walls that are offscreen and prevent you from going past end of level
-    position[0] = 0;
-    position[1] = 0;
-    position[2] = 0;
-    position[3] = DEFAULT_HEIGHT;
-    position[4] = -2;
-    position[5] = DEFAULT_HEIGHT;
-    position[6] = -2;
-    position[7] = 0;
-    addWall(position);
-    for(int i = 0; i < WALL_VERTS; i += 2) {
-        position[i] += 2 + _length;
-    }
-    addWall(position);
     
     return true;
 }
 
 void LevelModel::unload() {
-    //TODO - pre-nulling cleanup
-    
-    if (_pineapple != nullptr) {
-        if (_world != nullptr) {
-            _world->removeObstacle(_pineapple);
-            _worldnode->removeChild(_pineapple->getSceneNode());
-            _debugnode->removeChild(_pineapple->getDebugNode());
-        }
-        _pineapple->release();
-        _pineapple = nullptr;
-    }
-    if (_goalDoor != nullptr) {
-        if (_world != nullptr) {
-            _world->removeObstacle(_goalDoor);
-            _worldnode->removeChild(_goalDoor->getSceneNode());
-            _debugnode->removeChild(_goalDoor->getDebugNode());
-        }
-        _goalDoor->release();
-        _goalDoor = nullptr;
-    }
-    if(_blender != nullptr) {
-        if (_world != nullptr) {
-            _world->removeObstacle(_blender);
-            _worldnode->removeChild(_blender->getSceneNode());
-            _debugnode->removeChild(_blender->getDebugNode());
-        }
-        _blender->release();
-        _blender = nullptr;
-    }
-    
-    for(int i = 0; i < KID_COUNT; i++) {
-        if (_kids[i] != nullptr) {
+    if(! _isUnloaded || ! _isLoaded) {
+        //TODO - pre-nulling cleanup
+        
+        if (_pineapple != nullptr) {
             if (_world != nullptr) {
-                _world->removeObstacle(_kids[i]);
-                _worldnode->removeChild(_kids[i]->getSceneNode());
-                _debugnode->removeChild(_kids[i]->getDebugNode());
+                _world->removeObstacle(_pineapple);
+                _worldnode->removeChild(_pineapple->getSceneNode());
+                _debugnode->removeChild(_pineapple->getDebugNode());
             }
-            _kids[i]->release();
-            _kids[i] = nullptr;
+            _pineapple->release();
+            _pineapple = nullptr;
         }
-    }
-    
-    for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
+        if (_goalDoor != nullptr) {
+            if (_world != nullptr) {
+                _world->removeObstacle(_goalDoor);
+                _worldnode->removeChild(_goalDoor->getSceneNode());
+                _debugnode->removeChild(_goalDoor->getDebugNode());
+            }
+            _goalDoor->release();
+            _goalDoor = nullptr;
+        }
+        if(_blender != nullptr) {
+            if (_world != nullptr) {
+                _world->removeObstacle(_blender);
+                _worldnode->removeChild(_blender->getSceneNode());
+                _debugnode->removeChild(_blender->getDebugNode());
+            }
+            _blender->release();
+            _blender = nullptr;
+        }
+        
+        for(int i = 0; i < KID_COUNT; i++) {
+            if (_kids[i] != nullptr) {
+                if (_world != nullptr) {
+                    _world->removeObstacle(_kids[i]);
+                    _worldnode->removeChild(_kids[i]->getSceneNode());
+                    _debugnode->removeChild(_kids[i]->getDebugNode());
+                }
+                _kids[i]->release();
+                _kids[i] = nullptr;
+            }
+        }
+        
+        for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
+            if (_world != nullptr) {
+                _world->removeObstacle(*it);
+                _worldnode->removeChild((*it)->getSceneNode());
+                _debugnode->removeChild((*it)->getDebugNode());
+            }
+            (*it)->release();
+        }
+        _spikes.clear();
+        
+        for(auto it = _walls.begin(); it != _walls.end(); ++it) {
+            if (_world != nullptr) {
+                _world->removeObstacle(*it);
+                _worldnode->removeChild((*it)->getSceneNode());
+                _debugnode->removeChild((*it)->getDebugNode());
+            }
+            (*it)->release();
+        }
+        _walls.clear();
+        
+        for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
+            if (_world != nullptr && ! (*it)->isRemoved()) {
+                _world->removeObstacle(*it);
+                _worldnode->removeChild((*it)->getSceneNode());
+                _debugnode->removeChild((*it)->getDebugNode());
+            }
+            (*it)->release();
+        }
+        _jellos.clear();
+        
+        for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
+            if (_world != nullptr && ! (*it)->isRemoved()) {
+                _world->removeObstacle(*it);
+                _worldnode->removeChild((*it)->getSceneNode());
+                _debugnode->removeChild((*it)->getDebugNode());
+            }
+            (*it)->release();
+        }
+        _crushables.clear();
+        
+        for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
+            if (_world != nullptr && ! (*it)->isRemoved()) {
+                _world->removeObstacle(*it);
+                _worldnode->removeChild((*it)->getSceneNode());
+                _debugnode->removeChild((*it)->getDebugNode());
+            }
+            (*it)->release();
+        }
+        _buttonSwitches.clear();
+        
+        for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
+            if (_world != nullptr && ! (*it)->isRemoved()) {
+                _world->removeObstacle(*it);
+                _worldnode->removeChild((*it)->getSceneNode());
+                _debugnode->removeChild((*it)->getDebugNode());
+            }
+            (*it)->release();
+        }
+        _moveablePlatforms.clear();
+        
         if (_world != nullptr) {
-            _world->removeObstacle(*it);
-            _worldnode->removeChild((*it)->getSceneNode());
-            _debugnode->removeChild((*it)->getDebugNode());
+            _world->clear();
+            _world->release();
+            _world = nullptr;
         }
-        (*it)->release();
+        
+        _length = UNSET_LENGTH;
+        _kidsRemaining=0;
+        _worldnode=nullptr;
+        _debugnode=nullptr;
+        _rootnode=nullptr;
+        
+        _isUnloaded = true;
     }
-    _spikes.clear();
-    
-    for(auto it = _walls.begin(); it != _walls.end(); ++it) {
-        if (_world != nullptr) {
-            _world->removeObstacle(*it);
-            _worldnode->removeChild((*it)->getSceneNode());
-            _debugnode->removeChild((*it)->getDebugNode());
-        }
-        (*it)->release();
-    }
-    _walls.clear();
-    
-    for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
-        if (_world != nullptr && ! (*it)->isRemoved()) {
-            _world->removeObstacle(*it);
-            _worldnode->removeChild((*it)->getSceneNode());
-            _debugnode->removeChild((*it)->getDebugNode());
-        }
-        (*it)->release();
-    }
-    _jellos.clear();
-    
-    for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
-        if (_world != nullptr && ! (*it)->isRemoved()) {
-            _world->removeObstacle(*it);
-            _worldnode->removeChild((*it)->getSceneNode());
-            _debugnode->removeChild((*it)->getDebugNode());
-        }
-        (*it)->release();
-    }
-    _crushables.clear();
-    
-    for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
-        if (_world != nullptr && ! (*it)->isRemoved()) {
-            _world->removeObstacle(*it);
-            _worldnode->removeChild((*it)->getSceneNode());
-            _debugnode->removeChild((*it)->getDebugNode());
-        }
-        (*it)->release();
-    }
-    _buttonSwitches.clear();
-    
-    for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
-        if (_world != nullptr && ! (*it)->isRemoved()) {
-            _world->removeObstacle(*it);
-            _worldnode->removeChild((*it)->getSceneNode());
-            _debugnode->removeChild((*it)->getDebugNode());
-        }
-        (*it)->release();
-    }
-    _moveablePlatforms.clear();
-    
-    if (_world != nullptr) {
-        _world->clear();
-        _world->release();
-        _world = nullptr;
-    }
-    
-    _length = UNSET_LENGTH;
-    _kidsRemaining=0;
-    _worldnode=nullptr;
-    _debugnode=nullptr;
-    _rootnode=nullptr;
 }
 
 LevelModel::~LevelModel(){
@@ -660,7 +669,7 @@ void LevelModel::setRootNode(Node* node) {
         poly = PolygonNode::create();
         platform->setSceneNode(poly);
         
-        addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);        
+        addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);
     }
     
     //Hook up switches to platforms

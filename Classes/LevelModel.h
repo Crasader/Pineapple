@@ -95,6 +95,11 @@ protected:
 	int _kidsRemaining;
 	/** Whether we have failed at this level (and need a reset) */
 	bool _failed;
+    
+    /** True once this level is loaded */
+    bool _isLoaded;
+    /** True once this level is unloaded */
+    bool _isUnloaded;
 
 public:
 #pragma mark -
