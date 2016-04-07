@@ -73,6 +73,8 @@ private:
     void update(float dt) override;
     
 public:
+    bool createJoints(b2World& world) {  return true;  }
+    
     virtual int getCollisionClass() { return MOVEABLE_PLATFORM_C; }
     
     static Color getColor(int index) {
