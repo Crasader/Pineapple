@@ -11,7 +11,7 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define MOVEABLE_PLATFORM_SCALE 0.18
+#define MOVEABLE_PLATFORM_SCALE 0.14
 
 MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float length, bool isOpen, bool vertical, Color color) {
     MoveablePlatformModel* platform = new (std::nothrow) MoveablePlatformModel();
@@ -36,12 +36,18 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
     
     _length = length;
     
+    b2Filter b = b2Filter();
+    b.maskBits = 0;
+    b.categoryBits = 0;
+    
     _nubbin1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
+    _nubbin1->setFilterData(b);
     _nubbin1->setName(NUBBIN_NAME);
     _nubbin1->retain();
     _bodies.push_back(_nubbin1);
     
     _nubbin2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
+    _nubbin2->setFilterData(b);
     _nubbin2->setName(NUBBIN_NAME);
     _nubbin2->retain();
     _bodies.push_back(_nubbin2);
@@ -209,6 +215,8 @@ void MoveablePlatformModel::open() {
         _isClosing = false;
         _isClosed = false;
         _isOpening = true;
+        _box1->setFilterData(getFilterData());
+        _box2->setFilterData(getFilterData());
     }
 }
 
@@ -217,6 +225,14 @@ void MoveablePlatformModel::setOpen() {
     _isOpening = false;
     _isClosed = false;
     _isClosing = false;
+    
+    //No collisions when open
+    b2Filter b = b2Filter();
+    b.categoryBits = 0;
+    b.maskBits = 0;
+    _box1->setFilterData(b);
+    _box2->setFilterData(b);
+    
     _xStretch = MIN_X_STRETCH;
 }
 
@@ -225,6 +241,8 @@ void MoveablePlatformModel::close() {
         _isOpening = false;
         _isOpen = false;
         _isClosing = true;
+        _box1->setFilterData(getFilterData());
+        _box2->setFilterData(getFilterData());
     }
 }
 
@@ -233,6 +251,8 @@ void MoveablePlatformModel::setClosed() {
     _isClosing = false;
     _isOpen = false;
     _isOpening = false;
+    _box1->setFilterData(getFilterData());
+    _box2->setFilterData(getFilterData());
     _xStretch = _maxXStretch;
 }
 

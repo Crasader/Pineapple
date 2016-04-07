@@ -27,10 +27,10 @@ using namespace cocos2d;
 #define CLOSING_OPENING_SPEED         1.0f
 #define OPEN_DISTANCE                 2.5f
 
-#define MIN_X_STRETCH                 0.05f
+#define MIN_X_STRETCH                 0.01f
 #define X_STRETCH_INC_PER_SEC         1.0f
 
-#define MOVEABLE_PLATFORM_WIDTH       2.0f
+#define MOVEABLE_PLATFORM_WIDTH       1.0f
 
 enum Color {blue = 1, red = 2, green = 3};
 

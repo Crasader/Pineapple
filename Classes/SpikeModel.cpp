@@ -53,7 +53,7 @@ SpikeModel* SpikeModel::create() {
 SpikeModel* SpikeModel::create(const Vec2& pos) {
     SpikeModel* spike = new (std::nothrow) SpikeModel();
     if (spike && spike->init(pos)) {
-        spike->setPosition(pos + Vec2(spike->getWidth()/2, spike->getHeight()/2));
+        spike->setPosition(pos + Vec2(spike->getWidth()/2, 0));
         spike->retain();
         return spike;
     }
@@ -181,9 +181,6 @@ void SpikeModel::resetSceneNode() {
         
         setDimension(pnode->getContentSize().width * SPIKE_SCALE / _drawScale.x,
                      pnode->getContentSize().height * SPIKE_SCALE / _drawScale.y);
-        
-        //HACKY YAY
-        setPosition(getPosition() - Vec2(0, getHeight()/4));
     }
 }
 

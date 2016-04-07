@@ -36,7 +36,6 @@
 #define IS_SWITCH_PROPERTY  "isSwitch"
 
 /** MoveablePlatform Properties */
-#define LENGTH_PROPERTY         "length"
 #define IS_OPEN_PROPERTY        "isOpen"
 #define IS_VERTICAL_PROPERTY    "isVertical"
 
@@ -168,7 +167,8 @@ bool LevelModel::load() {
                     float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
                     
                     position[0] = x;
-                    position[1] = y+1;
+                    position[1] = y + h + 0.5; //For objects (not walls), y is the top left not bottom left
+                                            //Also correct for objects initializing in the center
                     
                     if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
                         position[0] = x;
@@ -197,9 +197,20 @@ bool LevelModel::load() {
                         Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
                         addButtonSwitch(position, isSwitch, color);
                     } else if (objectGroup->getGroupName() == MOVEABLE_PLATFORMS_GROUP) {
-                        int length = object.at(LENGTH_PROPERTY).asInt();
+                        
+                        //Corect x positioning issue.. this is hacky though. Should figure out why this is necessary
+                        position[0] += 1;
+                        
                         bool isOpen = object.at(IS_OPEN_PROPERTY).asBool();
                         bool isVertical = object.at(IS_VERTICAL_PROPERTY).asBool();
+                        float length;
+                        if (isVertical) {
+                            length = h/2.0f + 0.6; //Tiny bits extra is to make sure shrunken part fits
+                            position[1] += h/2.0f - 0.5;
+                        } else {
+                            length = w/2.0f + 0.6;
+                            position[1] += w/2.0f - 0.5;
+                        }
                         Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
                         addMoveablePlatform(position, length, isOpen, isVertical, color);
                     }
@@ -608,7 +619,9 @@ void LevelModel::setRootNode(Node* node) {
             Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(i));
             _kids[i]->setDrawScale(_scale.x, _scale.y);
             poly = AnimationNode::create(image, 1, KID_ANIMATION_FRAMES, KID_ANIMATION_FRAMES);
+            
             _kids[i]->setSceneNode(poly);
+            
             
             addObstacle(_kids[i], KID_Z_INDEX+i);
         }

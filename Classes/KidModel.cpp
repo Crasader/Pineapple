@@ -167,7 +167,7 @@ string KidModel::getTexture(int idx) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
-    if (CapsuleObstacle::init(pos,Size(100, 101))) {
+    if (CapsuleObstacle::init(pos,Size(1, 50))) {
         setDensity(KID_DENSITY);
         
         // Gameplay attributes
@@ -194,16 +194,9 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
  */
 void KidModel::setMovement(float value) {
     _movement = value;
-    bool face = _movement > 0;
     if (_movement == 0) {
         return;
     }
-    
-    // Change facing
-    /*TexturedNode* image = dynamic_cast<TexturedNode*>(_node);
-    if (image != nullptr) {
-        image->flipHorizontal(!image->isFlipHorizontal());
-    }*/
 }
 
 
@@ -350,12 +343,9 @@ void KidModel::resetSceneNode() {
         
         setDimension(pnode->getContentSize().width * KID_SCALE / _drawScale.x,
                      pnode->getContentSize().height * KID_SCALE / _drawScale.y);
-        
+                
         _kidWalkcycleFrame = 0;
-        _kidWalkcycle = pnode;
-        
-        //HACKY YAY
-        setPosition(getPosition() + Vec2(0, getHeight() / 3 * 2));
+        _kidWalkcycle = pnode;        
     }
 }
 
