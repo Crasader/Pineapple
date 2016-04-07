@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="12" tilewidth="64" tileheight="64" nextobjectid="61">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="64" height="12" tilewidth="64" tileheight="64" nextobjectid="67">
  <properties>
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
@@ -10,14 +10,13 @@
  <objectgroup name="Walls">
   <object id="1" name="wall" x="0" y="640" width="704" height="128"/>
   <object id="40" x="704" y="704" width="128" height="64"/>
-  <object id="41" x="832" y="640" width="1152" height="128"/>
+  <object id="41" x="832" y="640" width="832" height="128"/>
   <object id="49" x="1024" y="448" width="128" height="64"/>
   <object id="50" x="1216" y="256" width="64" height="64"/>
   <object id="51" x="1472" y="256" width="64" height="192"/>
-  <object id="56" x="1984" y="704" width="128" height="64"/>
-  <object id="57" x="2112" y="640" width="1984" height="128"/>
+  <object id="57" x="1792" y="640" width="2304" height="128"/>
   <object id="59" x="1536" y="256" width="384" height="64"/>
-  <object id="60" x="1920" y="0" width="64" height="320"/>
+  <object id="60" x="1920" y="256" width="64" height="192"/>
  </objectgroup>
  <objectgroup name="Will">
   <object id="10" name="will" gid="1" x="512" y="640" width="64" height="64"/>
@@ -31,13 +30,11 @@
  <objectgroup name="Spikes">
   <object id="42" gid="12" x="704" y="704" width="64" height="64"/>
   <object id="43" gid="12" x="768" y="704" width="64" height="64"/>
-  <object id="54" gid="12" x="1984" y="704" width="64" height="64"/>
-  <object id="55" gid="12" x="2048" y="704" width="64" height="64"/>
+  <object id="64" gid="12" x="1728" y="768" width="64" height="64"/>
+  <object id="66" gid="12" x="1664" y="768" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Jello">
   <object id="13" name="jello" gid="11" x="640" y="640" width="64" height="64"/>
-  <object id="52" gid="11" x="1728" y="640" width="64" height="64"/>
-  <object id="53" gid="11" x="1856" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Goal">
   <object id="21" name="goal" gid="51" x="3776" y="640" width="64" height="64"/>
@@ -51,7 +48,7 @@
   <object id="48" gid="21" x="1344" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Switches">
-  <object id="32" gid="41" x="1792" y="256" width="64" height="64">
+  <object id="32" gid="41" x="1664" y="256" width="64" height="64">
    <properties>
     <property name="isSwitch" value="true"/>
     <property name="linkID" value="1"/>
@@ -65,11 +62,12 @@
   </object>
  </objectgroup>
  <objectgroup name="Bridges">
-  <object id="33" gid="42" x="1472" y="704" width="64" height="320">
+  <object id="33" gid="42" x="1472" y="640" width="64" height="192">
    <properties>
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="true"/>
     <property name="linkID" value="1"/>
+    <property name="nubbinsVisible" value="false"/>
    </properties>
   </object>
   <object id="38" gid="42" x="2176" y="256" width="64" height="64">
@@ -77,6 +75,23 @@
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="false"/>
     <property name="linkID" value="2"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+  <object id="61" gid="42" x="1664" y="704" width="128" height="64">
+   <properties>
+    <property name="isOpen" value="false"/>
+    <property name="isVertical" value="false"/>
+    <property name="linkID" value="1"/>
+    <property name="nubbinsVisible" value="false"/>
+   </properties>
+  </object>
+  <object id="62" gid="42" x="1920" y="640" width="64" height="192">
+   <properties>
+    <property name="isOpen" value="true"/>
+    <property name="isVertical" value="true"/>
+    <property name="linkID" value="1"/>
+    <property name="nubbinsVisible" value="false"/>
    </properties>
   </object>
  </objectgroup>

@@ -36,6 +36,7 @@
 #define IS_SWITCH_PROPERTY  "isSwitch"
 
 /** MoveablePlatform Properties */
+#define NUBBINS_VISIBLE         "nubbinsVisible"
 #define IS_OPEN_PROPERTY        "isOpen"
 #define IS_VERTICAL_PROPERTY    "isVertical"
 
@@ -167,7 +168,7 @@ bool LevelModel::load() {
                     float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
                     
                     position[0] = x;
-                    position[1] = y + h + 0.5; //For objects (not walls), y is the top left not bottom left
+                    position[1] = y + h * 3/2; //For objects (not walls), y is the top left not bottom left
                                             //Also correct for objects initializing in the center
                     
                     if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
@@ -199,20 +200,21 @@ bool LevelModel::load() {
                     } else if (objectGroup->getGroupName() == MOVEABLE_PLATFORMS_GROUP) {
                         
                         //Corect x positioning issue.. this is hacky though. Should figure out why this is necessary
-                        position[0] += 1;
+                        position[0] += (w/2);
                         
                         bool isOpen = object.at(IS_OPEN_PROPERTY).asBool();
                         bool isVertical = object.at(IS_VERTICAL_PROPERTY).asBool();
+                        bool nubbinsVisible = object.at(NUBBINS_VISIBLE).asBool();
                         float length;
                         if (isVertical) {
-                            length = h/2.0f + 0.6; //Tiny bits extra is to make sure shrunken part fits
-                            position[1] += h/2.0f - 0.5;
+                            position[0] += 0.5;
+                            length = h; //Tiny bits extra is to make sure shrunken part fits
                         } else {
-                            length = w/2.0f + 0.6;
-                            position[1] += w/2.0f - 0.5;
+                            position[1] += 0.65;
+                            length = w;
                         }
                         Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
-                        addMoveablePlatform(position, length, isOpen, isVertical, color);
+                        addMoveablePlatform(position, length, isOpen, isVertical, nubbinsVisible, color);
                     }
                 }
             }
@@ -516,8 +518,8 @@ void LevelModel::addButtonSwitch(float buttonSwitchPos[POS_COORDS], bool isSwitc
     _buttonSwitches.push_back(button);
 }
 
-void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length, bool isOpen, bool vertical, Color color) {
-    MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, color);
+void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color) {
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, nubbinsVisible, color);
     
     initDebugProperties(platform);
     
@@ -686,6 +688,8 @@ void LevelModel::setRootNode(Node* node) {
     }
     
     //Hook up switches to platforms
+    //Note that multiple buttons can now link to multiple platforms
+    //Hence the lack of breaks
     for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
         ButtonSwitchModel* button = *it;
         
@@ -696,12 +700,9 @@ void LevelModel::setRootNode(Node* node) {
             Color c2 = platform->getColor();
             if(c == c2) {
                 button->linkToPlatform(platform);
-                break;
             }
         }
     }
-    
-    _pineapple->setGrounded(true);
 }
 
 /**
