@@ -11,11 +11,11 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define MOVEABLE_PLATFORM_SCALE 0.18
+#define MOVEABLE_PLATFORM_SCALE 0.125
 
-MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float length, bool isOpen, bool vertical, Color color) {
+MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color) {
     MoveablePlatformModel* platform = new (std::nothrow) MoveablePlatformModel();
-    if (platform && platform->init(pos, length, isOpen, vertical, color)) {
+    if (platform && platform->init(pos, length, isOpen, vertical, nubbinsVisible, color)) {
         platform->retain();
         return platform;
     }
@@ -23,7 +23,7 @@ MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float leng
     return nullptr;
 }
 
-bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, bool vertical, Color color) {
+bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color) {
     Obstacle::init(pos);
     
     _isClosed = !isOpen;
@@ -34,14 +34,21 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
     _color = color;
     _pos = pos;
     
+    _nubbinsVisible = nubbinsVisible;
     _length = length;
     
+    b2Filter b = b2Filter();
+    b.maskBits = 0;
+    b.categoryBits = 0;
+    
     _nubbin1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
+    _nubbin1->setFilterData(b);
     _nubbin1->setName(NUBBIN_NAME);
     _nubbin1->retain();
     _bodies.push_back(_nubbin1);
     
     _nubbin2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
+    _nubbin2->setFilterData(b);
     _nubbin2->setName(NUBBIN_NAME);
     _nubbin2->retain();
     _bodies.push_back(_nubbin2);
@@ -100,11 +107,6 @@ void MoveablePlatformModel::resetSceneNode() {
     } else {
         _maxXStretch = _length/2 * _drawScale.x / centerSize.width;
     }
-    if (_isOpen) {
-        setOpen();
-    } else {
-        setClosed();
-    }
     
     Rect bounds;
     BoxObstacle *ob;
@@ -125,7 +127,10 @@ void MoveablePlatformModel::resetSceneNode() {
     ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE / _drawScale.x,
                      pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE/ _drawScale.y);
     
-    _node->addChild(pnode);
+    
+    if(_nubbinsVisible) {
+        _node->addChild(pnode);
+    }
     
     
     //Right/Bottom Nubbin
@@ -147,7 +152,9 @@ void MoveablePlatformModel::resetSceneNode() {
                      pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE/ _drawScale.y);
     
     
-    _node->addChild(pnode);
+    if(_nubbinsVisible) {
+        _node->addChild(pnode);
+    }
     
     //Left Center
     ob = (BoxObstacle*) _bodies[2];
@@ -202,6 +209,34 @@ void MoveablePlatformModel::resetSceneNode() {
         _box2->setAngle(nintyDegrees);
     }
     
+    if (_isOpen) {
+        setOpen();
+    } else {
+        setClosed();
+    }
+    
+    _box1->getSceneNode()->setScaleX(_xStretch);
+    _box2->getSceneNode()->setScaleX(_xStretch);
+    
+    if (_isVertical) {
+        _box1->setWidth(_length/2.0f * _xStretch/_maxXStretch* _drawScale.y / _drawScale.x);
+        _box2->setWidth(_length/2.0f * _xStretch/_maxXStretch* _drawScale.y / _drawScale.x);
+        _box1->setY(_nubbin1->getY() - (_nubbin1->getWidth()/2.0f + _box1->getWidth()/2.0f)* _drawScale.x / _drawScale.y);
+        _box2->setY(_nubbin2->getY() + (_nubbin2->getWidth()/2.0f + _box2->getWidth()/2.0f)* _drawScale.x / _drawScale.y);
+    } else {
+        _box1->setWidth(_length/2.0f * _xStretch/_maxXStretch);
+        _box2->setWidth(_length/2.0f * _xStretch/_maxXStretch);
+        _box1->setX(_nubbin1->getX() + _nubbin1->getWidth()/2.0f + _box1->getWidth()/2.0f);
+        _box2->setX(_nubbin2->getX() - _nubbin2->getWidth()/2.0f - _box2->getWidth()/2.0f);
+    }
+}
+
+void MoveablePlatformModel::toggle() {
+    if (_isOpen || _isOpening) {
+        close();
+    } else {
+        open();
+    }
 }
 
 void MoveablePlatformModel::open() {
@@ -209,6 +244,8 @@ void MoveablePlatformModel::open() {
         _isClosing = false;
         _isClosed = false;
         _isOpening = true;
+        _box1->setFilterData(getFilterData());
+        _box2->setFilterData(getFilterData());
     }
 }
 
@@ -217,6 +254,14 @@ void MoveablePlatformModel::setOpen() {
     _isOpening = false;
     _isClosed = false;
     _isClosing = false;
+    
+    //No collisions when open
+    b2Filter b = b2Filter();
+    b.categoryBits = 0;
+    b.maskBits = 0;
+    _box1->setFilterData(b);
+    _box2->setFilterData(b);
+    
     _xStretch = MIN_X_STRETCH;
 }
 
@@ -225,6 +270,8 @@ void MoveablePlatformModel::close() {
         _isOpening = false;
         _isOpen = false;
         _isClosing = true;
+        _box1->setFilterData(getFilterData());
+        _box2->setFilterData(getFilterData());
     }
 }
 
@@ -233,6 +280,8 @@ void MoveablePlatformModel::setClosed() {
     _isClosing = false;
     _isOpen = false;
     _isOpening = false;
+    _box1->setFilterData(getFilterData());
+    _box2->setFilterData(getFilterData());
     _xStretch = _maxXStretch;
 }
 

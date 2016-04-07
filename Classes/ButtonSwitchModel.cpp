@@ -167,14 +167,14 @@ void ButtonSwitchModel::handleContact()  {
     if (!_isPressed) {
         _isPressed = true;
         updateTexture();
-        if (_linkedPlatform != nullptr) {
-            _linkedPlatform->open();
+        for(auto it = _linkedPlatforms.begin(); it != _linkedPlatforms.end(); ++it) {
+            (*it)->toggle();
         }
     } else {
         _isPressed = false;
         updateTexture();
-        if (_linkedPlatform != nullptr) {
-            _linkedPlatform->close();
+        for(auto it = _linkedPlatforms.begin(); it != _linkedPlatforms.end(); ++it) {
+            (*it)->toggle();
         }
     }
 }
@@ -183,8 +183,8 @@ void ButtonSwitchModel::handleEndContact() {
     if (!_isSwitch) {
         _isPressed = false;
         updateTexture();
-        if (_linkedPlatform != nullptr) {
-            _linkedPlatform->close();
+        for(auto it = _linkedPlatforms.begin(); it != _linkedPlatforms.end(); ++it) {
+            (*it)->toggle();
         }
     }
 }

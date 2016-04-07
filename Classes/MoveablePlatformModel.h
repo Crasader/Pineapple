@@ -27,10 +27,10 @@ using namespace cocos2d;
 #define CLOSING_OPENING_SPEED         1.0f
 #define OPEN_DISTANCE                 2.5f
 
-#define MIN_X_STRETCH                 0.05f
+#define MIN_X_STRETCH                 0.01f
 #define X_STRETCH_INC_PER_SEC         1.0f
 
-#define MOVEABLE_PLATFORM_WIDTH       2.0f
+#define MOVEABLE_PLATFORM_WIDTH       1.0f
 
 enum Color {blue = 1, red = 2, green = 3};
 
@@ -44,9 +44,9 @@ private:
     bool _isOpening;
     bool _isClosing;
     bool _isOpen;
-    
     bool _isVertical;
     
+    bool _nubbinsVisible;
     float _length;
     
     // left if horizontal, top if vertical
@@ -72,7 +72,13 @@ private:
     
     void update(float dt) override;
     
+    void open();
+    
+    void close();
+    
 public:
+    bool createJoints(b2World& world) {  return true;  }
+    
     virtual int getCollisionClass() { return MOVEABLE_PLATFORM_C; }
     
     static Color getColor(int index) {
@@ -106,26 +112,24 @@ public:
     BoxObstacle* getBox2() {
         return _box2;
     }
-    
-    void open();
-    
-    void close();
         
     void setOpen();
     
     void setClosed();
+    
+    void toggle();
 
     // length is length of two middle boxes
-    static MoveablePlatformModel* create(const Vec2& pos, float length, bool isOpen, bool vertical, Color color);
+    static MoveablePlatformModel* create(const Vec2& pos, float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color);
     
 #pragma mark Drawing Methods
     
     
 CC_CONSTRUCTOR_ACCESS:
-    virtual bool init(const Vec2& pos, float length, bool isOpen, bool vertical, Color color);
+    virtual bool init(const Vec2& pos, float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color);
     
     // pos is center of obstacle
-    MoveablePlatformModel() : _isClosed(false), _isOpening(false), _isClosing(false), _isOpen(false), _isVertical(false) { }
+    MoveablePlatformModel() : _isClosed(false), _isOpening(false), _isClosing(false), _isOpen(false), _isVertical(false), _nubbinsVisible(false) { }
 };
 
 #endif /* MoveablePlatformModel_hpp */
