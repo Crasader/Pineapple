@@ -169,7 +169,7 @@ bool LevelModel::load() {
                     
                     position[0] = x;
                     position[1] = y + h * 3/2; //For objects (not walls), y is the top left not bottom left
-                                            //Also correct for objects initializing in the center
+                                                //Also correct for objects initializing in the center
                     
                     if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
                         position[0] = x;
@@ -208,7 +208,7 @@ bool LevelModel::load() {
                         float length;
                         if (isVertical) {
                             position[0] += 0.5;
-                            length = h; //Tiny bits extra is to make sure shrunken part fits
+                            length = h;
                         } else {
                             position[1] += 0.65;
                             length = w;
