@@ -75,8 +75,8 @@ _debugPressed(false),
 _exitPressed(false),
 _touchListener(nullptr),
 _previousDelta(0),
-_id1(-1), _touch1(-1, -1),
-_id2(-1), _touch2(-1, -1)
+_id1(-1), _touch1(-1, -1), _time1(current_time()),
+_id2(-1), _touch2(-1, -1), _time2(current_time())
 {
     _keyReset = false;
     _keyDebug = false;
@@ -283,10 +283,12 @@ InputController::Zone InputController::getZone(const Vec2& pos) {
     return Zone::UNDEFINED;
 }
 
-/**
+/** 
+ * NOT CURRENTLY USED - SWITCHED TO TAPS
+ *
  * Returns true if this is a jump swipe.
  *
- * A jump swipe is a quick swipe up in either the left or right zone.
+ * A jump swipe is a quick swipe on left or right section.
  *
  * @param  start    the start position of the candidate swipe
  * @param  stop     the end position of the candidate swipe
@@ -352,18 +354,21 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
             _touch2 = t->getLocation();
             if (_touch2 > _touch1) {
                 _id2 = t->getID();
+                _time2 = current_time();
             } else {
                 Vec2 temp = _touch1;
                 _touch1 = _touch2;
                 _touch2 = temp;
                 _id2 = _id1;
                 _id1 = t->getID();
+                _time1 = current_time();
             }
             _previousDelta = _touch1.distance(_touch2);
             return true;
         } else {
             _touch1 = t->getLocation();
             _id1 = t->getID();
+            _time1 = current_time();
         }
         Vec2 pos = t->getLocation();
         Zone zone = getZone(pos);
@@ -428,11 +433,17 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
     for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
         Touch* t = *i;
         if (t->getID() == _id1) {
+            if (elapsed_millis(_time1, current_time()) <= MAX_TAP_DURATION_MILLIS) {
+                _keyJump = true;
+            }
             _id1 = _id2;
             _touch1 = _touch2;
             _id2 = -1;
             _previousDelta = 0;
         } else if (t->getID() == _id2) {
+            if (elapsed_millis(_time2, current_time()) <= MAX_TAP_DURATION_MILLIS) {
+                _keyJump = true;
+            }
             _id2 = -1;
             _previousDelta = 0;
         }

@@ -24,6 +24,7 @@
 
 using namespace cocos2d;
 
+#define MAX_TAP_DURATION_MILLIS        100
 #define MIN_SWIPE_SPEED      20.0f
 #define MIN_PINCH_SPREAD_SPEED    20.0f
 #define PINCH                        -1
@@ -80,9 +81,12 @@ protected:
     // One of the touches in the gesture, -1 if no current gesture
     int _id1;
     Vec2 _touch1;
+    // timestamp for touchdown of _touch1;
+    timestamp_t _time1;
     // The other one, -1 if no current gesture
     int _id2;
     Vec2 _touch2;
+    timestamp_t _time2;
     
     // Input results
     /** Whether the reset action was chosen. */
