@@ -44,7 +44,7 @@ using namespace cocos2d;
 #define PINEAPPLE_SHRINK_SCALE			       0.75f
 
 /** Number of frames in the walk animation */
-#define PINEAPPLE_FRAME_COUNT 24
+#define PINEAPPLE_FRAME_COUNT	26
 
 #define PINEAPPLE_MASK 0x0002
 #define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
