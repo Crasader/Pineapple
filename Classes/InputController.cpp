@@ -453,7 +453,6 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
             _previousDelta = 0;
         }
         // Reset all keys that might have been set
-        CCLOG("Touch is up %d", t->getID());
         if (_ltouch.touchid == t->getID()) {
             _ltouch.touchid = -1;
             _ltouch.count = 0;
