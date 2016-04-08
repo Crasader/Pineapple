@@ -132,8 +132,6 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         _isCollidingWithButtonSwitch = false;
         _faceRight = true;
         _reachedGoal = false;
-        
-        _jumpCooldown = 0;
         return true;
     }
     return false;
@@ -265,15 +263,6 @@ void PineappleModel::applyForce() {
  * @param delta Number of seconds since last animation frame
  */
 void PineappleModel::update(float dt) {
-    // Apply cooldowns
-    if (isJumping()) {
-        _jumpCooldown = JUMP_COOLDOWN;
-    }
-    // Only cooldown while grounded
-    else if (isGrounded()){
-        _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown - 1 : 0);
-    }
-    
     CapsuleObstacle::update(dt);
 }
 

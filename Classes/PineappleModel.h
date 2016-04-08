@@ -72,8 +72,6 @@ protected:
 	Size _normalSize = Size();
 	/** Duration since last grow or shrink, 0 if currently normal size */
 	float _durationSinceGrowOrShrink = 0.0f;
-	/** How long until we can jump again */
-	int  _jumpCooldown;
 	/** Whether we are actively jumping */
 	bool _isJumping;
 	/** Whether we are currently colliding with a jello */
@@ -250,7 +248,7 @@ public:
 	*
 	* @return true if the pineapple is actively jumping.
 	*/
-	bool isJumping() const { return _isJumping && _jumpCooldown <= 0; }
+	bool isJumping() const { return _isJumping; }
 
 	/**
 	* Sets whether the pineapple is actively jumping.
@@ -426,8 +424,7 @@ CC_CONSTRUCTOR_ACCESS:
 	PineappleModel() : CapsuleObstacle(),
     _sensorFixture(nullptr),
     _sensorName(PINEAPPLE_SENSOR),
-    _willWalkcycle(nullptr),
-    _jumpCooldown(0){ }
+    _willWalkcycle(nullptr){ }
 	~PineappleModel() { }
 
 	/**
