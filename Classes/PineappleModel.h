@@ -29,7 +29,7 @@ using namespace cocos2d;
 #define PINEAPPLE_SHRUNK_MASS				   1.0f
 #define PINEAPPLE_DENSITY					   0.5f
 /** The amount to shrink the whole body, including image */
-#define PINEAPPLE_SCALE						   0.1f
+#define PINEAPPLE_SCALE						   0.4f
 /** The factor to multiply by the input */
 #define PINEAPPLE_FORCE						   50.0f
 /** The amount to slow the character down */
