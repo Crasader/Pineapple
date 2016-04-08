@@ -30,8 +30,10 @@ protected:
     bool _isSwitch;
     // true if button is pressed or level is switched on
     bool _isPressed;
+    
     // never has ownership
-    MoveablePlatformModel* _linkedPlatform;
+    std::vector<MoveablePlatformModel*> _linkedPlatforms;
+    
     Color _color;
     
     /**
@@ -78,7 +80,7 @@ public:
         } else if (platform->getColor() != _color) {
             return;
         }
-        _linkedPlatform = platform;
+        _linkedPlatforms.push_back(platform);
     }
     
     
@@ -134,7 +136,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the ButtonSwitchModel values beyond
      * the defaults.  To use a ButtonSwitchModel, you must call init().
      */
-    ButtonSwitchModel() : BoxObstacle(), _isSwitch(false), _isPressed(false), _linkedPlatform(nullptr) { }
+    ButtonSwitchModel() : BoxObstacle(), _isSwitch(false), _isPressed(false) { }
     
     virtual bool init(const Vec2& pos, const Vec2& scale, const bool isSwitch, const Color color);
 };

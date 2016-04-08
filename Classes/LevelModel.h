@@ -1,6 +1,11 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+#ifdef _MSC_VER
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
+#endif
+
 #include "PineappleModel.h"
 #include "BlenderModel.h"
 #include "KidModel.h"
@@ -224,7 +229,7 @@ public:
     
     void addButtonSwitch(float buttonSwitchPos[], bool isSwitch, Color color);
     
-    void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, Color color);
+    void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color);
     
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
@@ -392,6 +397,11 @@ private:
     
     ~LevelModel();
     
+    bool string2bool (std::string v){
+        return !v.empty () &&
+        (strcasecmp (v.c_str (), "true") == 0 ||
+         atoi (v.c_str ()) != 0);
+    }
     
     /** Actually handles the obstacle addition. Should not be called from the outside
      * Will be called as a part of the following add functions
