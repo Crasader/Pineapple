@@ -234,7 +234,7 @@ CC_CONSTRUCTOR_ACCESS:
  * way to reference assets.
  */
 template <class T>
-class CC_DLL Loader : public BaseLoader {
+class Loader : public BaseLoader {
 protected:
     /** Hash map storing the loaded assets */
     std::unordered_map<std::string, T*> _assets;
