@@ -424,6 +424,7 @@ CC_CONSTRUCTOR_ACCESS:
 	* the defaults.  To use a PineappleModel, you must call init().
 	*/
 	PineappleModel() : CapsuleObstacle(),
+    _isGrounded(true),
     _sensorFixture(nullptr),
     _sensorName(PINEAPPLE_SENSOR),
     _willWalkcycle(nullptr),

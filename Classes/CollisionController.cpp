@@ -30,6 +30,7 @@ void CollisionController::setLevel(LevelModel* level) {
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
     if (isBelowChar(ground, will)) {
+        cout << "GROUNDED\n";
         will->setGrounded(true);
         _pSensorFixtures.emplace(fix);
     }
@@ -118,7 +119,11 @@ void CollisionController::handleButtonSwitchEndCollision(PineappleModel* will, B
 bool CollisionController::isBelowChar(BoxObstacle* obj, CapsuleObstacle* character) {
 	float e = 0.01f;
 	float objTop = obj->getY() + (obj->getHeight() / 2);
+    cout << "OBJECT TOP: " << objTop << "\n";
+    cout << "OBJECT getY: " << obj->getY() << "\n";
 	float charBot = character->getY() - (character->getHeight() / 2);
+    cout << "charBot: " << charBot << "\n";
+    cout << "char getY: " << character->getY() << "\n";
 	return charBot + e >= objTop;
 }
 
