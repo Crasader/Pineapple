@@ -19,7 +19,7 @@ void LoadingScreenController::preload() {
 
 	tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
 	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
-	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_full.png");
+	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
 
 	tloader->loadAsync(KID_TEXTURE_1, "textures/child_bow_walkcycle.png");
 	tloader->loadAsync(KID_TEXTURE_2, "textures/child_glasses_walkcycle.png");
