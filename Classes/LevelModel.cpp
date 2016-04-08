@@ -1,6 +1,8 @@
 #include "LevelModel.h"
-#include <base/CCValue.h>
+
+#include <cornell/CUJSONReader.h>
 #include "MoveablePlatformModel.h"
+#include "Const.h"
 
 #define UNSET_LENGTH -2
 
@@ -20,8 +22,14 @@
 
 /** Properties that Tiled Objects and maps posess */
 /** Level Properties */
+#define LAYERS_PROPERTY             "layers"
+#define LAYER_NAME_PROPERTY         "name"
+#define LAYER_OBJECTS_PROPERTY      "objects"
 #define BLENDER_START_X_PROPERTY    "BlenderStartX"
 #define BLENDER_Y_PROPERTY          "BlenderStartY"
+#define TILE_WIDTH_PROPERTY         "tilewidth"
+#define TILE_HEIGHT_PROPERTY        "tileheight"
+#define OBJECT_PROPERTIES_PROPERTY  "properties"
 
 /** All Object Properties */
 #define WIDTH_PROPERTY      "width"
@@ -36,7 +44,7 @@
 #define IS_SWITCH_PROPERTY  "isSwitch"
 
 /** MoveablePlatform Properties */
-#define LENGTH_PROPERTY         "length"
+#define NUBBINS_VISIBLE         "nubbinsVisible"
 #define IS_OPEN_PROPERTY        "isOpen"
 #define IS_VERTICAL_PROPERTY    "isVertical"
 
@@ -139,77 +147,132 @@ bool LevelModel::load() {
         
         _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         
-        TMXTiledMap *map = TMXTiledMap::create(_file);
-        if(map == nullptr) {
+        
+        JSONReader reader;
+        reader.initWithFile(_file);
+        if (!reader.startJSON()) {
             CCASSERT(false, "Failed to load level file");
             return false;
         }
         
-        addLength(map->getMapSize().width);
+        float stageWidth = reader.getNumber(WIDTH_PROPERTY);
+        float stageHeight = reader.getNumber(HEIGHT_PROPERTY);
         
-        float tileX = map->getTileSize().width;
-        float tileY = map->getTileSize().height;
+        addLength(stageWidth);
         
-        //For all imaged layers, need to add 1 to y coordinate because tiled is weird
+        float tileX = reader.getNumber(TILE_WIDTH_PROPERTY);
+        float tileY = reader.getNumber(TILE_HEIGHT_PROPERTY);
         
-        for(auto it = map->getObjectGroups().begin(); it != map->getObjectGroups().end(); ++it) {
-            TMXObjectGroup* objectGroup = *it;
-            ValueVector objects = objectGroup->getObjects();
-            for(auto it2 = objects.begin(); it2 != objects.end(); ++it2) {
+        reader.startObject(LAYERS_PROPERTY); //Start layer
+        int wsize = reader.startArray(); //Start layer as array
+        for(int ii = 0; ii < wsize; ii++) {
+            
+            //Start layer in this object
+            reader.startObject();
+            
+            string layerName = reader.getString(LAYER_NAME_PROPERTY);
+            
+            //Start reading objects in this layer
+            reader.startObject(LAYER_OBJECTS_PROPERTY);
+            int wsize2 = reader.startArray();
+            
+            for (int jj = 0; jj < wsize2; jj++) {
                 
-                //Casting bug occurs here
-                Value obj = (*it2);
-                if (obj.getType() == Value::Type::MAP) {
-                    ValueMap object = obj.asValueMap();
-                    
-                    float x = (float) object.at(X_PROPERTY).asFloat() / tileX;
-                    float y = (float) object.at(Y_PROPERTY).asFloat() / tileY;
-                    float w = (float) object.at(WIDTH_PROPERTY).asFloat() / tileX;
-                    float h = (float) object.at(HEIGHT_PROPERTY).asFloat() / tileY;
-                    
+                //Start object in array
+                reader.startObject();
+                
+                
+                float x = (float) reader.getNumber(X_PROPERTY) / tileX;
+                float y = stageHeight - (float) reader.getNumber(Y_PROPERTY) / tileY;
+                float w = (float) reader.getNumber(WIDTH_PROPERTY) / tileX;
+                float h = (float) reader.getNumber(HEIGHT_PROPERTY) / tileY;
+                
+                position[0] = x;
+                position[1] = y+0.5;
+                
+                if (layerName == WALL_OBJECT_GROUP) {
                     position[0] = x;
-                    position[1] = y+1;
+                    position[1] = y-h;
+                    position[2] = x;
+                    position[3] = y;
+                    position[4] = x+w;
+                    position[5] = y;
+                    position[6] = x+w;
+                    position[7] = y-h;
+                    addWall(position);
+                } else if (layerName == GOAL_OBJECT_GROUP) {
+                    addGoal(position);
+                } else if (layerName == JELLO_OBJECT_GROUP) {
+                    addJello(position);
+                } else if (layerName == SPIKES_OBJECT_GROUP) {
+                    addSpikes(position);
+                } else if (layerName == WILL_OBJECT_GROUP) {
+                    addPineapple(position);
+                } else if (layerName == KIDS_OBJECT_GROUP) {
+                    addKid(position);
+                } else if (layerName == CUP_OBJECT_GROUP) {
+                    addCup(position);
+                } else if (layerName == BUTTON_SWITCH_OBJECT_GROUP) {
+                    reader.startObject(OBJECT_PROPERTIES_PROPERTY);
                     
-                    if (objectGroup->getGroupName() == WALL_OBJECT_GROUP) {
-                        position[0] = x;
-                        position[1] = y;
-                        position[2] = x;
-                        position[3] = y+h;
-                        position[4] = x+w;
-                        position[5] = y+h;
-                        position[6] = x+w;
-                        position[7] = y;
-                        addWall(position);
-                    } else if (objectGroup->getGroupName() == GOAL_OBJECT_GROUP) {
-                        addGoal(position);
-                    } else if (objectGroup->getGroupName() == JELLO_OBJECT_GROUP) {
-                        addJello(position);
-                    } else if (objectGroup->getGroupName() == SPIKES_OBJECT_GROUP) {
-                        addSpikes(position);
-                    } else if (objectGroup->getGroupName() == WILL_OBJECT_GROUP) {
-                        addPineapple(position);
-                    } else if (objectGroup->getGroupName() == KIDS_OBJECT_GROUP) {
-                        addKid(position);
-                    } else if (objectGroup->getGroupName() == CUP_OBJECT_GROUP) {
-                        addCup(position);
-                    } else if (objectGroup->getGroupName() == BUTTON_SWITCH_OBJECT_GROUP) {
-                        bool isSwitch = object.at(IS_SWITCH_PROPERTY).asBool();
-                        Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
-                        addButtonSwitch(position, isSwitch, color);
-                    } else if (objectGroup->getGroupName() == MOVEABLE_PLATFORMS_GROUP) {
-                        int length = object.at(LENGTH_PROPERTY).asInt();
-                        bool isOpen = object.at(IS_OPEN_PROPERTY).asBool();
-                        bool isVertical = object.at(IS_VERTICAL_PROPERTY).asBool();
-                        Color color = MoveablePlatformModel::getColor(object.at(COLOR_PROPERTY).asInt());
-                        addMoveablePlatform(position, length, isOpen, isVertical, color);
+                    bool isSwitch = string2bool(reader.getString(IS_SWITCH_PROPERTY));
+                    double colorF = std::stod(reader.getString(COLOR_PROPERTY));
+                    Color color = MoveablePlatformModel::getColor((int)colorF);
+                    
+                    reader.endObject();
+                    addButtonSwitch(position, isSwitch, color);
+                } else if (layerName == MOVEABLE_PLATFORMS_GROUP) {
+                    reader.startObject(OBJECT_PROPERTIES_PROPERTY);
+                    
+                    bool isOpen = string2bool(reader.getString(IS_OPEN_PROPERTY));
+                    bool isVertical = string2bool(reader.getString(IS_VERTICAL_PROPERTY));
+                    bool nubbinsVisible = string2bool(reader.getString(NUBBINS_VISIBLE));
+                    
+                    float length;
+                    if (isVertical) {
+                        position[0] = x + w;
+                        position[1] = y + h/2;
+                        length = h;
+                    } else {
+                        position[0] = x + w/2;
+                        position[1] = y + h + 0.175; // Hack to get horizontal platform to be flush with floor next to it
+                        length = w;
                     }
+                    double colorF = std::stod(reader.getString(COLOR_PROPERTY));
+                    Color color = MoveablePlatformModel::getColor((int)colorF);
+                    
+                    reader.endObject();
+                    addMoveablePlatform(position, length, isOpen, isVertical, nubbinsVisible, color);
                 }
+                
+                //End object in array
+                reader.endObject();
+                
+                //Advance to next object in group
+                reader.advance();
             }
             
+            //End object group array
+            reader.endArray();
+            
+            reader.endObject();
+            reader.endObject();
+            
+            //Advance to next object group
+            reader.advance();
         }
         
-        position[0] = map->getProperties().at(BLENDER_START_X_PROPERTY).asFloat();
-        position[1] = map->getProperties().at(BLENDER_Y_PROPERTY).asFloat();
+        //End layer array
+        reader.endArray();
+        
+        //End layer
+        reader.endObject();
+        
+        //Start map properties
+        reader.startObject(OBJECT_PROPERTIES_PROPERTY);
+        
+        position[0] = std::stod(reader.getString(BLENDER_START_X_PROPERTY));
+        position[1] = std::stod(reader.getString(BLENDER_Y_PROPERTY));
         addBlender(position);
         
         //Add walls that are offscreen and prevent you from going past end of level
@@ -226,6 +289,10 @@ bool LevelModel::load() {
             position[i] += 2 + _length;
         }
         addWall(position);
+        
+        //End JSON object
+        reader.endObject();
+        
         _isLoaded = true;
     }
     
@@ -505,8 +572,8 @@ void LevelModel::addButtonSwitch(float buttonSwitchPos[POS_COORDS], bool isSwitc
     _buttonSwitches.push_back(button);
 }
 
-void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length, bool isOpen, bool vertical, Color color) {
-    MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, color);
+void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color) {
+    MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, nubbinsVisible, color);
     
     initDebugProperties(platform);
     
@@ -608,7 +675,9 @@ void LevelModel::setRootNode(Node* node) {
             Texture2D* image = assets->get<Texture2D>(KidModel::getTexture(i));
             _kids[i]->setDrawScale(_scale.x, _scale.y);
             poly = AnimationNode::create(image, 1, KID_ANIMATION_FRAMES, KID_ANIMATION_FRAMES);
+            
             _kids[i]->setSceneNode(poly);
+            
             
             addObstacle(_kids[i], KID_Z_INDEX+i);
         }
@@ -653,7 +722,7 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
         ButtonSwitchModel* button = *it;
         
-        Texture2D* image = assets->get<Texture2D>(button->isSwitch() ? SWITCH_TEXTURE_RED : BUTTON_TEXTURE_RED);
+        Texture2D* image = assets->get<Texture2D>(button->isSwitch() ? SWITCH_TEXTURE_RED : SWITCH_TEXTURE_RED); //TODO - replace when button is ready
         button->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);
         button->setSceneNode(poly);
@@ -673,6 +742,8 @@ void LevelModel::setRootNode(Node* node) {
     }
     
     //Hook up switches to platforms
+    //Note that multiple buttons can now link to multiple platforms
+    //Hence the lack of breaks
     for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
         ButtonSwitchModel* button = *it;
         
@@ -683,12 +754,9 @@ void LevelModel::setRootNode(Node* node) {
             Color c2 = platform->getColor();
             if(c == c2) {
                 button->linkToPlatform(platform);
-                break;
             }
         }
     }
-    
-    _pineapple->setGrounded(true);
 }
 
 /**

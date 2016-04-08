@@ -29,7 +29,7 @@ using namespace cocos2d;
 #define PINEAPPLE_SHRUNK_MASS				   1.0f
 #define PINEAPPLE_DENSITY					   0.5f
 /** The amount to shrink the whole body, including image */
-#define PINEAPPLE_SCALE						   0.1f
+#define PINEAPPLE_SCALE						   0.4f
 /** The factor to multiply by the input */
 #define PINEAPPLE_FORCE						   50.0f
 /** The amount to slow the character down */
@@ -44,7 +44,7 @@ using namespace cocos2d;
 #define PINEAPPLE_SHRINK_SCALE			       0.75f
 
 /** Number of frames in the walk animation */
-#define PINEAPPLE_FRAME_COUNT 24
+#define PINEAPPLE_FRAME_COUNT	26
 
 #define PINEAPPLE_MASK 0x0002
 #define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
