@@ -24,6 +24,8 @@
 
 using namespace cocos2d;
 
+// radius around a tap to recognize second tap as double tap (bigger the better tbh)
+#define TAP_RADIUS                140.0f
 #define MAX_TAP_DURATION_MILLIS        300
 #define MIN_SWIPE_SPEED      20.0f
 #define MIN_PINCH_SPREAD_SPEED    20.0f
@@ -87,6 +89,8 @@ protected:
     int _id2;
     Vec2 _touch2;
     timestamp_t _time2;
+    // previous tap location
+    Vec2 _prevTap;
     
     // Input results
     /** Whether the reset action was chosen. */
@@ -106,6 +110,9 @@ protected:
     /** Whether the shrink action was chosen */
     bool _shrinkPressed;
 
+    bool oneFingerDown() {
+        return _id1 == -1 || _id2 == -1;
+    }
     
 #pragma mark Internal Touch Management   
     // The screen is divided into four zones: Left, Bottom, Right and Main/

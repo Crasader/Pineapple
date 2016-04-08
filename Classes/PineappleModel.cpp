@@ -232,9 +232,7 @@ void PineappleModel::applyForce() {
     if (!isActive()) {
         return;
     }
-    
-    cout << isJumping() << " " << isGrounded() << "\n";
-    
+        
     // Don't want to be moving. Damp out player motion
     if (getMovement() == 0.0f) {
         b2Vec2 force(-getDamping()*getVX(), 0);

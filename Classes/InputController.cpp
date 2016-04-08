@@ -33,7 +33,7 @@
 #define SHRINK_KEY EventKeyboard::KeyCode::KEY_S
 
 /** How fast a double click must be in milliseconds */
-#define EVENT_DOUBLE_CLICK  400
+#define EVENT_DOUBLE_CLICK  300
 /** How fast we must swipe left or right for a gesture */
 #define EVENT_SWIPE_TIME    1000
 /** How far we must swipe left or right for a gesture (as ratio of screen) */
@@ -53,9 +53,9 @@
 // The meaning of any touch depends on the zone it begins in.
 
 /** The portion of the screen used for the left zone */
-#define LEFT_ZONE       0.2f
+#define LEFT_ZONE       0.15f
 /** The portion of the screen used for the right zone */
-#define RIGHT_ZONE      0.2f
+#define RIGHT_ZONE      0.15f
 /** The portion of the screen used for the bottom zone */
 #define BOTTOM_ZONE     0.2f
 
@@ -76,7 +76,8 @@ _exitPressed(false),
 _touchListener(nullptr),
 _previousDelta(0),
 _id1(-1), _touch1(-1, -1), _time1(current_time()),
-_id2(-1), _touch2(-1, -1), _time2(current_time())
+_id2(-1), _touch2(-1, -1), _time2(current_time()),
+_prevTap(-1,-1)
 {
     _keyReset = false;
     _keyDebug = false;
@@ -349,6 +350,12 @@ int InputController::checkSwipe(const Vec2& start, const Vec2& stop, timestamp_t
 bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t current) {
     for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
         Touch* t = *i;
+        std::cout << _prevTap.distance(t->getLocation());
+        // double tap is jump
+        if (_prevTap.distance(t->getLocation()) <= TAP_RADIUS && (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK)) {
+            std::cout << "DOUBLE TAP \n";
+            _keyJump = true;
+        }
         if (_id1 != -1) {
             // we already have a finger down, potential gesture
             _touch2 = t->getLocation();
@@ -364,12 +371,11 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                 _time1 = current_time();
             }
             _previousDelta = _touch1.distance(_touch2);
-            return true;
-        } else {
-            _touch1 = t->getLocation();
-            _id1 = t->getID();
-            _time1 = current_time();
+            break;
         }
+        _touch1 = t->getLocation();
+        _id1 = t->getID();
+        _time1 = current_time();
         Vec2 pos = t->getLocation();
         Zone zone = getZone(pos);
         switch (zone) {
@@ -380,7 +386,10 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                     _ltouch.position = pos;
                     _ltouch.touchid = t->getID();
                     // Cannot do both.
-                    _keyLeft = _rtouch.touchid == -1;
+                    // only move if one finger down
+                    if (oneFingerDown()) {
+                        _keyLeft = _rtouch.touchid == -1;
+                    }
                 }
                 break;
             case Zone::RIGHT:
@@ -389,7 +398,9 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                 if (_rtouch.touchid == -1) {
                     _rtouch.position = pos;
                     _rtouch.touchid = t->getID();
-                    _keyRight = _ltouch.touchid == -1;
+                    if (oneFingerDown()) {
+                        _keyRight = _ltouch.touchid == -1;
+                    }
                 }
                 break;
             case Zone::BOTTOM:
@@ -404,7 +415,7 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
             case Zone::MAIN:
                 // Only check for double tap in Main if nothing else down
                 if (_ltouch.touchid == -1 && _rtouch.touchid == -1 && _btouch.touchid == -1 && _mtouch.touchid == -1) {
-                    _keyDebug = (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK);
+                    //_keyDebug = (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK);
                 }
                 
                 // Keep count of touches in Main zone.
@@ -420,6 +431,8 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
         }
         _swipetime = current;
     }
+    _prevTap = touches[0]->getLocation();
+    _dbtaptime = current;
     return true;
 }
 
@@ -433,28 +446,11 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
     for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
         Touch* t = *i;
         if (t->getID() == _id1) {
-            // if two fingers are down then recognize tap as a jump
-            if (_id2 != -1 &&
-                elapsed_millis(_time1, current_time()) <= MAX_TAP_DURATION_MILLIS) {
-                _keyJump = true;
-            }
-            // one finger is down so only recognize double tap as jump
-            else if (_id2 == -1) {
-                if (_ltouch.touchid == -1 && _rtouch.touchid == -1 && _btouch.touchid == -1 && _mtouch.touchid == -1) {
-                    if (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK) {
-                        std::cout << "DOUBLE TAP\n";
-                    }
-                }
-            }
             _id1 = _id2;
             _touch1 = _touch2;
             _id2 = -1;
             _previousDelta = 0;
         } else if (t->getID() == _id2) {
-            // two fingers are down so recognize tap as a jump
-            if (elapsed_millis(_time2, current_time()) <= MAX_TAP_DURATION_MILLIS) {
-                _keyJump = true;
-            }
             _id2 = -1;
             _previousDelta = 0;
         }
@@ -479,7 +475,6 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
             }
             // Reset, debug is made false by update
         }
-        _dbtaptime = current;
     }
 }
 
@@ -491,41 +486,24 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
  * @param event The associated event
  */
 void InputController::touchesMovedCB(std::vector<Touch*> touches, timestamp_t current) {
-    if (touches.size() == 1) {
-        Touch* t = touches[0];
-        _keyJump = checkJump(t->getID(), t->getLocation());
-        if (t->getID() == _btouch.touchid && getZone(t->getLocation()) == Zone::BOTTOM)  {
-            // Allow the fire "key" to be held down
-            _keyFire = true;
-        } else if (t->getID() == _mtouch.touchid && _mtouch.count > 1) {
-            int swipe = checkSwipe(_mtouch.position, t->getLocation(), current);
-            if (swipe == -1) {
-                _keyReset = true;
-            } else if (swipe == 1) {
-                _keyExit = true;
-            }
-        }
-    }
     // process gesture recognition
-    if (touches.size() > 1) {
-        for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
-            Touch* t = *i;
-            if (t->getID() == _id1) {
-                _touch1 = t->getLocation();
-            } else if (t->getID() == _id2) {
-                _touch2 = t->getLocation();
-            }
+    for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
+        Touch* t = *i;
+        if (t->getID() == _id1) {
+            _touch1 = t->getLocation();
+        } else if (t->getID() == _id2) {
+            _touch2 = t->getLocation();
         }
-        if (_id1 != -1 && _id2 != -1 && !_keyJump) {
-            int pinch_spread = checkPinchSpread();
-            if (pinch_spread == PINCH) {
-                _keyShrink = true;
-            } else if (pinch_spread == SPREAD) {
-                _keyGrow = true;
-            }
-        }
-        _previousDelta = _touch1.distance(_touch2);
     }
+    if (_id1 != -1 && _id2 != -1) {
+        int pinch_spread = checkPinchSpread();
+        if (pinch_spread == PINCH) {
+            _keyShrink = true;
+        } else if (pinch_spread == SPREAD) {
+            _keyGrow = true;
+        }
+    }
+    _previousDelta = _touch1.distance(_touch2);
 }
 
 /**
