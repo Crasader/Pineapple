@@ -24,7 +24,7 @@
 
 using namespace cocos2d;
 
-#define MAX_TAP_DURATION_MILLIS        100
+#define MAX_TAP_DURATION_MILLIS        300
 #define MIN_SWIPE_SPEED      20.0f
 #define MIN_PINCH_SPREAD_SPEED    20.0f
 #define PINCH                        -1

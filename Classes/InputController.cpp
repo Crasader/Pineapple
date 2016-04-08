@@ -433,14 +433,25 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
     for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
         Touch* t = *i;
         if (t->getID() == _id1) {
-            if (elapsed_millis(_time1, current_time()) <= MAX_TAP_DURATION_MILLIS) {
+            // if two fingers are down then recognize tap as a jump
+            if (_id2 != -1 &&
+                elapsed_millis(_time1, current_time()) <= MAX_TAP_DURATION_MILLIS) {
                 _keyJump = true;
+            }
+            // one finger is down so only recognize double tap as jump
+            else if (_id2 == -1) {
+                if (_ltouch.touchid == -1 && _rtouch.touchid == -1 && _btouch.touchid == -1 && _mtouch.touchid == -1) {
+                    if (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK) {
+                        std::cout << "DOUBLE TAP\n";
+                    }
+                }
             }
             _id1 = _id2;
             _touch1 = _touch2;
             _id2 = -1;
             _previousDelta = 0;
         } else if (t->getID() == _id2) {
+            // two fingers are down so recognize tap as a jump
             if (elapsed_millis(_time2, current_time()) <= MAX_TAP_DURATION_MILLIS) {
                 _keyJump = true;
             }
