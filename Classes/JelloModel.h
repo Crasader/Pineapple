@@ -60,8 +60,6 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
-/** The Jello specific scaling */
-#define JELLO_SCALE         0.075f
 /** Amount of upward force given to will or a kid when hitting a jello */
 #define JELLO_BOUNCE_FORCE  10.0f
 /** Amount of horizontal force given to a kid when hitting a jello */

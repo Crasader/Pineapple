@@ -14,7 +14,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define KID_VSHRINK  0.95f
+#define KID_VSHRINK  0.8f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define KID_HSHRINK  0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
@@ -27,6 +27,8 @@
 #define KID_FORCE    2.0f
 /** Epsilon on Kid Speed - if within this amount, just set to max speed */
 #define KID_SPEED_EPSILON   .1f
+/** Anchor point that is in the center of the pineapple's mass */
+#define KID_ANCHOR_POINT   Vec2(0.5f, 0.22f)
 
 
 #pragma mark -
@@ -341,9 +343,11 @@ void KidModel::resetSceneNode() {
         pnode->setScale(cscale * KID_SCALE);
         pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * KID_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * KID_SCALE / _drawScale.y);
-                
+        setDimension(pnode->getContentSize().width * KID_SCALE * KID_HSHRINK / _drawScale.x,
+                     pnode->getContentSize().height * KID_SCALE * KID_VSHRINK * (1 - KID_ANCHOR_POINT.y) / _drawScale.y);
+        
+        pnode->setAnchorPoint(KID_ANCHOR_POINT);
+        
         _kidWalkcycleFrame = 0;
         _kidWalkcycle = pnode;        
     }

@@ -49,7 +49,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SCALe 0.078
+#define JELLO_SCALE 0.078
 
 
 #pragma mark -
