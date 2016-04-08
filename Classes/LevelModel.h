@@ -392,6 +392,11 @@ private:
     
     ~LevelModel();
     
+    bool string2bool (std::string v){
+        return !v.empty () &&
+        (strcasecmp (v.c_str (), "true") == 0 ||
+         atoi (v.c_str ()) != 0);
+    }
     
     /** Actually handles the obstacle addition. Should not be called from the outside
      * Will be called as a part of the following add functions
