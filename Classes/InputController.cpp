@@ -350,10 +350,8 @@ int InputController::checkSwipe(const Vec2& start, const Vec2& stop, timestamp_t
 bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t current) {
     for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
         Touch* t = *i;
-        std::cout << _prevTap.distance(t->getLocation());
         // double tap is jump
         if (_prevTap.distance(t->getLocation()) <= TAP_RADIUS && (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK)) {
-            std::cout << "DOUBLE TAP \n";
             _keyJump = true;
         }
         if (_id1 != -1) {
