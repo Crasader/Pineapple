@@ -29,10 +29,8 @@ void CollisionController::setLevel(LevelModel* level) {
 #pragma mark Collision Handling
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
-    if (isBelowChar(ground, will)) {
         will->setGrounded(true);
         _pSensorFixtures.emplace(fix);
-    }
 }
 
 /**

@@ -1,6 +1,11 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+#if defined(_WIN32)
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#endif
+
 #include "PineappleModel.h"
 #include "BlenderModel.h"
 #include "KidModel.h"
