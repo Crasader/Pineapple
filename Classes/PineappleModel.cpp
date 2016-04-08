@@ -347,9 +347,6 @@ void PineappleModel::resetSceneNode() {
         _willWalkcycle = pnode;
         
         _normalSize = getDimension();
-        
-        //HACKY YAY
-        setPosition(getPosition() + Vec2(0, getHeight() / 3 * 2));
     }
 }
 

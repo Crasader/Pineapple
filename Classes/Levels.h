@@ -12,11 +12,11 @@
 /** Level One Key */
 #define LEVEL_ONE_KEY "level_one"
 /** Level One File */
-#define LEVEL_ONE_FILE "levels/testLevel.tmx"
+#define LEVEL_ONE_FILE "levels/export/testLevel.json"
 /** Level Two Key */
 #define LEVEL_TWO_KEY "level_two"
 /** Level Two File */
-#define LEVEL_TWO_FILE "levels/testLevel2.tmx"
+#define LEVEL_TWO_FILE "levels/export/testLevel2.json"
 
 
 #endif /* Level_h */
