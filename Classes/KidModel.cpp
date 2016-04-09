@@ -7,16 +7,15 @@
 //
 
 #include "KidModel.h"
-//#include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
 
 #pragma mark -
 #pragma mark Physics Constants
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define KID_VSHRINK  0.8f
+#define KID_VSHRINK  0.6f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define KID_HSHRINK  0.7f
+#define KID_HSHRINK  0.6f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define KID_SSHRINK  0.9f
 /** Height of the sensor attached to the player's feet */
@@ -28,7 +27,7 @@
 /** Epsilon on Kid Speed - if within this amount, just set to max speed */
 #define KID_SPEED_EPSILON   .1f
 /** Anchor point that is in the center of the pineapple's mass */
-#define KID_ANCHOR_POINT   Vec2(0.5f, 0.22f)
+#define KID_ANCHOR_POINT   Vec2(0.5f, 0.25f)
 
 
 #pragma mark -
