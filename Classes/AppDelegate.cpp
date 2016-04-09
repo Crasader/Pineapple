@@ -12,7 +12,7 @@
 //  Version: 12/10/15
 //
 #include "AppDelegate.h"
-#include "GameRoot.h"
+#include "PineappleRoot.h"
 #include <cornell/CUSoundEngine.h>
 #include <cornell/CUAssetManager.h>
 
@@ -106,7 +106,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     AssetManager::init();
     
     // MODIFY this line to use your root class
-    auto scene = GameRoot::createScene<PlatformRoot>();
+    auto scene = GameRoot::createScene<PineappleRoot>();
 
     // Run the game
     director->runWithScene(scene);
