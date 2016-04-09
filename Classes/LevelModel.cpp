@@ -163,6 +163,8 @@ bool LevelModel::load() {
         float tileX = reader.getNumber(TILE_WIDTH_PROPERTY);
         float tileY = reader.getNumber(TILE_HEIGHT_PROPERTY);
         
+        _tileSize = Size(tileX, tileY);
+        
         reader.startObject(LAYERS_PROPERTY); //Start layer
         int wsize = reader.startArray(); //Start layer as array
         for(int ii = 0; ii < wsize; ii++) {
@@ -692,6 +694,8 @@ void LevelModel::setRootNode(Node* node) {
         poly = PolygonNode::createWithTexture(image);
         jello->setSceneNode(poly);
         
+        jello->setY(jello->getY() - (1 - jello->getHeight())/2);
+                
         addAnonymousObstacle(jello, JELLO_Z_INDEX);
     }
     
@@ -703,6 +707,8 @@ void LevelModel::setRootNode(Node* node) {
         spike->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);
         spike->setSceneNode(poly);
+        
+        spike->setY(spike->getY() - (1 - spike->getHeight())/2);
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }

@@ -13,19 +13,19 @@
 #pragma mark -
 #pragma mark Physics Constants
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define KID_VSHRINK  0.6f
+#define KID_VSHRINK             0.6f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define KID_HSHRINK  0.6f
+#define KID_HSHRINK             0.6f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define KID_SSHRINK  0.9f
+#define KID_SSHRINK             0.9f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.1f
+#define SENSOR_HEIGHT           0.1f
 /** The density of the character */
-#define KID_DENSITY    .5f
+#define KID_DENSITY             0.5f
 /** The amount kids change force to get back to max speed */
-#define KID_FORCE    2.0f
+#define KID_FORCE               2.0f
 /** Epsilon on Kid Speed - if within this amount, just set to max speed */
-#define KID_SPEED_EPSILON   .1f
+#define KID_SPEED_EPSILON       0.1f
 /** Anchor point that is in the center of the pineapple's mass */
 #define KID_ANCHOR_POINT   Vec2(0.5f, 0.25f)
 
