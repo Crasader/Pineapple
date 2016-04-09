@@ -49,7 +49,10 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SCALe 0.078
+#define JELLO_SCALE 0.078
+
+/** Extra amount to shift the jello down to move the object to sync with the floor visually */
+#define JELLO_DOWN_SHIFT 0
 
 
 #pragma mark -
@@ -146,7 +149,8 @@ JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool JelloModel::init(const Vec2& pos, const Vec2& scale) {
-    if (BoxObstacle::init(pos,Size(scale))) {
+    Vec2 pos2 = Vec2(pos.x, pos.y - JELLO_DOWN_SHIFT);
+    if (BoxObstacle::init(pos2,Size(scale))) {
         
         // Gameplay attributes
         return true;

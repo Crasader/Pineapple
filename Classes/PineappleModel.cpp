@@ -14,7 +14,7 @@
 /** Cooldown (in animation frames) for jumping */
 #define JUMP_COOLDOWN				5
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define PINEAPPLE_VSHRINK			0.95f
+#define PINEAPPLE_VSHRINK			0.6f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define PINEAPPLE_HSHRINK			0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
@@ -24,7 +24,9 @@
 /** The density of the character */
 #define PINEAPPLE_DENSITY			0.5f
 /** The impulse for the character jump */
-#define PINEAPPLE_JUMP				10.0f
+#define PINEAPPLE_JUMP              10.0f
+/** Anchor point that is in the center of the pineapple's mass */
+#define PINEAPPLE_ANCHOR_POINT   Vec2(0.5f, 0.22f)
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -338,8 +340,10 @@ void PineappleModel::resetSceneNode() {
         pnode->setScale(cscale * PINEAPPLE_SCALE);
         pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * PINEAPPLE_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * PINEAPPLE_SCALE / _drawScale.y);
+        setDimension(pnode->getContentSize().width * PINEAPPLE_SCALE * PINEAPPLE_HSHRINK / _drawScale.x,
+                     pnode->getContentSize().height * PINEAPPLE_SCALE * (1 - PINEAPPLE_ANCHOR_POINT.y) * PINEAPPLE_VSHRINK / _drawScale.y);
+        
+        pnode->setAnchorPoint(PINEAPPLE_ANCHOR_POINT);
         
         _willWalkcycleFrame = 0;
         _willWalkcycle = pnode;

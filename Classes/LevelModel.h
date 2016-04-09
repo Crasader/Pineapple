@@ -51,6 +51,9 @@ using namespace cocos2d;
 
 class LevelModel : public Asset {
 protected:
+    /** Size of a tile as read from the map */
+    Size _tileSize;
+    
 	/** Reference to the goalDoor (for collision detection) */
 	BoxObstacle*    _goalDoor;
 	/** Reference to the player avatar */
