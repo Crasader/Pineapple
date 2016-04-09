@@ -1,5 +1,5 @@
 //
-//  GameRoot.cpp
+//  PineappleRoot.cpp
 //  PlatformerDemo
 //
 //  This is the root class for a single game scene.  It shows how to subclass RootLayer to
@@ -12,7 +12,7 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#include "GameRoot.h"
+#include "PineappleRoot.h"
 #include "LoadingScreenController.h"
 #include <cornell/CUGenericLoader.h>
 
@@ -27,7 +27,7 @@ using namespace cocos2d;
  * This method is used to bootstrap the game.  It should start up an asset manager
  * and load initial assets.
  */
-void PlatformRoot::start() {
+void PineappleRoot::start() {
     int scene = AssetManager::getInstance()->createScene();
     
     FontLoader* fonts = FontLoader::create();
@@ -52,7 +52,7 @@ void PlatformRoot::start() {
  * update.  While Cocos2d does have rudimentary garbage collection, you still have
  * to release any objects that you have retained.
  */
-void PlatformRoot::stop() {
+void PineappleRoot::stop() {
     RootLayer::stop();  // YOU MUST BEGIN with call to parent
     int scene = AssetManager::getInstance()->getCurrentIndex();
     
@@ -69,7 +69,7 @@ void PlatformRoot::stop() {
  *
  * @param  dt   the time in seconds since last update
  */
-void PlatformRoot::update(float deltaTime) {
+void PineappleRoot::update(float deltaTime) {
     RootLayer::update(deltaTime);  // YOU MUST BEGIN with call to parent
     bool complete = true;
     
@@ -100,7 +100,7 @@ void PlatformRoot::update(float deltaTime) {
  * assets that have been loaded already, and the font is the only thing that
  * is guaranteed to be loaded at start.
  */
-void PlatformRoot::displayLoader() {
+void PineappleRoot::displayLoader() {
     // Load the font NOW
     AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
     

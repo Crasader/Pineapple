@@ -1,5 +1,5 @@
 //
-//  GameRoot.h
+//  PineappleRoot.h
 //  PlatformerDemo
 //
 //  This is the root class for a single game scene.  It shows how to subclass RootLayer to
@@ -34,7 +34,7 @@ using namespace cocos2d;
  * game engine.  However, from this point onward, we obey MVC separation as much
  * as possible.
  */
-class PlatformRoot : public RootLayer {
+class PineappleRoot : public RootLayer {
 protected:
     // CONTROLLERS
     /** The primary controller for the game world */

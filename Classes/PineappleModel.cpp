@@ -225,6 +225,39 @@ void PineappleModel::releaseFixtures() {
     }
 }
 
+int PineappleModel::grow() {
+    float currentHeight = getDimension().height;
+    if (_isSmall) {
+        setDimension(_normalSize);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsSmall(false);
+        return 1;
+    } else if (!_isLarge  && !_isSmall) {
+        setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsLarge(true);
+        return 2;
+    }
+    
+    return 0;
+}
+
+int PineappleModel::shrink() {
+    float currentHeight = getDimension().height;
+    if (_isLarge) {
+        setDimension(_normalSize);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsLarge(false);
+        return 1;
+    } else if (!_isLarge && !_isSmall) {
+        setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsSmall(true);
+        return 2;
+    }
+    return 0;
+}
+
 /**
  * Applies the force to the body of this pineapple
  *
