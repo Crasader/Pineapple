@@ -1,6 +1,11 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+#ifdef _MSC_VER
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
+#endif
+
 #include "PineappleModel.h"
 #include "BlenderModel.h"
 #include "KidModel.h"

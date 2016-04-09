@@ -14,15 +14,15 @@
 /** Cooldown (in animation frames) for jumping */
 #define JUMP_COOLDOWN				5
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define PINEAPPLE_VSHRINK		0.6f
+#define PINEAPPLE_VSHRINK			0.6f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define PINEAPPLE_HSHRINK		0.7f
+#define PINEAPPLE_HSHRINK			0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define PINEAPPLE_SSHRINK		0.9f
+#define PINEAPPLE_SSHRINK			0.9f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT				0.07f
 /** The density of the character */
-#define PINEAPPLE_DENSITY           0.5f
+#define PINEAPPLE_DENSITY			0.5f
 /** The impulse for the character jump */
 #define PINEAPPLE_JUMP              10.0f
 /** Anchor point that is in the center of the pineapple's mass */
@@ -234,9 +234,7 @@ void PineappleModel::applyForce() {
     if (!isActive()) {
         return;
     }
-    
-    cout << isJumping() << " " << isGrounded() << "\n";
-    
+        
     // Don't want to be moving. Damp out player motion
     if (getMovement() == 0.0f) {
         b2Vec2 force(-getDamping()*getVX(), 0);
@@ -283,36 +281,36 @@ void PineappleModel::update(float dt) {
  * Animate Will if he's moving
  */
 void PineappleModel::animate() {
-    // in the air
-    if (!_isGrounded || _isJumping || getVY() < -0.2f) {
-        if (_faceRight) {
-            _willWalkcycleFrame = 0;
-        }
-        else {
-            _willWalkcycleFrame = 12;
-        }
-        _willWalkcycle->setFrame(_willWalkcycleFrame);
-    }
-    // moving
-    else if (abs(getVX()) > 0.5f) {
-        _willWalkcycleFrame++;
-        if (_faceRight) {
-            _willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-        }
-        else {
-            _willWalkcycle->setFrame((_willWalkcycleFrame % 12) + 12);
-        }
-    }
-    // at rest
-    else {
-        if (_faceRight) {
-            _willWalkcycleFrame = 0;
-        }
-        else {
-            _willWalkcycleFrame = 12;
-        }
-        _willWalkcycle->setFrame(_willWalkcycleFrame);
-    }
+	// in the air
+	/*if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}*/
+	// moving
+	if (abs(getVX()) > 0.5f) {
+		_willWalkcycleFrame++;
+		if (_faceRight) {
+			_willWalkcycle->setFrame(_willWalkcycleFrame % (PINEAPPLE_FRAME_COUNT / 2));
+		}
+		else {
+			_willWalkcycle->setFrame((_willWalkcycleFrame % (PINEAPPLE_FRAME_COUNT / 2)) + (PINEAPPLE_FRAME_COUNT / 2));
+		}
+	}
+	// at rest
+	else {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}
 }
 
 

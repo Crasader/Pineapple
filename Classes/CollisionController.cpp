@@ -29,10 +29,8 @@ void CollisionController::setLevel(LevelModel* level) {
 #pragma mark Collision Handling
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
-    if (isBelowChar(ground, will)) {
-        will->setGrounded(true);
-        _pSensorFixtures.emplace(fix);
-    }
+    will->setGrounded(true);
+    _pSensorFixtures.emplace(fix);
 }
 
 /**
@@ -141,13 +139,16 @@ void CollisionController::beginContact(b2Contact* contact) {
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
 
+    // WILL FEET COLLISIONS
+    PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
+    string* feetSensorName = _level->getPineapple()->getSensorName();
+    if ((bd1->getCollisionClass() % 2 == 0 && fix2->GetUserData() == feetSensorName) ||
+        (bd2->getCollisionClass() % 2 == 0 && fix1->GetUserData() == feetSensorName)) {
+        ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
+    }
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
-		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
-		// Will  x Ground
-		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
-            ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
-		}
+
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			handleJelloCollision(will, bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
@@ -216,16 +217,19 @@ void CollisionController::endContact(b2Contact* contact) {
 	Obstacle* bd1 = (Obstacle*)body1->GetUserData();
 	Obstacle* bd2 = (Obstacle*)body2->GetUserData();
 	
+    // WILL FEET COLLISIONS
+    PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
+    string* feetSensorName = _level->getPineapple()->getSensorName();
+    if ((bd1->getCollisionClass() % 2 == 0 && fix2->GetUserData() == feetSensorName) ||
+        (bd2->getCollisionClass() % 2 == 0 && fix1->GetUserData() == feetSensorName)) {        _pSensorFixtures.erase(bd1 == will ? fix2 : fix1);
+        if (_pSensorFixtures.empty()) {
+            will->setGrounded(false);
+        }
+    }
+    
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 		PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
-		// Will x Ground
-		if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
-			_pSensorFixtures.erase(bd1 == will ? fix2 : fix1);
-			if (_pSensorFixtures.empty()) {
-				will->setGrounded(false);
-			}
-		}
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			will->setCollidingWithJello(false);
