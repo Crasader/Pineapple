@@ -9,11 +9,11 @@
 #include "BackgroundView.h"
 
 /** Scale factor for background images */
-#define FRONT_BACKGROUND_SCALE   1.1f
+#define FRONT_BACKGROUND_SCALE   1.15f
 #define MIDDLE_BACKGROUND_SCALE  1.1f
 #define BACK_BACKGROUND_SCALE    1.0f
 /** The width of background assets */
-#define FRONT_BACKGROUND_WIDTH   4000.0f
+#define FRONT_BACKGROUND_WIDTH   1000.0f
 #define MIDDLE_BACKGROUND_WIDTH  1000.0f
 #define BACK_BACKGROUND_WIDTH    1500.0f
 /** Height of background assets */
@@ -21,8 +21,8 @@
 #define MIDDLE_BACKGROUND_HEIGHT 300.0f
 #define BACK_BACKGROUND_HEIGHT   300.0f
 /** Vertical offset of background assets */
-#define FRONT_BACKGROUND_VERTICAL_OFFSET  -140.0f
-#define MIDDLE_BACKGROUND_VERTICAL_OFFSET  120.0f
+#define FRONT_BACKGROUND_VERTICAL_OFFSET  -210.0f
+#define MIDDLE_BACKGROUND_VERTICAL_OFFSET  110.0f
 #define BACK_BACKGROUND_VERTICAL_OFFSET    170.0f
 /** Damping factor for parallax scrolling */
 #define HILLS_DAMPING_FACTOR     4.0f

@@ -315,7 +315,7 @@ void PineappleModel::update(float dt) {
  */
 void PineappleModel::animate() {
 	// in the air
-	/*if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+	if (!_isGrounded || _isJumping || getVY() < -0.2f) {
 		if (_faceRight) {
 			_willWalkcycleFrame = 0;
 		}
@@ -323,9 +323,9 @@ void PineappleModel::animate() {
 			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
 		}
 		_willWalkcycle->setFrame(_willWalkcycleFrame);
-	}*/
+	}
 	// moving
-	if (abs(getVX()) > 0.5f) {
+	else if (abs(getVX()) > 0.5f) {
 		_willWalkcycleFrame++;
 		if (_faceRight) {
 			_willWalkcycle->setFrame(_willWalkcycleFrame % (PINEAPPLE_FRAME_COUNT / 2));

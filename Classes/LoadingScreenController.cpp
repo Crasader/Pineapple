@@ -26,7 +26,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(KID_TEXTURE_3, "textures/child_hat_walkcycle_reduced.png");
 	tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
 
-	tloader->loadAsync(JELLO_TEXTURE, "textures/jello.png");
+	tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle.png");
 	tloader->loadAsync(SPIKE_TEXTURE, "textures/spikes.png");
 
 	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
@@ -38,7 +38,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
 	tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
 
-	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_full.png");
+	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     

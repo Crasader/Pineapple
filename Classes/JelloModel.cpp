@@ -198,6 +198,15 @@ void JelloModel::update(float dt) {
     BoxObstacle::update(dt);
 }
 
+/**
+* Animate the resting Jello
+*/
+void JelloModel::animate() {
+	_jelloRestcycleFrame += 0.5f;
+	int tmp = (int)rint(_jelloRestcycleFrame);
+	_jelloRestcycle->setFrame(tmp % JELLO_FRAME_COUNT);
+}
+
 
 #pragma mark -
 #pragma mark Scene Graph Methods
@@ -209,7 +218,7 @@ void JelloModel::update(float dt) {
  * manage our own afterburner animations.
  */
 void JelloModel::resetSceneNode() {
-    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
@@ -223,9 +232,13 @@ void JelloModel::resetSceneNode() {
         
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * JELLO_SCALE);
+		pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
                      pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
+
+		_jelloRestcycleFrame = 0.0f;
+		_jelloRestcycle = pnode;
     }
 }
 

@@ -347,7 +347,7 @@ void KidModel::resetSceneNode() {
         
         pnode->setAnchorPoint(KID_ANCHOR_POINT);
         
-        _kidWalkcycleFrame = 0;
+        _kidWalkcycleFrame = 0.0f;
         _kidWalkcycle = pnode;        
     }
 }

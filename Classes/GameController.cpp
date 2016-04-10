@@ -358,7 +358,7 @@ void GameController::update(float dt) {
     }
     
     // Process the movement
-    if(_level->getPineapple() != nullptr) {
+    if (_level->getPineapple() != nullptr) {
         _level->getPineapple()->setMovement(_input.getHorizontal()*_level->getPineapple()->getForce());
         _level->getPineapple()->setJumping( _input.didJump());
         float cscale = Director::getInstance()->getContentScaleFactor();
@@ -374,6 +374,13 @@ void GameController::update(float dt) {
         
         _level->getPineapple()->animate();
     }
+
+	// Animate the jello
+	std::vector<JelloModel*> jellos = _level->getJellos();
+	for (auto it = jellos.begin(); it != jellos.end(); ++it) {
+		JelloModel* jello = *it;
+		jello->animate();
+	}
     
     // Update the background (move the clouds)
     _background->update(dt);

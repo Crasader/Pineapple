@@ -137,11 +137,15 @@ public:
 	*/
 	void clearKid(int i) { _kids[i] = nullptr; }
 
-
 	/**
 	*
 	*/
 	BlenderModel* getBlender() { return _blender; }
+
+	/**
+	*
+	*/
+	std::vector<JelloModel*> getJellos() { return _jellos; }
 
 	/**
 	*

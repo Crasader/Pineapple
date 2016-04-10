@@ -684,14 +684,13 @@ void LevelModel::setRootNode(Node* node) {
             addObstacle(_kids[i], KID_Z_INDEX+i);
         }
     }
-    
-    
+        
     for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
         JelloModel* jello = *it;
         
         Texture2D* image = assets->get<Texture2D>(JELLO_TEXTURE);
         jello->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        poly = AnimationNode::create(image, 1, JELLO_FRAME_COUNT, JELLO_FRAME_COUNT);
         jello->setSceneNode(poly);
         
         jello->setY(jello->getY() - (1 - jello->getHeight())/2);
