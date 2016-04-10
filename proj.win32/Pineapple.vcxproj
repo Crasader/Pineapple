@@ -152,7 +152,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\CollisionObjectModel.cpp" />
     <ClCompile Include="..\Classes\CrushableModel.cpp" />
     <ClCompile Include="..\Classes\GameController.cpp" />
-    <ClCompile Include="..\Classes\GameRoot.cpp" />
     <ClCompile Include="..\Classes\GoalModel.cpp" />
     <ClCompile Include="..\Classes\InputController.cpp" />
     <ClCompile Include="..\Classes\JelloModel.cpp" />
@@ -163,6 +162,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\NonPhysicalObstacleModel.cpp" />
     <ClCompile Include="..\Classes\PhysicalObstacleModel.cpp" />
     <ClCompile Include="..\Classes\PineappleModel.cpp" />
+    <ClCompile Include="..\Classes\PineappleRoot.cpp" />
     <ClCompile Include="..\Classes\ProgressHUD.cpp" />
     <ClCompile Include="..\Classes\SpikeModel.cpp" />
     <ClCompile Include="..\Classes\SpinnerModel.cpp" />
@@ -179,7 +179,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Const.h" />
     <ClInclude Include="..\Classes\CrushableModel.h" />
     <ClInclude Include="..\Classes\GameController.h" />
-    <ClInclude Include="..\Classes\GameRoot.h" />
     <ClInclude Include="..\Classes\GoalModel.h" />
     <ClInclude Include="..\Classes\InputController.h" />
     <ClInclude Include="..\Classes\JelloModel.h" />
@@ -191,6 +190,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\NonPhysicalObstacleModel.h" />
     <ClInclude Include="..\Classes\PhysicalObstacleModel.h" />
     <ClInclude Include="..\Classes\PineappleModel.h" />
+    <ClInclude Include="..\Classes\PineappleRoot.h" />
     <ClInclude Include="..\Classes\ProgressHUD.h" />
     <ClInclude Include="..\Classes\SpikeModel.h" />
     <ClInclude Include="..\Classes\SpinnerModel.h" />
