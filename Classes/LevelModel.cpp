@@ -1,6 +1,7 @@
 #include "LevelModel.h"
 
 #include <cornell/CUJSONReader.h>
+#include <cornell/CUStrings.h>
 #include "MoveablePlatformModel.h"
 #include "Const.h"
 
@@ -218,7 +219,7 @@ bool LevelModel::load() {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
                     
                     bool isSwitch = string2bool(reader.getString(IS_SWITCH_PROPERTY));
-                    double colorF = std::stod(reader.getString(COLOR_PROPERTY));
+                    double colorF = cocos2d::stod(reader.getString(COLOR_PROPERTY));
                     Color color = MoveablePlatformModel::getColor((int)colorF);
                     
                     reader.endObject();
@@ -240,7 +241,7 @@ bool LevelModel::load() {
                         position[1] = y + h + 0.175; // Hack to get horizontal platform to be flush with floor next to it
                         length = w;
                     }
-                    double colorF = std::stod(reader.getString(COLOR_PROPERTY));
+                    double colorF = cocos2d::stod(reader.getString(COLOR_PROPERTY));
                     Color color = MoveablePlatformModel::getColor((int)colorF);
                     
                     reader.endObject();
@@ -273,8 +274,8 @@ bool LevelModel::load() {
         //Start map properties
         reader.startObject(OBJECT_PROPERTIES_PROPERTY);
         
-        position[0] = std::stod(reader.getString(BLENDER_START_X_PROPERTY));
-        position[1] = std::stod(reader.getString(BLENDER_Y_PROPERTY));
+        position[0] = cocos2d::stod(reader.getString(BLENDER_START_X_PROPERTY));
+        position[1] = cocos2d::stod(reader.getString(BLENDER_Y_PROPERTY));
         addBlender(position);
         
         //Add walls that are offscreen and prevent you from going past end of level
