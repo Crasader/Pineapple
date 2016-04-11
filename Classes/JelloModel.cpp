@@ -49,10 +49,10 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SCALE 0.078
+#define JELLO_SCALE			0.39
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
-#define JELLO_DOWN_SHIFT 0
+#define JELLO_DOWN_SHIFT	0
 
 
 #pragma mark -
