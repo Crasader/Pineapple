@@ -638,7 +638,7 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
         
-        Texture2D* image = assets->get<Texture2D>(TILE_TEXTURE);
+        Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
         
         wall->setDrawScale(_scale.x , _scale.y);
         poly = PolygonNode::createWithTexture(image);

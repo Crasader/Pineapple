@@ -10,7 +10,7 @@
 #define __TEXTURE_H__
 
 /** The key for the tile tile texture in the asset manage */
-#define TILE_TEXTURE     "tile"
+#define FLOOR_TEXTURE     "floor"
 /** The key for the platform texture in the asset manager */
 #define PLATFORM_TEXTURE "platform"
 /** The key for the win door texture in the asset manager */
