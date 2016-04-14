@@ -362,6 +362,10 @@ void LevelModel::unload() {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
+                
+                if ((*it)->isFloor()) {
+                    _worldnode->removeChild((*it)->getTopNode());
+                }
             }
             (*it)->release();
         }
@@ -648,14 +652,20 @@ void LevelModel::setRootNode(Node* node) {
         
         Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
         image->setTexParameters(params);
-        
         wall->setDrawScale(_scale.x , _scale.y);
-        
         poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
+        
+        if (wall->isFloor()) {
+            Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
+            wall->setTopNode(PolygonNode::createWithTexture(topImage));
+        }
         
         wall->setSceneNode(poly);
         
         addObstacle(wall, WALL_Z_INDEX);
+        if (wall->isFloor()) {
+            _worldnode->addChild(wall->getTopNode(),WALL_Z_INDEX + 1);
+        }
     }
     
     if (_goalDoor != nullptr) {

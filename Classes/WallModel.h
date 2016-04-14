@@ -23,6 +23,7 @@
 #include "Texture.h"
 #include "Const.h"
 #include <cornell/CUPolygonObstacle.h>
+#include <cornell/CUPolygonNode.h>
 
 using namespace cocos2d;
 using namespace std;
@@ -53,14 +54,33 @@ protected:
      */
     virtual void resetSceneNode() override;
     
+    /** A reference to the node that defines the top texture (drawing only) */
+    PolygonNode* _topNode;
     
 #pragma mark -
 #pragma mark Static Constructors
 public:
     
-    string getTextureID() {
-        return getY() <= 1 ? FLOOR_TEXTURE : PLATFORM_TEXTURE;
+    /** 
+     * Returns true if this wall represents a floor (is touching the bottom of the screen),
+     * false if this represents a platform (is not a floor)
+     */
+    bool isFloor() {
+        return getY() - getHeight()/2 == 0;
     }
+    
+    /**
+     * Returns the texture ID to use for this wall, depending if it is a floor or platform 
+     */
+    string getTextureID() {
+        return isFloor() ? FLOOR_TEXTURE : PLATFORM_TEXTURE;
+    }
+    
+    /** Returns the node that draws the top border of the wall */
+    PolygonNode* getTopNode() { return _topNode; }
+    
+    /** Sets the node that draws the top border of the wall */
+    void setTopNode(PolygonNode* topNode) { _topNode = topNode; }
     
     int getCollisionClass() { return WALL_C; };
     /**
@@ -111,7 +131,7 @@ CC_CONSTRUCTOR_ACCESS:
     /*
      * Creates a new wall at the origin.
      */
-    WallModel(void) : PolygonObstacle() { }
+    WallModel(void) : PolygonObstacle(), _topNode(nullptr) { }
     
     /**
      * Destroys this wall, releasing all resources.

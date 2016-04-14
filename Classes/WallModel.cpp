@@ -124,5 +124,12 @@ void WallModel::resetSceneNode() {
         // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
+        
+        if( _topNode != nullptr) {
+            Vec2 p = Vec2(pnode->getPositionX(),
+                          pnode->getPositionY() + (pnode->getContentSize().height-_topNode->getContentSize().height)/2);
+            _topNode->setPosition(p);
+            _topNode->setScaleX(pnode->getContentSize().width/_topNode->getContentSize().width);
+        }
     }
 }

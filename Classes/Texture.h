@@ -9,8 +9,10 @@
 #ifndef __TEXTURE_H__
 #define __TEXTURE_H__
 
-/** The key for the tile tile texture in the asset manage */
+/** The key for the tile tile texture in the asset manager */
 #define FLOOR_TEXTURE     "floor"
+/** The key for the floor top texture in the asset manager */
+#define FLOOR_TOP_TEXTURE "floor_top"
 /** The key for the platform texture in the asset manager */
 #define PLATFORM_TEXTURE "platform"
 /** The key for the win door texture in the asset manager */
