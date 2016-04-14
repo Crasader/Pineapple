@@ -25,6 +25,7 @@
 #include <cornell/CUPolygonObstacle.h>
 
 using namespace cocos2d;
+using namespace std;
 
 
 #pragma mark -
@@ -56,6 +57,10 @@ protected:
 #pragma mark -
 #pragma mark Static Constructors
 public:
+    
+    string getTextureID() {
+        return getY() <= 1 ? FLOOR_TEXTURE : PLATFORM_TEXTURE;
+    }
     
     int getCollisionClass() { return WALL_C; };
     /**

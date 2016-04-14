@@ -17,8 +17,8 @@ void LoadingScreenController::preload() {
 	SceneManager* assets = AssetManager::getInstance()->getCurrent();
 	TextureLoader* tloader = (TextureLoader*)assets->access<Texture2D>();
 
-	tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
-	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
+	tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png", params);
+	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png", params);
 	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
 
 	tloader->loadAsync(KID_TEXTURE_1, "textures/child_bow_walkcycle_reduced.png");

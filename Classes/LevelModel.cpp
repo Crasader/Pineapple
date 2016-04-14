@@ -131,7 +131,7 @@ void initSensor(Obstacle* obstacle) {
 void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setBodyType(b2_staticBody);
     obstacle->setDensity(BASIC_DENSITY);
-    obstacle->setFriction(BASIC_FRICTION);
+    obstacle->setFriction(0.0f);
     obstacle->setFixedRotation(true);
     obstacle->setRestitution(BASIC_RESTITUTION);
     obstacle->setGravityScale(1);
@@ -638,7 +638,7 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
         
-        Texture2D* image = assets->get<Texture2D>(TILE_TEXTURE);
+        Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
         
         wall->setDrawScale(_scale.x , _scale.y);
         poly = PolygonNode::createWithTexture(image);
