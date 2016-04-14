@@ -208,6 +208,7 @@ bool LevelModel::load() {
                 } else if (layerName == JELLO_OBJECT_GROUP) {
                     addJello(position);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
+                    position[0] += 0.5;
                     addSpikes(position);
                 } else if (layerName == WILL_OBJECT_GROUP) {
                     addPineapple(position);
@@ -361,6 +362,10 @@ void LevelModel::unload() {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
+                
+                if ((*it)->isFloor()) {
+                    _worldnode->removeChild((*it)->getTopNode());
+                }
             }
             (*it)->release();
         }
@@ -635,16 +640,32 @@ void LevelModel::setRootNode(Node* node) {
     // Add the individual elements
     PolygonNode* poly;
     
+    //Tiling params
+    Texture2D::TexParams params;
+    params.wrapS = GL_REPEAT;
+    params.wrapT = GL_REPEAT;
+    params.magFilter = GL_NEAREST;
+    params.minFilter = GL_NEAREST;
+    
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
         
         Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
-        
+        image->setTexParameters(params);
         wall->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
+        
+        if (wall->isFloor()) {
+            Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
+            wall->setTopNode(PolygonNode::createWithTexture(topImage));
+        }
+        
         wall->setSceneNode(poly);
         
         addObstacle(wall, WALL_Z_INDEX);
+        if (wall->isFloor()) {
+            _worldnode->addChild(wall->getTopNode(),WALL_Z_INDEX + 1);
+        }
     }
     
     if (_goalDoor != nullptr) {
