@@ -31,6 +31,8 @@
 #define GROW_KEY EventKeyboard::KeyCode::KEY_A
 /** The key for shrink is S */
 #define SHRINK_KEY EventKeyboard::KeyCode::KEY_S
+/** The key for pause is <ESC> */
+#define PAUSE_KEY EventKeyboard::KeyCode::KEY_P
 
 /** How fast a double click must be in milliseconds */
 #define EVENT_DOUBLE_CLICK  300
@@ -88,6 +90,7 @@ _prevTap(-1,-1)
     _keyJump  = false;
     _keyGrow = false;
     _keyShrink = false;
+    _keyPause = false;
     
     // Initialize the touch values.
     _ltouch.touchid = -1;
@@ -212,6 +215,7 @@ void InputController::update(float dt) {
     _keyJump   = keys->keyPressed(JUMP_KEY);
     _keyGrow   = keys->keyPressed(GROW_KEY);
     _keyShrink = keys->keyPressed(SHRINK_KEY);
+    _keyPause  = keys->keyPressed(PAUSE_KEY);
     
     _keyLeft  = keys->keyDown(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
     _keyRight = keys->keyDown(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
@@ -226,6 +230,7 @@ void InputController::update(float dt) {
     _jumpPressed   = _keyJump;
     _growPressed   = _keyGrow;
     _shrinkPressed = _keyShrink;
+    _pausePressed  = _keyPause;
     
     // Directional controls
     _horizontal = 0.0f;
@@ -245,6 +250,7 @@ void InputController::update(float dt) {
     _keyFire   = false;
     _keyGrow   = false;
     _keyShrink = false;
+    _keyPause  = false;
 #endif
 }
 

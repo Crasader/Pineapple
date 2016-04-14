@@ -76,5 +76,7 @@
 /** The key for the furthest back background texture in the asset manager */
 #define BACK_BACKGROUND   "background_3"
 
+/** The key for the pause screen overlay texture in the asset manager */
+#define PAUSE_SCREEN_OVERLAY "pause_overlay"
 
 #endif /* Texture_h */

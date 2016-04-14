@@ -67,6 +67,8 @@ private:
     bool  _keyGrow;
     /** whether the shrink key is down */
     bool  _keyShrink;
+    /** whether the pause key is down */
+    bool _keyPause;
 
     
 protected:
@@ -109,6 +111,8 @@ protected:
     bool _growPressed;
     /** Whether the shrink action was chosen */
     bool _shrinkPressed;
+    /** Whether the pause action was chosen */
+    bool _pausePressed;
 
     bool oneFingerDown() {
         return _id1 == -1 || _id2 == -1;
@@ -337,6 +341,8 @@ public:
      * @return true if the player wants to go toggle the debug mode.
      */
     bool didDebug() const { return _debugPressed; }
+    
+    bool didPause() const { return _pausePressed; }
     
     /**
      * Returns true if the exit button was pressed.

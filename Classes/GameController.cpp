@@ -119,6 +119,8 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
     
+    _pause.init(_worldnode, _assets, root);
+
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _winnode->setString(WIN_MESSAGE);
@@ -190,6 +192,7 @@ void GameController::dispose() {
     _background = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
+    _pause.~PauseController();
     _rootnode->removeAllChildren();
     _rootnode->release();
     _rootnode = nullptr;
@@ -318,6 +321,33 @@ void GameController::update(float dt) {
         return;
     }
     
+    _input.update(dt);
+    
+    // Process the toggled key commands
+    if (_input.didPause()) {
+        // TODO(ekotlikoff): PAUSE
+        if (!_paused) {
+            _paused = true;
+            _pause.pause();
+            return;
+        } else {
+            _paused = false;
+            _pause.unPause();
+        }
+    }
+    if (_input.didDebug()) { setDebug(!isDebug()); }
+    if (_input.didReset()) {
+        reset();
+        return;
+    }
+    if (_input.didExit())  {
+        _rootnode->shutdown();
+        return;
+    }
+    if (_paused) {
+        return;
+    }
+    
     // Check to see if new level loaded yet
     if (_loadnode->isVisible()) {
         if (_assets->isComplete()) {
@@ -327,8 +357,6 @@ void GameController::update(float dt) {
             return;
         }
     }
-    
-    _input.update(dt);
     
     if (_level->haveFailed() && _countdown == -1) {
         setFailure(true);
@@ -345,16 +373,6 @@ void GameController::update(float dt) {
             _level->getKid(i)->dampTowardsWalkspeed();
             _level->getKid(i)->animate();
         }
-    }
-    
-    // Process the toggled key commands
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) {
-        reset();
-        return;
-    }
-    if (_input.didExit())  {
-        _rootnode->shutdown();
     }
     
     // Process the movement

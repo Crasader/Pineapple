@@ -93,7 +93,7 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _willWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _willWalkcycleFrame;
+	int _willWalkcycleFrame = 0;
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node

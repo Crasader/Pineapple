@@ -49,12 +49,6 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 			will->setJumping(true);
 			will->setGrounded(false);
 		}
-		else {
-			//Squish
-			if (isBelowChar(jello, will)) {
-				_level->removeObstacle(jello);
-			}
-		}
 	}
 }
 
@@ -142,9 +136,31 @@ void CollisionController::beginContact(b2Contact* contact) {
     // WILL FEET COLLISIONS
     PineappleModel* will = bd1->getCollisionClass() == PINEAPPLE_C ? (PineappleModel*)bd1 : (PineappleModel*)bd2;
     string* feetSensorName = _level->getPineapple()->getSensorName();
-    if ((bd1->getCollisionClass() % 2 == 0 && fix2->GetUserData() == feetSensorName) ||
-        (bd2->getCollisionClass() % 2 == 0 && fix1->GetUserData() == feetSensorName)) {
-        ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
+    if (fix2->GetUserData() == feetSensorName || fix1->GetUserData() == feetSensorName) {
+        // with jello
+        if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
+            // if will is large and traveling downwards, squish
+            if (will->isLarge() && will->getVY() < MAX_V_TO_CRUSH) {
+                // set v to 0 because sometimes the sensor touches too early for the physics
+                // engine to do it
+                will->setVY(0);
+                _level->removeObstacle(bd1->getCollisionClass() == JELLO_C ? bd1 : bd2);
+            }
+        }
+        // with cup
+        if (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C) {
+            // if will is large and traveling downwards, crush
+            if (will->isLarge() && will->getVY() < MAX_V_TO_CRUSH) {
+                // set v to 0 because sometimes the sensor touches too early for the physics
+                // engine to do it
+                will->setVY(0);
+                _level->removeObstacle(bd1->getCollisionClass() == CUP_C ? bd1 : bd2);
+            }
+        }
+        // with ground
+        if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+            ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
+        }
     }
 	// WILL COLLISIONS
 	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
@@ -152,11 +168,6 @@ void CollisionController::beginContact(b2Contact* contact) {
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			handleJelloCollision(will, bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
-		}
-		// Will x Cup
-		if (will->isLarge() && (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C)) {
-			CrushableModel* cup = bd1->getCollisionClass() == CUP_C ? (CrushableModel*)bd1 : (CrushableModel*)bd2;
-			handleCupCollision(will, cup);
 		}
 		// Will x Goal
 		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
