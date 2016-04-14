@@ -131,7 +131,7 @@ void initSensor(Obstacle* obstacle) {
 void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setBodyType(b2_staticBody);
     obstacle->setDensity(BASIC_DENSITY);
-    obstacle->setFriction(BASIC_FRICTION);
+    obstacle->setFriction(0.0f);
     obstacle->setFixedRotation(true);
     obstacle->setRestitution(BASIC_RESTITUTION);
     obstacle->setGravityScale(1);
