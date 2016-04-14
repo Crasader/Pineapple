@@ -635,13 +635,23 @@ void LevelModel::setRootNode(Node* node) {
     // Add the individual elements
     PolygonNode* poly;
     
+    //Tiling params
+    Texture2D::TexParams params;
+    params.wrapS = GL_REPEAT;
+    params.wrapT = GL_REPEAT;
+    params.magFilter = GL_NEAREST;
+    params.minFilter = GL_NEAREST;
+    
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
         
         Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
+        image->setTexParameters(params);
         
         wall->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        
+        poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
+        
         wall->setSceneNode(poly);
         
         addObstacle(wall, WALL_Z_INDEX);

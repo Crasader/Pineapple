@@ -7,18 +7,11 @@
 * Preloads the assets needed for the game.
 */
 void LoadingScreenController::preload() {
-	// Load the textures (Autorelease objects)
-	Texture2D::TexParams params;
-	params.wrapS = GL_REPEAT;
-	params.wrapT = GL_REPEAT;
-	params.magFilter = GL_LINEAR;
-	params.minFilter = GL_NEAREST;
-
 	SceneManager* assets = AssetManager::getInstance()->getCurrent();
 	TextureLoader* tloader = (TextureLoader*)assets->access<Texture2D>();
 
-	tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png", params);
-	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png", params);
+	tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
+	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
 	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
 
 	tloader->loadAsync(KID_TEXTURE_1, "textures/child_bow_walkcycle_reduced.png");
