@@ -94,6 +94,8 @@ protected:
 	AnimationNode* _willWalkcycle;
 	/** Frame counter for walkcycle animation */
 	int _willWalkcycleFrame;
+	/** Whether Will is spiraling towards blender blades */
+	bool _isBlended;
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
@@ -336,9 +338,14 @@ public:
 	bool isFacingRight() const { return _faceRight; }
 
 	/**
-	* Initialize the filmstrip for walking animation
+	* Sets whether will is spiralling towards the blender blades
 	*/
-    void initAnimation(Texture2D* image, float scale);
+	void setIsBlended(bool blending) { _isBlended = blending; }
+
+	/**
+	* Returns true if will is spiralling towards the blender blades
+	*/
+	bool getIsBlended() { return _isBlended; }
 
     
 #pragma mark Drawing Methods
@@ -390,6 +397,14 @@ public:
 	* Animate Will if he's moving
 	*/
 	void animate();
+
+	/** 
+	* Make Will spiral towards blender blades
+	*
+	* @param x level offset
+	* @param y y-coordinate of the blender
+	*/
+	void spiral(float y);
 
 
 CC_CONSTRUCTOR_ACCESS:

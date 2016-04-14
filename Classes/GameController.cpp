@@ -342,8 +342,15 @@ void GameController::update(float dt) {
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_level->getKid(i) != nullptr) {
-            _level->getKid(i)->dampTowardsWalkspeed();
-            _level->getKid(i)->animate();
+			if (!_level->getKid(i)->getIsBlended()) {
+				_level->getKid(i)->dampTowardsWalkspeed();
+				_level->getKid(i)->animate();
+			} 
+			else {
+				_level->getKid(i)->spiral(_level->getBlender()->getPosition().y);
+				_level->getKid(i)->setFixedRotation(false);
+				_level->getKid(i)->setAngularVelocity(6.0f);
+			}            
         }
     }
     
@@ -356,23 +363,30 @@ void GameController::update(float dt) {
     if (_input.didExit())  {
         _rootnode->shutdown();
     }
-    
+
     // Process the movement
     if (_level->getPineapple() != nullptr) {
-        _level->getPineapple()->setMovement(_input.getHorizontal()*_level->getPineapple()->getForce());
-        _level->getPineapple()->setJumping( _input.didJump());
-        float cscale = Director::getInstance()->getContentScaleFactor();
+		if (!_level->getPineapple()->getIsBlended()) {
+			_level->getPineapple()->setMovement(_input.getHorizontal()*_level->getPineapple()->getForce());
+			_level->getPineapple()->setJumping(_input.didJump());
+			float cscale = Director::getInstance()->getContentScaleFactor();
 
-        handleAvatarGrowth(cscale, _input, _level->getPineapple());
-        
-        _level->getPineapple()->applyForce();
-        
-        if (_level->getPineapple()->isJumping()) {
-            Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-        }
-        
-        _level->getPineapple()->animate();
+			handleAvatarGrowth(cscale, _input, _level->getPineapple());
+
+			_level->getPineapple()->applyForce();
+
+			if (_level->getPineapple()->isJumping()) {
+				Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+				//SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+			}
+
+			_level->getPineapple()->animate();
+		}
+		else {
+			_level->getPineapple()->spiral(_level->getBlender()->getPosition().y);
+			_level->getPineapple()->setFixedRotation(false);
+			_level->getPineapple()->setAngularVelocity(6.0f);
+		}
     }
 
 	// Animate the jello
@@ -386,7 +400,9 @@ void GameController::update(float dt) {
     _background->update(dt);
     
     // Scroll the screen (with parallax) if necessary
-    handleScrolling();
+	if (!_level->getPineapple()->getIsBlended()) {
+		handleScrolling();
+	}
     
     // Turn the physics engine crank
     _world->update(dt);

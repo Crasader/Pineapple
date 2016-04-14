@@ -278,7 +278,7 @@ bool LevelModel::load() {
         addBlender(position);
         
         //Add walls that are offscreen and prevent you from going past end of level
-        position[0] = 0;
+        /*position[0] = 0;
         position[1] = 0;
         position[2] = 0;
         position[3] = DEFAULT_HEIGHT;
@@ -290,7 +290,7 @@ bool LevelModel::load() {
         for(int i = 0; i < WALL_VERTS; i += 2) {
             position[i] += 2 + _length;
         }
-        addWall(position);
+        addWall(position);*/
         
         //End JSON object
         reader.endObject();
@@ -791,7 +791,8 @@ void LevelModel::showDebug(bool flag) {
 void LevelModel::kill(PineappleModel* will) {
     removeObstacle(will);
     clearPineapple();
-    setFailure(true); //TODO: Move failure to main game loop?
+	// TODO: Move failure to main game loop?
+    setFailure(true); 
 }
 
 void LevelModel::kill(KidModel* kid) {
@@ -804,18 +805,6 @@ void LevelModel::kill(KidModel* kid) {
             setFailure(true);
         }
     }
-}
-
-void LevelModel::blendAndKill(PineappleModel* will) {
-    kill(will);
-    
-    //TODO: Animation and sounds
-}
-
-void LevelModel::blendAndKill(KidModel* kid) {
-    kill(kid);
-    
-    //TODO: Animation and sounds
 }
 
 void LevelModel::spikeAndKill(PineappleModel* will) {

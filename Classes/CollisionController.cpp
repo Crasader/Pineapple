@@ -73,12 +73,20 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 }
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
-	_level->blendAndKill(will);
-	//_pSensorFixtures.clear();
+	will->setIsBlended(true);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
-	_level->blendAndKill(kid);
+	kid->setIsBlended(true);
+}
+
+void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
+	_level->kill(will);
+	//_pSensorFixtures.clear();
+}
+
+void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
+	_level->kill(kid);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
@@ -164,6 +172,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 		}
 		// Will x Blender
 		if (bd1->getCollisionClass() == BLENDER_C || bd2->getCollisionClass() == BLENDER_C) {
+			CCLOG("will x blender");
 			handleBlenderCollision(will);
 		}
 		// Will x Spikes
@@ -191,6 +200,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 		}
 		// Kid x Blender
 		if (bd1->getCollisionClass() == BLENDER_C || bd2->getCollisionClass() == BLENDER_C) {
+			CCLOG("kid x blender");
 			handleBlenderCollision(kid);
 		}
 		// Kid x Spikes

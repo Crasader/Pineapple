@@ -351,26 +351,16 @@ public:
      * @param  flag whether to show the debug layer of this game world
      */
     void showDebug(bool flag);
-    
-	/**
-	 * Kills will, removing him from the game world.
-	 */
-	void kill(PineappleModel * will);
 
 	/**
-	 * Kills kid, removing it from the game world.
+	 * Kills will, triggers blending animations and sounds, and removes him from the game world.
+	 */
+	void kill(PineappleModel* will);
+
+	/**
+	 * Kills kid, triggers blending animations and sounds, and removes it from the game world.
 	 */
 	void kill(KidModel* kid);
-
-	/**
-	* Kills will and triggers blending animations and sounds
-	*/
-	void blendAndKill(PineappleModel* will);
-
-	/**
-	* Kills the given kid and triggers blending animations and sounds
-	*/
-	void blendAndKill(KidModel* kid);
 
 	/**
 	* Kills will and triggers death-by-spikes animations and sounds

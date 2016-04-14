@@ -134,7 +134,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         _isCollidingWithButtonSwitch = false;
         _faceRight = true;
         _reachedGoal = false;
-        
+		_isBlended = false;
         _jumpCooldown = 0;
         return true;
     }
@@ -307,7 +307,7 @@ void PineappleModel::update(float dt) {
         _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown - 1 : 0);
     }
     
-    CapsuleObstacle::update(dt);
+	CapsuleObstacle::update(dt);
 }
 
 /**
@@ -344,6 +344,31 @@ void PineappleModel::animate() {
 		}
 		_willWalkcycle->setFrame(_willWalkcycleFrame);
 	}
+}
+
+/**
+* Make Will spiral towards blender blades
+*
+* @param y y-coordinate of the blender
+*/
+void PineappleModel::spiral(float y) {
+	float val = 0.3f;
+	
+	// near blades
+	if (abs(getY() - y) < val) {
+		setY(y);
+	}
+	// above blades
+	else if (getY() > y) {
+		setY(getY() - val);
+	}
+	// below blades
+	else {
+		setY(getY() + val);
+	}
+
+	// move towards left side of screen
+	setX(getX() - val);
 }
 
 

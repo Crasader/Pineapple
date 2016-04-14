@@ -177,6 +177,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         _index = idx;
         _isCollidingWithJello = false;
 		_reachedGoal = false;
+		_isBlended = false;
         return true;
     }
     return false;
@@ -303,7 +304,7 @@ void KidModel::update(float dt) {
 */
 void KidModel::animate() {
 	// in the air
-	if (getVY() < -0.2f) {
+	if (abs(getVY()) > 0.2f) {
 		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
@@ -318,6 +319,32 @@ void KidModel::animate() {
 		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
+}
+
+/**
+* Make the kid spiral towards blender blades
+*
+* @param x level offset
+* @param y y-coordinate of the blender
+*/
+void KidModel::spiral(float y) {
+	float val = 0.3f;
+
+	// near blades
+	if (abs(getY() - y) < val) {
+		setY(y);
+	}
+	// above blades
+	else if (getY() > y) {
+		setY(getY() - val);
+	}
+	// below blades
+	else {
+		setY(getY() + val);
+	}
+
+	// move towards left side of screen
+	setX(getX() - val);
 }
 
 

@@ -14,6 +14,9 @@
 //#include "CollisionObjectModel.h"
 
 using namespace cocos2d;
+
+/** Identifier to allow us to track the sensor in ContactListener */
+#define BLENDER_SENSOR     "blendersensor"
  
 #pragma mark -
 #pragma mark Physics Constants
@@ -38,6 +41,13 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
 
 protected:
+	/** Ground sensor to represent blades */
+	b2Fixture*  _sensorFixture;
+	/** Reference to the sensor name (since a constant cannot have a pointer) */
+	std::string _sensorName;
+	/** The node for debugging the sensor */
+	WireNode* _sensorNode;
+
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
@@ -113,6 +123,15 @@ public:
      * @return the upper limit on blender left-right movement.
      */
     float getSpeed() const { return BLENDER_SPEED; }
+
+	/**
+	* Returns the name of the ground sensor
+	*
+	* This is used by ContactListener
+	*
+	* @return the name of the ground sensor
+	*/
+	std::string* getSensorName() { return &_sensorName; }
     
     
 #pragma mark Physics Methods
@@ -161,7 +180,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the blender values beyond
      * the defaults.  To use a BlenderModel, you must call init().
      */
-    BlenderModel() : BoxObstacle() { }
+    BlenderModel() : BoxObstacle(), _sensorFixture(nullptr), _sensorName(BLENDER_SENSOR) { }
 
     /**
      * Initializes a new blender at the origin.

@@ -67,6 +67,8 @@ protected:
 	AnimationNode* _kidWalkcycle;
 	/** Frame counter for walkcycle animation */
 	float _kidWalkcycleFrame;
+	/** Whether kid is spiraling towards blender blades */
+	bool _isBlended;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -239,9 +241,14 @@ public:
     bool isFacingRight() const { return true; }
 
 	/**
-	* Initialize the filmstrip for walking animation
+	 * Sets whether the kid is spiralling towards the blender blades 
+	 */
+	void setIsBlended(bool blending) { _isBlended = blending; }
+
+	/**
+	* Returns true if the kid is spiralling towards the blender blades
 	*/
-	void initAnimation(Texture2D* image, float scale);
+	bool getIsBlended() { return _isBlended; }
     
     
 #pragma mark Physics Methods
@@ -283,6 +290,14 @@ public:
 	* Animate the kid if they're moving
 	*/
 	void animate();
+
+	/**
+	* Make the kid spiral towards blender blades
+	*
+	* @param x level offset
+	* @param y y-coordinate of the blender
+	*/
+	void spiral(float y);
 
 #pragma mark Drawing Methods
     /**

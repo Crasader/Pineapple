@@ -17,7 +17,11 @@
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define BLENDER_HSHRINK  0.72f
 /** The Blender specific scaling */
-#define BLENDER_SCALE      0.75f
+#define BLENDER_SCALE    0.75f
+/** The amount to shrink the sensor fixture (horizontally) relative to the image */
+#define BLENDER_SSHRINK  0.9f
+/** Height of the sensor attached to the player's feet */
+#define SENSOR_WIDTH     0.2f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -135,6 +139,27 @@ void BlenderModel::createFixtures() {
     }
 
     BoxObstacle::createFixtures();
+	b2FixtureDef sensorDef;
+	sensorDef.density = 0.5f;
+	sensorDef.isSensor = true;
+
+	// Sensor dimensions
+	b2Vec2 corners[4];
+	corners[0].x = -SENSOR_WIDTH / 2.0f;
+	corners[0].y =  BLENDER_SSHRINK*getHeight() / 2.0f;
+	corners[1].x = -SENSOR_WIDTH / 2.0f;
+	corners[1].y = -BLENDER_SSHRINK*getHeight() / 2.0f;
+	corners[2].x =  SENSOR_WIDTH / 2.0f;
+	corners[2].y = -BLENDER_SSHRINK*getHeight() / 2.0f;
+	corners[3].x =  SENSOR_WIDTH / 2.0f;
+	corners[3].y =  BLENDER_SSHRINK*getHeight() / 2.0f;
+
+	b2PolygonShape sensorShape;
+	sensorShape.Set(corners, 4);
+
+	sensorDef.shape = &sensorShape;
+	_sensorFixture = _body->CreateFixture(&sensorDef);
+	_sensorFixture->SetUserData(getSensorName());
 }
 
 /**
@@ -201,6 +226,20 @@ void BlenderModel::resetSceneNode() {
  */
 void BlenderModel::resetDebugNode() {
     BoxObstacle::resetDebugNode();
+
+	float w = SENSOR_WIDTH*_drawScale.x;
+	float h = BLENDER_SSHRINK*_dimension.height*_drawScale.y;
+	Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+	poly.traverse(Poly2::Traversal::INTERIOR);
+
+	if (_sensorNode != nullptr) {
+		_debug->removeChild(_sensorNode);
+	}
+
+	_sensorNode = WireNode::createWithPoly(poly);
+	_sensorNode->setPosition(Vec2(0.35f*_debug->getContentSize().width, 0.5f*_debug->getContentSize().height));
+	_sensorNode->setColor(DEBUG_COLOR);
+	_debug->addChild(_sensorNode);
 }
 
 

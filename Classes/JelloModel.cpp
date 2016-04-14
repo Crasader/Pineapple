@@ -202,7 +202,7 @@ void JelloModel::update(float dt) {
 * Animate the resting Jello
 */
 void JelloModel::animate() {
-	_jelloRestcycleFrame += 0.5f;
+	_jelloRestcycleFrame += 0.25f;
 	int tmp = (int)rint(_jelloRestcycleFrame);
 	_jelloRestcycle->setFrame(tmp % JELLO_FRAME_COUNT);
 }
