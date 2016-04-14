@@ -20,7 +20,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
 
 	tloader->loadAsync(JELLO_TEXTURE, "textures/jello.png");
-	tloader->loadAsync(SPIKE_TEXTURE, "textures/spikes.png");
+	tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
 
 	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
 

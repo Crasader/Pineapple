@@ -208,6 +208,7 @@ bool LevelModel::load() {
                 } else if (layerName == JELLO_OBJECT_GROUP) {
                     addJello(position);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
+                    position[0] += 0.5;
                     addSpikes(position);
                 } else if (layerName == WILL_OBJECT_GROUP) {
                     addPineapple(position);
