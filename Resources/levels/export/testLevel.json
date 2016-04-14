@@ -314,23 +314,7 @@
          "draworder":"topdown",
          "height":0,
          "name":"Jello",
-         "objects":[
-                {
-                 "gid":11,
-                 "height":64,
-                 "id":13,
-                 "name":"jello",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":640,
-                 "y":640
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -385,7 +369,7 @@
                  "visible":true,
                  "width":64,
                  "x":640,
-                 "y":576
+                 "y":640
                 }, 
                 {
                  "gid":21,

@@ -32,14 +32,12 @@
   <object id="42" gid="12" x="704" y="768" width="128" height="128"/>
   <object id="64" gid="12" x="1664" y="768" width="128" height="128"/>
  </objectgroup>
- <objectgroup name="Jello">
-  <object id="13" name="jello" gid="11" x="640" y="640" width="64" height="64"/>
- </objectgroup>
+ <objectgroup name="Jello"/>
  <objectgroup name="Goal">
   <object id="21" name="goal" gid="51" x="3776" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups">
-  <object id="31" gid="21" x="640" y="576" width="64" height="64"/>
+  <object id="31" gid="21" x="640" y="640" width="64" height="64"/>
   <object id="44" gid="21" x="1344" y="512" width="64" height="64"/>
   <object id="45" gid="21" x="1344" y="448" width="64" height="64"/>
   <object id="46" gid="21" x="1344" y="384" width="64" height="64"/>

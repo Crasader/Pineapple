@@ -1,6 +1,7 @@
 #include "CollisionController.h"
 #include <Box2D/Dynamics/Contacts/b2Contact.h>
 #include <Box2D/Collision/b2Collision.h>
+#include "platform/CCDevice.h"
 #include "PineappleModel.h"
 #include "BlenderModel.h"
 #include "KidModel.h"
@@ -74,11 +75,13 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	_level->blendAndKill(will);
+    Device::vibrate(VIBRATION_DURATION);
 	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
 	_level->blendAndKill(kid);
+    Device::vibrate(VIBRATION_DURATION);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
