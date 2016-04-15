@@ -147,7 +147,7 @@ bool LevelModel::load() {
         float* position = new float[WALL_VERTS];
         
         _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        
+        _isActive = false;
         
         JSONReader reader;
         reader.initWithFile(_file);
@@ -308,7 +308,7 @@ void LevelModel::unload() {
         //TODO - pre-nulling cleanup
         
         if (_pineapple != nullptr) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(_pineapple);
                 _worldnode->removeChild(_pineapple->getSceneNode());
                 _debugnode->removeChild(_pineapple->getDebugNode());
@@ -317,7 +317,7 @@ void LevelModel::unload() {
             _pineapple = nullptr;
         }
         if (_goalDoor != nullptr) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(_goalDoor);
                 _worldnode->removeChild(_goalDoor->getSceneNode());
                 _debugnode->removeChild(_goalDoor->getDebugNode());
@@ -326,7 +326,7 @@ void LevelModel::unload() {
             _goalDoor = nullptr;
         }
         if(_blender != nullptr) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(_blender);
                 _worldnode->removeChild(_blender->getSceneNode());
                 _debugnode->removeChild(_blender->getDebugNode());
@@ -337,7 +337,7 @@ void LevelModel::unload() {
         
         for(int i = 0; i < KID_COUNT; i++) {
             if (_kids[i] != nullptr) {
-                if (_world != nullptr) {
+                if (_isActive) {
                     _world->removeObstacle(_kids[i]);
                     _worldnode->removeChild(_kids[i]->getSceneNode());
                     _debugnode->removeChild(_kids[i]->getDebugNode());
@@ -348,7 +348,7 @@ void LevelModel::unload() {
         }
         
         for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -358,7 +358,7 @@ void LevelModel::unload() {
         _spikes.clear();
         
         for(auto it = _walls.begin(); it != _walls.end(); ++it) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -372,7 +372,7 @@ void LevelModel::unload() {
         _walls.clear();
         
         for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -382,7 +382,7 @@ void LevelModel::unload() {
         _jellos.clear();
         
         for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -392,7 +392,7 @@ void LevelModel::unload() {
         _crushables.clear();
         
         for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -402,7 +402,7 @@ void LevelModel::unload() {
         _buttonSwitches.clear();
         
         for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -424,6 +424,7 @@ void LevelModel::unload() {
         _rootnode=nullptr;
         
         _isUnloaded = true;
+        _isActive = false;
     }
 }
 
@@ -785,6 +786,9 @@ void LevelModel::setRootNode(Node* node) {
             }
         }
     }
+    
+    //Set that this is active
+    _isActive = true;
 }
 
 /**
