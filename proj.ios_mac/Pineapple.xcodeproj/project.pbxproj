@@ -11,6 +11,8 @@
 		0313B5EA1CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5E71CB3325000C9CD4C /* ButtonSwitchModel.cpp */; };
 		0313B5ED1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */; };
 		0313B5EE1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */; };
+		0373D6F01CBF205A00B00A7E /* PauseController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0373D6EE1CBF205A00B00A7E /* PauseController.cpp */; };
+		0373D6F11CBF205A00B00A7E /* PauseController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0373D6EE1CBF205A00B00A7E /* PauseController.cpp */; };
 		1AC6FB21180E996B004C840B /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */; };
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -156,6 +158,8 @@
 		0313B5E81CB3325000C9CD4C /* ButtonSwitchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonSwitchModel.h; sourceTree = "<group>"; };
 		0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoveablePlatformModel.cpp; sourceTree = "<group>"; };
 		0313B5EC1CB336D500C9CD4C /* MoveablePlatformModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveablePlatformModel.h; sourceTree = "<group>"; };
+		0373D6EE1CBF205A00B00A7E /* PauseController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PauseController.cpp; sourceTree = "<group>"; };
+		0373D6EF1CBF205A00B00A7E /* PauseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PauseController.h; sourceTree = "<group>"; };
 		037D90E31C98FA0C001C332F /* SpikeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpikeModel.cpp; sourceTree = "<group>"; };
 		037D90E41C98FA0C001C332F /* SpikeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpikeModel.h; sourceTree = "<group>"; };
 		03E256121C991AF0002FB07E /* CrushableModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrushableModel.cpp; sourceTree = "<group>"; };
@@ -449,6 +453,8 @@
 				4072DF6E1C9F43F900F7DAA4 /* LoadingScreenController.h */,
 				405CBEB21C7D14DF004AB5A0 /* PineappleRoot.cpp */,
 				405CBEB11C7D14DF004AB5A0 /* PineappleRoot.h */,
+				0373D6EE1CBF205A00B00A7E /* PauseController.cpp */,
+				0373D6EF1CBF205A00B00A7E /* PauseController.h */,
 				404380C11CC09912003BE560 /* AbsScreenController.h */,
 			);
 			name = Controller;
@@ -706,6 +712,7 @@
 				4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */,
 				4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */,
 				403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */,
+				0373D6F01CBF205A00B00A7E /* PauseController.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				0313B5ED1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */,
 				403B05751CA37B5E003F47CB /* PineappleModel.cpp in Sources */,
@@ -744,6 +751,7 @@
 				4072DF961C9F68B300F7DAA4 /* PineappleRoot.cpp in Sources */,
 				0313B5EE1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */,
 				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,
+				0373D6F11CBF205A00B00A7E /* PauseController.cpp in Sources */,
 				4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */,
 				4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */,
 				0313B5EA1CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */,

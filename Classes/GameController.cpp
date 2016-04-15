@@ -113,6 +113,8 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
     
+    _pause->init(this, _worldnode, _assets, root, _input);
+
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _winnode->setString(WIN_MESSAGE);
@@ -182,6 +184,8 @@ void GameController::dispose() {
     }
     _worldnode = nullptr;
     _background = nullptr;
+    _pause->releaseController();
+    _pause = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
     if (_rootnode != nullptr) {
@@ -314,6 +318,31 @@ void GameController::update(float dt) {
         return;
     }
     
+    _input->update(dt);
+    
+    // Process the toggled key commands
+    if (_input->didPause()) {
+        // TODO(ekotlikoff): PAUSE
+        if (!_pause->isPaused()) {
+            _pause->pause();
+            return;
+        } else {
+            _pause->unPause();
+        }
+    }
+    if (_input->didDebug()) { setDebug(!isDebug()); }
+    if (_input->didReset()) {
+        reset();
+        return;
+    }
+    if (_input->didExit())  {
+        setTransitionStatus(TRANSITION_TO_EXIT);
+        return;
+    }
+    if (_pause->isPaused()) {
+        return;
+    }
+    
     // Check to see if new level loaded yet
     if (_loadnode->isVisible()) {
         if (_assets->isComplete()) {
@@ -323,8 +352,6 @@ void GameController::update(float dt) {
             return;
         }
     }
-    
-    _input->update(dt);
     
     if (_level->haveFailed() && _countdown == -1) {
         setFailure(true);
@@ -341,17 +368,6 @@ void GameController::update(float dt) {
             _level->getKid(i)->dampTowardsWalkspeed();
             _level->getKid(i)->animate();
         }
-    }
-    
-    // Process the toggled key commands
-    if (_input->didDebug()) { setDebug(!isDebug()); }
-    if (_input->didReset()) {
-        reset();
-        return;
-    }
-    if (_input->didExit())  {
-        setTransitionStatus(TRANSITION_TO_EXIT);
-        return;
     }
     
     // Process the movement

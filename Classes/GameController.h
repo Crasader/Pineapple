@@ -22,6 +22,7 @@
 
 #include "AbsScreenController.h"
 #include "InputController.h"
+#include "PauseController.h"
 #include "LevelModel.h"
 #include "BackgroundView.h"
 
@@ -79,6 +80,9 @@ protected:
     
     /** Controller for abstracting out input away from layer */
     InputController* _input;
+    /** Controller for handling the pause screen */
+    PauseController* _pause = PauseController::getController();
+    
     /** Controller for collision handling */
     CollisionController* _collision;
     

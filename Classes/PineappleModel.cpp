@@ -21,6 +21,7 @@
 #define PINEAPPLE_SSHRINK			0.9f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT				0.07f
+#define SENSOR_V_OFFSET             -0.075f
 /** The density of the character */
 #define PINEAPPLE_DENSITY			0.5f
 /** The impulse for the character jump */
@@ -184,13 +185,13 @@ void PineappleModel::createFixtures() {
     // Sensor dimensions
     b2Vec2 corners[4];
     corners[0].x = -PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + SENSOR_HEIGHT) / 2.0f;
+    corners[0].y = SENSOR_V_OFFSET + (-getHeight() + SENSOR_HEIGHT) / 2.0f;
     corners[1].x = -PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - SENSOR_HEIGHT) / 2.0f;
+    corners[1].y = SENSOR_V_OFFSET + (-getHeight() - SENSOR_HEIGHT) / 2.0f;
     corners[2].x = PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - SENSOR_HEIGHT) / 2.0f;
+    corners[2].y = SENSOR_V_OFFSET + (-getHeight() - SENSOR_HEIGHT) / 2.0f;
     corners[3].x = PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + SENSOR_HEIGHT) / 2.0f;
+    corners[3].y = SENSOR_V_OFFSET + (-getHeight() + SENSOR_HEIGHT) / 2.0f;
     
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);

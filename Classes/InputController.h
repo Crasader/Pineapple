@@ -67,6 +67,10 @@ private:
     bool  _keyGrow;
     /** whether the shrink key is down */
     bool  _keyShrink;
+    /** whether the pause key is down */
+    bool _keyPause;
+    /** whether reset is overridden by pause menu this frame */
+    bool _resetOverride = false;
 
     
 protected:
@@ -109,6 +113,8 @@ protected:
     bool _growPressed;
     /** Whether the shrink action was chosen */
     bool _shrinkPressed;
+    /** Whether the pause action was chosen */
+    bool _pausePressed;
 
     bool oneFingerDown() {
         return _id1 == -1 || _id2 == -1;
@@ -329,7 +335,7 @@ public:
      *
      * @return true if the reset button was pressed.
      */
-    bool didReset() const { return _resetPressed; }
+    bool didReset() { bool o = _resetPressed || _resetOverride; _resetOverride = false; return o; }
     
     /**
      * Returns true if the player wants to go toggle the debug mode.
@@ -338,6 +344,8 @@ public:
      */
     bool didDebug() const { return _debugPressed; }
     
+    bool didPause() const { return _pausePressed; }
+    
     /**
      * Returns true if the exit button was pressed.
      *
@@ -345,6 +353,9 @@ public:
      */
     bool didExit() const { return _exitPressed; }
     
+    void clear() { this->_keyLeft = false; this->_keyRight = false; }
+    
+    void setReset() { _resetOverride = true; }
     
 #pragma mark -
 #pragma mark Touch Callbacks
