@@ -9,7 +9,8 @@ const string PauseController::BUTTON_FILES[NUM_BUTTONS*2] = {"textures/buttons/r
 
 PauseController* PauseController::PAUSE_CONTROLLER = nullptr;
 
-void PauseController::init(Node* worldNode, SceneManager* assets, RootLayer* root, InputController* input) {
+void PauseController::init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input) {
+    _gameController = gameController;
     _rootNode = root;
     _pauseNode = Node::create();
     _pauseNode->retain();
@@ -52,12 +53,16 @@ void PauseController::init(Node* worldNode, SceneManager* assets, RootLayer* roo
             case 2: // level select
                 button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
                     if (type == ui::Widget::TouchEventType::ENDED) {
+                        this->unPause();
+                        _gameController->setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
                     }
                 });
                 break;
             case 3: // quit
                 button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
                     if (type == ui::Widget::TouchEventType::ENDED) {
+                        this->unPause();
+                        _gameController->setTransitionStatus(TRANSITION_TO_EXIT);
                     }
                 });
                 break;

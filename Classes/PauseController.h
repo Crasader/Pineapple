@@ -12,6 +12,7 @@
 #include "Const.h"
 #include "Texture.h"
 #include "InputController.h"
+#include "AbsScreenController.h"
 
 #define PAUSE_OVERLAY_Z_ORDER  1
 #define BUTTON_Z_ORDER         2
@@ -50,7 +51,7 @@ public:
         return _isPaused;
     }
     
-    void init(Node* worldNode, SceneManager* assets, RootLayer* root, InputController* input);
+    void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input);
     
     static PauseController* getController() {
         if (PAUSE_CONTROLLER) {
@@ -74,9 +75,11 @@ private:
         }
         _pauseNode->release();
     }
+    
     // static reference to singleton
     static PauseController* PAUSE_CONTROLLER;
     InputController* _inputController = nullptr;
+    
     bool _isPaused = false;
     // reference to worldNode
     Node* _rootNode = nullptr;
@@ -86,6 +89,10 @@ private:
     Button* _buttons[NUM_BUTTONS];
     // background overlay
     PolygonNode* _backgroundOverlay;
+    
+    /** Reference to the game controller this is pausing for */
+    AbsScreenController* _gameController;
+    
     const static string BUTTON_FILES[NUM_BUTTONS*2];
     
 };

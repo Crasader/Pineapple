@@ -1,5 +1,5 @@
 //
-//  GameController.h
+//  LevelSelectController.h
 //  PlatformerDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -17,14 +17,11 @@
 //  Author: Walker White
 //  Version: 1/15/15
 //
-#ifndef __PF_GAME_CONTROLLER_H__
-#define __PF_GAME_CONTROLLER_H__
+#ifndef __PF_LEVEL_SELECT_CONTROLLER_H__
+#define __PF_LEVEL_SELECT_CONTROLLER_H__
 
-#include "AbsScreenController.h"
 #include "InputController.h"
-#include "PauseController.h"
-#include "LevelModel.h"
-#include "BackgroundView.h"
+#include "AbsScreenController.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -41,7 +38,7 @@ using namespace cocos2d;
 using namespace std;
 
 #pragma mark -
-#pragma mark GameController
+#pragma mark LevelSelectController
 /**
  * Instance is a controls the gameplay for the demo.
  *
@@ -51,57 +48,23 @@ using namespace std;
  * game root (which has scaled the scene graph to fix the device with the
  * desired aspect ratio).
  */
-class GameController : public AbsScreenController {
+class LevelSelectController : public AbsScreenController {
 protected:    
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
-    /** Reference to the win message label */
-    Label* _winnode;
-    /** Reference to the lose message label */
-    Label* _losenode;
-    /** Reference to the reset message label */
-    Label* _loadnode;
     /** The Box2D world */
     WorldController* _world;
     
     /** The scene manager for this game demo */
     SceneManager* _assets;
-    /** The background view */
-    BackgroundView* _background;
-    /** Reference to current level */
-    LevelModel* _level;
-    
-    /** Name of the level that is currently loaded */
-    string _levelKey;
-    /** Filename of the level that is currently loaded */
-    string _levelFile;
     
     /** Controller for abstracting out input away from layer */
     InputController* _input;
-    /** Controller for handling the pause screen */
-    PauseController* _pause = PauseController::getController();
     
-    /** Controller for collision handling */
-    CollisionController* _collision;
-    
-    /** Whether or note this game is still active */
-    bool _active;
-    /** Whether we have completed this "game" */
-    bool _complete;
-    /** Whether or not debug mode is active */
+    /** True iff we should display the debug nodes of the physics bodies */
     bool _debug;
-    /** Whether we have failed at this world (and need a reset) */
-    bool _failed;
-    /** Countdown active for winning or losing */
-    int _countdown;
-	/** Distance between start of level and left side of screen */
-    float _levelOffset;
-    
-    /** Mark set to handle more sophisticated collision callbacks */
-    unordered_set<b2Fixture*> _sensorFixtures;
-
     
 #pragma mark Internal Object Management
     /**
@@ -135,12 +98,12 @@ public:
      *
      * The game world is scaled so that the screen coordinates do not agree
      * with the Box2d coordinates.  This initializer uses the default scale.
-     * 
+     *
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
     bool init(Node* root, InputController* input);
-
+    
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -164,18 +127,6 @@ public:
 #pragma mark -
 #pragma mark State Access
     /**
-     * Returns true if the gameplay controller is currently active
-     *
-     * @return true if the gameplay controller is currently active
-     */
-    bool isActive( ) const { return _active; }
-
-    /**
-     * Returns true once this has been initted 
-     */
-    bool isInitted() const { return _isInitted; }
-    
-    /**
      * Returns true if debug mode is active.
      *
      * If true, all objects will display their physics bodies.
@@ -193,43 +144,6 @@ public:
      */
     void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
     
-    /**
-     * Returns true if the level is completed.
-     *
-     * If true, the level will advance after a countdown
-     *
-     * @return true if the level is completed.
-     */
-    bool isComplete( ) const { return _complete; }
-    
-    /**
-     * Sets whether the level is completed.
-     *
-     * If true, the level will advance after a countdown
-     *
-     * @param value whether the level is completed.
-     */
-    void setComplete(bool value);
-    
-    /**
-     * Returns true if the level is failed.
-     *
-     * If true, the level will reset after a countdown
-     *
-     * @return true if the level is failed.
-     */
-    bool isFailure() const { return _failed; }
-    
-    /**
-     * Sets whether the level is failed.
-     *
-     * If true, the level will reset after a countdown
-     *
-     * @param value whether the level is failed.
-     */
-    void setFailure(bool value);
-    
-    
 #pragma mark -
 #pragma mark Allocation
     /**
@@ -238,7 +152,7 @@ public:
      * This constructor does not allocate any objects or start the controller.
      * This allows us to use a controller without a heap pointer.
      */
-    GameController();
+    LevelSelectController();
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -246,39 +160,20 @@ public:
      * This method is different from dispose() in that it ALSO shuts off any
      * static resources, like the input controller.
      */
-    ~GameController();
+    ~LevelSelectController();
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose();
-
     
-#pragma mark -
-#pragma mark Collision Handling
-    
-    /**
-     * Checks for victory, triggering it if it occurs
-     * Specifically, sees if every living child has reached the goal
-     *
-     * @return true if victory has occurred
-     */
-    bool checkForVictory();
-
+    ///**
+    // * Preloads all of the assets necessary for this game world
+    // */
+    //void preload();
     
 #pragma mark -
 #pragma mark Gameplay Handling
-    /**
-     * Resets the status of the game so that we can play again.
-     *
-     * This method disposes of the world and creates a new one.
-     */
-    void reset() ;
-    
-    /** Called after the asynced level reloading finishes.
-      * a helper for reset() */
-    void onReset();
-
     /**
      * Executes the core gameplay loop of this world.
      *
@@ -291,11 +186,6 @@ public:
      */
     void update(float dt) override;
 
-	/**
-	* Compute offsets for horizontal scrolling.
-	*/
-	void handleScrolling();
-
 };
 
-#endif /* defined(__PF_GAME_CONTROLLER_H__) */
+#endif /* defined(__PF_LEVEL_SELECT_CONTROLLER_H__) */

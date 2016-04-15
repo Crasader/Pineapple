@@ -44,7 +44,6 @@ using namespace cocos2d;
  * This allows us to use a controller without a heap pointer.
  */
 GameController::GameController() :
-_rootnode(nullptr),
 _worldnode(nullptr),
 _debugnode(nullptr),
 _world(nullptr),
@@ -66,8 +65,8 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(RootLayer* root) {
-    return init(root,SCREEN);
+bool GameController::init(Node* root, InputController* input) {
+    return init(root,input,SCREEN);
 }
 
 /**
@@ -88,7 +87,12 @@ bool GameController::init(RootLayer* root) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(RootLayer* root, const Rect& rect) {
+bool GameController::init(Node* root, InputController* input, const Rect& rect) {
+    _rootnode = root;
+    _rootnode->retain();
+    
+    _input = input;
+    
     _levelKey = LEVEL_ONE_KEY;
     _levelFile = LEVEL_ONE_FILE;
     
@@ -98,16 +102,6 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
     Vec2 center(dimen.width/2.0f,dimen.height/2.0f);
-    
-    // Create the scale and notify the input handler
-    Vec2 scale = Vec2(root->getContentSize().width/rect.size.width,
-                      root->getContentSize().height/rect.size.height);
-    Rect screen = rect;
-    screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
-    screen.size.width *= scale.x;  screen.size.height *= scale.y;
-    
-    _input.init(screen);
-    _input.start();
     
     _level->setRootNode(root);
     
@@ -119,7 +113,7 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
     
-    _pause->init(_worldnode, _assets, root, &_input);
+    _pause->init(this, _worldnode, _assets, root, _input);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
@@ -148,9 +142,6 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     
     _loadnode->setVisible(false);
     
-    _rootnode = root;
-    _rootnode->retain();
-    
     _collision->setLevel(_level);
     
     _levelOffset = 0.0f;
@@ -170,6 +161,7 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     setComplete(false);
     setDebug(false);
     setFailure(false);
+    _isInitted = true;
     return true;
 }
 
@@ -187,15 +179,19 @@ GameController::~GameController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameController::dispose() {
-    _level->unload();
+    if (_level != nullptr) {
+        _level->unload();
+    }
     _worldnode = nullptr;
     _background = nullptr;
     _pause->releaseController();
     _pause = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
-    _rootnode->removeAllChildren();
-    _rootnode->release();
+    if (_rootnode != nullptr) {
+        _rootnode->removeAllChildren();
+        _rootnode->release();
+    }
     _rootnode = nullptr;
 }
 
@@ -290,14 +286,14 @@ void GameController::setFailure(bool value){
     
 }
 
-void handleAvatarGrowth(float cscale, InputController& _input, PineappleModel* _avatar) {
+void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _avatar) {
     int size = 0;
     float scale = 1.0f;
-    if (_input.didGrow()) {
+    if (_input->didGrow()) {
         size = _avatar->grow();
         if (size == 2)
             scale = PINEAPPLE_GROW_SCALE;
-    } else if (_input.didShrink()) {
+    } else if (_input->didShrink()) {
         size = _avatar->shrink();
         if (size == 2)
             scale = PINEAPPLE_SHRINK_SCALE;
@@ -322,10 +318,10 @@ void GameController::update(float dt) {
         return;
     }
     
-    _input.update(dt);
+    _input->update(dt);
     
     // Process the toggled key commands
-    if (_input.didPause()) {
+    if (_input->didPause()) {
         // TODO(ekotlikoff): PAUSE
         if (!_pause->isPaused()) {
             _pause->pause();
@@ -334,13 +330,13 @@ void GameController::update(float dt) {
             _pause->unPause();
         }
     }
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) {
+    if (_input->didDebug()) { setDebug(!isDebug()); }
+    if (_input->didReset()) {
         reset();
         return;
     }
-    if (_input.didExit())  {
-        _rootnode->shutdown();
+    if (_input->didExit())  {
+        setTransitionStatus(TRANSITION_TO_EXIT);
         return;
     }
     if (_pause->isPaused()) {
@@ -376,8 +372,8 @@ void GameController::update(float dt) {
     
     // Process the movement
     if(_level->getPineapple() != nullptr) {
-        _level->getPineapple()->setMovement(_input.getHorizontal()*_level->getPineapple()->getForce());
-        _level->getPineapple()->setJumping( _input.didJump());
+        _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
+        _level->getPineapple()->setJumping( _input->didJump());
         float cscale = Director::getInstance()->getContentScaleFactor();
 
         handleAvatarGrowth(cscale, _input, _level->getPineapple());
