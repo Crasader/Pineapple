@@ -119,7 +119,7 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
     
-    _pause.init(_worldnode, _assets, root);
+    _pause->init(_worldnode, _assets, root, &_input, &_levelOffset);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
@@ -190,9 +190,10 @@ void GameController::dispose() {
     _level->unload();
     _worldnode = nullptr;
     _background = nullptr;
+    _pause->releaseController();
+    _pause = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
-    _pause.~PauseController();
     _rootnode->removeAllChildren();
     _rootnode->release();
     _rootnode = nullptr;
@@ -326,13 +327,11 @@ void GameController::update(float dt) {
     // Process the toggled key commands
     if (_input.didPause()) {
         // TODO(ekotlikoff): PAUSE
-        if (!_paused) {
-            _paused = true;
-            _pause.pause();
+        if (!_pause->isPaused()) {
+            _pause->pause();
             return;
         } else {
-            _paused = false;
-            _pause.unPause();
+            _pause->unPause();
         }
     }
     if (_input.didDebug()) { setDebug(!isDebug()); }
@@ -344,7 +343,7 @@ void GameController::update(float dt) {
         _rootnode->shutdown();
         return;
     }
-    if (_paused) {
+    if (_pause->isPaused()) {
         return;
     }
     

@@ -69,6 +69,8 @@ private:
     bool  _keyShrink;
     /** whether the pause key is down */
     bool _keyPause;
+    /** whether reset is overridden by pause menu this frame */
+    bool _resetOverride = false;
 
     
 protected:
@@ -333,7 +335,7 @@ public:
      *
      * @return true if the reset button was pressed.
      */
-    bool didReset() const { return _resetPressed; }
+    bool didReset() { bool o = _resetPressed || _resetOverride; _resetOverride = false; return o; }
     
     /**
      * Returns true if the player wants to go toggle the debug mode.
@@ -351,6 +353,9 @@ public:
      */
     bool didExit() const { return _exitPressed; }
     
+    void clear() { this->_keyLeft = false; this->_keyRight = false; }
+    
+    void setReset() { _resetOverride = true; }
     
 #pragma mark -
 #pragma mark Touch Callbacks

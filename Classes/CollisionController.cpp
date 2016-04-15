@@ -30,6 +30,7 @@ void CollisionController::setLevel(LevelModel* level) {
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
     will->setGrounded(true);
+    cout << "GROUNDED TRUE\n";
     _pSensorFixtures.emplace(fix);
 }
 
@@ -48,6 +49,7 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 			body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
 			will->setJumping(true);
 			will->setGrounded(false);
+            cout << "GROUNDED FALSE\n";
 		}
 	}
 }
@@ -235,6 +237,7 @@ void CollisionController::endContact(b2Contact* contact) {
         (bd2->getCollisionClass() % 2 == 0 && fix1->GetUserData() == feetSensorName)) {        _pSensorFixtures.erase(bd1 == will ? fix2 : fix1);
         if (_pSensorFixtures.empty()) {
             will->setGrounded(false);
+            cout << "GROUNDED FALSE\n";
         }
     }
     

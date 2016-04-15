@@ -83,8 +83,7 @@ protected:
     /** Controller for abstracting out input away from layer */
     InputController _input;
     /** Controller for handling the pause screen */
-    PauseController _pause;
-    bool _paused = false;
+    PauseController* _pause = PauseController::getController();
     
     /** Controller for collision handling */
     CollisionController* _collision;
