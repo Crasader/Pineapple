@@ -41,6 +41,9 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_full.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
+    
+    // PAUSE SCREEN
+    
     tloader->loadAsync(PAUSE_SCREEN_OVERLAY, "textures/pause-overlay.png");
     
     // MOVEABLE PLATFORMS

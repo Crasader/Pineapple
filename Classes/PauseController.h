@@ -14,7 +14,7 @@
 
 #define PAUSE_OVERLAY_Z_ORDER  100
 #define BUTTON_Z_ORDER         150
-#define NUM_BUTTONS            3
+#define NUM_BUTTONS            4
 #define BUTTON_HEIGHT          400.0f
 
 using namespace cocos2d;
@@ -58,6 +58,7 @@ private:
     Button* _buttons[NUM_BUTTONS];
     // background overlay
     PolygonNode* _backgroundOverlay;
+    const static string BUTTON_FILES[NUM_BUTTONS*2];
     
 };
 
