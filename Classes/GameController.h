@@ -20,6 +20,7 @@
 #ifndef __PF_GAME_CONTROLLER_H__
 #define __PF_GAME_CONTROLLER_H__
 
+#include "AbsScreenController.h"
 #include "InputController.h"
 #include "LevelModel.h"
 #include "BackgroundView.h"
@@ -49,10 +50,8 @@ using namespace std;
  * game root (which has scaled the scene graph to fix the device with the
  * desired aspect ratio).
  */
-class GameController {
+class GameController : public AbsScreenController {
 protected:    
-    /** Reference to the root node of the scene graph */
-    RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */

@@ -21,6 +21,7 @@
 #define __PF_LEVEL_SELECT_CONTROLLER_H__
 
 #include "InputController.h"
+#include "AbsScreenController.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -47,7 +48,7 @@ using namespace std;
  * game root (which has scaled the scene graph to fix the device with the
  * desired aspect ratio).
  */
-class LevelSelectController {
+class LevelSelectController : public AbsScreenController {
 protected:    
     /** Reference to the root node of the scene graph */
     RootLayer* _rootnode;

@@ -44,7 +44,6 @@ using namespace cocos2d;
  * This allows us to use a controller without a heap pointer.
  */
 GameController::GameController() :
-_rootnode(nullptr),
 _worldnode(nullptr),
 _debugnode(nullptr),
 _world(nullptr),
