@@ -119,7 +119,7 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
     
-    _pause->init(_worldnode, _assets, root, &_input, &_levelOffset);
+    _pause->init(_worldnode, _assets, root, &_input);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
