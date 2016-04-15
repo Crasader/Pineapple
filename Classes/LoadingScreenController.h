@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "LevelModel.h"
 #include "Levels.h"
+#include "AbsScreenController.h"
 
 /** Font size for loading message */
 #define DEFAULT_FONT_SIZE   64.0f
@@ -14,7 +15,7 @@
 /** Loading font message */
 #define LOADING_MESSAGE     "Loading..."
 
-class LoadingScreenController {
+class LoadingScreenController : public AbsScreenController {
 public:
 	/**
 	* Constructor
