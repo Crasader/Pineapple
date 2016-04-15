@@ -178,6 +178,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         _isCollidingWithJello = false;
 		_reachedGoal = false;
 		_isBlended = false;
+		_isDead = false;
         return true;
     }
     return false;
@@ -324,10 +325,10 @@ void KidModel::animate() {
 /**
 * Make the kid spiral towards blender blades
 *
-* @param x level offset
+* @param x x-coordinate of the blender blades
 * @param y y-coordinate of the blender
 */
-void KidModel::spiral(float y) {
+void KidModel::spiral(float x, float y) {
 	float val = 0.3f;
 
 	// near blades
@@ -343,8 +344,14 @@ void KidModel::spiral(float y) {
 		setY(getY() + val);
 	}
 
-	// move towards left side of screen
-	setX(getX() - val);
+	// move towards left side of screen, die if hit blender blades
+	float newX = getX() - val;
+	if (newX < x) {
+		setIsDead(true);
+	}
+	else {
+		setX(newX);
+	}
 }
 
 

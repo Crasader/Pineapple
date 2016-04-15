@@ -96,6 +96,8 @@ protected:
 	int _willWalkcycleFrame;
 	/** Whether Will is spiraling towards blender blades */
 	bool _isBlended;
+	/** Whether Will has been blended */
+	bool _isDead;
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
@@ -347,6 +349,16 @@ public:
 	*/
 	bool getIsBlended() { return _isBlended; }
 
+	/**
+	* Sets whether will is dead
+	*/
+	void setIsDead(bool dead) { _isDead = dead; }
+
+	/**
+	* Returns true if will is dead
+	*/
+	bool getIsDead() { return _isDead; }
+
     
 #pragma mark Drawing Methods
     /**
@@ -401,10 +413,10 @@ public:
 	/** 
 	* Make Will spiral towards blender blades
 	*
-	* @param x level offset
+	* @param x x-coordinate of the blender blades
 	* @param y y-coordinate of the blender
 	*/
-	void spiral(float y);
+	void spiral(float x, float y);
 
 
 CC_CONSTRUCTOR_ACCESS:

@@ -135,6 +135,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         _faceRight = true;
         _reachedGoal = false;
 		_isBlended = false;
+		_isDead = false;
         _jumpCooldown = 0;
         return true;
     }
@@ -349,9 +350,10 @@ void PineappleModel::animate() {
 /**
 * Make Will spiral towards blender blades
 *
+* @param x x-coordinate of the blender blades
 * @param y y-coordinate of the blender
 */
-void PineappleModel::spiral(float y) {
+void PineappleModel::spiral(float x, float y) {
 	float val = 0.3f;
 	
 	// near blades
@@ -367,8 +369,14 @@ void PineappleModel::spiral(float y) {
 		setY(getY() + val);
 	}
 
-	// move towards left side of screen
-	setX(getX() - val);
+	// move towards left side of screen, die if hit blender blades
+	float newX = getX() - val;
+	if (newX < x) {
+		setIsDead(true);
+	}
+	else {
+		setX(newX);
+	}
 }
 
 

@@ -69,6 +69,8 @@ protected:
 	float _kidWalkcycleFrame;
 	/** Whether kid is spiraling towards blender blades */
 	bool _isBlended;
+	/** Whether kid has been blended */
+	bool _isDead;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -249,6 +251,16 @@ public:
 	* Returns true if the kid is spiralling towards the blender blades
 	*/
 	bool getIsBlended() { return _isBlended; }
+
+	/**
+	* Sets whether the kid is dead
+	*/
+	void setIsDead(bool dead) { _isDead = dead; }
+
+	/**
+	* Returns true if the kid is dead
+	*/
+	bool getIsDead() { return _isDead; }
     
     
 #pragma mark Physics Methods
@@ -294,10 +306,10 @@ public:
 	/**
 	* Make the kid spiral towards blender blades
 	*
-	* @param x level offset
+	* @param x x-coordinate of the blender blades
 	* @param y y-coordinate of the blender
 	*/
-	void spiral(float y);
+	void spiral(float x, float y);
 
 #pragma mark Drawing Methods
     /**

@@ -21,7 +21,7 @@
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define BLENDER_SSHRINK  0.9f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_WIDTH     0.2f
+#define SENSOR_WIDTH     0.1f
 
 #pragma mark -
 #pragma mark Static Constructors

@@ -347,9 +347,12 @@ void GameController::update(float dt) {
 				_level->getKid(i)->animate();
 			} 
 			else {
-				_level->getKid(i)->spiral(_level->getBlender()->getPosition().y);
+				_level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
 				_level->getKid(i)->setFixedRotation(false);
 				_level->getKid(i)->setAngularVelocity(6.0f);
+				if (_level->getKid(i)->getIsDead()) {
+					_level->kill(_level->getKid(i));
+				}
 			}            
         }
     }
@@ -381,11 +384,17 @@ void GameController::update(float dt) {
 			}
 
 			_level->getPineapple()->animate();
+
+			// Scroll the screen (with parallax) if necessary
+			handleScrolling();
 		}
 		else {
-			_level->getPineapple()->spiral(_level->getBlender()->getPosition().y);
+			_level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
 			_level->getPineapple()->setFixedRotation(false);
 			_level->getPineapple()->setAngularVelocity(6.0f);
+			if (_level->getPineapple()->getIsDead()) {
+				_level->kill(_level->getPineapple());
+			}
 		}
     }
 
@@ -398,11 +407,6 @@ void GameController::update(float dt) {
     
     // Update the background (move the clouds)
     _background->update(dt);
-    
-    // Scroll the screen (with parallax) if necessary
-	if (!_level->getPineapple()->getIsBlended()) {
-		handleScrolling();
-	}
     
     // Turn the physics engine crank
     _world->update(dt);
