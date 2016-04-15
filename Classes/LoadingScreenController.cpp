@@ -38,7 +38,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
 	tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
 
-	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background.png");
+	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_wPlants.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
