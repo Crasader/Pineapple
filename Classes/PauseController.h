@@ -34,9 +34,8 @@ public:
             // is pause while holding down movement don't want it to be down when unpause
             _inputController->clear();
             _isPaused = true;
-            _backgroundOverlay->setPositionX(*_levelOffset);
             for (int i = 0; i < NUM_BUTTONS; i++) {
-                _buttons[i]->setPositionX(*_levelOffset + _center.x);
+                _buttons[i]->setPositionX(_center.x);
             }
             _rootNode->addChild(_pauseNode, PAUSE_MENU_Z_ORDER);
         }
@@ -51,7 +50,7 @@ public:
         return _isPaused;
     }
     
-    void init(Node* worldNode, SceneManager* assets, RootLayer* root, InputController* input, float* levelOffset);
+    void init(Node* worldNode, SceneManager* assets, RootLayer* root, InputController* input);
     
     static PauseController* getController() {
         if (PAUSE_CONTROLLER) {
@@ -83,7 +82,6 @@ private:
     Node* _rootNode = nullptr;
     Node* _pauseNode = nullptr;
     Vec2 _center;
-    float* _levelOffset;
     // array of buttons
     Button* _buttons[NUM_BUTTONS];
     // background overlay

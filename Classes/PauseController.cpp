@@ -9,12 +9,11 @@ const string PauseController::BUTTON_FILES[NUM_BUTTONS*2] = {"textures/buttons/r
 
 PauseController* PauseController::PAUSE_CONTROLLER = nullptr;
 
-void PauseController::init(Node* worldNode, SceneManager* assets, RootLayer* root, InputController* input, float* levelOffset) {
+void PauseController::init(Node* worldNode, SceneManager* assets, RootLayer* root, InputController* input) {
     _rootNode = root;
     _pauseNode = Node::create();
     _pauseNode->retain();
     _inputController = input;
-    _levelOffset = levelOffset;
     _center = Vec2(root->getContentSize().width/2.0f, root->getContentSize().height/2.0f);
     
     Texture2D* image = assets->get<Texture2D>(PAUSE_SCREEN_OVERLAY);
@@ -24,7 +23,6 @@ void PauseController::init(Node* worldNode, SceneManager* assets, RootLayer* roo
     _backgroundOverlay->retain();
     _pauseNode->addChild(_backgroundOverlay);
     for (int i = 0; i < NUM_BUTTONS; i++) {
-        cout << i << "\n";
         Button* button = Button::create();
         button->loadTextureNormal(BUTTON_FILES[i*2]);
         button->loadTexturePressed(BUTTON_FILES[i*2 + 1]);
