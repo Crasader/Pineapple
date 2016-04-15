@@ -22,7 +22,7 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define WALL_SCALE 1
+#define WALL_SCALE 0.5f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -124,16 +124,12 @@ void WallModel::resetSceneNode() {
         // THIS DOES NOT FIX ASPECT RATIO PROBLEMS
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
-        float cscale = Director::getInstance()->getContentScaleFactor();
-                
-        Rect bounds;
-        bounds.size = pnode->getContentSize();
         
-        pnode->setPolygon(bounds);
-        pnode->setScaleX(getSize().width / pnode->getContentSize().width * _drawScale.x);
-        pnode->setScaleY(getSize().height / pnode->getContentSize().height * _drawScale.y);
-        
-//        setSize(pnode->getContentSize().width * WALL_SCALE / _drawScale.x,
-//                pnode->getContentSize().height * WALL_SCALE / _drawScale.y);
+        if( _topNode != nullptr) {
+            Vec2 p = Vec2(pnode->getPositionX(),
+                          pnode->getPositionY() + (pnode->getContentSize().height-_topNode->getContentSize().height)/2);
+            _topNode->setPosition(p);
+            _topNode->setScaleX(pnode->getContentSize().width/_topNode->getContentSize().width);
+        }
     }
 }

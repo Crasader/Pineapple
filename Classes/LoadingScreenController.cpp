@@ -7,17 +7,11 @@
 * Preloads the assets needed for the game.
 */
 void LoadingScreenController::preload() {
-	// Load the textures (Autorelease objects)
-	Texture2D::TexParams params;
-	params.wrapS = GL_REPEAT;
-	params.wrapT = GL_REPEAT;
-	params.magFilter = GL_LINEAR;
-	params.minFilter = GL_NEAREST;
-
 	SceneManager* assets = AssetManager::getInstance()->getCurrent();
 	TextureLoader* tloader = (TextureLoader*)assets->access<Texture2D>();
 
-	tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
+	tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
+    tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
 	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
 	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
 
@@ -27,7 +21,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
 
 	tloader->loadAsync(JELLO_TEXTURE, "textures/jello.png");
-	tloader->loadAsync(SPIKE_TEXTURE, "textures/spikes.png");
+	tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
 
 	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
 
@@ -77,5 +71,5 @@ void LoadingScreenController::preload() {
 	assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
     
     assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
-    //assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
+    assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
 }
