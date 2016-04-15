@@ -29,7 +29,7 @@ using namespace cocos2d;
 #define PINEAPPLE_SHRUNK_MASS				   1.0f
 #define PINEAPPLE_DENSITY					   0.5f
 /** The amount to shrink the whole body, including image */
-#define PINEAPPLE_SCALE						   0.1f
+#define PINEAPPLE_SCALE						   0.4f
 /** The factor to multiply by the input */
 #define PINEAPPLE_FORCE						   50.0f
 /** The amount to slow the character down */
@@ -44,7 +44,7 @@ using namespace cocos2d;
 #define PINEAPPLE_SHRINK_SCALE			       0.75f
 
 /** Number of frames in the walk animation */
-#define PINEAPPLE_FRAME_COUNT 24
+#define PINEAPPLE_FRAME_COUNT	26
 
 #define PINEAPPLE_MASK 0x0002
 #define PINEAPPLE_COLLIDES_WITH 0xFFFB //All but 0x0004
@@ -93,7 +93,7 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _willWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _willWalkcycleFrame;
+	int _willWalkcycleFrame = 0;
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
@@ -187,35 +187,12 @@ public:
     /**
      * Grows the pineapple, returns 1 if now normal size, 2 if large
      */
-    int grow() {
-        if (_isSmall) {
-            setDimension(_normalSize);
-            _isSmall = false;
-            return 1;
-        } else if (!_isLarge  && !_isSmall) {
-            setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-            _isLarge = true;
-            return 2;
-        }
-        
-        return 0;
-    }
+    int grow();
     
     /**
      * Shrinks the pineapple, returns 1 if normal size, 2 if small
      */
-    int shrink() {
-        if (_isLarge) {
-            setDimension(_normalSize);
-            _isLarge = false;
-            return 1;
-        } else if (!_isLarge && !_isSmall) {
-            setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
-            setIsSmall(true);
-            return 2;
-        }
-        return 0;
-    }
+    int shrink();
 
 	bool isSmall() const { return _isSmall; }
 
@@ -424,6 +401,7 @@ CC_CONSTRUCTOR_ACCESS:
 	* the defaults.  To use a PineappleModel, you must call init().
 	*/
 	PineappleModel() : CapsuleObstacle(),
+    _isGrounded(true),
     _sensorFixture(nullptr),
     _sensorName(PINEAPPLE_SENSOR),
     _willWalkcycle(nullptr),

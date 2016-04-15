@@ -24,6 +24,9 @@
 
 using namespace cocos2d;
 
+// radius around a tap to recognize second tap as double tap (bigger the better tbh)
+#define TAP_RADIUS                140.0f
+#define MAX_TAP_DURATION_MILLIS        300
 #define MIN_SWIPE_SPEED      20.0f
 #define MIN_PINCH_SPREAD_SPEED    20.0f
 #define PINCH                        -1
@@ -64,6 +67,10 @@ private:
     bool  _keyGrow;
     /** whether the shrink key is down */
     bool  _keyShrink;
+    /** whether the pause key is down */
+    bool _keyPause;
+    /** whether reset is overridden by pause menu this frame */
+    bool _resetOverride = false;
 
     
 protected:
@@ -80,9 +87,14 @@ protected:
     // One of the touches in the gesture, -1 if no current gesture
     int _id1;
     Vec2 _touch1;
+    // timestamp for touchdown of _touch1;
+    timestamp_t _time1;
     // The other one, -1 if no current gesture
     int _id2;
     Vec2 _touch2;
+    timestamp_t _time2;
+    // previous tap location
+    Vec2 _prevTap;
     
     // Input results
     /** Whether the reset action was chosen. */
@@ -101,7 +113,12 @@ protected:
     bool _growPressed;
     /** Whether the shrink action was chosen */
     bool _shrinkPressed;
+    /** Whether the pause action was chosen */
+    bool _pausePressed;
 
+    bool oneFingerDown() {
+        return _id1 == -1 || _id2 == -1;
+    }
     
 #pragma mark Internal Touch Management   
     // The screen is divided into four zones: Left, Bottom, Right and Main/
@@ -318,7 +335,7 @@ public:
      *
      * @return true if the reset button was pressed.
      */
-    bool didReset() const { return _resetPressed; }
+    bool didReset() { bool o = _resetPressed || _resetOverride; _resetOverride = false; return o; }
     
     /**
      * Returns true if the player wants to go toggle the debug mode.
@@ -327,6 +344,8 @@ public:
      */
     bool didDebug() const { return _debugPressed; }
     
+    bool didPause() const { return _pausePressed; }
+    
     /**
      * Returns true if the exit button was pressed.
      *
@@ -334,6 +353,9 @@ public:
      */
     bool didExit() const { return _exitPressed; }
     
+    void clear() { this->_keyLeft = false; this->_keyRight = false; }
+    
+    void setReset() { _resetOverride = true; }
     
 #pragma mark -
 #pragma mark Touch Callbacks

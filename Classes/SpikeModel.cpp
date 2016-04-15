@@ -10,7 +10,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define SPIKE_SCALE 0.25
+#define SPIKE_SCALE 0.5
 
 #pragma mark -
 #pragma mark Static Constructors

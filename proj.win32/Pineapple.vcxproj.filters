@@ -51,16 +51,10 @@
     <ClCompile Include="..\Classes\InputController.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\LevelController.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\LevelModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\PineappleModel.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\PlatformModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ProgressHUD.cpp">
@@ -73,6 +67,21 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\SpinnerModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ButtonSwitchModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CollisionObjectModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GoalModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoveablePlatformModel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\WallModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,16 +128,10 @@
     <ClInclude Include="..\Classes\InputController.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\LevelController.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\LevelModel.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\PineappleModel.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\PlatformModel.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ProgressHUD.h">
@@ -147,6 +150,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CollisionObjectModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ButtonSwitchModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GoalModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Levels.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveablePlatformModel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\WallModel.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

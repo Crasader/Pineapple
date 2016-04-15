@@ -1,6 +1,7 @@
 #include "LevelModel.h"
 
 #include <cornell/CUJSONReader.h>
+#include <cornell/CUStrings.h>
 #include "MoveablePlatformModel.h"
 #include "Const.h"
 
@@ -130,7 +131,7 @@ void initSensor(Obstacle* obstacle) {
 void initPhysicalObstacle(Obstacle* obstacle) {
     obstacle->setBodyType(b2_staticBody);
     obstacle->setDensity(BASIC_DENSITY);
-    obstacle->setFriction(BASIC_FRICTION);
+    obstacle->setFriction(0.0f);
     obstacle->setFixedRotation(true);
     obstacle->setRestitution(BASIC_RESTITUTION);
     obstacle->setGravityScale(1);
@@ -146,7 +147,7 @@ bool LevelModel::load() {
         float* position = new float[WALL_VERTS];
         
         _bounds.size.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        
+        _isActive = false;
         
         JSONReader reader;
         reader.initWithFile(_file);
@@ -162,6 +163,8 @@ bool LevelModel::load() {
         
         float tileX = reader.getNumber(TILE_WIDTH_PROPERTY);
         float tileY = reader.getNumber(TILE_HEIGHT_PROPERTY);
+        
+        _tileSize = Size(tileX, tileY);
         
         reader.startObject(LAYERS_PROPERTY); //Start layer
         int wsize = reader.startArray(); //Start layer as array
@@ -205,6 +208,7 @@ bool LevelModel::load() {
                 } else if (layerName == JELLO_OBJECT_GROUP) {
                     addJello(position);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
+                    position[0] += 0.5;
                     addSpikes(position);
                 } else if (layerName == WILL_OBJECT_GROUP) {
                     addPineapple(position);
@@ -216,7 +220,7 @@ bool LevelModel::load() {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
                     
                     bool isSwitch = string2bool(reader.getString(IS_SWITCH_PROPERTY));
-                    double colorF = std::stod(reader.getString(COLOR_PROPERTY));
+                    double colorF = cocos2d::stod(reader.getString(COLOR_PROPERTY));
                     Color color = MoveablePlatformModel::getColor((int)colorF);
                     
                     reader.endObject();
@@ -238,7 +242,7 @@ bool LevelModel::load() {
                         position[1] = y + h + 0.175; // Hack to get horizontal platform to be flush with floor next to it
                         length = w;
                     }
-                    double colorF = std::stod(reader.getString(COLOR_PROPERTY));
+                    double colorF = cocos2d::stod(reader.getString(COLOR_PROPERTY));
                     Color color = MoveablePlatformModel::getColor((int)colorF);
                     
                     reader.endObject();
@@ -271,8 +275,8 @@ bool LevelModel::load() {
         //Start map properties
         reader.startObject(OBJECT_PROPERTIES_PROPERTY);
         
-        position[0] = std::stod(reader.getString(BLENDER_START_X_PROPERTY));
-        position[1] = std::stod(reader.getString(BLENDER_Y_PROPERTY));
+        position[0] = cocos2d::stod(reader.getString(BLENDER_START_X_PROPERTY));
+        position[1] = cocos2d::stod(reader.getString(BLENDER_Y_PROPERTY));
         addBlender(position);
         
         //Add walls that are offscreen and prevent you from going past end of level
@@ -304,7 +308,7 @@ void LevelModel::unload() {
         //TODO - pre-nulling cleanup
         
         if (_pineapple != nullptr) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(_pineapple);
                 _worldnode->removeChild(_pineapple->getSceneNode());
                 _debugnode->removeChild(_pineapple->getDebugNode());
@@ -313,7 +317,7 @@ void LevelModel::unload() {
             _pineapple = nullptr;
         }
         if (_goalDoor != nullptr) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(_goalDoor);
                 _worldnode->removeChild(_goalDoor->getSceneNode());
                 _debugnode->removeChild(_goalDoor->getDebugNode());
@@ -322,7 +326,7 @@ void LevelModel::unload() {
             _goalDoor = nullptr;
         }
         if(_blender != nullptr) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(_blender);
                 _worldnode->removeChild(_blender->getSceneNode());
                 _debugnode->removeChild(_blender->getDebugNode());
@@ -333,7 +337,7 @@ void LevelModel::unload() {
         
         for(int i = 0; i < KID_COUNT; i++) {
             if (_kids[i] != nullptr) {
-                if (_world != nullptr) {
+                if (_isActive) {
                     _world->removeObstacle(_kids[i]);
                     _worldnode->removeChild(_kids[i]->getSceneNode());
                     _debugnode->removeChild(_kids[i]->getDebugNode());
@@ -344,7 +348,7 @@ void LevelModel::unload() {
         }
         
         for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -354,17 +358,21 @@ void LevelModel::unload() {
         _spikes.clear();
         
         for(auto it = _walls.begin(); it != _walls.end(); ++it) {
-            if (_world != nullptr) {
+            if (_isActive) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
+                
+                if ((*it)->isFloor()) {
+                    _worldnode->removeChild((*it)->getTopNode());
+                }
             }
             (*it)->release();
         }
         _walls.clear();
         
         for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -374,7 +382,7 @@ void LevelModel::unload() {
         _jellos.clear();
         
         for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -384,7 +392,7 @@ void LevelModel::unload() {
         _crushables.clear();
         
         for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -394,7 +402,7 @@ void LevelModel::unload() {
         _buttonSwitches.clear();
         
         for(auto it = _moveablePlatforms.begin(); it != _moveablePlatforms.end(); ++it) {
-            if (_world != nullptr && ! (*it)->isRemoved()) {
+            if (_isActive && !(*it)->isRemoved()) {
                 _world->removeObstacle(*it);
                 _worldnode->removeChild((*it)->getSceneNode());
                 _debugnode->removeChild((*it)->getDebugNode());
@@ -416,6 +424,7 @@ void LevelModel::unload() {
         _rootnode=nullptr;
         
         _isUnloaded = true;
+        _isActive = false;
     }
 }
 
@@ -632,16 +641,32 @@ void LevelModel::setRootNode(Node* node) {
     // Add the individual elements
     PolygonNode* poly;
     
+    //Tiling params
+    Texture2D::TexParams params;
+    params.wrapS = GL_REPEAT;
+    params.wrapT = GL_REPEAT;
+    params.magFilter = GL_NEAREST;
+    params.minFilter = GL_NEAREST;
+    
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
         
-        Texture2D* image = assets->get<Texture2D>(TILE_TEXTURE);
-        
+        Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
+        image->setTexParameters(params);
         wall->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
+        
+        if (wall->isFloor()) {
+            Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
+            wall->setTopNode(PolygonNode::createWithTexture(topImage));
+        }
+        
         wall->setSceneNode(poly);
         
         addObstacle(wall, WALL_Z_INDEX);
+        if (wall->isFloor()) {
+            _worldnode->addChild(wall->getTopNode(),WALL_Z_INDEX + 1);
+        }
     }
     
     if (_goalDoor != nullptr) {
@@ -692,6 +717,8 @@ void LevelModel::setRootNode(Node* node) {
         poly = PolygonNode::createWithTexture(image);
         jello->setSceneNode(poly);
         
+        jello->setY(jello->getY() - (1 - jello->getHeight())/2);
+                
         addAnonymousObstacle(jello, JELLO_Z_INDEX);
     }
     
@@ -703,6 +730,8 @@ void LevelModel::setRootNode(Node* node) {
         spike->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);
         spike->setSceneNode(poly);
+        
+        spike->setY(spike->getY() - (1 - spike->getHeight())/2);
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }
@@ -757,6 +786,9 @@ void LevelModel::setRootNode(Node* node) {
             }
         }
     }
+    
+    //Set that this is active
+    _isActive = true;
 }
 
 /**

@@ -14,17 +14,20 @@
 /** Cooldown (in animation frames) for jumping */
 #define JUMP_COOLDOWN				5
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define PINEAPPLE_VSHRINK		0.95f
+#define PINEAPPLE_VSHRINK			0.6f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define PINEAPPLE_HSHRINK		0.7f
+#define PINEAPPLE_HSHRINK			0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define PINEAPPLE_SSHRINK		0.9f
+#define PINEAPPLE_SSHRINK			0.9f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT				0.07f
+#define SENSOR_V_OFFSET             -0.075f
 /** The density of the character */
-#define PINEAPPLE_DENSITY   0.5f
+#define PINEAPPLE_DENSITY			0.5f
 /** The impulse for the character jump */
-#define PINEAPPLE_JUMP      10.0f
+#define PINEAPPLE_JUMP              10.0f
+/** Anchor point that is in the center of the pineapple's mass */
+#define PINEAPPLE_ANCHOR_POINT   Vec2(0.5f, 0.22f)
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -182,13 +185,13 @@ void PineappleModel::createFixtures() {
     // Sensor dimensions
     b2Vec2 corners[4];
     corners[0].x = -PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + SENSOR_HEIGHT) / 2.0f;
+    corners[0].y = SENSOR_V_OFFSET + (-getHeight() + SENSOR_HEIGHT) / 2.0f;
     corners[1].x = -PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - SENSOR_HEIGHT) / 2.0f;
+    corners[1].y = SENSOR_V_OFFSET + (-getHeight() - SENSOR_HEIGHT) / 2.0f;
     corners[2].x = PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - SENSOR_HEIGHT) / 2.0f;
+    corners[2].y = SENSOR_V_OFFSET + (-getHeight() - SENSOR_HEIGHT) / 2.0f;
     corners[3].x = PINEAPPLE_SSHRINK*getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + SENSOR_HEIGHT) / 2.0f;
+    corners[3].y = SENSOR_V_OFFSET + (-getHeight() + SENSOR_HEIGHT) / 2.0f;
     
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);
@@ -223,6 +226,39 @@ void PineappleModel::releaseFixtures() {
     }
 }
 
+int PineappleModel::grow() {
+    float currentHeight = getDimension().height;
+    if (_isSmall) {
+        setDimension(_normalSize);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsSmall(false);
+        return 1;
+    } else if (!_isLarge  && !_isSmall) {
+        setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsLarge(true);
+        return 2;
+    }
+    
+    return 0;
+}
+
+int PineappleModel::shrink() {
+    float currentHeight = getDimension().height;
+    if (_isLarge) {
+        setDimension(_normalSize);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsLarge(false);
+        return 1;
+    } else if (!_isLarge && !_isSmall) {
+        setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
+        setY(getY() + (getDimension().height - currentHeight)/2);
+        setIsSmall(true);
+        return 2;
+    }
+    return 0;
+}
+
 /**
  * Applies the force to the body of this pineapple
  *
@@ -232,9 +268,7 @@ void PineappleModel::applyForce() {
     if (!isActive()) {
         return;
     }
-    
-    cout << isJumping() << " " << isGrounded() << "\n";
-    
+        
     // Don't want to be moving. Damp out player motion
     if (getMovement() == 0.0f) {
         b2Vec2 force(-getDamping()*getVX(), 0);
@@ -281,36 +315,36 @@ void PineappleModel::update(float dt) {
  * Animate Will if he's moving
  */
 void PineappleModel::animate() {
-    // in the air
-    if (!_isGrounded || _isJumping || getVY() < -0.2f) {
-        if (_faceRight) {
-            _willWalkcycleFrame = 0;
-        }
-        else {
-            _willWalkcycleFrame = 12;
-        }
-        _willWalkcycle->setFrame(_willWalkcycleFrame);
-    }
-    // moving
-    else if (abs(getVX()) > 0.5f) {
-        _willWalkcycleFrame++;
-        if (_faceRight) {
-            _willWalkcycle->setFrame(_willWalkcycleFrame % 12);
-        }
-        else {
-            _willWalkcycle->setFrame((_willWalkcycleFrame % 12) + 12);
-        }
-    }
-    // at rest
-    else {
-        if (_faceRight) {
-            _willWalkcycleFrame = 0;
-        }
-        else {
-            _willWalkcycleFrame = 12;
-        }
-        _willWalkcycle->setFrame(_willWalkcycleFrame);
-    }
+	// in the air
+	/*if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}*/
+	// moving
+	if (abs(getVX()) > 0.5f) {
+		_willWalkcycleFrame++;
+		if (_faceRight) {
+			_willWalkcycle->setFrame(_willWalkcycleFrame % (PINEAPPLE_FRAME_COUNT / 2));
+		}
+		else {
+			_willWalkcycle->setFrame((_willWalkcycleFrame % (PINEAPPLE_FRAME_COUNT / 2)) + (PINEAPPLE_FRAME_COUNT / 2));
+		}
+	}
+	// at rest
+	else {
+		if (_faceRight) {
+			_willWalkcycleFrame = 0;
+		}
+		else {
+			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
+		}
+		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}
 }
 
 
@@ -340,8 +374,10 @@ void PineappleModel::resetSceneNode() {
         pnode->setScale(cscale * PINEAPPLE_SCALE);
         pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * PINEAPPLE_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * PINEAPPLE_SCALE / _drawScale.y);
+        setDimension(pnode->getContentSize().width * PINEAPPLE_SCALE * PINEAPPLE_HSHRINK / _drawScale.x,
+                     pnode->getContentSize().height * PINEAPPLE_SCALE * (1 - PINEAPPLE_ANCHOR_POINT.y) * PINEAPPLE_VSHRINK / _drawScale.y);
+        
+        pnode->setAnchorPoint(PINEAPPLE_ANCHOR_POINT);
         
         _willWalkcycleFrame = 0;
         _willWalkcycle = pnode;
