@@ -59,8 +59,8 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool LevelSelectController::init(Node* root) {
-    return init(root,SCREEN);
+bool LevelSelectController::init(Node* root, InputController* input) {
+    return init(root,input,SCREEN);
 }
 
 /**
@@ -81,8 +81,9 @@ bool LevelSelectController::init(Node* root) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool LevelSelectController::init(Node* root, const Rect& rect) {
+bool LevelSelectController::init(Node* root, InputController* input, const Rect& rect) {
     _assets = AssetManager::getInstance()->getCurrent();
+    _input = input;
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -95,17 +96,23 @@ bool LevelSelectController::init(Node* root, const Rect& rect) {
     screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
     screen.size.width *= scale.x;  screen.size.height *= scale.y;
     
-    _input.init(screen);
-    _input.start();
-    
     // Create the scene graph
     _debugnode = _debugnode = Node::create();
     
     _rootnode = root;
     _rootnode->retain();
     
-    _isInitted = true;
+    // Create the message label.
+    Label* label = Label::create();
+    label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>("felt")->getTTF());
+    label->setAnchorPoint(Vec2(0.5f,0.5f));
+    label->setPosition(center);
+    label->setString("LEVEL SELECT");
     
+    // Add the label as a child to loading screen
+    _rootnode->addChild(label, 5);
+    
+    _isInitted = true;
     setDebug(false);
     
     return true;
@@ -149,11 +156,16 @@ void LevelSelectController::dispose() {
  */
 void LevelSelectController::update(float dt) {
     
-    _input.update(dt);
+    _input->update(dt);
+    
+    if (_input->didJump()) {
+        setTransitionStatus(TRANSITION_TO_GAME);
+        return;
+    }
     
     // Turn the physics engine crank
-    _world->update(dt);
+    //_world->update(dt);
     
     // Since items may be deleted, garbage collect
-    _world->garbageCollect();
+    //_world->garbageCollect();
 }

@@ -61,7 +61,7 @@ protected:
     SceneManager* _assets;
     
     /** Controller for abstracting out input away from layer */
-    InputController _input;
+    InputController* _input;
     
     /** True iff we should display the debug nodes of the physics bodies */
     bool _debug;
@@ -98,12 +98,12 @@ public:
      *
      * The game world is scaled so that the screen coordinates do not agree
      * with the Box2d coordinates.  This initializer uses the default scale.
-     * 
+     *
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root);
-
+    bool init(Node* root, InputController* input);
+    
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -121,7 +121,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root, const Rect& rect);
+    bool init(Node* root, InputController* input, const Rect& rect);
     
     
 #pragma mark -

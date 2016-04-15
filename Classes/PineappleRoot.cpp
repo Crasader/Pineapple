@@ -168,7 +168,7 @@ void PineappleRoot::update(float deltaTime) {
         _activeController = &_levelSelect;
         
         if (! _levelSelect.isInitted()) {
-            _levelSelect.init(_levelSelectRoot);
+            _levelSelect.init(_levelSelectRoot, &_inputController);
         }
         
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
@@ -205,7 +205,7 @@ void PineappleRoot::update(float deltaTime) {
             _loadingScreen.preload();
             _preloaded = true;
         } else if (AssetManager::getInstance()->getCurrent()->isComplete() && ! _gameplay.isInitted()) {
-            _loadingScreen.setTransitionStatus(TRANSITION_TO_GAME);
+            _loadingScreen.setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
         }
     }
 }

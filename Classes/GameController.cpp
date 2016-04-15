@@ -351,6 +351,7 @@ void GameController::update(float dt) {
     }
     if (_input->didExit())  {
         setTransitionStatus(TRANSITION_TO_EXIT);
+        return;
     }
     
     // Process the movement
