@@ -65,7 +65,7 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(RootLayer* root) {
+bool GameController::init(Node* root) {
     return init(root,SCREEN);
 }
 
@@ -87,7 +87,10 @@ bool GameController::init(RootLayer* root) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(RootLayer* root, const Rect& rect) {
+bool GameController::init(Node* root, const Rect& rect) {
+    _rootnode = root;
+    _rootnode->retain();
+    
     _levelKey = LEVEL_ONE_KEY;
     _levelFile = LEVEL_ONE_FILE;
     
@@ -145,9 +148,6 @@ bool GameController::init(RootLayer* root, const Rect& rect) {
     
     _loadnode->setVisible(false);
     
-    _rootnode = root;
-    _rootnode->retain();
-    
     _collision->setLevel(_level);
     
     _levelOffset = 0.0f;
@@ -184,13 +184,17 @@ GameController::~GameController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameController::dispose() {
-    _level->unload();
+    if (_level != nullptr) {
+        _level->unload();
+    }
     _worldnode = nullptr;
     _background = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
-    _rootnode->removeAllChildren();
-    _rootnode->release();
+    if (_rootnode != nullptr) {
+        _rootnode->removeAllChildren();
+        _rootnode->release();
+    }
     _rootnode = nullptr;
 }
 
@@ -353,7 +357,7 @@ void GameController::update(float dt) {
         return;
     }
     if (_input.didExit())  {
-        _rootnode->shutdown();
+        setTransitionStatus(TRANSITION_TO_EXIT);
     }
     
     // Process the movement

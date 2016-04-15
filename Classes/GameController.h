@@ -135,7 +135,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(RootLayer* root);
+    bool init(Node* root);
 
     /**
      * Initializes the controller contents, and starts the game
@@ -154,7 +154,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(RootLayer* root, const Rect& rect);
+    bool init(Node* root, const Rect& rect);
     
     
 #pragma mark -
@@ -243,11 +243,6 @@ public:
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose();
-    
-    ///**
-    // * Preloads all of the assets necessary for this game world
-    // */
-    //void preload();
 
     
 #pragma mark -
@@ -285,7 +280,7 @@ public:
      *
      * @param  delta    Number of seconds since last animation frame
      */
-    void update(float dt);
+    void update(float dt) override;
 
 	/**
 	* Compute offsets for horizontal scrolling.

@@ -18,6 +18,10 @@
 
 using namespace cocos2d;
 
+#define GAME_ROOT_Z             1
+#define LEVEL_SELECT_ROOT_Z     2
+#define LOADING_ROOT_Z          3
+
 #pragma mark -
 #pragma mark Gameplay Control
 
@@ -30,6 +34,16 @@ using namespace cocos2d;
 void PineappleRoot::start() {
     int scene = AssetManager::getInstance()->createScene();
     
+    _gameRoot = Node::create();
+    _gameRoot->setContentSize(getContentSize());
+    _gameRoot->retain();
+    _levelSelectRoot = Node::create();
+    _levelSelectRoot->setContentSize(getContentSize());
+    _levelSelectRoot->retain();
+    _loadingScreenRoot = Node::create();
+    _loadingScreenRoot->setContentSize(getContentSize());
+    _loadingScreenRoot->retain();
+    
     FontLoader* fonts = FontLoader::create();
     fonts->setDefaultSize(DEFAULT_FONT_SIZE);
     AssetManager::getInstance()->at(scene)->attach<TTFont>(fonts);
@@ -41,7 +55,13 @@ void PineappleRoot::start() {
     
     // Create a "loading" screen
     _preloaded = false;
-    displayLoader();
+    
+    _gameplay.init(_gameRoot);
+    _levelSelect.init(_levelSelectRoot);
+    _loadingScreen.init(_loadingScreenRoot);
+    
+    _loadingScreen.setTransitionStatus(TRANSITION_TO_VISIBLE);
+    
     RootLayer::start(); // YOU MUST END with call to parent
 }
 
@@ -55,6 +75,12 @@ void PineappleRoot::start() {
 void PineappleRoot::stop() {
     RootLayer::stop();  // YOU MUST BEGIN with call to parent
     int scene = AssetManager::getInstance()->getCurrentIndex();
+    
+    removeAllChildren();
+
+    _gameRoot->release();
+    _levelSelectRoot->release();
+    _loadingScreenRoot->release();
     
     SoundEngine::getInstance()->stopAll();
     AssetManager::getInstance()->stopScene(scene);
@@ -71,51 +97,93 @@ void PineappleRoot::stop() {
  */
 void PineappleRoot::update(float deltaTime) {
     RootLayer::update(deltaTime);  // YOU MUST BEGIN with call to parent
-    bool complete = true;
     
-    complete = complete && AssetManager::getInstance()->getCurrent()->isComplete();
+    if (_activeController == nullptr) {
+        CCLOG("No active controller");
+        return;
+    }
+    
+    //Check for exit
+    if (_activeController->getTransitionStatus() == TRANSITION_TO_EXIT) {
+        shutdown();
+        return;
+    }
+    
+    bool complete = AssetManager::getInstance()->getCurrent()->isComplete();
+    
     if (_preloaded && !_gameplay.isActive() && complete) {
         // Transfer control to the gameplay subcontroller
-        removeAllChildren();
-        _gameplay.init(this);
+        
     } else if (_gameplay.isActive()) {
         _gameplay.update(deltaTime);
     } else if (!_preloaded) {
         _preloaded = true;
-        LoadingScreenController loader = LoadingScreenController();
-        loader.preload();
+        _loadingScreen.preload();
     }
+    
+    //Check for transitions
+    if ((_gameplay.getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == &_gameplay) ||
+        (_loadingScreen.getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == &_loadingScreen) ) {
+        
+        _levelSelect.setTransitionStatus(TRANSITION_TO_VISIBLE);
+    }
+    
+    if ((_levelSelect.getTransitionStatus() == TRANSITION_TO_GAME && _activeController == &_levelSelect) ||
+        (_loadingScreen.getTransitionStatus() == TRANSITION_TO_GAME && _activeController == &_loadingScreen)) {
+        
+        _gameplay.setTransitionStatus(TRANSITION_TO_VISIBLE);
+    }
+    
+    
+    //Transitioning to gameplay
+    if (_gameplay.getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+        
+        if (_activeController == &_levelSelect) {
+            removeChild(_levelSelectRoot);
+        }
+        
+        if (_activeController == &_loadingScreen) {
+            removeChild(_loadingScreenRoot);
+        }
+        
+        _activeController = &_gameplay;
+        addChild(_gameRoot, GAME_ROOT_Z);
+    }
+    
+    //Transitioning to level select
+    if (_levelSelect.getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+        
+        if (_activeController == &_gameplay) {
+            removeChild(_gameRoot);
+        }
+        
+        if (_activeController == &_loadingScreen) {
+            removeChild(_loadingScreenRoot);
+        }
+        
+        _activeController = &_levelSelect;
+        addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
+    }
+    
+    
+    //Transitioning to loadingscreen
+    if (_loadingScreen.getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+        
+        if (_activeController == &_levelSelect) {
+            removeChild(_levelSelectRoot);
+        }
+        
+        if (_activeController == &_gameplay) {
+            removeChild(_gameRoot);
+        }
+        
+        _activeController = &_loadingScreen;
+        addChild(_loadingScreenRoot, LOADING_ROOT_Z);
+    }
+    
+    //Do the updating
+    _activeController->update(deltaTime);
 }
 
-
-#pragma mark -
-#pragma mark Internal Helpers
-
-/**
- * Builds the scene graph for the loading screen.
- *
- * The loading screen is what we run while we are waiting for the asynchronous
- * loader for finish with the textures.  Right now, the loading screen is just
- * the word "Loading...".  We do this because the loading screen can only use
- * assets that have been loaded already, and the font is the only thing that
- * is guaranteed to be loaded at start.
- */
-void PineappleRoot::displayLoader() {
-    // Load the font NOW
-    AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
-    
-    Size size = getContentSize();
-    Vec2 center(size.width/2.0f,size.height/2.0f);
-    
-    // Create the message label.
-    auto label = Label::create();
-    label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
-    label->setAnchorPoint(Vec2(0.5f,0.5f));
-    label->setPosition(center);
-    label->setString(LOADING_MESSAGE);
-    
-    // Add the label as a child to this layer
-    addChild(label, 1);
-}
 
 

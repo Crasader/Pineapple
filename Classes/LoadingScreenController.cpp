@@ -69,3 +69,25 @@ void LoadingScreenController::preload() {
     assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
     assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
 }
+
+void LoadingScreenController::init(Node* root) {
+    // Load the font NOW
+    AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
+    
+    Size size = getContentSize();
+    Vec2 center(size.width/2.0f,size.height/2.0f);
+    
+    // Create the message label.
+    auto label = Label::create();
+    label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
+    label->setAnchorPoint(Vec2(0.5f,0.5f));
+    label->setPosition(center);
+    label->setString(LOADING_MESSAGE);
+    
+    // Add the label as a child to loading screen
+    _rootnode->addChild(label);
+}
+
+void LoadingScreenController::update(float dt) {
+    //TODO
+}

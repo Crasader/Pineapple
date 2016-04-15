@@ -22,11 +22,15 @@ public:
 	*/
 	LoadingScreenController() {};
 
+    void init(Node* root);
+    
 	/**
 
 	* Preloads all of the assets necessary for this game world
 	*/
 	void preload();
+    
+    void update(float dt) override;
 };
 
 #endif

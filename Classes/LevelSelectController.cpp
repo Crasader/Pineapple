@@ -41,7 +41,6 @@ using namespace cocos2d;
  * This allows us to use a controller without a heap pointer.
  */
 LevelSelectController::LevelSelectController() :
-_rootnode(nullptr),
 _worldnode(nullptr),
 _debugnode(nullptr),
 _world(nullptr),
@@ -60,7 +59,7 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool LevelSelectController::init(RootLayer* root) {
+bool LevelSelectController::init(Node* root) {
     return init(root,SCREEN);
 }
 
@@ -82,7 +81,7 @@ bool LevelSelectController::init(RootLayer* root) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool LevelSelectController::init(RootLayer* root, const Rect& rect) {
+bool LevelSelectController::init(Node* root, const Rect& rect) {
     _assets = AssetManager::getInstance()->getCurrent();
     
     // Determine the center of the screen
@@ -126,8 +125,10 @@ LevelSelectController::~LevelSelectController() {
 void LevelSelectController::dispose() {
     _worldnode = nullptr;
     _debugnode = nullptr;
-    _rootnode->removeAllChildren();
-    _rootnode->release();
+    if(_rootnode != nullptr) {
+        _rootnode->removeAllChildren();
+        _rootnode->release();
+    }
     _rootnode = nullptr;
 }
 

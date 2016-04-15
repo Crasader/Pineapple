@@ -50,8 +50,6 @@ using namespace std;
  */
 class LevelSelectController : public AbsScreenController {
 protected:    
-    /** Reference to the root node of the scene graph */
-    RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */
@@ -104,7 +102,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(RootLayer* root);
+    bool init(Node* root);
 
     /**
      * Initializes the controller contents, and starts the game
@@ -123,7 +121,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(RootLayer* root, const Rect& rect);
+    bool init(Node* root, const Rect& rect);
     
     
 #pragma mark -
@@ -186,7 +184,7 @@ public:
      *
      * @param  delta    Number of seconds since last animation frame
      */
-    void update(float dt);
+    void update(float dt) override;
 
 };
 
