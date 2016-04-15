@@ -322,7 +322,6 @@ void GameController::update(float dt) {
     
     // Process the toggled key commands
     if (_input->didPause()) {
-        // TODO(ekotlikoff): PAUSE
         if (!_pause->isPaused()) {
             _pause->pause();
             return;
