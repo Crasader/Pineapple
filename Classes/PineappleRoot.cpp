@@ -53,14 +53,7 @@ void PineappleRoot::start() {
     AssetManager::getInstance()->at(scene)->attach<LevelModel>(levels);
     AssetManager::getInstance()->startScene(scene);
     
-    // Create a "loading" screen
     _preloaded = false;
-    
-    _gameplay.init(_gameRoot);
-    _levelSelect.init(_levelSelectRoot);
-    _loadingScreen.init(_loadingScreenRoot);
-    
-    _loadingScreen.setTransitionStatus(TRANSITION_TO_VISIBLE);
     
     RootLayer::start(); // YOU MUST END with call to parent
 }
@@ -86,6 +79,24 @@ void PineappleRoot::stop() {
     AssetManager::getInstance()->stopScene(scene);
 }
 
+/** Set the game to the default properties - loading controller is active,
+ * create input controller */
+void PineappleRoot::onFirstUpdate() {
+    Vec2 scale = Vec2(getContentSize().width/SCREEN.size.width,
+                      getContentSize().height/SCREEN.size.height);
+    Rect screen = SCREEN;
+    screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
+    screen.size.width *= scale.x;  screen.size.height *= scale.y;
+    
+    _inputController.init(screen);
+    _inputController.start();
+    
+    _loadingScreen.init(_loadingScreenRoot);
+    _activeController = &_loadingScreen;
+    addChild(_loadingScreenRoot);
+    _loadingScreen.setTransitionStatus(TRANSITION_NONE);
+}
+
 /**
  * Updates the game for a single animation frame
  *
@@ -99,26 +110,13 @@ void PineappleRoot::update(float deltaTime) {
     RootLayer::update(deltaTime);  // YOU MUST BEGIN with call to parent
     
     if (_activeController == nullptr) {
-        CCLOG("No active controller");
-        return;
+        onFirstUpdate();
     }
     
     //Check for exit
     if (_activeController->getTransitionStatus() == TRANSITION_TO_EXIT) {
         shutdown();
         return;
-    }
-    
-    bool complete = AssetManager::getInstance()->getCurrent()->isComplete();
-    
-    if (_preloaded && !_gameplay.isActive() && complete) {
-        // Transfer control to the gameplay subcontroller
-        
-    } else if (_gameplay.isActive()) {
-        _gameplay.update(deltaTime);
-    } else if (!_preloaded) {
-        _preloaded = true;
-        _loadingScreen.preload();
     }
     
     //Check for transitions
@@ -147,7 +145,13 @@ void PineappleRoot::update(float deltaTime) {
         }
         
         _activeController = &_gameplay;
+        
+        if (! _gameplay.isInitted()) {
+            _gameplay.init(_gameRoot, &_inputController);
+        }
+        
         addChild(_gameRoot, GAME_ROOT_Z);
+        _gameplay.setTransitionStatus(TRANSITION_NONE);
     }
     
     //Transitioning to level select
@@ -162,7 +166,13 @@ void PineappleRoot::update(float deltaTime) {
         }
         
         _activeController = &_levelSelect;
+        
+        if (! _levelSelect.isInitted()) {
+            _levelSelect.init(_levelSelectRoot);
+        }
+        
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
+        _levelSelect.setTransitionStatus(TRANSITION_NONE);
     }
     
     
@@ -178,11 +188,26 @@ void PineappleRoot::update(float deltaTime) {
         }
         
         _activeController = &_loadingScreen;
+        
+        if (! _loadingScreen.isInitted()) {
+            _loadingScreen.init(_loadingScreenRoot);
+        }
+        
         addChild(_loadingScreenRoot, LOADING_ROOT_Z);
+        _loadingScreen.setTransitionStatus(TRANSITION_NONE);
     }
     
     //Do the updating
     _activeController->update(deltaTime);
+    
+    if (_activeController == &_loadingScreen) {
+        if (!_preloaded) {
+            _loadingScreen.preload();
+            _preloaded = true;
+        } else if (AssetManager::getInstance()->getCurrent()->isComplete() && ! _gameplay.isInitted()) {
+            _loadingScreen.setTransitionStatus(TRANSITION_TO_GAME);
+        }
+    }
 }
 
 

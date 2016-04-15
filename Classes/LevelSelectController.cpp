@@ -104,6 +104,8 @@ bool LevelSelectController::init(Node* root, const Rect& rect) {
     _rootnode = root;
     _rootnode->retain();
     
+    _isInitted = true;
+    
     setDebug(false);
     
     return true;

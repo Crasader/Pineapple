@@ -73,21 +73,24 @@ void LoadingScreenController::preload() {
 void LoadingScreenController::init(Node* root) {
     // Load the font NOW
     AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
-    
-    Size size = getContentSize();
-    Vec2 center(size.width/2.0f,size.height/2.0f);
-    
-    // Create the message label.
-    auto label = Label::create();
-    label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
-    label->setAnchorPoint(Vec2(0.5f,0.5f));
-    label->setPosition(center);
-    label->setString(LOADING_MESSAGE);
-    
-    // Add the label as a child to loading screen
-    _rootnode->addChild(label);
+    _loadingLabel = nullptr;
+    _rootnode = root;
+    _isInitted = true;
 }
 
 void LoadingScreenController::update(float dt) {
-    //TODO
+    if (_loadingLabel == nullptr) {
+        Size size = _rootnode->getContentSize();
+        Vec2 center(size.width/2.0f,size.height/2.0f);
+        
+        // Create the message label.
+        _loadingLabel = Label::create();
+        _loadingLabel->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
+        _loadingLabel->setAnchorPoint(Vec2(0.5f,0.5f));
+        _loadingLabel->setPosition(center);
+        _loadingLabel->setString(LOADING_MESSAGE);
+        
+        // Add the label as a child to loading screen
+        _rootnode->addChild(_loadingLabel, 5);
+    }
 }

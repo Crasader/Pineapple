@@ -16,6 +16,9 @@
 #define LOADING_MESSAGE     "Loading..."
 
 class LoadingScreenController : public AbsScreenController {
+protected:
+    Label* _loadingLabel;
+    
 public:
 	/**
 	* Constructor

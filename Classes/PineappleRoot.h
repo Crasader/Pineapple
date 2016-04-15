@@ -20,6 +20,7 @@
 #include "GameController.h"
 #include "LevelSelectController.h"
 #include "LoadingScreenController.h"
+#include "InputController.h"
 
 using namespace cocos2d;
 
@@ -55,6 +56,9 @@ protected:
     /** The root node for the loading screen */
     Node* _loadingScreenRoot;
     
+    /** The input controller that handles input. All other controllers get a reference to this instance */
+    InputController _inputController;
+    
     /** Whether or not we have finished preloading all assets */
     bool _preloaded;
     
@@ -78,6 +82,13 @@ public:
      * and load initial assets.
      */
     void start() override;
+    
+    
+    /** 
+     * Sets up the properties for beginning of the game.
+     * called during the first update loop
+     */
+    void onFirstUpdate();
     
     /**
      * Updates the game for a single animation frame

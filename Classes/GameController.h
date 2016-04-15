@@ -78,7 +78,7 @@ protected:
     string _levelFile;
     
     /** Controller for abstracting out input away from layer */
-    InputController _input;
+    InputController* _input;
     /** Controller for collision handling */
     CollisionController* _collision;
     
@@ -93,7 +93,7 @@ protected:
     /** Countdown active for winning or losing */
     int _countdown;
 	/** Distance between start of level and left side of screen */
-	float _levelOffset;
+    float _levelOffset;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
@@ -135,7 +135,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root);
+    bool init(Node* root, InputController* input);
 
     /**
      * Initializes the controller contents, and starts the game
@@ -154,7 +154,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root, const Rect& rect);
+    bool init(Node* root, InputController* input, const Rect& rect);
     
     
 #pragma mark -
@@ -166,6 +166,11 @@ public:
      */
     bool isActive( ) const { return _active; }
 
+    /**
+     * Returns true once this has been initted 
+     */
+    bool isInitted() const { return _isInitted; }
+    
     /**
      * Returns true if debug mode is active.
      *

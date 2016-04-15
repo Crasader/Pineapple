@@ -34,8 +34,8 @@ protected:
     /** The current transitional status of this AbsScreenController */
     int _transitionStatus;
     
-    /** The content size given by the rootlayer */
-    Size _contentSize;
+    /** True once this has been initted */
+    bool _isInitted;
     
 public:
     
@@ -43,7 +43,7 @@ public:
     
     void setTransitionStatus(int status) {_transitionStatus = status; }
     
-    Size getContentSize() { return _contentSize; }
+    bool isInitted() { return _isInitted; }
     
     virtual void update(float dt) {};
     
