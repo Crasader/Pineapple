@@ -67,5 +67,5 @@ void LoadingScreenController::preload() {
 	assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
     
     assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
-    //assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
+    assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
 }
