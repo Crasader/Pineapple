@@ -178,7 +178,7 @@ GameController::~GameController() {
  */
 void GameController::dispose() {
     if (_level != nullptr) {
-        //_level->unload();
+        _level->unload();
     }
     _worldnode = nullptr;
     _background = nullptr;

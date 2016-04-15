@@ -42,17 +42,17 @@ protected:
     AbsScreenController* _activeController;
     
     /** The primary controller for the game world */
-    GameController _gameplay;
+    GameController* _gameplay;
     /** The root node for the game */
     Node* _gameRoot;
     
     /** The controller for the level select screen */
-    LevelSelectController _levelSelect;
+    LevelSelectController* _levelSelect;
     /** The root node for the level select */
     Node* _levelSelectRoot;
     
     /** The controller for the loading screen */
-    LoadingScreenController _loadingScreen;
+    LoadingScreenController* _loadingScreen;
     /** The root node for the loading screen */
     Node* _loadingScreenRoot;
     

@@ -34,12 +34,17 @@ using namespace cocos2d;
 void PineappleRoot::start() {
     int scene = AssetManager::getInstance()->createScene();
     
+    _gameplay = new GameController();
     _gameRoot = Node::create();
     _gameRoot->setContentSize(getContentSize());
     _gameRoot->retain();
+    
+    _levelSelect = new LevelSelectController();
     _levelSelectRoot = Node::create();
     _levelSelectRoot->setContentSize(getContentSize());
     _levelSelectRoot->retain();
+    
+    _loadingScreen = new LoadingScreenController();
     _loadingScreenRoot = Node::create();
     _loadingScreenRoot->setContentSize(getContentSize());
     _loadingScreenRoot->retain();
@@ -69,6 +74,9 @@ void PineappleRoot::stop() {
     RootLayer::stop();  // YOU MUST BEGIN with call to parent
     int scene = AssetManager::getInstance()->getCurrentIndex();
     
+    _gameplay->dispose();
+    _levelSelect->dispose();
+    
     removeAllChildren();
 
     _gameRoot->release();
@@ -91,10 +99,10 @@ void PineappleRoot::onFirstUpdate() {
     _inputController.init(screen);
     _inputController.start();
     
-    _loadingScreen.init(_loadingScreenRoot);
-    _activeController = &_loadingScreen;
+    _loadingScreen->init(_loadingScreenRoot);
+    _activeController = _loadingScreen;
     addChild(_loadingScreenRoot);
-    _loadingScreen.setTransitionStatus(TRANSITION_NONE);
+    _loadingScreen->setTransitionStatus(TRANSITION_NONE);
 }
 
 /**
@@ -120,92 +128,92 @@ void PineappleRoot::update(float deltaTime) {
     }
     
     //Check for transitions
-    if ((_gameplay.getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == &_gameplay) ||
-        (_loadingScreen.getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == &_loadingScreen) ) {
+    if ((_gameplay->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _gameplay) ||
+        (_loadingScreen->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _loadingScreen) ) {
         
-        _levelSelect.setTransitionStatus(TRANSITION_TO_VISIBLE);
+        _levelSelect->setTransitionStatus(TRANSITION_TO_VISIBLE);
     }
     
-    if ((_levelSelect.getTransitionStatus() == TRANSITION_TO_GAME && _activeController == &_levelSelect) ||
-        (_loadingScreen.getTransitionStatus() == TRANSITION_TO_GAME && _activeController == &_loadingScreen)) {
+    if ((_levelSelect->getTransitionStatus() == TRANSITION_TO_GAME && _activeController == _levelSelect) ||
+        (_loadingScreen->getTransitionStatus() == TRANSITION_TO_GAME && _activeController == _loadingScreen)) {
         
-        _gameplay.setTransitionStatus(TRANSITION_TO_VISIBLE);
+        _gameplay->setTransitionStatus(TRANSITION_TO_VISIBLE);
     }
     
     
     //Transitioning to gameplay
-    if (_gameplay.getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+    if (_gameplay->getTransitionStatus() == TRANSITION_TO_VISIBLE) {
         
-        if (_activeController == &_levelSelect) {
+        if (_activeController == _levelSelect) {
             removeChild(_levelSelectRoot);
         }
         
-        if (_activeController == &_loadingScreen) {
+        if (_activeController == _loadingScreen) {
             removeChild(_loadingScreenRoot);
         }
         
-        _activeController = &_gameplay;
+        _activeController = _gameplay;
         
-        if (! _gameplay.isInitted()) {
-            _gameplay.init(_gameRoot, &_inputController);
+        if (! _gameplay->isInitted()) {
+            _gameplay->init(_gameRoot, &_inputController);
         }
         
         addChild(_gameRoot, GAME_ROOT_Z);
-        _gameplay.setTransitionStatus(TRANSITION_NONE);
+        _gameplay->setTransitionStatus(TRANSITION_NONE);
     }
     
     //Transitioning to level select
-    if (_levelSelect.getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+    if (_levelSelect->getTransitionStatus() == TRANSITION_TO_VISIBLE) {
         
-        if (_activeController == &_gameplay) {
+        if (_activeController == _gameplay) {
             removeChild(_gameRoot);
         }
         
-        if (_activeController == &_loadingScreen) {
+        if (_activeController == _loadingScreen) {
             removeChild(_loadingScreenRoot);
         }
         
-        _activeController = &_levelSelect;
+        _activeController = _levelSelect;
         
-        if (! _levelSelect.isInitted()) {
-            _levelSelect.init(_levelSelectRoot, &_inputController);
+        if (! _levelSelect->isInitted()) {
+            _levelSelect->init(_levelSelectRoot, &_inputController);
         }
         
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
-        _levelSelect.setTransitionStatus(TRANSITION_NONE);
+        _levelSelect->setTransitionStatus(TRANSITION_NONE);
     }
     
     
     //Transitioning to loadingscreen
-    if (_loadingScreen.getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+    if (_loadingScreen->getTransitionStatus() == TRANSITION_TO_VISIBLE) {
         
-        if (_activeController == &_levelSelect) {
+        if (_activeController == _levelSelect) {
             removeChild(_levelSelectRoot);
         }
         
-        if (_activeController == &_gameplay) {
+        if (_activeController == _gameplay) {
             removeChild(_gameRoot);
         }
         
-        _activeController = &_loadingScreen;
+        _activeController = _loadingScreen;
         
-        if (! _loadingScreen.isInitted()) {
-            _loadingScreen.init(_loadingScreenRoot);
+        if (! _loadingScreen->isInitted()) {
+            _loadingScreen->init(_loadingScreenRoot);
         }
         
         addChild(_loadingScreenRoot, LOADING_ROOT_Z);
-        _loadingScreen.setTransitionStatus(TRANSITION_NONE);
+        _loadingScreen->setTransitionStatus(TRANSITION_NONE);
     }
     
     //Do the updating
     _activeController->update(deltaTime);
     
-    if (_activeController == &_loadingScreen) {
+    if (_activeController == _loadingScreen) {
         if (!_preloaded) {
-            _loadingScreen.preload();
+            _loadingScreen->preload();
             _preloaded = true;
-        } else if (AssetManager::getInstance()->getCurrent()->isComplete() && ! _gameplay.isInitted()) {
-            _loadingScreen.setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+        } else if (AssetManager::getInstance()->getCurrent()->isComplete()) {
+            _loadingScreen->setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
         }
     }
 }
