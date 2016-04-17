@@ -28,7 +28,7 @@
 #define HILLS_DAMPING_FACTOR     4.0f
 #define CLOUDS_DAMPING_FACTOR    6.0f
 /** Cloud velocity */
-#define CLOUD_VELOCITY           0.05f
+#define CLOUD_VELOCITY           0.12f
 
 BackgroundView* BackgroundView::createAndAddTo(Node* rootNode, Node* worldNode, SceneManager *assets) {
     BackgroundView* view = new (std::nothrow) BackgroundView();

@@ -206,7 +206,7 @@ void GameController::dispose() {
 void GameController::reset() {
     setFailure(false);
     setComplete(false);
-    
+	
     // Unload the level but keep in memory temporarily
     _level->retain();
     _assets->unload<LevelModel>(_levelKey);
@@ -218,7 +218,6 @@ void GameController::reset() {
 
 /** Called after the loadAsync for the level finishes */
 void GameController::onReset() {
-    
     // Release the old level permanently
     _level->release();
     
