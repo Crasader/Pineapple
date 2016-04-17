@@ -66,6 +66,9 @@ protected:
     /** True iff we should display the debug nodes of the physics bodies */
     bool _debug;
     
+    /** The node representing the background image drawn for this screen */
+    Node* _backgroundNode;
+    
 #pragma mark Internal Object Management
     /**
      * Lays out the game geography.

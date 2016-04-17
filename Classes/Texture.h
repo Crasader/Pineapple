@@ -81,4 +81,7 @@
 /** The key for the pause screen overlay texture in the asset manager */
 #define PAUSE_SCREEN_OVERLAY "pause_overlay"
 
+/** The key for the level select background texture in the asset manager */
+#define LEVEL_SELECT_BACKGROUND "level_select_background"
+
 #endif /* Texture_h */

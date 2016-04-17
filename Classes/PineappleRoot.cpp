@@ -74,8 +74,12 @@ void PineappleRoot::stop() {
     RootLayer::stop();  // YOU MUST BEGIN with call to parent
     int scene = AssetManager::getInstance()->getCurrentIndex();
     
-    _gameplay->dispose();
-    _levelSelect->dispose();
+    if (_gameplay->isInitted()) {
+        _gameplay->dispose();
+    }
+    if (_levelSelect->isInitted()) {
+        _levelSelect->dispose();
+    }
     
     removeAllChildren();
 

@@ -26,6 +26,10 @@
 #include "Texture.h"
 #include "Levels.h"
 
+/** Level Select Z indexes */
+#define LEVEL_SELECT_BACKGROUND_Z   1
+#define LEVEL_SELECT_BUTTON_Z       2
+#define LEVEL_SELECT_TEXT_Z         3
 
 using namespace cocos2d;
 //using namespace std;
@@ -43,6 +47,7 @@ using namespace cocos2d;
 LevelSelectController::LevelSelectController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
+_backgroundNode(nullptr),
 _world(nullptr),
 _debug(false){}
 
@@ -102,15 +107,14 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     _rootnode = root;
     _rootnode->retain();
     
-    // Create the message label.
-    Label* label = Label::create();
-    label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>("felt")->getTTF());
-    label->setAnchorPoint(Vec2(0.5f,0.5f));
-    label->setPosition(center);
-    label->setString("LEVEL SELECT");
+    //Create the background image
+    Texture2D* image = _assets->get<Texture2D>(LEVEL_SELECT_BACKGROUND);
+    _backgroundNode = PolygonNode::createWithTexture(image);
+    _backgroundNode->setPosition(center);
+    _backgroundNode->setAnchorPoint(Vec2(0.5f, 0.5f));
+    _backgroundNode->setScale(dimen.width/image->getContentSize().width, dimen.height/image->getContentSize().height);
     
-    // Add the label as a child to loading screen
-    _rootnode->addChild(label, 5);
+    _rootnode->addChild(_backgroundNode, LEVEL_SELECT_BACKGROUND_Z);
     
     _isInitted = true;
     setDebug(false);
@@ -132,6 +136,7 @@ LevelSelectController::~LevelSelectController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void LevelSelectController::dispose() {
+    _backgroundNode = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
     if(_rootnode != nullptr) {
