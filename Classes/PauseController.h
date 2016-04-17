@@ -30,39 +30,44 @@ using namespace cocos2d::ui;
 class PauseController {
 public:
     // adds the pause screen overlay and buttons to the world
-    void pause() {
-        if (!_isPaused) {
-            // is pause while holding down movement don't want it to be down when unpause
-            _inputController->clear();
-            _isPaused = true;
-            for (int i = 0; i < NUM_BUTTONS; i++) {
-                _buttons[i]->setPositionX(_center.x);
-            }
-            _rootNode->addChild(_pauseNode, PAUSE_MENU_Z_ORDER);
-        }
-    }
-    
-    void unPause() {
-        _isPaused = false;
-        _rootNode->removeChild(_pauseNode);
-    }
-    
-    bool isPaused() {
-        return _isPaused;
-    }
-    
-    void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input);
-    
-    static PauseController* getController() {
+    static void pause() {
         if (PAUSE_CONTROLLER) {
-            return PAUSE_CONTROLLER;
-        } else {
-            PAUSE_CONTROLLER = new PauseController();
-            return PAUSE_CONTROLLER;
+            if (!PAUSE_CONTROLLER->_isPaused) {
+                // is pause while holding down movement don't want it to be down when unpause
+                PAUSE_CONTROLLER->_inputController->clear();
+                PAUSE_CONTROLLER->_isPaused = true;
+                for (int i = 0; i < NUM_BUTTONS; i++) {
+                    PAUSE_CONTROLLER->_buttons[i]->setPositionX(PAUSE_CONTROLLER->_center.x);
+                }
+                PAUSE_CONTROLLER->_rootNode->addChild(PAUSE_CONTROLLER->_pauseNode, PAUSE_MENU_Z_ORDER);
+            }
         }
     }
     
-    static void releaseController() {
+    static void unPause() {
+        if (PAUSE_CONTROLLER) {
+            PAUSE_CONTROLLER->_isPaused = false;
+            PAUSE_CONTROLLER->_rootNode->removeChild(PAUSE_CONTROLLER->_pauseNode);
+        }
+    }
+    
+    static bool isPaused() {
+        return PAUSE_CONTROLLER->_isPaused;
+    }
+    
+    static void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input);
+    
+    static bool isInitialized() {
+        return PAUSE_CONTROLLER != nullptr;
+    }
+    
+    static void create() {
+        if (!PAUSE_CONTROLLER) {
+            PAUSE_CONTROLLER = new PauseController();
+        }
+    }
+    
+    static void release() {
         PAUSE_CONTROLLER->~PauseController();
     }
     
