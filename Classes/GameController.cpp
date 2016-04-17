@@ -294,11 +294,9 @@ void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _
     float scale = 1.0f;
     if (_input->didGrow()) {
         size = _avatar->grow();
-        if (size == 2)
-            scale = PINEAPPLE_GROW_SCALE;
     } else if (_input->didShrink()) {
         size = _avatar->shrink();
-        if (size == 2)
+        if (size == 1)
             scale = PINEAPPLE_SHRINK_SCALE;
     }
     if (size) {
