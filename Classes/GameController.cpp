@@ -130,6 +130,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _losenode->setColor(LOSE_COLOR);
     
     _loadnode = Label::create();
+    _loadnode->retain();
     _loadnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
     _loadnode->setString(LOAD_MESSAGE);
     _loadnode->setPosition(root->getContentSize().width/2.0f,
@@ -188,6 +189,8 @@ void GameController::dispose() {
     _pause = nullptr;
     _debugnode = nullptr;
     _winnode = nullptr;
+    _loadnode->release();
+    _loadnode = nullptr;
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
@@ -318,6 +321,16 @@ void GameController::update(float dt) {
         return;
     }
     
+    // Check to see if new level loaded yet
+    if (_loadnode->isVisible()) {
+        if (_assets->isComplete()) {
+            onReset();
+        } else {
+            // Level is not loaded yet; refuse input
+            return;
+        }
+    }
+    
     _input->update(dt);
     
     // Process the toggled key commands
@@ -340,16 +353,6 @@ void GameController::update(float dt) {
     }
     if (_pause->isPaused()) {
         return;
-    }
-    
-    // Check to see if new level loaded yet
-    if (_loadnode->isVisible()) {
-        if (_assets->isComplete()) {
-            onReset();
-        } else {
-            // Level is not loaded yet; refuse input
-            return;
-        }
     }
     
     if (_level->haveFailed() && _countdown == -1) {
