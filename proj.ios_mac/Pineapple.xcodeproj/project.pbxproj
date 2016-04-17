@@ -37,6 +37,8 @@
 		03238CC41CC3F44400FE42CE /* Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = 03238CAB1CC3F44400FE42CE /* Icon-144.png */; };
 		03238CC51CC3F44400FE42CE /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = 03238CAC1CC3F44400FE42CE /* Icon-152.png */; };
 		03238CC61CC3F44400FE42CE /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = 03238CAC1CC3F44400FE42CE /* Icon-152.png */; };
+		03238CCB1CC3F75700FE42CE /* HUDController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03238CC91CC3F75700FE42CE /* HUDController.cpp */; };
+		03238CCC1CC3F75700FE42CE /* HUDController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03238CC91CC3F75700FE42CE /* HUDController.cpp */; };
 		0373D6F01CBF205A00B00A7E /* PauseController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0373D6EE1CBF205A00B00A7E /* PauseController.cpp */; };
 		0373D6F11CBF205A00B00A7E /* PauseController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0373D6EE1CBF205A00B00A7E /* PauseController.cpp */; };
 		1AC6FB21180E996B004C840B /* libcocos2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */; };
@@ -183,6 +185,8 @@
 		03238CAA1CC3F44400FE42CE /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = "<group>"; };
 		03238CAB1CC3F44400FE42CE /* Icon-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-144.png"; sourceTree = "<group>"; };
 		03238CAC1CC3F44400FE42CE /* Icon-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-152.png"; sourceTree = "<group>"; };
+		03238CC91CC3F75700FE42CE /* HUDController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HUDController.cpp; sourceTree = "<group>"; };
+		03238CCA1CC3F75700FE42CE /* HUDController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDController.h; sourceTree = "<group>"; };
 		0373D6EE1CBF205A00B00A7E /* PauseController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PauseController.cpp; sourceTree = "<group>"; };
 		0373D6EF1CBF205A00B00A7E /* PauseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PauseController.h; sourceTree = "<group>"; };
 		037D90E31C98FA0C001C332F /* SpikeModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpikeModel.cpp; sourceTree = "<group>"; };
@@ -462,6 +466,8 @@
 				404380C01CC095FE003BE560 /* LevelSelectController.h */,
 				4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */,
 				4072DF6E1C9F43F900F7DAA4 /* LoadingScreenController.h */,
+				03238CC91CC3F75700FE42CE /* HUDController.cpp */,
+				03238CCA1CC3F75700FE42CE /* HUDController.h */,
 				405CBEB21C7D14DF004AB5A0 /* PineappleRoot.cpp */,
 				405CBEB11C7D14DF004AB5A0 /* PineappleRoot.h */,
 				0373D6EE1CBF205A00B00A7E /* PauseController.cpp */,
@@ -729,6 +735,7 @@
 				403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */,
 				405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */,
 				405CBEB81C7D14DF004AB5A0 /* PineappleRoot.cpp in Sources */,
+				03238CCB1CC3F75700FE42CE /* HUDController.cpp in Sources */,
 				403B05731CA37B5E003F47CB /* SpinnerModel.cpp in Sources */,
 				403B05701CA37B5E003F47CB /* LevelModel.cpp in Sources */,
 				4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */,
@@ -775,6 +782,7 @@
 				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,
 				0373D6F11CBF205A00B00A7E /* PauseController.cpp in Sources */,
 				4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */,
+				03238CCC1CC3F75700FE42CE /* HUDController.cpp in Sources */,
 				4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */,
 				0313B5EA1CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */,
 				404380BF1CC095F7003BE560 /* LevelSelectController.cpp in Sources */,
