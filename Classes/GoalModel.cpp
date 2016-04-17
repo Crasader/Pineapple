@@ -10,7 +10,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define GOAL_SIZE Size(3.2,2) //Size in box2d units
+#define GOAL_SIZE Size(1.54,1.45) //Size in box2d units
 
 #pragma mark -
 #pragma mark Static Constructors
