@@ -35,7 +35,7 @@ protected:
     int _transitionStatus;
     
     /** True once this has been initted */
-    bool _isInitted;
+    bool _isInitted = false;
     
 public:
     
