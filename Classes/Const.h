@@ -106,5 +106,8 @@
 /** The volume for sound effects */
 #define EFFECT_VOLUME   0.8f
 
+/** The duration of the vibration when a kid / you are blended */
+#define VIBRATION_DURATION  1.0f
+
 
 #endif /* Const_h */

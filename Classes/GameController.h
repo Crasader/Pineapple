@@ -20,7 +20,9 @@
 #ifndef __PF_GAME_CONTROLLER_H__
 #define __PF_GAME_CONTROLLER_H__
 
+#include "AbsScreenController.h"
 #include "InputController.h"
+#include "PauseController.h"
 #include "LevelModel.h"
 #include "BackgroundView.h"
 
@@ -33,7 +35,6 @@ namespace cocos2d {
 }
 
 // These forward declarations are in the project
-class LoadingScreenController;
 class CollisionController;
 
 using namespace cocos2d;
@@ -50,10 +51,8 @@ using namespace std;
  * game root (which has scaled the scene graph to fix the device with the
  * desired aspect ratio).
  */
-class GameController {
+class GameController : public AbsScreenController {
 protected:    
-    /** Reference to the root node of the scene graph */
-    RootLayer* _rootnode;
     /** Reference to the physics root of the scene graph */
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */
@@ -80,7 +79,8 @@ protected:
     string _levelFile;
     
     /** Controller for abstracting out input away from layer */
-    InputController _input;
+    InputController* _input;
+    
     /** Controller for collision handling */
     CollisionController* _collision;
     
@@ -95,7 +95,7 @@ protected:
     /** Countdown active for winning or losing */
     int _countdown;
 	/** Distance between start of level and left side of screen */
-	float _levelOffset;
+    float _levelOffset;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
@@ -137,7 +137,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(RootLayer* root);
+    bool init(Node* root, InputController* input);
 
     /**
      * Initializes the controller contents, and starts the game
@@ -156,7 +156,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(RootLayer* root, const Rect& rect);
+    bool init(Node* root, InputController* input, const Rect& rect);
     
     
 #pragma mark -
@@ -168,6 +168,11 @@ public:
      */
     bool isActive( ) const { return _active; }
 
+    /**
+     * Returns true once this has been initted 
+     */
+    bool isInitted() const { return _isInitted; }
+    
     /**
      * Returns true if debug mode is active.
      *
@@ -245,11 +250,6 @@ public:
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose();
-    
-    ///**
-    // * Preloads all of the assets necessary for this game world
-    // */
-    //void preload();
 
     
 #pragma mark -
@@ -287,7 +287,7 @@ public:
      *
      * @param  delta    Number of seconds since last animation frame
      */
-    void update(float dt);
+    void update(float dt) override;
 
 	/**
 	* Compute offsets for horizontal scrolling.

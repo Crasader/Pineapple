@@ -10,6 +10,8 @@
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUCapsuleObstacle.h>
 
+#define MAX_V_TO_CRUSH -1.0f
+
 // Forward declarations in the project
 class LevelModel;
 class LevelController;

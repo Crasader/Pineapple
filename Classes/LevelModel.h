@@ -108,6 +108,13 @@ protected:
     bool _isLoaded;
     /** True once this level is unloaded */
     bool _isUnloaded;
+    
+    /** 
+     * True when this is the active level in use by the GameController.
+     * Set to true when the root node is set, and false when it is unloaded 
+     * Note that after loading isActive will still be false
+     */
+    bool _isActive;
 
 public:
 #pragma mark -
@@ -191,6 +198,11 @@ public:
      *
      */
     float getLength() { return _length; }
+    
+    /**
+     *
+     */
+    bool isActive() { return _isActive; }
     
     WorldController* getWorld() { return _world; }
     

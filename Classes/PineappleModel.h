@@ -93,11 +93,12 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _willWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _willWalkcycleFrame;
+	int _willWalkcycleFrame = 0;
 	/** Whether Will is spiraling towards blender blades */
 	bool _isBlended;
 	/** Whether Will has been blended */
 	bool _isDead;
+
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node

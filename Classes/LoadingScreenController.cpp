@@ -7,17 +7,11 @@
 * Preloads the assets needed for the game.
 */
 void LoadingScreenController::preload() {
-	// Load the textures (Autorelease objects)
-	Texture2D::TexParams params;
-	params.wrapS = GL_REPEAT;
-	params.wrapT = GL_REPEAT;
-	params.magFilter = GL_LINEAR;
-	params.minFilter = GL_NEAREST;
-
 	SceneManager* assets = AssetManager::getInstance()->getCurrent();
 	TextureLoader* tloader = (TextureLoader*)assets->access<Texture2D>();
 
-	tloader->loadAsync(TILE_TEXTURE,      "textures/tiling.png", params);
+	tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
+    tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
 	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
 	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
 
@@ -27,7 +21,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
 
 	tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
-	tloader->loadAsync(SPIKE_TEXTURE, "textures/spikes.png");
+	tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
 
 	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
 
@@ -41,6 +35,10 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_wPlants.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
+    
+    // PAUSE SCREEN
+    
+    tloader->loadAsync(PAUSE_SCREEN_OVERLAY, "textures/pause-overlay.png");
     
     // MOVEABLE PLATFORMS
     
@@ -73,5 +71,30 @@ void LoadingScreenController::preload() {
 	assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
     
     assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
-    //assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
+    assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
+}
+
+void LoadingScreenController::init(Node* root) {
+    // Load the font NOW
+    AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
+    _loadingLabel = nullptr;
+    _rootnode = root;
+    _isInitted = true;
+}
+
+void LoadingScreenController::update(float dt) {
+    if (_loadingLabel == nullptr) {
+        Size size = _rootnode->getContentSize();
+        Vec2 center(size.width/2.0f,size.height/2.0f);
+        
+        // Create the message label.
+        _loadingLabel = Label::create();
+        _loadingLabel->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
+        _loadingLabel->setAnchorPoint(Vec2(0.5f,0.5f));
+        _loadingLabel->setPosition(center);
+        _loadingLabel->setString(LOADING_MESSAGE);
+        
+        // Add the label as a child to loading screen
+        _rootnode->addChild(_loadingLabel, 5);
+    }
 }

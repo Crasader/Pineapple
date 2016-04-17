@@ -18,7 +18,9 @@
 #include <cocos2d.h>
 #include <cornell.h>
 #include "GameController.h"
-
+#include "LevelSelectController.h"
+#include "LoadingScreenController.h"
+#include "InputController.h"
 
 using namespace cocos2d;
 
@@ -36,9 +38,26 @@ using namespace cocos2d;
  */
 class PineappleRoot : public RootLayer {
 protected:
-    // CONTROLLERS
+    /** A pointer to the currently active controller */
+    AbsScreenController* _activeController;
+    
     /** The primary controller for the game world */
-    GameController _gameplay;
+    GameController* _gameplay;
+    /** The root node for the game */
+    Node* _gameRoot;
+    
+    /** The controller for the level select screen */
+    LevelSelectController* _levelSelect;
+    /** The root node for the level select */
+    Node* _levelSelectRoot;
+    
+    /** The controller for the loading screen */
+    LoadingScreenController* _loadingScreen;
+    /** The root node for the loading screen */
+    Node* _loadingScreenRoot;
+    
+    /** The input controller that handles input. All other controllers get a reference to this instance */
+    InputController _inputController;
     
     /** Whether or not we have finished preloading all assets */
     bool _preloaded;
@@ -63,6 +82,13 @@ public:
      * and load initial assets.
      */
     void start() override;
+    
+    
+    /** 
+     * Sets up the properties for beginning of the game.
+     * called during the first update loop
+     */
+    void onFirstUpdate();
     
     /**
      * Updates the game for a single animation frame
