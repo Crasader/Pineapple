@@ -99,6 +99,8 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _assets = AssetManager::getInstance()->getCurrent();
     _level = _assets->get<LevelModel>(_levelKey);
     
+    PauseController::create();
+    
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
     Vec2 center(dimen.width/2.0f,dimen.height/2.0f);
@@ -113,7 +115,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
     
-    _pause->init(this, _worldnode, _assets, root, _input);
+    PauseController::init(this, _worldnode, _assets, root, _input);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
@@ -185,8 +187,7 @@ void GameController::dispose() {
     }
     _worldnode = nullptr;
     _background = nullptr;
-    _pause->releaseController();
-    _pause = nullptr;
+    PauseController::release();
     _debugnode = nullptr;
     _winnode = nullptr;
     _loadnode->release();
@@ -333,12 +334,11 @@ void GameController::update(float dt) {
     
     // Process the toggled key commands
     if (_input->didPause()) {
-        // TODO(ekotlikoff): PAUSE
-        if (!_pause->isPaused()) {
-            _pause->pause();
+        if (!PauseController::isPaused()) {
+            PauseController::pause();
             return;
         } else {
-            _pause->unPause();
+            PauseController::unPause();
         }
     }
     if (_input->didDebug()) { setDebug(!isDebug()); }
@@ -350,7 +350,7 @@ void GameController::update(float dt) {
         setTransitionStatus(TRANSITION_TO_EXIT);
         return;
     }
-    if (_pause->isPaused()) {
+    if (PauseController::isPaused()) {
         return;
     }
     

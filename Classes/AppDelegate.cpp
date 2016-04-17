@@ -128,7 +128,9 @@ void AppDelegate::applicationDidEnterBackground() {
 
     // if you use SoundEngine, it must be paused here
     SoundEngine::getInstance()->pauseAll();
-    PauseController::getController()->pause();
+    if (PauseController::isInitialized()) {
+        PauseController::pause();
+    }
 }
 
 /**
