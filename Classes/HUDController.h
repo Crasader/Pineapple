@@ -76,11 +76,16 @@ private:
         // release children status nodes
         // release progress bar nodes
         // release sound node
+        _soundButton->release();
+        _soundButton = nullptr;
         // release pause node
         _pauseButton->release();
+        _pauseButton = nullptr;
     }
     
     static void initPauseButton();
+    
+    static void initSoundButton();
     
     // static reference to singleton
     static HUDController* HUD_CONTROLLER;
@@ -91,6 +96,8 @@ private:
     Node* _hudNode = nullptr;
     Vec2 _screenSize;
     Button* _pauseButton = nullptr;
+    CheckBox* _soundButton = nullptr;
+    SceneManager* _assets = nullptr;
     
     /** Reference to the game controller this is pausing for */
     AbsScreenController* _gameController;

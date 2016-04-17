@@ -112,9 +112,11 @@ void initFootSensorProperties(Obstacle* obstacle) {
  * debug properties of the object to be added */
 void initDebugProperties(Obstacle* obstacle) {
     WireNode* draw = WireNode::create();
+    draw->retain();
     draw->setColor(DEBUG_COLOR);
     draw->setOpacity(DEBUG_OPACITY);
     obstacle->setDebugNode(draw);
+    draw->release();
 }
 
 /** Helper method for creating sensors (and non-physical obstacles) */
@@ -635,7 +637,6 @@ void LevelModel::setRootNode(Node* node) {
     // Create, but transfer ownership to root
     _worldnode = Node::create();
     _debugnode = Node::create();
-    _debugnode->retain();
     _rootnode->addChild(_worldnode,2);
     _rootnode->addChild(_debugnode,3);
     
@@ -806,8 +807,7 @@ void LevelModel::clearRootNode() {
     }
     if (_debugnode != nullptr) {
         _rootnode->removeChild(_debugnode);
-        _debugnode->release();
-        _debugnode = nullptr;
+        _debugnode = nullptr; // we do not own it
     }
     _rootnode->release();
     _rootnode = nullptr;
