@@ -100,6 +100,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _level = _assets->get<LevelModel>(_levelKey);
     
     PauseController::create();
+    HUDController::create();
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -116,6 +117,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _debugnode = _level->getDebugNode();
     
     PauseController::init(this, _worldnode, _assets, root, _input);
+    HUDController::init(this, _worldnode, _assets, root, _input);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());

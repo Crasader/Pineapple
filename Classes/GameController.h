@@ -23,6 +23,7 @@
 #include "AbsScreenController.h"
 #include "InputController.h"
 #include "PauseController.h"
+#include "HUDController.h"
 #include "LevelModel.h"
 #include "BackgroundView.h"
 

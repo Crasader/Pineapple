@@ -635,6 +635,7 @@ void LevelModel::setRootNode(Node* node) {
     // Create, but transfer ownership to root
     _worldnode = Node::create();
     _debugnode = Node::create();
+    _debugnode->retain();
     _rootnode->addChild(_worldnode,2);
     _rootnode->addChild(_debugnode,3);
     
@@ -805,7 +806,8 @@ void LevelModel::clearRootNode() {
     }
     if (_debugnode != nullptr) {
         _rootnode->removeChild(_debugnode);
-        _debugnode = nullptr; // We do not own it
+        _debugnode->release();
+        _debugnode = nullptr;
     }
     _rootnode->release();
     _rootnode = nullptr;

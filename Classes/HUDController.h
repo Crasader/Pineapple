@@ -13,13 +13,17 @@
 #include "Const.h"
 #include "Texture.h"
 #include "InputController.h"
+#include "PauseController.h"
 #include "AbsScreenController.h"
 
 
-#define         CHILDREN_STATUS_HORIZ_POS_RATIO  0
-#define         PROGRESS_BAR_HORIZ_POS_RATIO     .15
-#define         SOUND_BUTTON_HORIZ_POS_RATIO     .85
-#define         PAUSE_BUTTON_HORIZ_POS_RATIO     .925
+#define         CHILDREN_STATUS_HORIZ_POS_RATIO  .0f
+#define         PROGRESS_BAR_HORIZ_POS_RATIO     .15f
+#define         SOUND_BUTTON_HORIZ_POS_RATIO     .85f
+#define         PAUSE_BUTTON_HORIZ_POS_RATIO     .925f
+#define         HUD_MIDDLE_Y_POS_RATIO           .9f
+#define         HUD_Z_ORDER                      5
+#define         HUD_SCALE                        .15f
 
 // singleton class
 using namespace cocos2d;
@@ -34,7 +38,7 @@ public:
     // add nodes to rootNode for the hud
     static void addHUD() {
         if (HUD_CONTROLLER) {
-            HUD_CONTROLLER->_rootNode->addChild(HUD_CONTROLLER->_hudNode);
+            HUD_CONTROLLER->_rootNode->addChild(HUD_CONTROLLER->_hudNode, HUD_Z_ORDER);
         } else {
             cout << "HUD CONTROLLER IS NULL\n";
         }
@@ -73,7 +77,10 @@ private:
         // release progress bar nodes
         // release sound node
         // release pause node
+        _pauseButton->release();
     }
+    
+    static void initPauseButton();
     
     // static reference to singleton
     static HUDController* HUD_CONTROLLER;
@@ -83,6 +90,7 @@ private:
     Node* _rootNode = nullptr;
     Node* _hudNode = nullptr;
     Vec2 _screenSize;
+    Button* _pauseButton = nullptr;
     
     /** Reference to the game controller this is pausing for */
     AbsScreenController* _gameController;
