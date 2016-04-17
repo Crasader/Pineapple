@@ -17,7 +17,7 @@
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define BLENDER_HSHRINK  0.72f
 /** The Blender specific scaling */
-#define BLENDER_SCALE    0.75f
+#define BLENDER_SCALE    2.68f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
 #define BLENDER_SSHRINK  0.9f
 /** Height of the sensor attached to the player's feet */
@@ -120,6 +120,8 @@ bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
         setVX(BLENDER_SPEED);
         
         // Gameplay attributes
+		_isBlending = false;
+		_blendcycleFrame = 0;
         return true;
     }
     return false;
@@ -197,7 +199,7 @@ void BlenderModel::update(float dt) {
  * manage our own afterburner animations.
  */
 void BlenderModel::resetSceneNode() {
-    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
@@ -208,12 +210,16 @@ void BlenderModel::resetSceneNode() {
         
         Rect bounds;
         bounds.size = pnode->getContentSize();
-        
-        pnode->setPolygon(bounds);
-        pnode->setScale(cscale * BLENDER_SCALE);
+
+		pnode->setPolygon(bounds);
+		pnode->setScale(cscale * BLENDER_SCALE);
+		pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * BLENDER_SCALE / _drawScale.x,
                      pnode->getContentSize().height * BLENDER_SCALE / _drawScale.y);
+
+		_blendcycleFrame = 0;
+		_blendcycle = pnode;
     }
 }
 
@@ -242,5 +248,16 @@ void BlenderModel::resetDebugNode() {
 	_debug->addChild(_sensorNode);
 }
 
-
+/**
+* Animate blender
+*/
+void BlenderModel::animate() {
+	_blendcycleFrame++;
+	if (_isBlending) {
+		_blendcycle->setFrame((_blendcycleFrame % 8) + 2);
+	}
+	else {
+		_blendcycle->setFrame(_blendcycleFrame % 2);
+	}
+}
 

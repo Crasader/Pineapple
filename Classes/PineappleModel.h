@@ -93,7 +93,7 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _willWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _willWalkcycleFrame = 0;
+	int _willWalkcycleFrame;
 	/** Whether Will is spiraling towards blender blades */
 	bool _isBlended;
 	/** Whether Will has been blended */

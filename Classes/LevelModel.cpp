@@ -679,7 +679,7 @@ void LevelModel::setRootNode(Node* node) {
     
     if (_pineapple != nullptr) {
         Texture2D* image = assets->get<Texture2D>(PINEAPPLE_TEXTURE);
-        _pineapple->setDrawScale(_scale.x , _scale.y);
+        _pineapple->setDrawScale(_scale.x, _scale.y);
         poly = AnimationNode::create(image, 1, PINEAPPLE_FRAME_COUNT, PINEAPPLE_FRAME_COUNT);
         _pineapple->setSceneNode(poly);
         
@@ -689,7 +689,7 @@ void LevelModel::setRootNode(Node* node) {
     if (_blender != nullptr) {
         Texture2D* image = assets->get<Texture2D>(BLENDER_TEXTURE);
         _blender->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+		poly = AnimationNode::create(image, 1, BLENDER_FRAME_COUNT, BLENDER_FRAME_COUNT);
         _blender->setSceneNode(poly);
         
         addObstacle(_blender, BLENDER_Z_INDEX);

@@ -23,7 +23,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
 	tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
 
-	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
+	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender_blendCycle.png");
 
 	tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
 	tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");

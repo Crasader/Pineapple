@@ -179,6 +179,7 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
 		_reachedGoal = false;
 		_isBlended = false;
 		_isDead = false;
+		_kidWalkcycleFrame = 0.0f;
         return true;
     }
     return false;

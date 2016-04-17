@@ -377,6 +377,7 @@ void GameController::update(float dt) {
 				_level->getKid(i)->setAngularVelocity(6.0f);
 				if (_level->getKid(i)->getIsDead()) {
 					_level->kill(_level->getKid(i));
+					_level->getBlender()->setIsBlending(true);
 				}
 			}            
         }
@@ -409,6 +410,7 @@ void GameController::update(float dt) {
 			_level->getPineapple()->setAngularVelocity(6.0f);
 			if (_level->getPineapple()->getIsDead()) {
 				_level->kill(_level->getPineapple());
+				_level->getBlender()->setIsBlending(true);
 			}
 		}
     }
@@ -419,6 +421,9 @@ void GameController::update(float dt) {
 		JelloModel* jello = *it;
 		jello->animate();
 	}
+
+	// Animate the blender
+	_level->getBlender()->animate();
     
     // Update the background (move the clouds)
     _background->update(dt);

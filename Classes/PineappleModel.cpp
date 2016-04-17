@@ -137,6 +137,7 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         _reachedGoal = false;
 		_isBlended = false;
 		_isDead = false;
+		_willWalkcycleFrame = 0;
         _jumpCooldown = 0;
         return true;
     }
