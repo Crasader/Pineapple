@@ -1,5 +1,5 @@
 { "height":12,
- "layers":[
+  "layers":[
         {
          "draworder":"topdown",
          "height":0,
@@ -374,7 +374,7 @@
                  "visible":true,
                  "width":64,
                  "x":3776,
-                 "y":640
+                 "y":600
                 }],
          "opacity":1,
          "type":"objectgroup",

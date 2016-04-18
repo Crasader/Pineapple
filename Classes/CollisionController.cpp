@@ -68,14 +68,20 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 }
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
-	_level->blendAndKill(will);
-    Device::vibrate(VIBRATION_DURATION);
-	//_pSensorFixtures.clear();
+	will->setIsBlended(true);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
-	_level->blendAndKill(kid);
-    Device::vibrate(VIBRATION_DURATION);
+	kid->setIsBlended(true);
+}
+
+void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
+	_level->kill(will);
+	//_pSensorFixtures.clear();
+}
+
+void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
+	_level->kill(kid);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
@@ -115,6 +121,10 @@ bool CollisionController::isBelowChar(BoxObstacle* obj, CapsuleObstacle* charact
 	float objTop = obj->getY() + (obj->getHeight() / 2);
 	float charBot = character->getY() - (character->getHeight() / 2);
 	return charBot + e >= objTop;
+}
+
+void ground(KidModel* kid, b2Fixture* fix) {
+    kid->setGrounded(true);
 }
 
 /**
@@ -195,9 +205,14 @@ void CollisionController::beginContact(b2Contact* contact) {
 	// KID COLLISIONS
 	else if (bd1->getCollisionClass() == KID_C || bd2->getCollisionClass() == KID_C) {
 		KidModel* kid = bd1->getCollisionClass() == KID_C ? (KidModel*)bd1 : (KidModel*)bd2;
+        // with ground
+        if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+            kid->setGrounded(true);
+        }
 		// Kid x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			handleJelloCollision(kid);
+            kid->setGrounded(false);
 		}
 		// Kid x Goal
 		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {

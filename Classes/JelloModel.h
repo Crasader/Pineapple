@@ -46,6 +46,7 @@
 
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
+#include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
 //#include "CollisionObjectModel.h"
@@ -64,6 +65,9 @@ using namespace cocos2d;
 #define JELLO_BOUNCE_FORCE  10.0f
 /** Amount of horizontal force given to a kid when hitting a jello */
 #define JELLO_HORIZONTAL_FORCE 5.0f
+
+/** Number of frames in the rest animation */
+#define JELLO_FRAME_COUNT	16
 
 
 #pragma mark -
@@ -89,6 +93,11 @@ protected:
      * the texture (e.g. a circular shape attached to a square texture).
      */
     virtual void resetDebugNode() override;
+
+	/** Filmstrip for restcycle animation */
+	AnimationNode* _jelloRestcycle;
+	/** Frame counter for restcycle animation */
+	float _jelloRestcycleFrame;
 
 public:
 	/**
@@ -188,6 +197,11 @@ public:
      */
     void applyForce();
 
+	/**
+	* Animate the resting Jello
+	*/
+	void animate();
+
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
@@ -197,7 +211,9 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the jello values beyond
      * the defaults.  To use a JelloModel, you must call init().
      */
-    JelloModel() : BoxObstacle() { }
+    JelloModel() : BoxObstacle(),
+	_jelloRestcycle(nullptr){ }
+	~JelloModel() { }
 
     /**
      * Initializes a new jello at the origin.
