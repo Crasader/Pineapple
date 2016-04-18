@@ -67,6 +67,10 @@ protected:
 	AnimationNode* _kidWalkcycle;
 	/** Frame counter for walkcycle animation */
 	float _kidWalkcycleFrame;
+	/** Whether kid is spiraling towards blender blades */
+	bool _isBlended;
+	/** Whether kid has been blended */
+	bool _isDead;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -152,6 +156,11 @@ public:
      * Returns the kid texture name for the given kid index
      */
     static std::string getTexture(int idx);
+
+	/**
+	* Returns the splat texture name for the given kid index
+	*/
+	static std::string getSplatTexture(int idx);
     
 #pragma mark Attribute Properties
     /**
@@ -239,9 +248,24 @@ public:
     bool isFacingRight() const { return true; }
 
 	/**
-	* Initialize the filmstrip for walking animation
+	 * Sets whether the kid is spiralling towards the blender blades 
+	 */
+	void setIsBlended(bool blending) { _isBlended = blending; }
+
+	/**
+	* Returns true if the kid is spiralling towards the blender blades
 	*/
-	void initAnimation(Texture2D* image, float scale);
+	bool getIsBlended() { return _isBlended; }
+
+	/**
+	* Sets whether the kid is dead
+	*/
+	void setIsDead(bool dead) { _isDead = dead; }
+
+	/**
+	* Returns true if the kid is dead
+	*/
+	bool getIsDead() { return _isDead; }
     
     
 #pragma mark Physics Methods
@@ -283,6 +307,14 @@ public:
 	* Animate the kid if they're moving
 	*/
 	void animate();
+
+	/**
+	* Make the kid spiral towards blender blades
+	*
+	* @param x x-coordinate of the blender blades
+	* @param y y-coordinate of the blender
+	*/
+	void spiral(float x, float y);
 
 #pragma mark Drawing Methods
     /**

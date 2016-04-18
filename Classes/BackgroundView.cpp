@@ -9,26 +9,26 @@
 #include "BackgroundView.h"
 
 /** Scale factor for background images */
-#define FRONT_BACKGROUND_SCALE   1.1f
-#define MIDDLE_BACKGROUND_SCALE  1.1f
+#define FRONT_BACKGROUND_SCALE   1.05f
+#define MIDDLE_BACKGROUND_SCALE  1.2f
 #define BACK_BACKGROUND_SCALE    1.0f
 /** The width of background assets */
-#define FRONT_BACKGROUND_WIDTH   4000.0f
+#define FRONT_BACKGROUND_WIDTH   2000.0f
 #define MIDDLE_BACKGROUND_WIDTH  1000.0f
 #define BACK_BACKGROUND_WIDTH    1500.0f
 /** Height of background assets */
-#define FRONT_BACKGROUND_HEIGHT  500.0f
+#define FRONT_BACKGROUND_HEIGHT  566.0f
 #define MIDDLE_BACKGROUND_HEIGHT 300.0f
 #define BACK_BACKGROUND_HEIGHT   300.0f
 /** Vertical offset of background assets */
-#define FRONT_BACKGROUND_VERTICAL_OFFSET  -140.0f
-#define MIDDLE_BACKGROUND_VERTICAL_OFFSET  120.0f
-#define BACK_BACKGROUND_VERTICAL_OFFSET    170.0f
+#define FRONT_BACKGROUND_VERTICAL_OFFSET  -280.0f
+#define MIDDLE_BACKGROUND_VERTICAL_OFFSET  100.0f
+#define BACK_BACKGROUND_VERTICAL_OFFSET    160.0f
 /** Damping factor for parallax scrolling */
 #define HILLS_DAMPING_FACTOR     4.0f
 #define CLOUDS_DAMPING_FACTOR    6.0f
 /** Cloud velocity */
-#define CLOUD_VELOCITY           0.05f
+#define CLOUD_VELOCITY           0.12f
 
 BackgroundView* BackgroundView::createAndAddTo(Node* rootNode, Node* worldNode, SceneManager *assets) {
     BackgroundView* view = new (std::nothrow) BackgroundView();
@@ -100,7 +100,7 @@ void BackgroundView::init(Node* rootNode, Node* worldNode, SceneManager* assets)
     worldNode->addChild(_frontBackground_2);
 }
 
-void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {
+void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {    
     // Do parallax scrolling in _hillsnode and _cloudsnode
     _hillsnode->setPositionX(_hillsnode->getPositionX() - (scale.x*offset/HILLS_DAMPING_FACTOR));
     _cloudsnode->setPositionX(_cloudsnode->getPositionX() - (scale.x*offset/CLOUDS_DAMPING_FACTOR));
@@ -177,14 +177,14 @@ void BackgroundView::update(float dt) {
     _cloudsnode->setPositionX(_cloudsnode->getPositionX() - CLOUD_VELOCITY);
 }
 
-void BackgroundView::reset() {
+void BackgroundView::reset(Node* worldNode) {
     _worldNode->removeChild(_frontBackground_1);
     _worldNode->removeChild(_frontBackground_2);
     _hillsnode->removeChild(_middleBackground_1);
     _hillsnode->removeChild(_middleBackground_2);
     _cloudsnode->removeChild(_backBackground_1);
     _cloudsnode->removeChild(_backBackground_2);
-    init(_rootNode, _worldNode, AssetManager::getInstance()->getCurrent());
+    init(_rootNode, worldNode, AssetManager::getInstance()->getCurrent());
 }
 
 void BackgroundView::removeAllChildren() {

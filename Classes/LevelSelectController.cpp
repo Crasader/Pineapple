@@ -114,7 +114,7 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     
     button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
     button->setTitleFontSize(BUTTON_FONT_SIZE);
-    button->setTitleFontName(LEVEL_SELECT_BUTTON_FONT_LOCATION);
+    button->setTitleFontName(ELECTRIC_CIRCUS_FONT_LOCATION);
     button->setTitleColor(Color3B::WHITE);
     
     button->setEnabled(i < LEVELS_CREATED);

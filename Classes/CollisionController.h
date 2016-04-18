@@ -55,12 +55,22 @@ protected:
 	/**
 	 * Triggers blending of will
 	 */
-	void handleBlenderCollision(PineappleModel * will);
+	void handleBlenderCollision(PineappleModel* will);
 
 	/**
 	 * Triggers blending of kid
 	 */
 	void handleBlenderCollision(KidModel* kid);
+	
+	/**
+	* Triggers death of will
+	*/
+	void handleBlenderBladeCollision(PineappleModel* will);
+
+	/**
+	* Triggers death of kid
+	*/
+	void handleBlenderBladeCollision(KidModel* kid);
 
 	/**
 	* Kills will and triggers any associated death-by-spikes animations and sound

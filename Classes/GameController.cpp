@@ -30,8 +30,10 @@
 using namespace cocos2d;
 //using namespace std;
 
-/** The number of frame to wait before reinitializing the game */
+/** The number of frames to wait before reinitializing the game */
 #define EXIT_COUNT      180
+/** The number of frames to wait before removing the splat */
+#define SPLAT_COUNT     20
 
 
 #pragma mark -
@@ -46,6 +48,7 @@ using namespace cocos2d;
 GameController::GameController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
+_splat(nullptr), 
 _world(nullptr),
 _active(false),
 _collision(nullptr),
@@ -115,6 +118,13 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     // Create the scene graph
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
+
+	_splat = PolygonNode::createWithTexture(_assets->get<Texture2D>(SPLAT_TEXTURE_1));
+	_splat->retain();
+	_splat->setVisible(false);
+	root->addChild(_splat,8);
+	_splatCount = -1;
+	_rootSize = root->getContentSize();
     
     PauseController::init(this, _worldnode, _assets, root, _input);
     HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
@@ -133,19 +143,8 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
     
-    _loadnode = Label::create();
-    _loadnode->retain();
-    _loadnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
-    _loadnode->setString(LOAD_MESSAGE);
-    _loadnode->setPosition(root->getContentSize().width/2.0f,
-                           root->getContentSize().height/2.0f);
-    _loadnode->setColor(LOAD_COLOR);
-    
     root->addChild(_winnode,4);
     root->addChild(_losenode,5);
-    root->addChild(_loadnode,6);
-    
-    _loadnode->setVisible(false);
     
     _collision->setLevel(_level);
     
@@ -167,6 +166,7 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     setDebug(false);
     setFailure(false);
     _isInitted = true;
+    _isReloading = false;
     return true;
 }
 
@@ -191,9 +191,9 @@ void GameController::dispose() {
     _background = nullptr;
     PauseController::release();
     _debugnode = nullptr;
+	_splat->release();
+	_splat = nullptr; 
     _winnode = nullptr;
-    _loadnode->release();
-    _loadnode = nullptr;
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
@@ -212,19 +212,18 @@ void GameController::dispose() {
 void GameController::reset() {
     setFailure(false);
     setComplete(false);
-    
+	
     // Unload the level but keep in memory temporarily
     _level->retain();
     _assets->unload<LevelModel>(_levelKey);
     
     // Load a new level and quit update
     _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
-    _loadnode->setVisible(true);
+    _isReloading = true;
 }
 
 /** Called after the loadAsync for the level finishes */
 void GameController::onReset() {
-    
     // Release the old level permanently
     _level->release();
     
@@ -251,8 +250,8 @@ void GameController::onReset() {
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
-    _background->reset();
-    _loadnode->setVisible(false);
+    _background->reset(_worldnode);
+    _isReloading = false;
 }
 
 /**
@@ -265,7 +264,6 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        Sound* source = _assets->get<Sound>(WIN_MUSIC);
         ////SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _winnode->setVisible(true);
         _countdown = EXIT_COUNT;
@@ -285,7 +283,6 @@ void GameController::setComplete(bool value) {
 void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
-        Sound* source = _assets->get<Sound>(LOSE_MUSIC);
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _losenode->setVisible(true);
         _countdown = EXIT_COUNT;
@@ -327,7 +324,7 @@ void GameController::update(float dt) {
     }
     
     // Check to see if new level loaded yet
-    if (_loadnode->isVisible()) {
+    if (_isReloading) {
         if (_assets->isComplete()) {
             onReset();
         } else {
@@ -357,6 +354,7 @@ void GameController::update(float dt) {
         return;
     }
     if (PauseController::isPaused()) {
+        PauseController::animate();
         return;
     }
     
@@ -372,36 +370,71 @@ void GameController::update(float dt) {
     // Process kids
     for(int i = 0; i < KID_COUNT; i++) {
         if(_level->getKid(i) != nullptr) {
-            _level->getKid(i)->dampTowardsWalkspeed();
-            _level->getKid(i)->animate();
+			if (!_level->getKid(i)->getIsBlended()) {
+				_level->getKid(i)->dampTowardsWalkspeed();
+				_level->getKid(i)->animate();
+			} 
+			else {
+				_level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+				_level->getKid(i)->setFixedRotation(false);
+				_level->getKid(i)->setAngularVelocity(6.0f);
+				if (_level->getKid(i)->getIsDead()) {
+					bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
+					activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
+					_level->kill(_level->getKid(i));
+					_level->getBlender()->setIsBlending(true);
+					_splatCount = SPLAT_COUNT;
+				}
+			}            
         }
     }
-    
-    // Process the movement
-    if(_level->getPineapple() != nullptr) {
-        _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
-        _level->getPineapple()->setJumping( _input->didJump());
-        float cscale = Director::getInstance()->getContentScaleFactor();
 
-        handleAvatarGrowth(cscale, _input, _level->getPineapple());
-        
-        _level->getPineapple()->applyForce();
-        
-        if (_level->getPineapple()->isJumping()) {
-            Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-        }
-        
-        _level->getPineapple()->animate();
+    // Process the movement
+    if (_level->getPineapple() != nullptr) {
+		if (!_level->getPineapple()->getIsBlended()) {
+			_level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
+			_level->getPineapple()->setJumping(_input->didJump());
+			float cscale = Director::getInstance()->getContentScaleFactor();
+
+			handleAvatarGrowth(cscale, _input, _level->getPineapple());
+
+			_level->getPineapple()->applyForce();
+
+			if (_level->getPineapple()->isJumping()) {
+				//Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+				//SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+			}
+
+			_level->getPineapple()->animate();
+
+			// Scroll the screen (with parallax) if necessary
+			handleScrolling();
+		}
+		else {
+			_level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+			_level->getPineapple()->setFixedRotation(false);
+			_level->getPineapple()->setAngularVelocity(6.0f);
+			if (_level->getPineapple()->getIsDead()) {
+				_level->kill(_level->getPineapple());
+				_level->getBlender()->setIsBlending(true);
+			}
+		}
     }
+
+	// Animate the jello
+	std::vector<JelloModel*> jellos = _level->getJellos();
+	for (auto it = jellos.begin(); it != jellos.end(); ++it) {
+		JelloModel* jello = *it;
+		jello->animate();
+	}
+
+	// Animate the blender
+	_level->getBlender()->animate();
+
+	HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
     
-    HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
-    
-    // Update the background (move the clouds)
+	// Update the background (move the clouds)
     _background->update(dt);
-    
-    // Scroll the screen (with parallax) if necessary
-    handleScrolling();
     
     // Turn the physics engine crank
     _world->update(dt);
@@ -415,6 +448,13 @@ void GameController::update(float dt) {
     } else if (_countdown == 0) {
         reset();
     }
+
+	if (_splatCount > 0) {
+		_splatCount--;
+	}
+	else {
+		_splat->setVisible(false);
+	}
 }
 
 /**
@@ -449,6 +489,22 @@ void GameController::handleScrolling() {
     
     // Do parallax scrolling of the background
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
+}
+
+/**
+* Activate the splat effect when shit hits the fan
+*/
+void GameController::activateSplat(Texture2D* image, bool offScreen) {
+	_splat->setTexture(image);
+	_splat->setScale(2.0f, 2.0f);
+	_splat->setVisible(true);
+
+	if (offScreen) {
+		_splat->setPosition(0.0f, _rootSize.height/2.0f);
+	}
+	else {
+		_splat->setPosition(_rootSize.width/2.0f, _rootSize.height / 2.0f);
+	}
 }
 
 #pragma mark -

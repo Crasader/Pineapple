@@ -64,7 +64,7 @@ public:
     
     void removeAllChildren();
     
-    void reset();
+    void reset(Node* worldNode);
     
 private:
     void init(Node* rootNode, Node* worldNode, SceneManager* assets);

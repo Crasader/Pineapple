@@ -11,7 +11,7 @@ void loadCharacters(TextureLoader* tloader) {
     tloader->loadAsync(KID_TEXTURE_3, "textures/child_hat_walkcycle_reduced.png");
     tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
     
-    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
+    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender_blendCycle2.png");
 }
 
 void loadObstacles(TextureLoader* tloader) {
@@ -19,7 +19,7 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
     tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
     
-    tloader->loadAsync(JELLO_TEXTURE, "textures/jello.png");
+    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
@@ -48,10 +48,15 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_RED,  "textures/lever-red-reverse.png");
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_GREEN, "textures/lever-green-reverse.png");
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_BLUE,   "textures/lever-blue-reverse.png");
+	
+	tloader->loadAsync(SPLAT_TEXTURE_1, "textures/splat1.png");
+	tloader->loadAsync(SPLAT_TEXTURE_2, "textures/splat2.png");
+	tloader->loadAsync(SPLAT_TEXTURE_3, "textures/splat3.png");
+	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splat4.png");
 }
 
 void loadBackground(TextureLoader* tloader) {
-    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_full.png");
+    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_wPlants2.png");
     tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
     tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
@@ -59,7 +64,7 @@ void loadBackground(TextureLoader* tloader) {
 
 void loadPauseScreen(TextureLoader* tloader) {
     tloader->loadAsync(PAUSE_SCREEN_OVERLAY, "textures/pause-overlay.png");
-    
+    tloader->loadAsync(CHUNKY_QUIVER, "textures/chunky_quiver.png");
 }
 
 void loadHUD(TextureLoader* tloader) {
@@ -84,7 +89,11 @@ void loadLevelSelectScreen(TextureLoader *tloader) {
 
 void loadFonts(SceneManager* assets) {
     assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
-    assets->loadAsync<TTFont>(LEVEL_SELECT_BUTTON_FONT, LEVEL_SELECT_BUTTON_FONT_LOCATION);
+}
+
+void loadSounds(SceneManager* assets) {
+    assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
+    assets->loadAsync<Sound>(LEVEL_SELECT_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
 }
 
 void loadLevels(SceneManager* assets) {
@@ -107,31 +116,42 @@ void LoadingScreenController::preload() {
     loadHUD(tloader);
     loadLevelSelectScreen(tloader);
     
+    loadSounds(assets);
     loadFonts(assets);
     loadLevels(assets);
 }
 
 void LoadingScreenController::init(Node* root) {
     // Load the font NOW
-    AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
+    AssetManager::getInstance()->getCurrent()->load<TTFont>(ELECTRIC_CIRCUS_FONT, ELECTRIC_CIRCUS_FONT_LOCATION);
+    AssetManager::getInstance()->getCurrent()->load<Texture2D>(LOADING_BACKGROUND, "textures/loadingBackground.png");
     _loadingLabel = nullptr;
     _rootnode = root;
     _isInitted = true;
+    
+    Size size = _rootnode->getContentSize();
+    Vec2 center(size.width/2.0f,size.height/2.0f);
+    
+    //Create the background image
+//    Texture2D* image = AssetManager::getInstance()->getCurrent()->get<Texture2D>(LOADING_BACKGROUND);
+//    _loadingImage = PolygonNode::createWithTexture(image);
+//    _loadingImage->setPosition(center);
+//    _loadingImage->setAnchorPoint(Vec2(0.5f, 0.5f));
+//    _loadingImage->setScale(size.width/image->getContentSize().width, size.height/image->getContentSize().height);
+//    
+//    _rootnode->addChild(_loadingImage, 0);
+    
+    // Create the message label.
+    _loadingLabel = Label::create();
+    _loadingLabel->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(ELECTRIC_CIRCUS_FONT)->getTTF());
+    _loadingLabel->setAnchorPoint(Vec2(0.5f,0.5f));
+    _loadingLabel->setPosition(center);
+    _loadingLabel->setString("Loading...");
+    
+    // Add the label as a child to loading screen
+    _rootnode->addChild(_loadingLabel, 1);
 }
 
 void LoadingScreenController::update(float dt) {
-    if (_loadingLabel == nullptr) {
-        Size size = _rootnode->getContentSize();
-        Vec2 center(size.width/2.0f,size.height/2.0f);
-        
-        // Create the message label.
-        _loadingLabel = Label::create();
-        _loadingLabel->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
-        _loadingLabel->setAnchorPoint(Vec2(0.5f,0.5f));
-        _loadingLabel->setPosition(center);
-        _loadingLabel->setString(LOADING_MESSAGE);
-        
-        // Add the label as a child to loading screen
-        _rootnode->addChild(_loadingLabel, 5);
-    }
+    
 }

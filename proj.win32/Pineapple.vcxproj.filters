@@ -84,6 +84,9 @@
     <ClCompile Include="..\Classes\PineappleRoot.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\HUDController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\LevelSelectController.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -170,10 +173,13 @@
     <ClInclude Include="..\Classes\WallModel.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\PineappleRoot.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\AbsScreenController.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PineappleRoot.h">
+    <ClInclude Include="..\Classes\HUDController.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LevelSelectController.h">
