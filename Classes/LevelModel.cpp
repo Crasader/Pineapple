@@ -665,6 +665,7 @@ void LevelModel::setRootNode(Node* node) {
         poly = PolygonNode::create();
         _goalDoor->setSceneNode(poly);
         initDebugProperties(_goalDoor);
+				_goalDoor->setY(_goalDoor->getY() + 0.7);
         
         addObstacle(_goalDoor, WALL_Z_INDEX);
     }
