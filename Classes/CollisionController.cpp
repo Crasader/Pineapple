@@ -123,6 +123,10 @@ bool CollisionController::isBelowChar(BoxObstacle* obj, CapsuleObstacle* charact
 	return charBot + e >= objTop;
 }
 
+void ground(KidModel* kid, b2Fixture* fix) {
+    kid->setGrounded(true);
+}
+
 /**
 * Processes the start of a collision
 *
@@ -201,9 +205,14 @@ void CollisionController::beginContact(b2Contact* contact) {
 	// KID COLLISIONS
 	else if (bd1->getCollisionClass() == KID_C || bd2->getCollisionClass() == KID_C) {
 		KidModel* kid = bd1->getCollisionClass() == KID_C ? (KidModel*)bd1 : (KidModel*)bd2;
+        // with ground
+        if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+            kid->setGrounded(true);
+        }
 		// Kid x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			handleJelloCollision(kid);
+            kid->setGrounded(false);
 		}
 		// Kid x Goal
 		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
