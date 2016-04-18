@@ -143,19 +143,8 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
                            root->getContentSize().height/2.0f);
     _losenode->setColor(LOSE_COLOR);
     
-    _loadnode = Label::create();
-    _loadnode->retain();
-    _loadnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
-    _loadnode->setString(LOAD_MESSAGE);
-    _loadnode->setPosition(root->getContentSize().width/2.0f,
-                           root->getContentSize().height/2.0f);
-    _loadnode->setColor(LOAD_COLOR);
-    
     root->addChild(_winnode,4);
     root->addChild(_losenode,5);
-    root->addChild(_loadnode,6);
-
-    _loadnode->setVisible(false);
     
     _collision->setLevel(_level);
     
@@ -177,6 +166,7 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     setDebug(false);
     setFailure(false);
     _isInitted = true;
+    _isReloading = false;
     return true;
 }
 
@@ -204,8 +194,6 @@ void GameController::dispose() {
 	_splat->release();
 	_splat = nullptr; 
     _winnode = nullptr;
-    _loadnode->release();
-    _loadnode = nullptr;
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
@@ -231,7 +219,7 @@ void GameController::reset() {
     
     // Load a new level and quit update
     _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
-    _loadnode->setVisible(true);
+    _isReloading = true;
 }
 
 /** Called after the loadAsync for the level finishes */
@@ -263,7 +251,7 @@ void GameController::onReset() {
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background->reset(_worldnode);
-    _loadnode->setVisible(false);
+    _isReloading = false;
 }
 
 /**
@@ -336,7 +324,7 @@ void GameController::update(float dt) {
     }
     
     // Check to see if new level loaded yet
-    if (_loadnode->isVisible()) {
+    if (_isReloading) {
         if (_assets->isComplete()) {
             onReset();
         } else {
