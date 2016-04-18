@@ -65,8 +65,8 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input) {
-    return init(root,input,SCREEN);
+bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile) {
+    return init(root, input, levelKey, levelFile, SCREEN);
 }
 
 /**
@@ -87,7 +87,7 @@ bool GameController::init(Node* root, InputController* input) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input, const Rect& rect) {
+bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile, const Rect& rect) {
     _rootnode = root;
     _rootnode->retain();
     
@@ -301,11 +301,9 @@ void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _
     float scale = 1.0f;
     if (_input->didGrow()) {
         size = _avatar->grow();
-        if (size == 2)
-            scale = PINEAPPLE_GROW_SCALE;
     } else if (_input->didShrink()) {
         size = _avatar->shrink();
-        if (size == 2)
+        if (size == 1)
             scale = PINEAPPLE_SHRINK_SCALE;
     }
     if (size) {

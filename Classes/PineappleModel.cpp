@@ -203,9 +203,7 @@ void PineappleModel::createFixtures() {
     
     // Override mass based on shape sizes to custom values
     b2MassData massData = b2MassData();
-    float mass = this->_isLarge ? PINEAPPLE_GROWN_MASS : PINEAPPLE_NORMAL_MASS;
-    mass = this->_isSmall ? PINEAPPLE_SHRUNK_MASS : mass;
-    massData.mass = mass;
+    massData.mass = this->_isSmall ? PINEAPPLE_SHRUNK_MASS : PINEAPPLE_NORMAL_MASS;
     setDensity(PINEAPPLE_DENSITY);
     _body->SetMassData(&massData);
 }
@@ -234,28 +232,17 @@ int PineappleModel::grow() {
         setY(getY() + (getDimension().height - currentHeight)/2);
         setIsSmall(false);
         return 1;
-    } else if (!_isLarge  && !_isSmall) {
-        setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-        setY(getY() + (getDimension().height - currentHeight)/2);
-        setIsLarge(true);
-        return 2;
     }
-    
     return 0;
 }
 
 int PineappleModel::shrink() {
     float currentHeight = getDimension().height;
-    if (_isLarge) {
-        setDimension(_normalSize);
-        setY(getY() + (getDimension().height - currentHeight)/2);
-        setIsLarge(false);
-        return 1;
-    } else if (!_isLarge && !_isSmall) {
+    if (!_isSmall) {
         setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
         setY(getY() + (getDimension().height - currentHeight)/2);
         setIsSmall(true);
-        return 2;
+        return 1;
     }
     return 0;
 }

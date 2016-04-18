@@ -20,6 +20,10 @@
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT     "retro"
 
+/** The key for the font for level select buttons in the asset manager */
+#define LEVEL_SELECT_BUTTON_FONT            "level_select_button_font"
+#define LEVEL_SELECT_BUTTON_FONT_LOCATION  "fonts/ElectricCircus.ttf"
+
 /** The texture for the character avatar */
 #define PINEAPPLE_TEXTURE "pineapple"
 /** The texture for the character avatar */

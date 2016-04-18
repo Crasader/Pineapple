@@ -18,7 +18,6 @@
 //  Version: 1/15/15
 //
 // This is the root, so there are a lot of includes
-#include <string>
 #include <cornell.h>
 #include "LevelSelectController.h"
 #include "CollisionController.h"
@@ -26,8 +25,30 @@
 #include "Texture.h"
 #include "Levels.h"
 
+#define LEVELS_CREATED              2
+const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE};
+const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY};
 
-using namespace cocos2d;
+/** Level Select Z indexes */
+#define LEVEL_SELECT_BACKGROUND_Z   1
+#define LEVEL_SELECT_BUTTON_Z       2
+#define LEVEL_SELECT_TEXT_Z         3
+
+/** Button texture paths */
+#define LEVEL_SELECT_BUTTON_OFF_FILEPATH  "textures/buttons/level_button.png"
+#define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
+
+/** Graphics scaling constants for button layout */
+#define BUTTONS_PER_ROW_TOP         5
+#define BUTTONS_PER_ROW_MIDDLE      5
+#define BUTTONS_PER_ROW_BOTTOM      3
+
+#define LEVEL_SELECT_TOP_MARGIN     100
+#define BUTTON_WIDTH_MARGIN         0.3f //As a percentage of button width, distributed to both sides
+#define BUTTON_HEIGHT_MARGIN        0.3f //As a percentage of button width, distributed to both sides
+#define BUTTON_FONT_SIZE            38
+
+
 //using namespace std;
 
 
@@ -43,7 +64,9 @@ using namespace cocos2d;
 LevelSelectController::LevelSelectController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
+_backgroundNode(nullptr),
 _world(nullptr),
+_levelSelected(NO_LEVEL_SELECTED),
 _debug(false){}
 
 /**
@@ -61,6 +84,54 @@ _debug(false){}
  */
 bool LevelSelectController::init(Node* root, InputController* input) {
     return init(root,input,SCREEN);
+}
+
+Button* LevelSelectController::initButton(Size dimen, int i) {
+    Button* button = Button::create();
+    button->loadTextureNormal(LEVEL_SELECT_BUTTON_OFF_FILEPATH);
+    button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
+    button->setAnchorPoint(Vec2(0.5f, 0.5f));
+    
+    float row = i / BUTTONS_PER_ROW_TOP;
+    float col;
+    if (row == 0) {
+        col = i % BUTTONS_PER_ROW_TOP;
+    } else if (row == 1) {
+        col = (i - BUTTONS_PER_ROW_TOP) % BUTTONS_PER_ROW_MIDDLE;
+    } else {
+        col = ((i - BUTTONS_PER_ROW_TOP - BUTTONS_PER_ROW_MIDDLE) % BUTTONS_PER_ROW_BOTTOM) + 1;
+    }
+    
+    row += 0.5f;
+    col += 0.6f;
+    
+    int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN);
+    int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN);
+    
+    button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
+    button->setVisible(true);
+    button->setTag(i);
+    
+    button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
+    button->setTitleFontSize(BUTTON_FONT_SIZE);
+    button->setTitleFontName(LEVEL_SELECT_BUTTON_FONT_LOCATION);
+    button->setTitleColor(Color3B::WHITE);
+    
+    button->setEnabled(i < LEVELS_CREATED);
+    
+    button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::BEGAN) {
+            ((Button*)sender)->setTitleColor(Color3B::BLACK);
+        } else if (type == ui::Widget::TouchEventType::CANCELED) {
+            ((Button*)sender)->setTitleColor(Color3B::WHITE);
+        } else if (type == ui::Widget::TouchEventType::ENDED) {
+            _levelSelected = ((Node*)sender)->getTag();
+            ((Button*)sender)->setTitleColor(Color3B::WHITE);
+        }
+    });
+    
+    button->retain();
+    return button;
 }
 
 /**
@@ -102,15 +173,21 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     _rootnode = root;
     _rootnode->retain();
     
-    // Create the message label.
-    Label* label = Label::create();
-    label->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>("felt")->getTTF());
-    label->setAnchorPoint(Vec2(0.5f,0.5f));
-    label->setPosition(center);
-    label->setString("LEVEL SELECT");
+    //Create the background image
+    Texture2D* image = _assets->get<Texture2D>(LEVEL_SELECT_BACKGROUND);
+    _backgroundNode = PolygonNode::createWithTexture(image);
+    _backgroundNode->setPosition(center);
+    _backgroundNode->setAnchorPoint(Vec2(0.5f, 0.5f));
+    _backgroundNode->setScale(dimen.width/image->getContentSize().width, dimen.height/image->getContentSize().height);
     
-    // Add the label as a child to loading screen
-    _rootnode->addChild(label, 5);
+    _rootnode->addChild(_backgroundNode, LEVEL_SELECT_BACKGROUND_Z);
+    
+    
+    //Lay out the buttons
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        _buttons[i] = initButton(dimen, i);
+        _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
+    }
     
     _isInitted = true;
     setDebug(false);
@@ -132,6 +209,13 @@ LevelSelectController::~LevelSelectController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void LevelSelectController::dispose() {
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        if (_buttons[i] != nullptr) {
+            _buttons[i]->release();
+            _buttons[i] = nullptr;
+        }
+    }
+    _backgroundNode = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
     if(_rootnode != nullptr) {
@@ -158,14 +242,8 @@ void LevelSelectController::update(float dt) {
     
     _input->update(dt);
     
-    if (_input->didJump()) {
+    if (_levelSelected != NO_LEVEL_SELECTED) {
         setTransitionStatus(TRANSITION_TO_GAME);
         return;
     }
-    
-    // Turn the physics engine crank
-    //_world->update(dt);
-    
-    // Since items may be deleted, garbage collect
-    //_world->garbageCollect();
 }

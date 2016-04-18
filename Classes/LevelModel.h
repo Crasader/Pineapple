@@ -401,8 +401,6 @@ public:
 	/**
 	* Removes obstacle from level world
 	*
-	* TODO: Putting this here for the sake of completing CollisionController, but should be moved to LevelController when it is made
-	*				Since this is just here temporarily, the full implementation is in the header.
 	*/
 	void removeObstacle(Obstacle* obj) {
 		_worldnode->removeChild(obj->getSceneNode());
