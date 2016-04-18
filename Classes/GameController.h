@@ -287,12 +287,15 @@ public:
     
 #pragma mark -
 #pragma mark Gameplay Handling
+    
+    void reset() { reset(_levelKey, _levelFile); }
+    
     /**
      * Resets the status of the game so that we can play again.
      *
      * This method disposes of the world and creates a new one.
      */
-    void reset() ;
+    void reset(string levelKey, string levelFile) ;
     
     /** Called after the asynced level reloading finishes.
       * a helper for reset() */

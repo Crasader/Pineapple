@@ -229,7 +229,7 @@ void GameController::dispose() {
  *
  * This method disposes of the world and creates a new one.
  */
-void GameController::reset() {
+void GameController::reset(string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
 	
@@ -241,8 +241,15 @@ void GameController::reset() {
     _assets->unload<LevelModel>(_levelKey);
     
     // Load a new level and quit update
-    _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
-    _isReloading = true;
+    _levelKey = levelKey;
+    _levelFile = levelFile;
+
+    if (_assets->get<LevelModel>(_levelKey) == nullptr) {
+        _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
+        _isReloading = true;
+    } else {
+        onReset();
+    }
 }
 
 /** Called after the loadAsync for the level finishes */

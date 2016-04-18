@@ -187,7 +187,7 @@ void PineappleRoot::update(float deltaTime) {
         if (! _gameplay->isInitted()) {
             _gameplay->init(_gameRoot, &_inputController, levelKey, levelFile);
         } else {
-            _gameplay->reset();
+            _gameplay->reset(levelKey, levelFile);
         }
         
         if (_backgroundSoundKey != GAME_BACKGROUND_SOUND) {
