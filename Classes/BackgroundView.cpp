@@ -100,7 +100,7 @@ void BackgroundView::init(Node* rootNode, Node* worldNode, SceneManager* assets)
     worldNode->addChild(_frontBackground_2);
 }
 
-void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {
+void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {    
     // Do parallax scrolling in _hillsnode and _cloudsnode
     _hillsnode->setPositionX(_hillsnode->getPositionX() - (scale.x*offset/HILLS_DAMPING_FACTOR));
     _cloudsnode->setPositionX(_cloudsnode->getPositionX() - (scale.x*offset/CLOUDS_DAMPING_FACTOR));
@@ -177,14 +177,14 @@ void BackgroundView::update(float dt) {
     _cloudsnode->setPositionX(_cloudsnode->getPositionX() - CLOUD_VELOCITY);
 }
 
-void BackgroundView::reset() {
+void BackgroundView::reset(Node* worldNode) {
     _worldNode->removeChild(_frontBackground_1);
     _worldNode->removeChild(_frontBackground_2);
     _hillsnode->removeChild(_middleBackground_1);
     _hillsnode->removeChild(_middleBackground_2);
     _cloudsnode->removeChild(_backBackground_1);
     _cloudsnode->removeChild(_backBackground_2);
-    init(_rootNode, _worldNode, AssetManager::getInstance()->getCurrent());
+    init(_rootNode, worldNode, AssetManager::getInstance()->getCurrent());
 }
 
 void BackgroundView::removeAllChildren() {

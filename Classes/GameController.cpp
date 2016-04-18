@@ -251,7 +251,7 @@ void GameController::onReset() {
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
-    _background->reset();
+    _background->reset(_worldnode);
     _loadnode->setVisible(false);
 }
 
