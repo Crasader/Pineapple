@@ -62,8 +62,6 @@ protected:
     Label* _winnode;
     /** Reference to the lose message label */
     Label* _losenode;
-    /** Reference to the reset message label */
-    Label* _loadnode;
     /** The Box2D world */
     WorldController* _world;
     
@@ -97,6 +95,8 @@ protected:
     int _countdown;
 	/** Distance between start of level and left side of screen */
     float _levelOffset;
+    /** True if this is reloading */
+    bool _isReloading;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
