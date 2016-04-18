@@ -86,6 +86,11 @@ public:
         HUDController::init(gameController, worldNode, assets, root, input, blenderPos);
     }
     
+    static void setEnabled(bool enabled) {
+        HUD_CONTROLLER->_pauseButton->setEnabled(enabled);
+        HUD_CONTROLLER->_soundButton->setEnabled(enabled);
+    }
+    
 private:
     HUDController() { }
     ~HUDController() { }

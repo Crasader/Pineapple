@@ -280,7 +280,7 @@ bool LevelModel::load() {
         addBlender(position);
         
         //Add walls that are offscreen and prevent you from going past end of level
-        /*position[0] = 0;
+        position[0] = 0;
         position[1] = 0;
         position[2] = 0;
         position[3] = DEFAULT_HEIGHT;
@@ -288,11 +288,11 @@ bool LevelModel::load() {
         position[5] = DEFAULT_HEIGHT;
         position[6] = -2;
         position[7] = 0;
-        addWall(position);
+        //addWall(position);
         for(int i = 0; i < WALL_VERTS; i += 2) {
             position[i] += 2 + _length;
         }
-        addWall(position);*/
+        addWall(position);
         
         //End JSON object
         reader.endObject();

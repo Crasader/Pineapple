@@ -26,6 +26,8 @@
 #include "HUDController.h"
 #include "LevelModel.h"
 #include "BackgroundView.h"
+#include "LoseView.h"
+#include "WinView.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -60,8 +62,21 @@ protected:
     Node* _debugnode;
     /** Reference to the win message label */
     Label* _winnode;
-    /** Reference to the lose message label */
-    Label* _losenode;
+    
+    /** The node that is the root of the lose splash screen */
+    Node* _loseroot;
+    /** Reference to the lose splash screen */
+    LoseView* _loseview;
+    /** True once the loseview is visible */
+    bool _loseViewVisible;
+    
+    /** The node that is the root of the win splash screen */
+    Node* _winroot;
+    /** Reference to the win splash screen */
+    WinView* _winview;
+    /** True once the winview is visible */
+    bool _winViewVisible;
+    
     /** The Box2D world */
     WorldController* _world;
 
@@ -98,8 +113,6 @@ protected:
     bool _debug;
     /** Whether we have failed at this world (and need a reset) */
     bool _failed;
-    /** Countdown active for winning or losing */
-    int _countdown;
 	/** Distance between start of level and left side of screen */
     float _levelOffset;
     /** True if this is reloading */
@@ -274,12 +287,15 @@ public:
     
 #pragma mark -
 #pragma mark Gameplay Handling
+    
+    void reset() { reset(_levelKey, _levelFile); }
+    
     /**
      * Resets the status of the game so that we can play again.
      *
      * This method disposes of the world and creates a new one.
      */
-    void reset() ;
+    void reset(string levelKey, string levelFile) ;
     
     /** Called after the asynced level reloading finishes.
       * a helper for reset() */

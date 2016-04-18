@@ -119,4 +119,19 @@
 /** The key for the selected level button texture in the asset manager */
 #define LEVEL_SELECT_LEVEL_BUTTON_ON "level_select_level_button_selected"
 
+/** The key for the lose splash screen */
+#define LOSE_SPLASH    "lose_splash"
+/** The key for the image of the juice cup for the lose splash screen */
+#define LOSE_JUICE_CUP "lose_juice_cup"
+/** The key for the crying will animation for the lose splash screen */
+#define LOSE_CRYING_WILL    "lose_crying_will"
+/** The key for the win splash screen */
+#define WIN_SPLASH    "win_splash"
+/** The keys for the children animations on the win splash screen */
+#define WIN_SPLASH_CHILD_1  "win_splash_child_1"
+#define WIN_SPLASH_CHILD_2  "win_splash_child_2"
+#define WIN_SPLASH_CHILD_3  "win_splash_child_3"
+#define WIN_SPLASH_CHILD_4  "win_splash_child_4"
+#define WIN_SPLASH_WILL     "win_splash_will"
+
 #endif /* Texture_h */

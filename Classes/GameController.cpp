@@ -30,8 +30,10 @@
 using namespace cocos2d;
 //using namespace std;
 
-/** The number of frames to wait before reinitializing the game */
-#define EXIT_COUNT      180
+#define SPLAT_Z         5
+#define WIN_SPLASH_Z    7
+#define LOSE_SPLASH_Z   8
+
 /** The number of frames to wait before removing the splat */
 #define SPLAT_COUNT     20
 
@@ -53,7 +55,9 @@ _world(nullptr),
 _active(false),
 _collision(nullptr),
 _background(nullptr),
-_debug(false){}
+_debug(false),
+_loseViewVisible(false),
+_winViewVisible(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -122,7 +126,7 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
 	_splat = PolygonNode::createWithTexture(_assets->get<Texture2D>(SPLAT_TEXTURE_1));
 	_splat->retain();
 	_splat->setVisible(false);
-	root->addChild(_splat,8);
+	root->addChild(_splat, SPLAT_Z);
 	_splatCount = -1;
 	_rootSize = root->getContentSize();
     
@@ -136,15 +140,15 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
                           root->getContentSize().height/2.0f);
     _winnode->setColor(WIN_COLOR);
     
-    _losenode = Label::create();
-    _losenode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
-    _losenode->setString(LOSE_MESSAGE);
-    _losenode->setPosition(root->getContentSize().width/2.0f,
-                           root->getContentSize().height/2.0f);
-    _losenode->setColor(LOSE_COLOR);
+    _loseroot = Node::create();
+    _loseroot->setContentSize(_rootnode->getContentSize());
+    _loseroot->retain();
+    _loseview = LoseView::create(_loseroot, _assets);
     
-    root->addChild(_winnode,4);
-    root->addChild(_losenode,5);
+    _winroot = Node::create();
+    _winroot->setContentSize(_rootnode->getContentSize());
+    _winroot->retain();
+    _winview = WinView::create(_winroot, _assets);
     
     _collision->setLevel(_level);
     
@@ -167,6 +171,8 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     setFailure(false);
     _isInitted = true;
     _isReloading = false;
+    _loseViewVisible = false;
+    _winViewVisible = false;
     return true;
 }
 
@@ -186,6 +192,20 @@ GameController::~GameController() {
 void GameController::dispose() {
     if (_level != nullptr) {
         _level->unload();
+    }
+    if (_loseview != nullptr) {
+        _loseview->dispose();
+    }
+    if (_loseroot != nullptr) {
+        _loseroot->release();
+        _loseroot = nullptr;
+    }
+    if (_winview != nullptr) {
+        _winview->dispose();
+    }
+    if (_winroot != nullptr) {
+        _winroot->release();
+        _winroot = nullptr;
     }
     _worldnode = nullptr;
     _background = nullptr;
@@ -209,7 +229,7 @@ void GameController::dispose() {
  *
  * This method disposes of the world and creates a new one.
  */
-void GameController::reset() {
+void GameController::reset(string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
 	
@@ -221,8 +241,15 @@ void GameController::reset() {
     _assets->unload<LevelModel>(_levelKey);
     
     // Load a new level and quit update
-    _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
-    _isReloading = true;
+    _levelKey = levelKey;
+    _levelFile = levelFile;
+
+    if (_assets->get<LevelModel>(_levelKey) == nullptr) {
+        _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
+        _isReloading = true;
+    } else {
+        onReset();
+    }
 }
 
 /** Called after the loadAsync for the level finishes */
@@ -247,6 +274,9 @@ void GameController::onReset() {
         _collision->endContact(contact);
     };
     
+    _splat->setVisible(false);
+    _splatCount = -1;
+    
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
     
@@ -267,12 +297,17 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        ////SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
-        _winnode->setVisible(true);
-        _countdown = EXIT_COUNT;
+        //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+        _rootnode->addChild(_winroot, WIN_SPLASH_Z);
+        _winview->position();
+        _winViewVisible = true;
+        HUDController::setEnabled(false);
     } else {
-        _winnode->setVisible(false);
-        _countdown = -1;
+        if (_winViewVisible) {
+            _rootnode->removeChild(_winroot);
+        }
+        _winViewVisible = false;
+        HUDController::setEnabled(true);
     }
 }
 
@@ -287,11 +322,16 @@ void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
-        _losenode->setVisible(true);
-        _countdown = EXIT_COUNT;
+        _rootnode->addChild(_loseroot, LOSE_SPLASH_Z);
+        _loseview->position();
+        _loseViewVisible = true;
+        HUDController::setEnabled(false);
     } else {
-        _losenode->setVisible(false);
-        _countdown = -1;
+        if (_loseViewVisible) {
+            _rootnode->removeChild(_loseroot);
+        }
+        _loseViewVisible = false;
+        HUDController::setEnabled(true);
     }
     
 }
@@ -361,110 +401,126 @@ void GameController::update(float dt) {
         return;
     }
     
-    if (_level->haveFailed() && _countdown == -1) {
+    if (_level->haveFailed() && ! _loseViewVisible) {
         setFailure(true);
     }
     
     // Check for Victory
-    if (checkForVictory() && ! _level->haveFailed() && ! _winnode->isVisible()) {
+    if (checkForVictory() && ! _level->haveFailed() && ! _winViewVisible) {
         setComplete(true);
     }
     
-    // Process kids
-    for(int i = 0; i < KID_COUNT; i++) {
-        if(_level->getKid(i) != nullptr) {
-			if (!_level->getKid(i)->getIsBlended()) {
-				_level->getKid(i)->dampTowardsWalkspeed();
-				_level->getKid(i)->animate();
-			} 
-			else {
-				_level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
-				_level->getKid(i)->setFixedRotation(false);
-				_level->getKid(i)->setAngularVelocity(6.0f);
-				if (_level->getKid(i)->getIsDead()) {
-					bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
-					activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
-					_level->kill(_level->getKid(i));
-					_level->getBlender()->setIsBlending(true);
-					_splatCount = SPLAT_COUNT;
-				}
-			}
-            // check if off bounds death
-            if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
-                _level->kill(_level->getKid(i));
+    if (_loseViewVisible)  {
+        _loseview->update(dt);
+        
+        if (_loseview->shouldReset()) {
+            _loseview->resetButtons();
+            reset();
+            return;
+        } else if (_loseview->shouldTransferToLevelSelect()) {
+            _loseview->resetButtons();
+            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+            return;
+        }
+    } else if (_winViewVisible) {
+        _winview->update(dt);
+        
+        if (_winview->shouldReset()) {
+            _winview->resetButtons();
+            reset();
+            return;
+        } else if (_winview->shouldTransferToLevelSelect()) {
+            _winview->resetButtons();
+            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+            return;
+        }
+    } else {
+        // Process kids
+        for(int i = 0; i < KID_COUNT; i++) {
+            if(_level->getKid(i) != nullptr) {
+                if (!_level->getKid(i)->getIsBlended()) {
+                    _level->getKid(i)->dampTowardsWalkspeed();
+                    _level->getKid(i)->animate();
+                }
+                else {
+                    _level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                    _level->getKid(i)->setFixedRotation(false);
+                    _level->getKid(i)->setAngularVelocity(6.0f);
+                    if (_level->getKid(i)->getIsDead()) {
+                        bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
+                        activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
+                        _level->kill(_level->getKid(i));
+                        _level->getBlender()->setIsBlending(true);
+                        _splatCount = SPLAT_COUNT;
+                    }
+                }
+                // check if off bounds death
+                if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
+                    _level->kill(_level->getKid(i));
+                }
             }
         }
-    }
-
-    // Process the movement
-    if (_level->getPineapple() != nullptr) {
-        if (!_level->getPineapple()->getIsBlended()) {
-			_level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
-			_level->getPineapple()->setJumping(_input->didJump());
-			float cscale = Director::getInstance()->getContentScaleFactor();
-
-        handleAvatarGrowth(cscale, _input, _level->getPineapple());
         
-        _level->getPineapple()->applyForce();
-
-        _level->getPineapple()->animate();
+        // Process the movement
+        if (_level->getPineapple() != nullptr) {
+            if (!_level->getPineapple()->getIsBlended()) {
+                _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
+                _level->getPineapple()->setJumping(_input->didJump());
+                float cscale = Director::getInstance()->getContentScaleFactor();
+                
+                handleAvatarGrowth(cscale, _input, _level->getPineapple());
+                
+                _level->getPineapple()->applyForce();
+                
+                _level->getPineapple()->animate();
+                
+                if (_level->getPineapple()->isJumping()) {
+                    //Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+                    //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+                }
+                
+                if (_level->getPineapple()->getPosition().y < 0) {
+                    _level->kill(_level->getPineapple());
+                }
+                
+                // Scroll the screen (with parallax) if necessary
+                handleScrolling();
+            } else {
+                _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                _level->getPineapple()->setFixedRotation(false);
+                _level->getPineapple()->setAngularVelocity(6.0f);
+                if (_level->getPineapple()->getIsDead()) {
+                    _level->kill(_level->getPineapple());
+                    _level->getBlender()->setIsBlending(true);
+                }
+            }
+        }
         
-        if (_level->getPineapple()->isJumping()) {
-            //Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        // Animate the jello
+        std::vector<JelloModel*> jellos = _level->getJellos();
+        for (auto it = jellos.begin(); it != jellos.end(); ++it) {
+            JelloModel* jello = *it;
+            jello->animate();
         }
-            
-        if (_level->getPineapple()->getPosition().y < 0) {
-            _level->kill(_level->getPineapple());
-        }
-
-        // Scroll the screen (with parallax) if necessary
-        handleScrolling();
-        } else {
-			_level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
-			_level->getPineapple()->setFixedRotation(false);
-			_level->getPineapple()->setAngularVelocity(6.0f);
-			if (_level->getPineapple()->getIsDead()) {
-				_level->kill(_level->getPineapple());
-				_level->getBlender()->setIsBlending(true);
-			}
-		}
+        
+        // Animate the blender
+        _level->getBlender()->animate();
+        
+        HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
+        
+        // Update the background (move the clouds)
+        _background->update(dt);
+        
+        // Turn the physics engine crank
+        _world->update(dt);
     }
-
-	// Animate the jello
-	std::vector<JelloModel*> jellos = _level->getJellos();
-	for (auto it = jellos.begin(); it != jellos.end(); ++it) {
-		JelloModel* jello = *it;
-		jello->animate();
-	}
-
-	// Animate the blender
-	_level->getBlender()->animate();
-
-	HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
-    
-	// Update the background (move the clouds)
-    _background->update(dt);
-    
-    // Turn the physics engine crank
-    _world->update(dt);
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-    
-    // Reset the game if we win or lose.
-    if (_countdown > 0) {
-        _countdown--;
-    } else if (_countdown == 0) {
-        reset();
-    }
-
-	if (_splatCount > 0) {
-		_splatCount--;
-	}
-	else {
-		_splat->setVisible(false);
-	}
 }
 
 /**
