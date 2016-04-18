@@ -137,7 +137,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root, InputController* input);
+    bool init(Node* root, InputController* input, string levelKey, string levelFile);
 
     /**
      * Initializes the controller contents, and starts the game
@@ -156,7 +156,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root, InputController* input, const Rect& rect);
+    bool init(Node* root, InputController* input, string levelKey, string levelFile, const Rect& rect);
     
     
 #pragma mark -

@@ -20,6 +20,10 @@
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT     "retro"
 
+/** The key for the font for level select buttons in the asset manager */
+#define LEVEL_SELECT_BUTTON_FONT            "level_select_button_font"
+#define LEVEL_SELECT_BUTTON_FONT_LOCATION  "fonts/ElectricCircus.ttf"
+
 /** The texture for the character avatar */
 #define PINEAPPLE_TEXTURE "pineapple"
 /** The texture for the character avatar */
@@ -80,5 +84,12 @@
 
 /** The key for the pause screen overlay texture in the asset manager */
 #define PAUSE_SCREEN_OVERLAY "pause_overlay"
+
+/** The key for the level select background texture in the asset manager */
+#define LEVEL_SELECT_BACKGROUND "level_select_background"
+/** The key for the unselected level button texture in the asset manager */
+#define LEVEL_SELECT_LEVEL_BUTTON_OFF "level_select_level_button"
+/** The key for the selected level button texture in the asset manager */
+#define LEVEL_SELECT_LEVEL_BUTTON_ON "level_select_level_button_selected"
 
 #endif /* Texture_h */
