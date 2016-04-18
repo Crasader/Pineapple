@@ -68,7 +68,7 @@ void loadLevelSelectScreen(TextureLoader *tloader) {
 
 void loadFonts(SceneManager* assets) {
     assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
-
+    assets->loadAsync<TTFont>(LEVEL_SELECT_BUTTON_FONT, LEVEL_SELECT_BUTTON_FONT_LOCATION);
 }
 
 void loadLevels(SceneManager* assets) {

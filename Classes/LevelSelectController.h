@@ -25,7 +25,7 @@
 #include "Levels.h"
 #include "ui/CocosGUI.h"
 
-#define NUM_LEVELS                  10
+#define NUM_LEVELS                  13
 #define NO_LEVEL_SELECTED           -1
 
 // We need a lot of forward references to the classes used by this controller
@@ -108,6 +108,9 @@ public:
     
 #pragma mark -
 #pragma mark Initialization
+    /** Creates and returns a button for the given index */
+    Button* initButton(Size dimen, int i);
+    
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -210,7 +213,6 @@ public:
      * @param  delta    Number of seconds since last animation frame
      */
     void update(float dt) override;
-
 };
 
 #endif /* defined(__PF_LEVEL_SELECT_CONTROLLER_H__) */

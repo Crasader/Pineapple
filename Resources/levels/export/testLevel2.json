@@ -219,6 +219,22 @@
                  "width":64,
                  "x":1024,
                  "y":640
+                }, 
+                {
+                 "gid":21,
+                 "height":64,
+                 "id":61,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":320,
+                 "y":320
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -251,7 +267,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":61,
+ "nextobjectid":62,
  "orientation":"orthogonal",
  "properties":
     {

@@ -18,7 +18,6 @@
 //  Version: 1/15/15
 //
 // This is the root, so there are a lot of includes
-#include <string>
 #include <cornell.h>
 #include "LevelSelectController.h"
 #include "CollisionController.h"
@@ -39,10 +38,14 @@ const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEV
 #define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
 
 /** Graphics scaling constants for button layout */
-#define BUTTONS_PER_ROW             5
+#define BUTTONS_PER_ROW_TOP         5
+#define BUTTONS_PER_ROW_MIDDLE      5
+#define BUTTONS_PER_ROW_BOTTOM      3
+
 #define LEVEL_SELECT_TOP_MARGIN     100
 #define BUTTON_WIDTH_MARGIN         0.3f //As a percentage of button width, distributed to both sides
 #define BUTTON_HEIGHT_MARGIN        0.3f //As a percentage of button width, distributed to both sides
+#define BUTTON_FONT_SIZE            38
 
 
 //using namespace std;
@@ -80,6 +83,52 @@ _debug(false){}
  */
 bool LevelSelectController::init(Node* root, InputController* input) {
     return init(root,input,SCREEN);
+}
+
+Button* LevelSelectController::initButton(Size dimen, int i) {
+    Button* button = Button::create();
+    button->loadTextureNormal(LEVEL_SELECT_BUTTON_OFF_FILEPATH);
+    button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
+    button->setAnchorPoint(Vec2(0.5f, 0.5f));
+    
+    float row = i / BUTTONS_PER_ROW_TOP;
+    float col;
+    if (row == 0) {
+        col = i % BUTTONS_PER_ROW_TOP;
+    } else if (row == 1) {
+        col = (i - BUTTONS_PER_ROW_TOP) % BUTTONS_PER_ROW_MIDDLE;
+    } else {
+        col = ((i - BUTTONS_PER_ROW_TOP - BUTTONS_PER_ROW_MIDDLE) % BUTTONS_PER_ROW_BOTTOM) + 1;
+    }
+    
+    row += 0.5f;
+    col += 0.6f;
+    
+    int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN);
+    int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN);
+    
+    button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
+    button->setVisible(true);
+    button->setTag(i);
+    
+    button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
+    button->setTitleFontSize(BUTTON_FONT_SIZE);
+    button->setTitleFontName(LEVEL_SELECT_BUTTON_FONT_LOCATION);
+    button->setTitleColor(Color3B::WHITE);
+    
+    button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::BEGAN) {
+            ((Button*)sender)->setTitleColor(Color3B::BLACK);
+        } else if (type == ui::Widget::TouchEventType::CANCELED) {
+            ((Button*)sender)->setTitleColor(Color3B::WHITE);
+        } else if (type == ui::Widget::TouchEventType::ENDED) {
+            _levelSelected = ((Node*)sender)->getTag();
+            ((Button*)sender)->setTitleColor(Color3B::WHITE);
+        }
+    });
+    
+    button->retain();
+    return button;
 }
 
 /**
@@ -133,31 +182,7 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     
     //Lay out the buttons
     for(int i = 0; i < NUM_LEVELS; i++) {
-        Button* button = Button::create();
-        button->loadTextureNormal(LEVEL_SELECT_BUTTON_OFF_FILEPATH);
-        button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
-        button->setAnchorPoint(Vec2(0.5f, 0.5f));
-    
-        float row = (i / BUTTONS_PER_ROW) + 0.5f;
-        float col = (i % BUTTONS_PER_ROW) + 0.6f;
-        
-        int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN);
-        int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN);
-        
-        button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
-        
-        button->setVisible(true);
-        button->retain();
-        
-        button->setTag(i);
-        
-        button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
-            if (type == ui::Widget::TouchEventType::ENDED) {
-                _levelSelected = ((Node*)sender)->getTag();
-            }
-        });
-        
-        _buttons[i] = button;
+        _buttons[i] = initButton(dimen, i);
         _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
     }
     
