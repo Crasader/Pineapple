@@ -58,6 +58,7 @@ void PineappleRoot::start() {
     AssetManager::getInstance()->at(scene)->attach<LevelModel>(levels);
     AssetManager::getInstance()->startScene(scene);
     
+    _backgroundSound = nullptr;
     _preloaded = false;
     
     RootLayer::start(); // YOU MUST END with call to parent
@@ -99,6 +100,8 @@ void PineappleRoot::onFirstUpdate() {
     Rect screen = SCREEN;
     screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
     screen.size.width *= scale.x;  screen.size.height *= scale.y;
+    
+    _assets = AssetManager::getInstance()->getCurrent();
     
     _inputController.init(screen);
     _inputController.start();
@@ -149,6 +152,17 @@ void PineappleRoot::update(float deltaTime) {
             _levelSelect->init(_levelSelectRoot, &_inputController);
         }
         
+        if (_backgroundSoundKey != LEVEL_SELECT_BACKGROUND_SOUND) {
+            if (_backgroundSound != nullptr) {
+                SoundEngine::getInstance()->stopMusic();
+            }
+            
+            _backgroundSoundKey = LEVEL_SELECT_BACKGROUND_SOUND;
+            _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        }
+        
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
         
         _gameplay->setTransitionStatus(TRANSITION_NONE);
@@ -170,6 +184,17 @@ void PineappleRoot::update(float deltaTime) {
             _gameplay->init(_gameRoot, &_inputController, levelKey, levelFile);
         } else {
             _gameplay->reset();
+        }
+        
+        if (_backgroundSoundKey != GAME_BACKGROUND_SOUND) {
+            if (_backgroundSound != nullptr) {
+                SoundEngine::getInstance()->stopMusic();
+            }
+            
+            _backgroundSoundKey = GAME_BACKGROUND_SOUND;
+            _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
         }
         
         _activeController = _gameplay;
