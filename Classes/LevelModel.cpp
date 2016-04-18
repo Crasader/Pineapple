@@ -765,7 +765,7 @@ void LevelModel::setRootNode(Node* node) {
         platform->setDrawScale(_scale);
         poly = PolygonNode::create();
         platform->setSceneNode(poly);
-        initDebugProperties(platform);r
+        initDebugProperties(platform);
         
         addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);
     }
