@@ -71,6 +71,7 @@ protected:
 	bool _isBlended;
 	/** Whether kid has been blended */
 	bool _isDead;
+    bool _isGrounded = false;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -167,6 +168,8 @@ public:
      * Returns the index of this kid in the kid array
      */
     int getIndex() const { return _index; }
+    
+    void setGrounded(bool value) { _isGrounded = value; }
     
     /**
      * Returns left/right movement of this character.
