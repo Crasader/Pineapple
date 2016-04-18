@@ -275,11 +275,13 @@ void GameController::setComplete(bool value) {
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
         _winview->position();
         _winViewVisible = true;
+        HUDController::setEnabled(false);
     } else {
         if (_winViewVisible) {
             _rootnode->removeChild(_winroot);
         }
         _winViewVisible = false;
+        HUDController::setEnabled(true);
     }
 }
 
@@ -297,11 +299,13 @@ void GameController::setFailure(bool value){
         _rootnode->addChild(_loseroot, LOSE_SPLASH_Z);
         _loseview->position();
         _loseViewVisible = true;
+        HUDController::setEnabled(false);
     } else {
         if (_loseViewVisible) {
             _rootnode->removeChild(_loseroot);
         }
         _loseViewVisible = false;
+        HUDController::setEnabled(true);
     }
     
 }
@@ -382,6 +386,18 @@ void GameController::update(float dt) {
     
     if (_loseViewVisible)  {
         _loseview->update(dt);
+        
+        if (_loseview->shouldReset()) {
+            _loseview->resetButtons();
+            reset();
+            return;
+        } else if (_loseview->shouldTransferToLevelSelect()) {
+            _loseview->resetButtons();
+            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+            return;
+        }
     } else if (_winViewVisible) {
         _winview->update(dt);
     } else {

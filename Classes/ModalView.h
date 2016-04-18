@@ -52,6 +52,15 @@ protected:
     void init(Node* rootNode, SceneManager* assets, string textureID);
     
 public:
+    bool shouldReset() { return _transferToReset; }
+    
+    bool shouldTransferToLevelSelect() { return _transferToLevelSelect; }
+    
+    void resetButtons() {
+        _transferToReset = false;
+        _transferToLevelSelect = false;
+    }
+    
     void position();
     
     void dispose();
