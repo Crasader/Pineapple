@@ -805,7 +805,7 @@ void LevelModel::clearRootNode() {
     }
     if (_debugnode != nullptr) {
         _rootnode->removeChild(_debugnode);
-        _debugnode = nullptr; // We do not own it
+        _debugnode = nullptr; // we do not own it
     }
     _rootnode->release();
     _rootnode = nullptr;

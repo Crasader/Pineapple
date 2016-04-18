@@ -37,8 +37,6 @@ BackgroundView* BackgroundView::createAndAddTo(Node* rootNode, Node* worldNode, 
     
     view->init(rootNode, worldNode, assets);
     
-    worldNode->addChild(view->_frontBackground_1);
-    worldNode->addChild(view->_frontBackground_2);
     rootNode->addChild(view->_hillsnode,0);
     rootNode->addChild(view->_cloudsnode,1);
     
@@ -98,6 +96,8 @@ void BackgroundView::init(Node* rootNode, Node* worldNode, SceneManager* assets)
     _frontBackground_2->setScale(cscale*FRONT_BACKGROUND_SCALE);
     _frontBackground_2->setPosition(FRONT_BACKGROUND_WIDTH*3/2 * cscale*FRONT_BACKGROUND_SCALE,
                                     FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
+    worldNode->addChild(_frontBackground_1);
+    worldNode->addChild(_frontBackground_2);
 }
 
 void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {
@@ -180,9 +180,11 @@ void BackgroundView::update(float dt) {
 void BackgroundView::reset() {
     _worldNode->removeChild(_frontBackground_1);
     _worldNode->removeChild(_frontBackground_2);
+    _hillsnode->removeChild(_middleBackground_1);
+    _hillsnode->removeChild(_middleBackground_2);
+    _cloudsnode->removeChild(_backBackground_1);
+    _cloudsnode->removeChild(_backBackground_2);
     init(_rootNode, _worldNode, AssetManager::getInstance()->getCurrent());
-    _worldNode->addChild(_frontBackground_1);
-    _worldNode->addChild(_frontBackground_2);
 }
 
 void BackgroundView::removeAllChildren() {
