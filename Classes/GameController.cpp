@@ -145,7 +145,7 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     _loseview = LoseView::create(_loseroot, _assets);
     
     _winroot = Node::create();
-    _winroot->setContentSize(_winroot->getContentSize());
+    _winroot->setContentSize(_rootnode->getContentSize());
     _winroot->retain();
     _winview = WinView::create(_winroot, _assets);
     
@@ -412,110 +412,104 @@ void GameController::update(float dt) {
             SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
             setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
             return;
-    // Process kids
-    for(int i = 0; i < KID_COUNT; i++) {
-        if(_level->getKid(i) != nullptr) {
-			if (!_level->getKid(i)->getIsBlended()) {
-				_level->getKid(i)->dampTowardsWalkspeed();
-				_level->getKid(i)->animate();
-			} 
-			else {
-				_level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
-				_level->getKid(i)->setFixedRotation(false);
-				_level->getKid(i)->setAngularVelocity(6.0f);
-				if (_level->getKid(i)->getIsDead()) {
-					bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
-					activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
-					_level->kill(_level->getKid(i));
-					_level->getBlender()->setIsBlending(true);
-					_splatCount = SPLAT_COUNT;
-				}
-			}
-            // check if off bounds death
-            if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
-                _level->kill(_level->getKid(i));
+        }
+    } else if (_winViewVisible) {
+        _winview->update(dt);
+        
+        if (_winview->shouldReset()) {
+            _winview->resetButtons();
+            reset();
+            return;
+        } else if (_winview->shouldTransferToLevelSelect()) {
+            _winview->resetButtons();
+            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+            return;
+        }
+    } else {
+        // Process kids
+        for(int i = 0; i < KID_COUNT; i++) {
+            if(_level->getKid(i) != nullptr) {
+                if (!_level->getKid(i)->getIsBlended()) {
+                    _level->getKid(i)->dampTowardsWalkspeed();
+                    _level->getKid(i)->animate();
+                }
+                else {
+                    _level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                    _level->getKid(i)->setFixedRotation(false);
+                    _level->getKid(i)->setAngularVelocity(6.0f);
+                    if (_level->getKid(i)->getIsDead()) {
+                        bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
+                        activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
+                        _level->kill(_level->getKid(i));
+                        _level->getBlender()->setIsBlending(true);
+                        _splatCount = SPLAT_COUNT;
+                    }
+                }
+                // check if off bounds death
+                if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
+                    _level->kill(_level->getKid(i));
+                }
             }
         }
-    }
-
-    // Process the movement
-    if (_level->getPineapple() != nullptr) {
-        if (!_level->getPineapple()->getIsBlended()) {
-			_level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
-			_level->getPineapple()->setJumping(_input->didJump());
-			float cscale = Director::getInstance()->getContentScaleFactor();
-
-            handleAvatarGrowth(cscale, _input, _level->getPineapple());
-            
-            _level->getPineapple()->applyForce();
-            
-            if (_level->getPineapple()->isJumping()) {
-                //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        
+        // Process the movement
+        if (_level->getPineapple() != nullptr) {
+            if (!_level->getPineapple()->getIsBlended()) {
+                _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
+                _level->getPineapple()->setJumping(_input->didJump());
+                float cscale = Director::getInstance()->getContentScaleFactor();
+                
+                handleAvatarGrowth(cscale, _input, _level->getPineapple());
+                
+                _level->getPineapple()->applyForce();
+                
+                _level->getPineapple()->animate();
+                
+                if (_level->getPineapple()->isJumping()) {
+                    //Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+                    //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+                }
+                
+                if (_level->getPineapple()->getPosition().y < 0) {
+                    _level->kill(_level->getPineapple());
+                }
+                
+                // Scroll the screen (with parallax) if necessary
+                handleScrolling();
+            } else {
+                _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                _level->getPineapple()->setFixedRotation(false);
+                _level->getPineapple()->setAngularVelocity(6.0f);
+                if (_level->getPineapple()->getIsDead()) {
+                    _level->kill(_level->getPineapple());
+                    _level->getBlender()->setIsBlending(true);
+                }
             }
-            
-            _level->getPineapple()->animate();
         }
         
-        _level->getPineapple()->applyForce();
-
-        _level->getPineapple()->animate();
+        // Animate the jello
+        std::vector<JelloModel*> jellos = _level->getJellos();
+        for (auto it = jellos.begin(); it != jellos.end(); ++it) {
+            JelloModel* jello = *it;
+            jello->animate();
+        }
         
-        if (_level->getPineapple()->isJumping()) {
-            //Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-        }
-            
-        if (_level->getPineapple()->getPosition().y < 0) {
-            _level->kill(_level->getPineapple());
-        }
-
-        // Scroll the screen (with parallax) if necessary
-        handleScrolling();
-        } else {
-			_level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
-			_level->getPineapple()->setFixedRotation(false);
-			_level->getPineapple()->setAngularVelocity(6.0f);
-			if (_level->getPineapple()->getIsDead()) {
-				_level->kill(_level->getPineapple());
-				_level->getBlender()->setIsBlending(true);
-			}
-		}
+        // Animate the blender
+        _level->getBlender()->animate();
+        
+        HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
+        
+        // Update the background (move the clouds)
+        _background->update(dt);
+        
+        // Turn the physics engine crank
+        _world->update(dt);
     }
-
-	// Animate the jello
-	std::vector<JelloModel*> jellos = _level->getJellos();
-	for (auto it = jellos.begin(); it != jellos.end(); ++it) {
-		JelloModel* jello = *it;
-		jello->animate();
-	}
-
-	// Animate the blender
-	_level->getBlender()->animate();
-
-	HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
-    
-	// Update the background (move the clouds)
-    _background->update(dt);
-    
-    // Turn the physics engine crank
-    _world->update(dt);
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-    
-    // Reset the game if we win or lose.
-    if (_countdown > 0) {
-        _countdown--;
-    } else if (_countdown == 0) {
-        reset();
-    }
-
-	if (_splatCount > 0) {
-		_splatCount--;
-	}
-	else {
-		_splat->setVisible(false);
-	}
 }
 
 /**

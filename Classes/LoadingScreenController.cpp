@@ -87,7 +87,13 @@ void loadSplashScreens(TextureLoader *tloader) {
     tloader->loadAsync(LOSE_SPLASH, "textures/failure.png");
     tloader->loadAsync(LOSE_JUICE_CUP, "textures/cup_o'_chillens.png");
     tloader->loadAsync(LOSE_CRYING_WILL, "textures/crying_will.png");
-
+    
+    tloader->loadAsync(WIN_SPLASH, "textures/victory.png");
+    tloader->loadAsync(WIN_SPLASH_CHILD_1, "textures/happy-bow-spritesheet.png");
+    tloader->loadAsync(WIN_SPLASH_CHILD_2, "textures/happy-glasses-spritesheet.png");
+    tloader->loadAsync(WIN_SPLASH_CHILD_3, "textures/happy-hat-spritesheet.png");
+    tloader->loadAsync(WIN_SPLASH_CHILD_4, "textures/happy-pirapplet-spritesheet.png");
+    tloader->loadAsync(WIN_SPLASH_WILL, "textures/happy-will-spritesheet.png");
 }
 
 void loadLevelSelectScreen(TextureLoader *tloader) {

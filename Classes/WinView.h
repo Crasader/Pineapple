@@ -12,26 +12,19 @@
 #include <stdio.h>
 #include <cornell.h>
 #include "ModalView.h"
+#include "Const.h"
 
 class WinView : public ModalView {
 protected:
-    /** The animation for will. Null if the will was the one who died */
-    Node* _willAnimation;
+    /** The animation for will.*/
+    AnimationNode* _willAnimation;
     
-    /** Button that causes the level to reset */
-    Button* _resetButton;
-    
-    /** Button that goes to level select */
-    Button* _toLevelSelectButton;
-    
-    /** The image of the juice cup */
-    Node* _juiceCup;
-    
-    /** The animation of will crying */
-    AnimationNode* _cryingWill;
+    AnimationNode* _kidAnimations[KID_COUNT];
     
     /** The current frame of will */
-    int _willFrame;
+    float _willFrame;
+    
+    float _kidFrames[KID_COUNT];
     
 public:
     static WinView* create(Node* root, SceneManager* assets);
