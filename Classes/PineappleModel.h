@@ -83,7 +83,12 @@ protected:
 	/** Filmstrip for walkcycle animation */
 	AnimationNode* _willWalkcycle;
 	/** Frame counter for walkcycle animation */
-	int _willWalkcycleFrame = 0;
+	int _willWalkcycleFrame;
+	/** Whether Will is spiraling towards blender blades */
+	bool _isBlended;
+	/** Whether Will has been blended */
+	bool _isDead;
+
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
@@ -315,9 +320,24 @@ public:
 	bool isFacingRight() const { return _faceRight; }
 
 	/**
-	* Initialize the filmstrip for walking animation
+	* Sets whether will is spiralling towards the blender blades
 	*/
-    void initAnimation(Texture2D* image, float scale);
+	void setIsBlended(bool blending) { _isBlended = blending; }
+
+	/**
+	* Returns true if will is spiralling towards the blender blades
+	*/
+	bool getIsBlended() { return _isBlended; }
+
+	/**
+	* Sets whether will is dead
+	*/
+	void setIsDead(bool dead) { _isDead = dead; }
+
+	/**
+	* Returns true if will is dead
+	*/
+	bool getIsDead() { return _isDead; }
 
     
 #pragma mark Drawing Methods
@@ -369,6 +389,14 @@ public:
 	* Animate Will if he's moving
 	*/
 	void animate();
+
+	/** 
+	* Make Will spiral towards blender blades
+	*
+	* @param x x-coordinate of the blender blades
+	* @param y y-coordinate of the blender
+	*/
+	void spiral(float x, float y);
 
 
 CC_CONSTRUCTOR_ACCESS:

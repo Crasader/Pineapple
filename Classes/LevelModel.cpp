@@ -280,7 +280,7 @@ bool LevelModel::load() {
         addBlender(position);
         
         //Add walls that are offscreen and prevent you from going past end of level
-        position[0] = 0;
+        /*position[0] = 0;
         position[1] = 0;
         position[2] = 0;
         position[3] = DEFAULT_HEIGHT;
@@ -292,7 +292,7 @@ bool LevelModel::load() {
         for(int i = 0; i < WALL_VERTS; i += 2) {
             position[i] += 2 + _length;
         }
-        addWall(position);
+        addWall(position);*/
         
         //End JSON object
         reader.endObject();
@@ -671,7 +671,7 @@ void LevelModel::setRootNode(Node* node) {
     
     if (_pineapple != nullptr) {
         Texture2D* image = assets->get<Texture2D>(PINEAPPLE_TEXTURE);
-        _pineapple->setDrawScale(_scale.x , _scale.y);
+        _pineapple->setDrawScale(_scale.x, _scale.y);
         poly = AnimationNode::create(image, 1, PINEAPPLE_FRAME_COUNT, PINEAPPLE_FRAME_COUNT);
         _pineapple->setSceneNode(poly);
         initDebugProperties(_pineapple);
@@ -682,7 +682,7 @@ void LevelModel::setRootNode(Node* node) {
     if (_blender != nullptr) {
         Texture2D* image = assets->get<Texture2D>(BLENDER_TEXTURE);
         _blender->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+		poly = AnimationNode::create(image, 1, BLENDER_FRAME_COUNT, BLENDER_FRAME_COUNT);
         _blender->setSceneNode(poly);
         initDebugProperties(_blender);
         
@@ -702,14 +702,13 @@ void LevelModel::setRootNode(Node* node) {
             addObstacle(_kids[i], KID_Z_INDEX+i);
         }
     }
-    
-    
+        
     for(auto it = _jellos.begin(); it != _jellos.end(); ++it) {
         JelloModel* jello = *it;
         
         Texture2D* image = assets->get<Texture2D>(JELLO_TEXTURE);
         jello->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        poly = AnimationNode::create(image, 1, JELLO_FRAME_COUNT, JELLO_FRAME_COUNT);
         jello->setSceneNode(poly);
         initDebugProperties(jello);
         
@@ -816,9 +815,11 @@ void LevelModel::showDebug(bool flag) {
 }
 
 void LevelModel::kill(PineappleModel* will) {
-    removeObstacle(will);
+	removeObstacle(will);
     clearPineapple();
-    setFailure(true); //TODO: Move failure to main game loop?
+	// TODO: Move failure to main game loop?
+    setFailure(true); 
+	Device::vibrate(VIBRATION_DURATION);
 }
 
 void LevelModel::kill(KidModel* kid) {
@@ -830,19 +831,8 @@ void LevelModel::kill(KidModel* kid) {
         if (_kidsRemaining == 0) {
             setFailure(true);
         }
+		Device::vibrate(VIBRATION_DURATION);
     }
-}
-
-void LevelModel::blendAndKill(PineappleModel* will) {
-    kill(will);
-    
-    //TODO: Animation and sounds
-}
-
-void LevelModel::blendAndKill(KidModel* kid) {
-    kill(kid);
-    
-    //TODO: Animation and sounds
 }
 
 void LevelModel::spikeAndKill(PineappleModel* will) {

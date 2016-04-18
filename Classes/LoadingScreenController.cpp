@@ -11,7 +11,7 @@ void loadCharacters(TextureLoader* tloader) {
     tloader->loadAsync(KID_TEXTURE_3, "textures/child_hat_walkcycle_reduced.png");
     tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
     
-    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender.png");
+    tloader->loadAsync(BLENDER_TEXTURE, "textures/blender_blendCycle2.png");
 }
 
 void loadObstacles(TextureLoader* tloader) {
@@ -19,7 +19,7 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
     tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
     
-    tloader->loadAsync(JELLO_TEXTURE, "textures/jello.png");
+    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
@@ -48,10 +48,15 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_RED,  "textures/lever-red-reverse.png");
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_GREEN, "textures/lever-green-reverse.png");
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_BLUE,   "textures/lever-blue-reverse.png");
+	
+	tloader->loadAsync(SPLAT_TEXTURE_1, "textures/splat1.png");
+	tloader->loadAsync(SPLAT_TEXTURE_2, "textures/splat2.png");
+	tloader->loadAsync(SPLAT_TEXTURE_3, "textures/splat3.png");
+	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splat4.png");
 }
 
 void loadBackground(TextureLoader* tloader) {
-    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_full.png");
+    tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_wPlants2.png");
     tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
     tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     

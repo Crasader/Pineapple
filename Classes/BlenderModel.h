@@ -9,16 +9,23 @@
 #define __PF_BLENDER_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
+#include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
 //#include "CollisionObjectModel.h"
 
 using namespace cocos2d;
+
+/** Identifier to allow us to track the sensor in ContactListener */
+#define BLENDER_SENSOR     "blendersensor"
  
 #pragma mark -
 #pragma mark Physics Constants
 /** The maximum character speed */
 #define BLENDER_SPEED   1.0f
+
+/** Number of frames in the walk animation */
+#define BLENDER_FRAME_COUNT	10
 
 #define BLENDER_MASK 0x0008
 #define BLENDER_COLLIDES_WITH 0x006 //Only kid and pineapple
@@ -38,6 +45,19 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(BlenderModel);
 
 protected:
+	/** Ground sensor to represent blades */
+	b2Fixture*  _sensorFixture;
+	/** Reference to the sensor name (since a constant cannot have a pointer) */
+	std::string _sensorName;
+	/** The node for debugging the sensor */
+	WireNode* _sensorNode;
+	/** Filmstrip for blendcycle animation */
+	AnimationNode* _blendcycle;
+	/** Frame counter for blendcycle animation */
+	float _blendcycleFrame;
+	/** Whether there is something being blended */
+	bool _isBlending;
+
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
@@ -113,6 +133,25 @@ public:
      * @return the upper limit on blender left-right movement.
      */
     float getSpeed() const { return BLENDER_SPEED; }
+
+	/**
+	* Returns the name of the ground sensor
+	*
+	* This is used by ContactListener
+	*
+	* @return the name of the ground sensor
+	*/
+	std::string* getSensorName() { return &_sensorName; }
+
+	/**
+	 * Returns true if there is something being blended
+	 */
+	bool getIsBlending() { return _isBlending; }
+
+	/**
+	* Sets whether something is being blended
+	*/
+	void setIsBlending(bool blending) { _isBlending = blending; }
     
     
 #pragma mark Physics Methods
@@ -152,6 +191,11 @@ public:
      * manage our own afterburner animations.
      */
     virtual void resetSceneNode() override;
+
+	/**
+	* Animate blender
+	*/
+	void animate();
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors
@@ -161,7 +205,7 @@ CC_CONSTRUCTOR_ACCESS:
      * This constructor does not initialize any of the blender values beyond
      * the defaults.  To use a BlenderModel, you must call init().
      */
-    BlenderModel() : BoxObstacle() { }
+    BlenderModel() : BoxObstacle(), _sensorFixture(nullptr), _sensorName(BLENDER_SENSOR), _blendcycle(nullptr) { }
 
     /**
      * Initializes a new blender at the origin.

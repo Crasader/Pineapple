@@ -68,14 +68,20 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 }
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
-	_level->blendAndKill(will);
-    Device::vibrate(VIBRATION_DURATION);
-	//_pSensorFixtures.clear();
+	will->setIsBlended(true);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
-	_level->blendAndKill(kid);
-    Device::vibrate(VIBRATION_DURATION);
+	kid->setIsBlended(true);
+}
+
+void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
+	_level->kill(will);
+	//_pSensorFixtures.clear();
+}
+
+void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
+	_level->kill(kid);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {

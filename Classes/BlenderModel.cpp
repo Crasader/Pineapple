@@ -17,7 +17,11 @@
 /** The amount to shrink the body fixture (horizontally) relative to the image */
 #define BLENDER_HSHRINK  0.72f
 /** The Blender specific scaling */
-#define BLENDER_SCALE      0.75f
+#define BLENDER_SCALE    2.68f
+/** The amount to shrink the sensor fixture (horizontally) relative to the image */
+#define BLENDER_SSHRINK  0.9f
+/** Height of the sensor attached to the player's feet */
+#define SENSOR_WIDTH     0.1f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -114,8 +118,10 @@ BlenderModel* BlenderModel::create(const Vec2& pos, const Vec2& scale) {
 bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
     if (BoxObstacle::init(pos,Size(scale))) {
         setVX(BLENDER_SPEED);
-        
+
         // Gameplay attributes
+		_isBlending = false;
+		_blendcycleFrame = 0.0f;
         return true;
     }
     return false;
@@ -135,6 +141,27 @@ void BlenderModel::createFixtures() {
     }
 
     BoxObstacle::createFixtures();
+	b2FixtureDef sensorDef;
+	sensorDef.density = 0.5f;
+	sensorDef.isSensor = true;
+
+	// Sensor dimensions
+	b2Vec2 corners[4];
+	corners[0].x = -SENSOR_WIDTH / 2.0f;
+	corners[0].y =  BLENDER_SSHRINK*getHeight() / 2.0f;
+	corners[1].x = -SENSOR_WIDTH / 2.0f;
+	corners[1].y = -BLENDER_SSHRINK*getHeight() / 2.0f;
+	corners[2].x =  SENSOR_WIDTH / 2.0f;
+	corners[2].y = -BLENDER_SSHRINK*getHeight() / 2.0f;
+	corners[3].x =  SENSOR_WIDTH / 2.0f;
+	corners[3].y =  BLENDER_SSHRINK*getHeight() / 2.0f;
+
+	b2PolygonShape sensorShape;
+	sensorShape.Set(corners, 4);
+
+	sensorDef.shape = &sensorShape;
+	_sensorFixture = _body->CreateFixture(&sensorDef);
+	_sensorFixture->SetUserData(getSensorName());
 }
 
 /**
@@ -172,7 +199,7 @@ void BlenderModel::update(float dt) {
  * manage our own afterburner animations.
  */
 void BlenderModel::resetSceneNode() {
-    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
@@ -183,12 +210,16 @@ void BlenderModel::resetSceneNode() {
         
         Rect bounds;
         bounds.size = pnode->getContentSize();
-        
-        pnode->setPolygon(bounds);
-        pnode->setScale(cscale * BLENDER_SCALE);
+
+		pnode->setPolygon(bounds);
+		pnode->setScale(cscale * BLENDER_SCALE);
+		pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * BLENDER_SCALE / _drawScale.x,
                      pnode->getContentSize().height * BLENDER_SCALE / _drawScale.y);
+
+		_blendcycleFrame = 0.0f;
+		_blendcycle = pnode;		
     }
 }
 
@@ -201,7 +232,33 @@ void BlenderModel::resetSceneNode() {
  */
 void BlenderModel::resetDebugNode() {
     BoxObstacle::resetDebugNode();
+
+	float w = SENSOR_WIDTH*_drawScale.x;
+	float h = BLENDER_SSHRINK*_dimension.height*_drawScale.y;
+	Poly2 poly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+	poly.traverse(Poly2::Traversal::INTERIOR);
+
+	if (_sensorNode != nullptr) {
+		_debug->removeChild(_sensorNode);
+	}
+
+	_sensorNode = WireNode::createWithPoly(poly);
+	_sensorNode->setPosition(Vec2(0.35f*_debug->getContentSize().width, 0.5f*_debug->getContentSize().height));
+	_sensorNode->setColor(DEBUG_COLOR);
+	_debug->addChild(_sensorNode);
 }
 
-
+/**
+* Animate blender
+*/
+void BlenderModel::animate() {
+	_blendcycleFrame += 0.25f;
+	int tmp = (int)rint(_blendcycleFrame);
+	if (_isBlending) {
+		_blendcycle->setFrame((tmp % 8) + 2);
+	}
+	else {
+		_blendcycle->setFrame(tmp % 2);
+	}
+}
 

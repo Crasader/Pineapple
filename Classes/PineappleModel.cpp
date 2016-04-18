@@ -136,7 +136,9 @@ bool PineappleModel::init(const Vec2& pos, const Vec2& scale) {
         _isCollidingWithButtonSwitch = false;
         _faceRight = true;
         _reachedGoal = false;
-        
+		_isBlended = false;
+		_isDead = false;
+		_willWalkcycleFrame = 0;
         _jumpCooldown = 0;
         return true;
     }
@@ -296,7 +298,7 @@ void PineappleModel::update(float dt) {
         _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown - 1 : 0);
     }
     
-    CapsuleObstacle::update(dt);
+	CapsuleObstacle::update(dt);
 }
 
 /**
@@ -304,7 +306,7 @@ void PineappleModel::update(float dt) {
  */
 void PineappleModel::animate() {
 	// in the air
-	/*if (!_isGrounded || _isJumping || getVY() < -0.2f) {
+	if (!_isGrounded || _isJumping || getVY() < -0.2f) {
 		if (_faceRight) {
 			_willWalkcycleFrame = 0;
 		}
@@ -312,9 +314,9 @@ void PineappleModel::animate() {
 			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
 		}
 		_willWalkcycle->setFrame(_willWalkcycleFrame);
-	}*/
+	}
 	// moving
-	if (abs(getVX()) > 0.5f) {
+	else if (abs(getVX()) > 0.5f) {
 		_willWalkcycleFrame++;
 		if (_faceRight) {
 			_willWalkcycle->setFrame(_willWalkcycleFrame % (PINEAPPLE_FRAME_COUNT / 2));
@@ -332,6 +334,38 @@ void PineappleModel::animate() {
 			_willWalkcycleFrame = PINEAPPLE_FRAME_COUNT / 2;
 		}
 		_willWalkcycle->setFrame(_willWalkcycleFrame);
+	}
+}
+
+/**
+* Make Will spiral towards blender blades
+*
+* @param x x-coordinate of the blender blades
+* @param y y-coordinate of the blender
+*/
+void PineappleModel::spiral(float x, float y) {
+	float val = 0.3f;
+	
+	// near blades
+	if (abs(getY() - y) < val) {
+		setY(y);
+	}
+	// above blades
+	else if (getY() > y) {
+		setY(getY() - val);
+	}
+	// below blades
+	else {
+		setY(getY() + val);
+	}
+
+	// move towards left side of screen, die if hit blender blades
+	float newX = getX() - val;
+	if (newX < x) {
+		setIsDead(true);
+	}
+	else {
+		setX(newX);
 	}
 }
 

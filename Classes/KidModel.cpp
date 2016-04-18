@@ -147,6 +147,28 @@ string KidModel::getTexture(int idx) {
     }
 }
 
+/**
+* Returns the splat texture name for the given kid index
+*/
+string KidModel::getSplatTexture(int idx) {
+	if (idx == 0) {
+		return SPLAT_TEXTURE_1;
+	}
+	else if (idx == 1) {
+		return SPLAT_TEXTURE_2;
+	}
+	else if (idx == 2) {
+		return SPLAT_TEXTURE_3;
+	}
+	else if (idx == 3) {
+		return SPLAT_TEXTURE_4;
+	}
+	else {
+		CC_ASSERT(false);
+		return nullptr;
+	}
+}
+
 
 #pragma mark -
 #pragma mark Initializers
@@ -177,6 +199,9 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
         _index = idx;
         _isCollidingWithJello = false;
 		_reachedGoal = false;
+		_isBlended = false;
+		_isDead = false;
+		_kidWalkcycleFrame = 0.0f;
         return true;
     }
     return false;
@@ -303,7 +328,7 @@ void KidModel::update(float dt) {
 */
 void KidModel::animate() {
 	// in the air
-	if (getVY() < -0.2f) {
+	if (abs(getVY()) > 0.2f) {
 		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
 	}
@@ -317,6 +342,38 @@ void KidModel::animate() {
 	else {
 		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
+	}
+}
+
+/**
+* Make the kid spiral towards blender blades
+*
+* @param x x-coordinate of the blender blades
+* @param y y-coordinate of the blender
+*/
+void KidModel::spiral(float x, float y) {
+	float val = 0.3f;
+
+	// near blades
+	if (abs(getY() - y) < val) {
+		setY(y);
+	}
+	// above blades
+	else if (getY() > y) {
+		setY(getY() - val);
+	}
+	// below blades
+	else {
+		setY(getY() + val);
+	}
+
+	// move towards left side of screen, die if hit blender blades
+	float newX = getX() - val;
+	if (newX < x) {
+		setIsDead(true);
+	}
+	else {
+		setX(newX);
 	}
 }
 
@@ -347,7 +404,7 @@ void KidModel::resetSceneNode() {
         
         pnode->setAnchorPoint(KID_ANCHOR_POINT);
         
-        _kidWalkcycleFrame = 0;
+        _kidWalkcycleFrame = 0.0f;
         _kidWalkcycle = pnode;        
     }
 }
