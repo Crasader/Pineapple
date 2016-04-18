@@ -39,7 +39,9 @@ void ModalView::init(Node *root, SceneManager *assets, string splashTexture) {
     _resetButton->setAnchorPoint(Vec2(0,0));
     
     _resetButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
-        _transferToReset = true;
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _transferToReset = true;
+        }
     });
     
     
@@ -51,7 +53,9 @@ void ModalView::init(Node *root, SceneManager *assets, string splashTexture) {
     _toLevelSelectButton->setAnchorPoint(Vec2(0,0));
     
     _toLevelSelectButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
-        _transferToLevelSelect = true;
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _transferToLevelSelect = true;
+        }
     });
     
     _transferToReset = false;
@@ -67,6 +71,7 @@ void ModalView::position() {
     _resetButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width/4, center.y + VERTICAL_MARGIN));
     _toLevelSelectButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width/4,
                                            center.y + VERTICAL_MARGIN + _resetButton->getContentSize().height));
+    
 }
 
 void ModalView::dispose() {
