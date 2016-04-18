@@ -87,6 +87,11 @@ void loadFonts(SceneManager* assets) {
     assets->loadAsync<TTFont>(LEVEL_SELECT_BUTTON_FONT, LEVEL_SELECT_BUTTON_FONT_LOCATION);
 }
 
+void loadSounds(SceneManager* assets) {
+    assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
+    assets->loadAsync<Sound>(LEVEL_SELECT_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
+}
+
 void loadLevels(SceneManager* assets) {
     assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
     assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
@@ -107,6 +112,7 @@ void LoadingScreenController::preload() {
     loadHUD(tloader);
     loadLevelSelectScreen(tloader);
     
+    loadSounds(assets);
     loadFonts(assets);
     loadLevels(assets);
 }
