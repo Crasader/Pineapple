@@ -93,8 +93,8 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     
     _input = input;
     
-    _levelKey = LEVEL_TWO_KEY;
-    _levelFile = LEVEL_TWO_FILE;
+    _levelKey = levelKey;
+    _levelFile = levelFile;
     
     _assets = AssetManager::getInstance()->getCurrent();
     _level = _assets->get<LevelModel>(_levelKey);

@@ -98,5 +98,11 @@
 #define STATUS_THREE       "three"
 #define STATUS_FOUR        "four"
 #define SLASH_FOUR         "slash_four"
+/** The key for the level select background texture in the asset manager */
+#define LEVEL_SELECT_BACKGROUND "level_select_background"
+/** The key for the unselected level button texture in the asset manager */
+#define LEVEL_SELECT_LEVEL_BUTTON_OFF "level_select_level_button"
+/** The key for the selected level button texture in the asset manager */
+#define LEVEL_SELECT_LEVEL_BUTTON_ON "level_select_level_button_selected"
 
 #endif /* Texture_h */
