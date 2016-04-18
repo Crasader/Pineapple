@@ -80,6 +80,8 @@ void loadHUD(TextureLoader* tloader) {
 
 void loadSplashScreens(TextureLoader *tloader) {
     tloader->loadAsync(LOSE_SPLASH, "textures/failure.png");
+    tloader->loadAsync(LOSE_JUICE_CUP, "textures/cup_o'_chillens.png");
+    tloader->loadAsync(LOSE_CRYING_WILL, "textures/crying_will.png");
 
 }
 

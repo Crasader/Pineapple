@@ -6,7 +6,7 @@
 //
 //
 
-#include "LoseView.h"
+#include "WinView.h"
 
 #define GRADIENT_Z      0
 #define SPLASH_Z        1
@@ -18,8 +18,8 @@
 #define WILL_SCALE      0.5f
 #define CRYING_WILL_FRAME_COUNT 20
 
-LoseView* LoseView::create(Node* root, SceneManager *assets) {
-    LoseView* view = new (std::nothrow) LoseView();
+WinView* WinView::create(Node* root, SceneManager *assets) {
+    WinView* view = new (std::nothrow) WinView();
     
     view->init(root, assets);
     
@@ -31,7 +31,7 @@ LoseView* LoseView::create(Node* root, SceneManager *assets) {
     return view;
 }
 
-void LoseView::init(Node *root, SceneManager *assets){
+void WinView::init(Node *root, SceneManager *assets){
     ModalView::init(root, assets, LOSE_SPLASH);
     
     
@@ -50,7 +50,7 @@ void LoseView::init(Node *root, SceneManager *assets){
     _willFrame = 0;
 }
 
-void LoseView::position() {
+void WinView::position() {
     ModalView::position();
     
     Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
@@ -60,12 +60,12 @@ void LoseView::position() {
     
 }
 
-void LoseView::update(float dt) {
+void WinView::update(float dt) {
     _willFrame++;
     _cryingWill->setFrame(_willFrame % CRYING_WILL_FRAME_COUNT);
 }
 
-void LoseView::dispose() {
+void WinView::dispose() {
     ModalView::dispose();
     
     if (_juiceCup != nullptr) {

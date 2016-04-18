@@ -112,6 +112,10 @@
 
 /** The key for the lose splash screen */
 #define LOSE_SPLASH    "lose_splash"
+/** The key for the image of the juice cup for the lose splash screen */
+#define LOSE_JUICE_CUP "lose_juice_cup"
+/** The key for the crying will animation for the lose splash screen */
+#define LOSE_CRYING_WILL    "lose_crying_will"
 /** The key for the win splash screen */
 #define WIN_SPLASH    "win_splash"
 

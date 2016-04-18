@@ -6,14 +6,14 @@
 //
 //
 
-#ifndef __LOSE_VIEW_H__
-#define __LOSE_VIEW_H__
+#ifndef __WIN_VIEW_H__
+#define __WIN_VIEW_H__
 
 #include <stdio.h>
 #include <cornell.h>
 #include "ModalView.h"
 
-class LoseView : public ModalView {
+class WinView : public ModalView {
 protected:
     /** The animation for will. Null if the will was the one who died */
     Node* _willAnimation;
@@ -34,7 +34,7 @@ protected:
     int _willFrame;
     
 public:
-    static LoseView* create(Node* root, SceneManager* assets);
+    static WinView* create(Node* root, SceneManager* assets);
     
     void position();
     
@@ -47,4 +47,4 @@ private:
 
 };
 
-#endif /* LoseView_hpp */
+#endif /* winView_h */

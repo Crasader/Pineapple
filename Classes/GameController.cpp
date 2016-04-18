@@ -30,9 +30,6 @@
 using namespace cocos2d;
 //using namespace std;
 
-/** The number of frame to wait before reinitializing the game */
-#define EXIT_COUNT      180
-
 #define WIN_SPLASH_Z 4
 #define LOSE_SPLASH_Z 5
 
@@ -53,7 +50,9 @@ _world(nullptr),
 _active(false),
 _collision(nullptr),
 _background(nullptr),
-_debug(false){}
+_debug(false),
+_loseViewVisible(false),
+_winViewVisible(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -134,6 +133,11 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     _loseroot->retain();
     _loseview = LoseView::create(_loseroot, _assets);
     
+    _winroot = Node::create();
+    _winroot->setContentSize(_winroot->getContentSize());
+    _winroot->retain();
+    _winview = WinView::create(_winroot, _assets);
+    
     _collision->setLevel(_level);
     
     _levelOffset = 0.0f;
@@ -155,6 +159,8 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     setFailure(false);
     _isInitted = true;
     _isReloading = false;
+    _loseViewVisible = false;
+    _winViewVisible = false;
     return true;
 }
 
@@ -181,6 +187,13 @@ void GameController::dispose() {
     if (_loseroot != nullptr) {
         _loseroot->release();
         _loseroot = nullptr;
+    }
+    if (_winview != nullptr) {
+        _winview->dispose();
+    }
+    if (_winroot != nullptr) {
+        _winroot->release();
+        _winroot = nullptr;
     }
     _worldnode = nullptr;
     _background = nullptr;
@@ -258,12 +271,15 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        ////SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
-        _winnode->setVisible(true);
-        _countdown = EXIT_COUNT;
+        //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+        _rootnode->addChild(_winroot, WIN_SPLASH_Z);
+        _winview->position();
+        _winViewVisible = true;
     } else {
-        _winnode->setVisible(false);
-        _countdown = -1;
+        if (_winViewVisible) {
+            _rootnode->removeChild(_winroot);
+        }
+        _winViewVisible = false;
     }
 }
 
@@ -280,10 +296,12 @@ void GameController::setFailure(bool value){
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _rootnode->addChild(_loseroot, LOSE_SPLASH_Z);
         _loseview->position();
-        _countdown = EXIT_COUNT;
+        _loseViewVisible = true;
     } else {
-        _rootnode->removeChild(_loseroot);
-        _countdown = -1;
+        if (_loseViewVisible) {
+            _rootnode->removeChild(_loseroot);
+        }
+        _loseViewVisible = false;
     }
     
 }
@@ -353,60 +371,59 @@ void GameController::update(float dt) {
         return;
     }
     
-    if (_level->haveFailed() && _countdown == -1) {
+    if (_level->haveFailed() && ! _loseViewVisible) {
         setFailure(true);
     }
     
     // Check for Victory
-    if (checkForVictory() && ! _level->haveFailed() && ! _winnode->isVisible()) {
+    if (checkForVictory() && ! _level->haveFailed() && ! _winViewVisible) {
         setComplete(true);
     }
     
-    // Process kids
-    for(int i = 0; i < KID_COUNT; i++) {
-        if(_level->getKid(i) != nullptr) {
-            _level->getKid(i)->dampTowardsWalkspeed();
-            _level->getKid(i)->animate();
+    if (_loseViewVisible)  {
+        _loseview->update(dt);
+    } else if (_winViewVisible) {
+        _winview->update(dt);
+    } else {
+        // Process kids
+        for(int i = 0; i < KID_COUNT; i++) {
+            if(_level->getKid(i) != nullptr) {
+                _level->getKid(i)->dampTowardsWalkspeed();
+                _level->getKid(i)->animate();
+            }
         }
-    }
-    
-    // Process the movement
-    if(_level->getPineapple() != nullptr) {
-        _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
-        _level->getPineapple()->setJumping( _input->didJump());
-        float cscale = Director::getInstance()->getContentScaleFactor();
+        
+        // Process the movement
+        if(_level->getPineapple() != nullptr) {
+            _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
+            _level->getPineapple()->setJumping( _input->didJump());
+            float cscale = Director::getInstance()->getContentScaleFactor();
 
-        handleAvatarGrowth(cscale, _input, _level->getPineapple());
-        
-        _level->getPineapple()->applyForce();
-        
-        if (_level->getPineapple()->isJumping()) {
-            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+            handleAvatarGrowth(cscale, _input, _level->getPineapple());
+            
+            _level->getPineapple()->applyForce();
+            
+            if (_level->getPineapple()->isJumping()) {
+                //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+            }
+            
+            _level->getPineapple()->animate();
         }
         
-        _level->getPineapple()->animate();
+        HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
+        
+        // Update the background (move the clouds)
+        _background->update(dt);
+        
+        // Scroll the screen (with parallax) if necessary
+        handleScrolling();
     }
-    
-    HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
-    
-    // Update the background (move the clouds)
-    _background->update(dt);
-    
-    // Scroll the screen (with parallax) if necessary
-    handleScrolling();
     
     // Turn the physics engine crank
     _world->update(dt);
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-    
-    // Reset the game if we win or lose.
-    if (_countdown > 0) {
-        _countdown--;
-    } else if (_countdown == 0) {
-        reset();
-    }
 }
 
 /**
