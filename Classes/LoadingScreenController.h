@@ -9,15 +9,14 @@
 #include "AbsScreenController.h"
 
 /** Font size for loading message */
-#define DEFAULT_FONT_SIZE   64.0f
-/** Loading font name */
-#define LOADING_FONT_NAME   "felt"
-/** Loading font message */
-#define LOADING_MESSAGE     "Loading..."
+#define LOADING_FONT_SIZE   64.0f
 
 class LoadingScreenController : public AbsScreenController {
 protected:
     Label* _loadingLabel;
+    
+    /** The background image displayed for the loading view */
+    Node* _loadingImage;
     
 public:
 	/**
