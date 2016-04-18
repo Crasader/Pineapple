@@ -417,10 +417,10 @@ void GameController::update(float dt) {
         
         // Scroll the screen (with parallax) if necessary
         handleScrolling();
+        
+        // Turn the physics engine crank
+        _world->update(dt);
     }
-    
-    // Turn the physics engine crank
-    _world->update(dt);
     
     // Since items may be deleted, garbage collect
     _world->garbageCollect();

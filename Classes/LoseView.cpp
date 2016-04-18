@@ -14,9 +14,11 @@
 #define BUTTON_Z        3
 
 
-#define JUICE_SCALE     0.5f
-#define WILL_SCALE      0.5f
-#define CRYING_WILL_FRAME_COUNT 20
+#define JUICE_SCALE                 0.6f
+#define WILL_SCALE                  0.6f
+#define CRYING_WILL_FRAME_COUNT     20
+#define VERTICAL_MARGIN             -150
+#define HORIZONTAL_MARGIN           100
 
 LoseView* LoseView::create(Node* root, SceneManager *assets) {
     LoseView* view = new (std::nothrow) LoseView();
@@ -37,14 +39,14 @@ void LoseView::init(Node *root, SceneManager *assets){
     
     Texture2D* image = assets->get<Texture2D>(LOSE_JUICE_CUP);
     _juiceCup = PolygonNode::createWithTexture(image);
-    _juiceCup->setAnchorPoint(Vec2(0.5f, 0.5f));
     _juiceCup->setScale(JUICE_SCALE);
+    _juiceCup->setAnchorPoint(Vec2(0,0));
     _juiceCup->retain();
     
     image = assets->get<Texture2D>(LOSE_CRYING_WILL);
     _cryingWill = AnimationNode::create(image, 1, CRYING_WILL_FRAME_COUNT, CRYING_WILL_FRAME_COUNT);
-    _cryingWill->setAnchorPoint(Vec2(0.5f, 0.5f));
     _cryingWill->setScale(WILL_SCALE);
+    _cryingWill->setAnchorPoint(Vec2(0,0));
     _cryingWill->retain();
     
     _willFrame = 0;
@@ -55,8 +57,8 @@ void LoseView::position() {
     
     Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
     
-    _juiceCup->setPosition(center.x - _juiceCup->getContentSize().width, center.y);
-    _cryingWill->setPosition(center.x + _cryingWill->getContentSize().width, center.y);
+    _juiceCup->setPosition(center.x - HORIZONTAL_MARGIN - _juiceCup->getContentSize().width/2, center.y + VERTICAL_MARGIN);
+    _cryingWill->setPosition(center.x + HORIZONTAL_MARGIN - _cryingWill->getContentSize().width/4, center.y + VERTICAL_MARGIN);
     
 }
 
