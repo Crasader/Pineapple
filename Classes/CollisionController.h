@@ -117,6 +117,8 @@ public:
 	* @param  contact  The two bodies that collided
 	*/
 	void endContact(b2Contact* contact);
+    
+    void reset() { _pSensorFixtures.clear(); }
 
 #pragma mark -
 #pragma mark Allocation

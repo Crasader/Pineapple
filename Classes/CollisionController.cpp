@@ -173,6 +173,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         // with ground
         if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
             ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
+            cout << "GROUNDED\n";
         }
     }
 	// WILL COLLISIONS
@@ -253,6 +254,7 @@ void CollisionController::endContact(b2Contact* contact) {
         (bd2->getCollisionClass() % 2 == 0 && fix1->GetUserData() == feetSensorName)) {        _pSensorFixtures.erase(bd1 == will ? fix2 : fix1);
         if (_pSensorFixtures.empty()) {
             will->setGrounded(false);
+            cout << "GROUNDED FALSE\n";
         }
     }
     

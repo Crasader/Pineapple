@@ -213,6 +213,9 @@ void GameController::reset() {
     setFailure(false);
     setComplete(false);
 	
+    // clear state
+    _collision->reset();
+    
     // Unload the level but keep in memory temporarily
     _level->retain();
     _assets->unload<LevelModel>(_levelKey);
@@ -386,31 +389,37 @@ void GameController::update(float dt) {
 					_splatCount = SPLAT_COUNT;
 				}
 			}            
+            if (_level->getKid(i)->getPosition().y < 0) {
+                _level->kill(_level->getKid(i));
+            }
         }
     }
 
     // Process the movement
     if (_level->getPineapple() != nullptr) {
-		if (!_level->getPineapple()->getIsBlended()) {
+        if (!_level->getPineapple()->getIsBlended()) {
 			_level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
 			_level->getPineapple()->setJumping(_input->didJump());
 			float cscale = Director::getInstance()->getContentScaleFactor();
 
-			handleAvatarGrowth(cscale, _input, _level->getPineapple());
+        handleAvatarGrowth(cscale, _input, _level->getPineapple());
+        
+        _level->getPineapple()->applyForce();
 
-			_level->getPineapple()->applyForce();
+        _level->getPineapple()->animate();
+        
+        if (_level->getPineapple()->isJumping()) {
+            //Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+            //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        }
+            
+        if (_level->getPineapple()->getPosition().y < 0) {
+            _level->kill(_level->getPineapple());
+        }
 
-			if (_level->getPineapple()->isJumping()) {
-				//Sound* source = _assets->get<Sound>(JUMP_EFFECT);
-				//SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-			}
-
-			_level->getPineapple()->animate();
-
-			// Scroll the screen (with parallax) if necessary
-			handleScrolling();
-		}
-		else {
+        // Scroll the screen (with parallax) if necessary
+        handleScrolling();
+        } else {
 			_level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
 			_level->getPineapple()->setFixedRotation(false);
 			_level->getPineapple()->setAngularVelocity(6.0f);

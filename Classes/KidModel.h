@@ -71,6 +71,7 @@ protected:
 	bool _isBlended;
 	/** Whether kid has been blended */
 	bool _isDead;
+    bool _isGrounded = false;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
