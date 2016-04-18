@@ -78,6 +78,11 @@ void loadHUD(TextureLoader* tloader) {
     tloader->loadAsync(SLASH_FOUR, "textures/HUD/slash 4.png");
 }
 
+void loadSplashScreens(TextureLoader *tloader) {
+    tloader->loadAsync(LOSE_SPLASH, "textures/failure.png");
+
+}
+
 void loadLevelSelectScreen(TextureLoader *tloader) {
     tloader->loadAsync(LEVEL_SELECT_BACKGROUND, "textures/level_select_bg.png");
 }
@@ -110,6 +115,7 @@ void LoadingScreenController::preload() {
     loadPauseScreen(tloader);
     loadHUD(tloader);
     loadLevelSelectScreen(tloader);
+    loadSplashScreens(tloader);
     
     loadSounds(assets);
     loadFonts(assets);

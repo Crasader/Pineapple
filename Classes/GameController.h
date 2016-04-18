@@ -26,6 +26,7 @@
 #include "HUDController.h"
 #include "LevelModel.h"
 #include "BackgroundView.h"
+#include "LoseView.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -60,8 +61,14 @@ protected:
     Node* _debugnode;
     /** Reference to the win message label */
     Label* _winnode;
-    /** Reference to the lose message label */
-    Label* _losenode;
+    
+    
+    /** The node that is the root of the lose splash screen */
+    Node* _loseroot;
+    /** Reference to the lose splash screen */
+    LoseView* _loseview;
+    
+    
     /** The Box2D world */
     WorldController* _world;
     

@@ -69,6 +69,8 @@
 		405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* InputController.cpp */; };
 		405CBEB81C7D14DF004AB5A0 /* PineappleRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* PineappleRoot.cpp */; };
 		405CBEC01C7D1CF7004AB5A0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
+		40660A8D1CC495020064EBD9 /* LoseView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40660A8B1CC495020064EBD9 /* LoseView.cpp */; };
+		40660A8E1CC495020064EBD9 /* LoseView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40660A8B1CC495020064EBD9 /* LoseView.cpp */; };
 		406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
 		406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
 		4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */; };
@@ -217,6 +219,8 @@
 		405CBEB11C7D14DF004AB5A0 /* PineappleRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PineappleRoot.h; sourceTree = "<group>"; };
 		405CBEB21C7D14DF004AB5A0 /* PineappleRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PineappleRoot.cpp; sourceTree = "<group>"; };
 		405CBEBF1C7D1CF7004AB5A0 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		40660A8B1CC495020064EBD9 /* LoseView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoseView.cpp; sourceTree = "<group>"; };
+		40660A8C1CC495020064EBD9 /* LoseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoseView.h; sourceTree = "<group>"; };
 		406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BackgroundView.cpp; sourceTree = "<group>"; };
 		406E53E61CA4A72B001E2EBD /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
 		406E53E91CA4ACA4001E2EBD /* Const.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
@@ -447,6 +451,8 @@
 				406E53E61CA4A72B001E2EBD /* BackgroundView.h */,
 				4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */,
 				4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */,
+				40660A8B1CC495020064EBD9 /* LoseView.cpp */,
+				40660A8C1CC495020064EBD9 /* LoseView.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -732,6 +738,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4039B4DE1CB33B3E001E8B6E /* GoalModel.cpp in Sources */,
+				40660A8D1CC495020064EBD9 /* LoseView.cpp in Sources */,
 				403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */,
 				405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */,
 				405CBEB81C7D14DF004AB5A0 /* PineappleRoot.cpp in Sources */,
@@ -778,6 +785,7 @@
 				406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				4072DF971C9F68B300F7DAA4 /* InputController.cpp in Sources */,
 				4072DF961C9F68B300F7DAA4 /* PineappleRoot.cpp in Sources */,
+				40660A8E1CC495020064EBD9 /* LoseView.cpp in Sources */,
 				0313B5EE1CB336D500C9CD4C /* MoveablePlatformModel.cpp in Sources */,
 				4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */,
 				0373D6F11CBF205A00B00A7E /* PauseController.cpp in Sources */,

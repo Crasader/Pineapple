@@ -110,4 +110,9 @@
 /** The key for the selected level button texture in the asset manager */
 #define LEVEL_SELECT_LEVEL_BUTTON_ON "level_select_level_button_selected"
 
+/** The key for the lose splash screen */
+#define LOSE_SPLASH    "lose_splash"
+/** The key for the win splash screen */
+#define WIN_SPLASH    "win_splash"
+
 #endif /* Texture_h */

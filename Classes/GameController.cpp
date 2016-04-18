@@ -33,6 +33,9 @@ using namespace cocos2d;
 /** The number of frame to wait before reinitializing the game */
 #define EXIT_COUNT      180
 
+#define WIN_SPLASH_Z 4
+#define LOSE_SPLASH_Z 5
+
 
 #pragma mark -
 #pragma mark Initialization
@@ -126,15 +129,10 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
                           root->getContentSize().height/2.0f);
     _winnode->setColor(WIN_COLOR);
     
-    _losenode = Label::create();
-    _losenode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
-    _losenode->setString(LOSE_MESSAGE);
-    _losenode->setPosition(root->getContentSize().width/2.0f,
-                           root->getContentSize().height/2.0f);
-    _losenode->setColor(LOSE_COLOR);
-    
-    root->addChild(_winnode,4);
-    root->addChild(_losenode,5);
+    _loseroot = Node::create();
+    _loseroot->setContentSize(_rootnode->getContentSize());
+    _loseroot->retain();
+    _loseview = LoseView::create(_loseroot, _assets);
     
     _collision->setLevel(_level);
     
@@ -176,6 +174,13 @@ GameController::~GameController() {
 void GameController::dispose() {
     if (_level != nullptr) {
         _level->unload();
+    }
+    if (_loseview != nullptr) {
+        _loseview->dispose();
+    }
+    if (_loseroot != nullptr) {
+        _loseroot->release();
+        _loseroot = nullptr;
     }
     _worldnode = nullptr;
     _background = nullptr;
@@ -273,10 +278,11 @@ void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
-        _losenode->setVisible(true);
+        _rootnode->addChild(_loseroot, LOSE_SPLASH_Z);
+        _loseview->position();
         _countdown = EXIT_COUNT;
     } else {
-        _losenode->setVisible(false);
+        _rootnode->removeChild(_loseroot);
         _countdown = -1;
     }
     
