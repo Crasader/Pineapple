@@ -56,11 +56,19 @@ protected:
     /** The root node for the loading screen */
     Node* _loadingScreenRoot;
     
+    /** A reference to the asset manager for sounds */
+    SceneManager* _assets;
+    /** The key for the currently active background sound */
+    string _backgroundSoundKey;
+    /** The currently active background sound */
+    Sound* _backgroundSound;
+    
     /** The input controller that handles input. All other controllers get a reference to this instance */
     InputController _inputController;
     
     /** Whether or not we have finished preloading all assets */
-    bool _preloaded;
+    bool _loadStarted;
+    bool _loadFinished;
     
     /**
      * Builds the scene graph for the loading screen.

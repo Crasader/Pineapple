@@ -21,7 +21,8 @@
 #define PINEAPPLE_SSHRINK			0.9f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT				0.07f
-#define SENSOR_V_OFFSET             -0.075f
+/** offset for the foot sensor to enable some logic in collisions before the pineapples physics kick in */
+#define SENSOR_V_OFFSET             -0.078f
 /** The density of the character */
 #define PINEAPPLE_DENSITY			0.5f
 /** The impulse for the character jump */
@@ -204,9 +205,7 @@ void PineappleModel::createFixtures() {
     
     // Override mass based on shape sizes to custom values
     b2MassData massData = b2MassData();
-    float mass = this->_isLarge ? PINEAPPLE_GROWN_MASS : PINEAPPLE_NORMAL_MASS;
-    mass = this->_isSmall ? PINEAPPLE_SHRUNK_MASS : mass;
-    massData.mass = mass;
+    massData.mass = this->_isSmall ? PINEAPPLE_SHRUNK_MASS : PINEAPPLE_NORMAL_MASS;
     setDensity(PINEAPPLE_DENSITY);
     _body->SetMassData(&massData);
 }
@@ -235,28 +234,17 @@ int PineappleModel::grow() {
         setY(getY() + (getDimension().height - currentHeight)/2);
         setIsSmall(false);
         return 1;
-    } else if (!_isLarge  && !_isSmall) {
-        setDimension(_normalSize * PINEAPPLE_GROW_SCALE);
-        setY(getY() + (getDimension().height - currentHeight)/2);
-        setIsLarge(true);
-        return 2;
     }
-    
     return 0;
 }
 
 int PineappleModel::shrink() {
     float currentHeight = getDimension().height;
-    if (_isLarge) {
-        setDimension(_normalSize);
-        setY(getY() + (getDimension().height - currentHeight)/2);
-        setIsLarge(false);
-        return 1;
-    } else if (!_isLarge && !_isSmall) {
+    if (!_isSmall) {
         setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
         setY(getY() + (getDimension().height - currentHeight)/2);
         setIsSmall(true);
-        return 2;
+        return 1;
     }
     return 0;
 }

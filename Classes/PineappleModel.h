@@ -24,24 +24,18 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Physics Constants
 #define PINEAPPLE_DENSITY					   0.5f
-#define PINEAPPLE_GROWN_MASS				   2.0f
-#define PINEAPPLE_NORMAL_MASS				   1.5f
+#define PINEAPPLE_NORMAL_MASS				   2.0f
 #define PINEAPPLE_SHRUNK_MASS				   1.0f
-#define PINEAPPLE_DENSITY					   0.5f
 /** The amount to shrink the whole body, including image */
-#define PINEAPPLE_SCALE						   0.4f
+#define PINEAPPLE_SCALE						   0.6f
 /** The factor to multiply by the input */
 #define PINEAPPLE_FORCE						   50.0f
 /** The amount to slow the character down */
 #define PINEAPPLE_DAMPING					   10.0f
 /** The maximum character speed */
 #define PINEAPPLE_MAXSPEED					   5.0f
-/** The maximum duration of pineapple size */
-#define PINEAPPLE_MAX_SIZE_DURATION            3.0f
-/** The relative size of enlarged pineapple */
-#define PINEAPPLE_GROW_SCALE				   1.5f
 /** The relative size of smaller pineapple */
-#define PINEAPPLE_SHRINK_SCALE			       0.75f
+#define PINEAPPLE_SHRINK_SCALE			       0.50f
 
 /** Number of frames in the walk animation */
 #define PINEAPPLE_FRAME_COUNT	26
@@ -65,13 +59,9 @@ protected:
 	/** Which direction is the character facing */
 	bool _faceRight;
 	/** Whether Will is large or not */
-	bool _isLarge = false;
-	/** Whether Will is small or not */
 	bool _isSmall = false;
 	/** Size object to store William's current size */
 	Size _normalSize = Size();
-	/** Duration since last grow or shrink, 0 if currently normal size */
-	float _durationSinceGrowOrShrink = 0.0f;
 	/** How long until we can jump again */
 	int  _jumpCooldown;
 	/** Whether we are actively jumping */
@@ -171,43 +161,32 @@ public:
 	*/
 	int updateSize(float dt);
 
-	/**
-	* TODO: method spec
-	*/
-	void toNormalSize() { setDimension(_normalSize); }
+	///**
+	//* TODO: method spec
+	//*/
+	//void toNormalSize() { setDimension(_normalSize); }
 
 	/**
 	* TODO: method spec
 	*/
-	bool isLarge() const { return _isLarge; }
+	bool isSmall() const { return _isSmall; }
 
 	/**
 	* Setter for _isLarge
 	*/
-	void setIsLarge(bool isLarge) {
-		_durationSinceGrowOrShrink = 0.0f;
-		_isLarge = isLarge;
+	void setIsSmall(bool isSmall) {
+		_isSmall = isSmall;
 	}
 
     /**
-     * Grows the pineapple, returns 1 if now normal size, 2 if large
+     * Grows the pineapple, returns 1 if now normal size, 0 if already normal
      */
     int grow();
     
     /**
-     * Shrinks the pineapple, returns 1 if normal size, 2 if small
+     * Shrinks the pineapple, returns 1 if now small size, 0 if already small
      */
     int shrink();
-
-	bool isSmall() const { return _isSmall; }
-
-	/**
-	* Setter for _isSmall
-	*/
-	void setIsSmall(bool isSmall) {
-		this->_durationSinceGrowOrShrink = 0.0f;
-		this->_isSmall = isSmall;
-	}
 
 	/**
 	* Returns left/right movement of this character.

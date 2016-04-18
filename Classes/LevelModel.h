@@ -139,6 +139,14 @@ public:
 	*/
 	KidModel* getKid(int i) { return _kids[i]; }
 
+    vector<KidModel*> getKids() {
+        vector<KidModel*> vec;
+        for (int i = 0; i < KID_COUNT; i++) {
+            vec.push_back(_kids[i]);
+        }
+        return vec;
+    }
+    
 	/**
 	*
 	*/
@@ -387,8 +395,6 @@ public:
 	/**
 	* Removes obstacle from level world
 	*
-	* TODO: Putting this here for the sake of completing CollisionController, but should be moved to LevelController when it is made
-	*				Since this is just here temporarily, the full implementation is in the header.
 	*/
 	void removeObstacle(Obstacle* obj) {
 		_worldnode->removeChild(obj->getSceneNode());

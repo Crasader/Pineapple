@@ -28,8 +28,10 @@
 #define SPLAT_TEXTURE_3   "splat3"
 /** The key for the splats 4 */
 #define SPLAT_TEXTURE_4   "splat4"
-/** The key for the splats 5 */
-#define SPLAT_TEXTURE_5   "splat5"
+
+/** The key for the font for level select buttons in the asset manager */
+#define ELECTRIC_CIRCUS_FONT            "level_select_button_font"
+#define ELECTRIC_CIRCUS_FONT_LOCATION  "fonts/ElectricCircus.ttf"
 
 /** The texture for the character avatar */
 #define PINEAPPLE_TEXTURE "pineapple"
@@ -91,5 +93,30 @@
 
 /** The key for the pause screen overlay texture in the asset manager */
 #define PAUSE_SCREEN_OVERLAY "pause_overlay"
+#define CHUNKY_QUIVER        "chunky_quiver"
+
+/** HUD */
+#define TOP_BAR  "top_bar"
+#define TOP_BLENDER "top_blender"
+#define TOP_CHILD_BOW "top_child_bow"
+#define TOP_CHILD_GLASSES "top_child_glasses"
+#define TOP_CHILD_HAT "top_child_hat"
+#define TOP_CHILD_PIRATE "top_child_pirate"
+#define TOP_WILL "top_will"
+#define STATUS_ONE         "one"
+#define STATUS_TWO         "two"
+#define STATUS_THREE       "three"
+#define STATUS_FOUR        "four"
+#define SLASH_FOUR         "slash_four"
+
+/** The key for the loading screen background texture in the asset manager */
+#define LOADING_BACKGROUND      "loading_background"
+
+/** The key for the level select background texture in the asset manager */
+#define LEVEL_SELECT_BACKGROUND "level_select_background"
+/** The key for the unselected level button texture in the asset manager */
+#define LEVEL_SELECT_LEVEL_BUTTON_OFF "level_select_level_button"
+/** The key for the selected level button texture in the asset manager */
+#define LEVEL_SELECT_LEVEL_BUTTON_ON "level_select_level_button_selected"
 
 #endif /* Texture_h */

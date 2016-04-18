@@ -14,11 +14,22 @@
 #include "InputController.h"
 #include "AbsScreenController.h"
 
-#define PAUSE_OVERLAY_Z_ORDER  1
-#define BUTTON_Z_ORDER         2
+// global z order
+#define PAUSE_MENU_Z_ORDER     6
+
 #define NUM_BUTTONS            4
-#define BUTTON_HEIGHT          400.0f
-#define PAUSE_MENU_Z_ORDER     10
+#define BUTTON_Y_OFFSET        60.0f
+#define BUTTON_X_OFFSET        -20.0f
+#define BUTTON_HEIGHT          200.0f
+#define BUTTON_COL_OFFSET      200.0f
+#define BUTTONS_PER_COL        2
+
+// local z orders
+#define PAUSE_OVERLAY_Z_ORDER  1
+#define CHUNKY_Z_ORDER     2
+#define BUTTON_Z_ORDER         3
+
+#define ANIMATION_FRAMES       3
 
 using namespace cocos2d;
 using namespace cocos2d::ui;
@@ -36,9 +47,6 @@ public:
                 // is pause while holding down movement don't want it to be down when unpause
                 PAUSE_CONTROLLER->_inputController->clear();
                 PAUSE_CONTROLLER->_isPaused = true;
-                for (int i = 0; i < NUM_BUTTONS; i++) {
-                    PAUSE_CONTROLLER->_buttons[i]->setPositionX(PAUSE_CONTROLLER->_center.x);
-                }
                 PAUSE_CONTROLLER->_rootNode->addChild(PAUSE_CONTROLLER->_pauseNode, PAUSE_MENU_Z_ORDER);
             }
         }
@@ -71,6 +79,11 @@ public:
         PAUSE_CONTROLLER->~PauseController();
     }
     
+    static void animate() {
+        PAUSE_CONTROLLER->_chunkyQuiver->setFrame((int)PAUSE_CONTROLLER->_animationCycle % ANIMATION_FRAMES);
+        PAUSE_CONTROLLER->_animationCycle += .2;
+    }
+    
 private:
     PauseController() { }
     ~PauseController() {
@@ -79,6 +92,7 @@ private:
             _buttons[i]->release();
         }
         _pauseNode->release();
+        _chunkyQuiver->release();
     }
     
     // static reference to singleton
@@ -92,14 +106,17 @@ private:
     Vec2 _center;
     // array of buttons
     Button* _buttons[NUM_BUTTONS];
+    
     // background overlay
-    PolygonNode* _backgroundOverlay;
+    PolygonNode* _backgroundOverlay = nullptr;
+    // animation in background
+    AnimationNode* _chunkyQuiver = nullptr;
+    float _animationCycle = 0.0;
     
     /** Reference to the game controller this is pausing for */
     AbsScreenController* _gameController;
     
     const static string BUTTON_FILES[NUM_BUTTONS*2];
-    
 };
 
 #endif /* PauseController_h */

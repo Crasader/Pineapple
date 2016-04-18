@@ -68,8 +68,8 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input) {
-    return init(root,input,SCREEN);
+bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile) {
+    return init(root, input, levelKey, levelFile, SCREEN);
 }
 
 /**
@@ -90,19 +90,20 @@ bool GameController::init(Node* root, InputController* input) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input, const Rect& rect) {
+bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile, const Rect& rect) {
     _rootnode = root;
     _rootnode->retain();
     
     _input = input;
     
-    _levelKey = LEVEL_ONE_KEY;
-    _levelFile = LEVEL_ONE_FILE;
+    _levelKey = levelKey;
+    _levelFile = levelFile;
     
     _assets = AssetManager::getInstance()->getCurrent();
     _level = _assets->get<LevelModel>(_levelKey);
     
     PauseController::create();
+    HUDController::create();
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -126,6 +127,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
 	_rootSize = root->getContentSize();
     
     PauseController::init(this, _worldnode, _assets, root, _input);
+    HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
@@ -253,10 +255,14 @@ void GameController::onReset() {
     _world->onEndContact = [this](b2Contact* contact) {
         _collision->endContact(contact);
     };
+    
+    //reset the hud
+    HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
+    
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
-    _background->reset();
+    _background->reset(_worldnode);
     _loadnode->setVisible(false);
 }
 
@@ -270,7 +276,6 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        Sound* source = _assets->get<Sound>(WIN_MUSIC);
         ////SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _winnode->setVisible(true);
         _countdown = EXIT_COUNT;
@@ -290,7 +295,6 @@ void GameController::setComplete(bool value) {
 void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
-        Sound* source = _assets->get<Sound>(LOSE_MUSIC);
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _losenode->setVisible(true);
         _countdown = EXIT_COUNT;
@@ -306,11 +310,9 @@ void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _
     float scale = 1.0f;
     if (_input->didGrow()) {
         size = _avatar->grow();
-        if (size == 2)
-            scale = PINEAPPLE_GROW_SCALE;
     } else if (_input->didShrink()) {
         size = _avatar->shrink();
-        if (size == 2)
+        if (size == 1)
             scale = PINEAPPLE_SHRINK_SCALE;
     }
     if (size) {
@@ -364,6 +366,7 @@ void GameController::update(float dt) {
         return;
     }
     if (PauseController::isPaused()) {
+        PauseController::animate();
         return;
     }
     
@@ -410,7 +413,7 @@ void GameController::update(float dt) {
 			_level->getPineapple()->applyForce();
 
 			if (_level->getPineapple()->isJumping()) {
-				Sound* source = _assets->get<Sound>(JUMP_EFFECT);
+				//Sound* source = _assets->get<Sound>(JUMP_EFFECT);
 				//SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 			}
 
@@ -440,7 +443,9 @@ void GameController::update(float dt) {
 	// Animate the blender
 	_level->getBlender()->animate();
 
-    // Update the background (move the clouds)
+	HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
+    
+	// Update the background (move the clouds)
     _background->update(dt);
     
     // Turn the physics engine crank
