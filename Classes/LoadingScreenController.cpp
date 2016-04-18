@@ -40,6 +40,21 @@ void LoadingScreenController::preload() {
     
     tloader->loadAsync(PAUSE_SCREEN_OVERLAY, "textures/pause-overlay.png");
     
+    // HUD
+    tloader->loadAsync(TOP_BAR, "textures/HUD/topBar.png");
+    tloader->loadAsync(TOP_BLENDER, "textures/HUD/blender.png");
+    tloader->loadAsync(TOP_CHILD_BOW, "textures/HUD/top_bar_bow.png");
+    tloader->loadAsync(TOP_CHILD_GLASSES, "textures/HUD/top_bar_glasses.png");
+    tloader->loadAsync(TOP_CHILD_HAT, "textures/HUD/top_bar_hat.png");
+    tloader->loadAsync(TOP_CHILD_PIRATE, "textures/HUD/top_bar_pirate.png");
+    tloader->loadAsync(TOP_WILL, "textures/HUD/will.png");
+    tloader->loadAsync(STATUS_ONE, "textures/HUD/1.png");
+    tloader->loadAsync(STATUS_TWO, "textures/HUD/2.png");
+    tloader->loadAsync(STATUS_THREE, "textures/HUD/3.png");
+    tloader->loadAsync(STATUS_FOUR, "textures/HUD/4.png");
+    tloader->loadAsync(SLASH_FOUR, "textures/HUD/slash 4.png");
+    
+    
     // MOVEABLE PLATFORMS
     
     tloader->loadAsync(LEFT_NUBBIN_TEXTURE_RED,  "textures/left-door-red.png");

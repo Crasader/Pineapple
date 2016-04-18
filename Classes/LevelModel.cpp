@@ -112,11 +112,9 @@ void initFootSensorProperties(Obstacle* obstacle) {
  * debug properties of the object to be added */
 void initDebugProperties(Obstacle* obstacle) {
     WireNode* draw = WireNode::create();
-    draw->retain();
     draw->setColor(DEBUG_COLOR);
     draw->setOpacity(DEBUG_OPACITY);
     obstacle->setDebugNode(draw);
-    draw->release();
 }
 
 /** Helper method for creating sensors (and non-physical obstacles) */

@@ -81,4 +81,18 @@
 /** The key for the pause screen overlay texture in the asset manager */
 #define PAUSE_SCREEN_OVERLAY "pause_overlay"
 
+/** HUD */
+#define TOP_BAR  "top_bar"
+#define TOP_BLENDER "top_blender"
+#define TOP_CHILD_BOW "top_child_bow"
+#define TOP_CHILD_GLASSES "top_child_glasses"
+#define TOP_CHILD_HAT "top_child_hat"
+#define TOP_CHILD_PIRATE "top_child_pirate"
+#define TOP_WILL "top_will"
+#define STATUS_ONE         "one"
+#define STATUS_TWO         "two"
+#define STATUS_THREE       "three"
+#define STATUS_FOUR        "four"
+#define SLASH_FOUR         "slash_four"
+
 #endif /* Texture_h */

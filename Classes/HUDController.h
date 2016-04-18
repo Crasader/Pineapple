@@ -15,15 +15,33 @@
 #include "InputController.h"
 #include "PauseController.h"
 #include "AbsScreenController.h"
+#include "Const.h"
+#include "KidModel.h"
+#include "PineappleModel.h"
 
 
-#define         CHILDREN_STATUS_HORIZ_POS_RATIO  .0f
+#define         CHILDREN_STATUS_HORIZ_POS_RATIO  .04f
 #define         PROGRESS_BAR_HORIZ_POS_RATIO     .15f
 #define         SOUND_BUTTON_HORIZ_POS_RATIO     .85f
-#define         PAUSE_BUTTON_HORIZ_POS_RATIO     .925f
+#define         PAUSE_BUTTON_HORIZ_POS_RATIO     .94f
 #define         HUD_MIDDLE_Y_POS_RATIO           .9f
 #define         HUD_Z_ORDER                      5
-#define         HUD_SCALE                        .15f
+#define         BUTTON_SCALE                     .15f
+#define         PROGRESS_BAR_SCALE_HORIZ         .6f
+#define         PROGRESS_BAR_SCALE_VERT          .5f
+// for mini blender etc
+#define         BLENDER_ICON_SCALE               .4f
+#define         KID_ICON_SCALE                   .8f
+#define         WILL_SCALE                       .9f
+#define         WILL_OFFSET_Y                    -10
+
+// local z order
+#define TOP_BAR_BACKGROUND_Z_ORDER  1
+#define TOP_BAR_FOREGROUND_Z_ORDER  2
+
+// 1 through 4 then slash
+#define STATUS_SCALE            .24f
+#define NUM_STATUS_NODES        5
 
 // singleton class
 using namespace cocos2d;
@@ -49,12 +67,10 @@ public:
         HUD_CONTROLLER->_rootNode->removeChild(HUD_CONTROLLER->_hudNode);
     }
     
-    static void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input);
+    static void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input, float blenderPos);
     
-    static void update() {
-        // update children status icon
-        // update progress bar
-    }
+    // update number of alive children icon and progress bar, blenderLoc should be right most x position
+    static void update(int childrenAlive, float blenderLoc, vector<KidModel*> children, PineappleModel* will, float goalLoc);
     
     static void create() {
         if (!HUD_CONTROLLER) {
@@ -62,30 +78,33 @@ public:
         }
     }
     
-    static void release() {
-        if (HUD_CONTROLLER) {
-            HUD_CONTROLLER->~HUDController();
-        }
-    }
+    static void release();
     
+    static void reset(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input, float blenderPos) {
+        HUDController::release();
+        HUDController::create();
+        HUDController::init(gameController, worldNode, assets, root, input, blenderPos);
+    }
     
 private:
     HUDController() { }
-    ~HUDController() {
-        _hudNode->release();
-        // release children status nodes
-        // release progress bar nodes
-        // release sound node
-        _soundButton->release();
-        _soundButton = nullptr;
-        // release pause node
-        _pauseButton->release();
-        _pauseButton = nullptr;
-    }
+    ~HUDController() { }
+    
+    static void initChildrenStatus(SceneManager* assets);
+    
+    static void initProgressBar(SceneManager* assets);
     
     static void initPauseButton();
     
     static void initSoundButton();
+    
+    // if you have game units (game object location and goal location) this will return
+    // relative units for the top progress bar, we're treating goalLoc as end of level.
+    // you will have to add your getContentsize().width * your relative scale * scale / 2.0f to make it non
+    // centered tho, srry
+    static float unitsToTopBarX(float location, float goalLoc) {
+        return HUD_CONTROLLER->_progressBarLeftXPos + (HUD_CONTROLLER->_progressBarWidth * location / goalLoc);
+    }
     
     // static reference to singleton
     static HUDController* HUD_CONTROLLER;
@@ -101,7 +120,16 @@ private:
     
     /** Reference to the game controller this is pausing for */
     AbsScreenController* _gameController;
-        
+    
+    // to get widths you need to getcontentsize().width * their respective scale * cscale
+    // 1 through 4 then the slash
+    PolygonNode* _numbers[NUM_STATUS_NODES];
+    PolygonNode* _blender = nullptr;
+    PolygonNode* _will    = nullptr;
+    PolygonNode* _children[KID_COUNT];
+    PolygonNode* _topbar = nullptr;
+    float _progressBarLeftXPos = 0.0f;
+    float _progressBarWidth    = 0.0f;
 };
 
 #endif /* HUDController_h */

@@ -139,6 +139,14 @@ public:
 	*/
 	KidModel* getKid(int i) { return _kids[i]; }
 
+    vector<KidModel*> getKids() {
+        vector<KidModel*> vec;
+        for (int i = 0; i < KID_COUNT; i++) {
+            vec.push_back(_kids[i]);
+        }
+        return vec;
+    }
+    
 	/**
 	*
 	*/

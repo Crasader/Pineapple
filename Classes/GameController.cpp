@@ -93,8 +93,8 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     
     _input = input;
     
-    _levelKey = LEVEL_ONE_KEY;
-    _levelFile = LEVEL_ONE_FILE;
+    _levelKey = LEVEL_TWO_KEY;
+    _levelFile = LEVEL_TWO_FILE;
     
     _assets = AssetManager::getInstance()->getCurrent();
     _level = _assets->get<LevelModel>(_levelKey);
@@ -117,7 +117,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     _debugnode = _level->getDebugNode();
     
     PauseController::init(this, _worldnode, _assets, root, _input);
-    HUDController::init(this, _worldnode, _assets, root, _input);
+    HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
 
     _winnode = Label::create();
     _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
@@ -244,6 +244,10 @@ void GameController::onReset() {
     _world->onEndContact = [this](b2Contact* contact) {
         _collision->endContact(contact);
     };
+    
+    //reset the hud
+    HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
+    
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
@@ -392,6 +396,8 @@ void GameController::update(float dt) {
         
         _level->getPineapple()->animate();
     }
+    
+    HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
     
     // Update the background (move the clouds)
     _background->update(dt);
