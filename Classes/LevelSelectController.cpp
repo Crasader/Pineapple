@@ -25,6 +25,7 @@
 #include "Texture.h"
 #include "Levels.h"
 
+#define LEVELS_CREATED              2
 const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE};
 const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY};
 
@@ -115,6 +116,8 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     button->setTitleFontSize(BUTTON_FONT_SIZE);
     button->setTitleFontName(LEVEL_SELECT_BUTTON_FONT_LOCATION);
     button->setTitleColor(Color3B::WHITE);
+    
+    button->setEnabled(i < LEVELS_CREATED);
     
     button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::BEGAN) {
