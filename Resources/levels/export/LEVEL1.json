@@ -49,22 +49,6 @@
                  "width":512,
                  "x":1088,
                  "y":640
-                }, 
-                {
-                 "gid":1,
-                 "height":64,
-                 "id":96,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":640,
-                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
