@@ -168,6 +168,8 @@ public:
      */
     int getIndex() const { return _index; }
     
+    void setGrounded(bool value) { _isGrounded = value; }
+    
     /**
      * Returns left/right movement of this character.
      *
