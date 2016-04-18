@@ -113,10 +113,12 @@ void HUDController::initSoundButton() {
     HUD_CONTROLLER->_soundButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
             if (HUD_CONTROLLER->_soundButton->isSelected()) {
-                //SoundEngine::getInstance()->pauseMusic();
+                SoundEngine::getInstance()->stopMusic();
+                SoundEngine::getInstance()->stopAllEffects();
             } else {
-                //Sound* source = HUD_CONTROLLER->_assets->get<Sound>(GAME_MUSIC);
-                //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+                Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+                SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+                SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
             }
         }
     });
