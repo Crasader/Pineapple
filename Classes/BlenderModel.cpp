@@ -118,10 +118,10 @@ BlenderModel* BlenderModel::create(const Vec2& pos, const Vec2& scale) {
 bool BlenderModel::init(const Vec2& pos, const Vec2& scale) {
     if (BoxObstacle::init(pos,Size(scale))) {
         setVX(BLENDER_SPEED);
-        
+
         // Gameplay attributes
 		_isBlending = false;
-		_blendcycleFrame = 0;
+		_blendcycleFrame = 0.0f;
         return true;
     }
     return false;
@@ -218,8 +218,8 @@ void BlenderModel::resetSceneNode() {
         setDimension(pnode->getContentSize().width * BLENDER_SCALE / _drawScale.x,
                      pnode->getContentSize().height * BLENDER_SCALE / _drawScale.y);
 
-		_blendcycleFrame = 0;
-		_blendcycle = pnode;
+		_blendcycleFrame = 0.0f;
+		_blendcycle = pnode;		
     }
 }
 
@@ -252,12 +252,13 @@ void BlenderModel::resetDebugNode() {
 * Animate blender
 */
 void BlenderModel::animate() {
-	_blendcycleFrame++;
+	_blendcycleFrame += 0.25f;
+	int tmp = (int)rint(_blendcycleFrame);
 	if (_isBlending) {
-		_blendcycle->setFrame((_blendcycleFrame % 8) + 2);
+		_blendcycle->setFrame((tmp % 8) + 2);
 	}
 	else {
-		_blendcycle->setFrame(_blendcycleFrame % 2);
+		_blendcycle->setFrame(tmp % 2);
 	}
 }
 

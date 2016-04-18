@@ -65,6 +65,13 @@ protected:
     Label* _loadnode;
     /** The Box2D world */
     WorldController* _world;
+
+	/** Reference to the splat */
+	PolygonNode* _splat; 
+	/** Countdown till splat is removed */
+	int _splatCount;
+	/** Size of root */
+	Size _rootSize;
     
     /** The scene manager for this game demo */
     SceneManager* _assets;
@@ -293,6 +300,11 @@ public:
 	* Compute offsets for horizontal scrolling.
 	*/
 	void handleScrolling();
+
+	/**
+	* Activate the splat effect when shit hits the fan
+	*/
+	void activateSplat(Texture2D* image, bool offScreen);
 
 };
 

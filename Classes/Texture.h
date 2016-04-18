@@ -20,22 +20,33 @@
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT     "retro"
 
+/** The key for the splats 1 */
+#define SPLAT_TEXTURE_1   "splat1"
+/** The key for the splats 2 */
+#define SPLAT_TEXTURE_2   "splat2"
+/** The key for the splats 3 */
+#define SPLAT_TEXTURE_3   "splat3"
+/** The key for the splats 4 */
+#define SPLAT_TEXTURE_4   "splat4"
+/** The key for the splats 5 */
+#define SPLAT_TEXTURE_5   "splat5"
+
 /** The texture for the character avatar */
 #define PINEAPPLE_TEXTURE "pineapple"
-/** The texture for the character avatar */
+/** The texture for the blender */
 #define BLENDER_TEXTURE   "blender"
 /** The texture for the first kid */
 #define KID_TEXTURE_1     "pineapplet_bow"
-/** The texture for the first kid */
+/** The texture for the second kid */
 #define KID_TEXTURE_2     "pineapplet_glasses"
-/** The texture for the first kid */
+/** The texture for the third kid */
 #define KID_TEXTURE_3     "pineapplet_hat"
-/** The texture for the first kid */
+/** The texture for the fourth kid */
 #define KID_TEXTURE_4     "pineapplet_pirate"
 
-/** The texture for the character avatar */
+/** The texture for the spikes */
 #define SPIKE_TEXTURE     "spikes_tex"
-/** The texture for the character avatar */
+/** The texture for the jello */
 #define JELLO_TEXTURE     "jello_tex"
 /** The key for the spinner texture */
 #define SPINNER_TEXTURE   "spinner"

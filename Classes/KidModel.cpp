@@ -147,6 +147,28 @@ string KidModel::getTexture(int idx) {
     }
 }
 
+/**
+* Returns the splat texture name for the given kid index
+*/
+string KidModel::getSplatTexture(int idx) {
+	if (idx == 0) {
+		return SPLAT_TEXTURE_1;
+	}
+	else if (idx == 1) {
+		return SPLAT_TEXTURE_2;
+	}
+	else if (idx == 2) {
+		return SPLAT_TEXTURE_3;
+	}
+	else if (idx == 3) {
+		return SPLAT_TEXTURE_4;
+	}
+	else {
+		CC_ASSERT(false);
+		return nullptr;
+	}
+}
+
 
 #pragma mark -
 #pragma mark Initializers

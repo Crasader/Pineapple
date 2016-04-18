@@ -54,7 +54,7 @@ protected:
 	/** Filmstrip for blendcycle animation */
 	AnimationNode* _blendcycle;
 	/** Frame counter for blendcycle animation */
-	int _blendcycleFrame = 0;
+	float _blendcycleFrame;
 	/** Whether there is something being blended */
 	bool _isBlending;
 

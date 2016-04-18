@@ -30,8 +30,10 @@
 using namespace cocos2d;
 //using namespace std;
 
-/** The number of frame to wait before reinitializing the game */
+/** The number of frames to wait before reinitializing the game */
 #define EXIT_COUNT      180
+/** The number of frames to wait before removing the splat */
+#define SPLAT_COUNT     20
 
 
 #pragma mark -
@@ -46,6 +48,7 @@ using namespace cocos2d;
 GameController::GameController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
+_splat(nullptr), 
 _world(nullptr),
 _active(false),
 _collision(nullptr),
@@ -114,6 +117,13 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     // Create the scene graph
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
+
+	_splat = PolygonNode::createWithTexture(_assets->get<Texture2D>(SPLAT_TEXTURE_1));
+	_splat->retain();
+	_splat->setVisible(false);
+	root->addChild(_splat,8);
+	_splatCount = -1;
+	_rootSize = root->getContentSize();
     
     PauseController::init(this, _worldnode, _assets, root, _input);
 
@@ -142,7 +152,7 @@ bool GameController::init(Node* root, InputController* input, const Rect& rect) 
     root->addChild(_winnode,4);
     root->addChild(_losenode,5);
     root->addChild(_loadnode,6);
-    
+
     _loadnode->setVisible(false);
     
     _collision->setLevel(_level);
@@ -189,6 +199,8 @@ void GameController::dispose() {
     _background = nullptr;
     PauseController::release();
     _debugnode = nullptr;
+	_splat->release();
+	_splat = nullptr; 
     _winnode = nullptr;
     _loadnode->release();
     _loadnode = nullptr;
@@ -376,8 +388,11 @@ void GameController::update(float dt) {
 				_level->getKid(i)->setFixedRotation(false);
 				_level->getKid(i)->setAngularVelocity(6.0f);
 				if (_level->getKid(i)->getIsDead()) {
+					bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
+					activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
 					_level->kill(_level->getKid(i));
 					_level->getBlender()->setIsBlending(true);
+					_splatCount = SPLAT_COUNT;
 				}
 			}            
         }
@@ -424,7 +439,7 @@ void GameController::update(float dt) {
 
 	// Animate the blender
 	_level->getBlender()->animate();
-    
+
     // Update the background (move the clouds)
     _background->update(dt);
     
@@ -440,6 +455,13 @@ void GameController::update(float dt) {
     } else if (_countdown == 0) {
         reset();
     }
+
+	if (_splatCount > 0) {
+		_splatCount--;
+	}
+	else {
+		_splat->setVisible(false);
+	}
 }
 
 /**
@@ -474,6 +496,22 @@ void GameController::handleScrolling() {
     
     // Do parallax scrolling of the background
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
+}
+
+/**
+* Activate the splat effect when shit hits the fan
+*/
+void GameController::activateSplat(Texture2D* image, bool offScreen) {
+	_splat->setTexture(image);
+	_splat->setScale(2.0f, 2.0f);
+	_splat->setVisible(true);
+
+	if (offScreen) {
+		_splat->setPosition(0.0f, _rootSize.height/2.0f);
+	}
+	else {
+		_splat->setPosition(_rootSize.width/2.0f, _rootSize.height / 2.0f);
+	}
 }
 
 #pragma mark -

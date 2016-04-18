@@ -156,6 +156,11 @@ public:
      * Returns the kid texture name for the given kid index
      */
     static std::string getTexture(int idx);
+
+	/**
+	* Returns the splat texture name for the given kid index
+	*/
+	static std::string getSplatTexture(int idx);
     
 #pragma mark Attribute Properties
     /**

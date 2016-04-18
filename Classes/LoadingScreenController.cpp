@@ -10,10 +10,15 @@ void LoadingScreenController::preload() {
 	SceneManager* assets = AssetManager::getInstance()->getCurrent();
 	TextureLoader* tloader = (TextureLoader*)assets->access<Texture2D>();
 
-	tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
+	tloader->loadAsync(FLOOR_TEXTURE,     "textures/new_tile.png");
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
 	tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
 	tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
+
+	tloader->loadAsync(SPLAT_TEXTURE_1, "textures/splat1.png");
+	tloader->loadAsync(SPLAT_TEXTURE_2, "textures/splat2.png");
+	tloader->loadAsync(SPLAT_TEXTURE_3, "textures/splat3.png");
+	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splat4.png");
 
 	tloader->loadAsync(KID_TEXTURE_1, "textures/child_bow_walkcycle_reduced.png");
 	tloader->loadAsync(KID_TEXTURE_2, "textures/child_glasses_walkcycle_reduced.png");
@@ -23,7 +28,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
 	tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives.png");
 
-	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender_blendCycle.png");
+	tloader->loadAsync(BLENDER_TEXTURE, "textures/blender_blendCycle2.png");
 
 	tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
 	tloader->loadAsync(GOAL_TEXTURE,      "textures/goal.png");
@@ -32,7 +37,7 @@ void LoadingScreenController::preload() {
 	tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
 	tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
 
-	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_wPlants.png");
+	tloader->loadAsync(FRONT_BACKGROUND,  "textures/background_wPlants2.png");
 	tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
 	tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
