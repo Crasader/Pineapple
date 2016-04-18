@@ -18,12 +18,6 @@ protected:
     /** The animation for will. Null if the will was the one who died */
     Node* _willAnimation;
     
-    /** Button that causes the level to reset */
-    Button* _resetButton;
-    
-    /** Button that goes to level select */
-    Button* _toLevelSelectButton;
-    
     /** The image of the juice cup */
     Node* _juiceCup;
     
@@ -31,7 +25,8 @@ protected:
     AnimationNode* _cryingWill;
     
     /** The current frame of will */
-    int _willFrame;
+    float _willFrame;
+
     
 public:
     static LoseView* create(Node* root, SceneManager* assets);
