@@ -10,25 +10,10 @@
 #define __LOSE_VIEW_H__
 
 #include <stdio.h>
-#include <cornell.h>
-#include "ui/CocosGUI.h"
-#include "Const.h"
-#include "Texture.h"
+#include "ModalView.h"
 
-using namespace cocos2d;
-using namespace cocos2d::ui;
-
-class LoseView {
+class LoseView : public ModalView {
 protected:
-    /** A reference to the root node for this splash */
-    Node* _root;
-    
-    /** The translucent gray overlay */
-    Node* _backgroundOverlay;
-    
-    /** The splash image */
-    Node* _splashImage;
-    
     /** The animation for will. Null if the will was the one who died */
     Node* _willAnimation;
     
@@ -39,15 +24,11 @@ protected:
     Button* _toLevelSelectButton;
     
 public:
-    static LoseView* create(Node* rootNode, SceneManager* assets);
-    
-    void position();
-    
-    void dispose();
+    static LoseView* create(Node* root, SceneManager* assets);
     
 private:
-    void init(Node* rootNode, SceneManager* assets);
-    
+    void init(Node* root, SceneManager* assets);
+
 };
 
 #endif /* LoseView_hpp */
