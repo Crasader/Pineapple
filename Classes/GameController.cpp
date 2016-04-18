@@ -357,6 +357,7 @@ void GameController::update(float dt) {
         return;
     }
     if (PauseController::isPaused()) {
+        PauseController::animate();
         return;
     }
     

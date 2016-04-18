@@ -84,6 +84,7 @@
 
 /** The key for the pause screen overlay texture in the asset manager */
 #define PAUSE_SCREEN_OVERLAY "pause_overlay"
+#define CHUNKY_QUIVER        "chunky_quiver"
 
 /** HUD */
 #define TOP_BAR  "top_bar"

@@ -59,7 +59,7 @@ void loadBackground(TextureLoader* tloader) {
 
 void loadPauseScreen(TextureLoader* tloader) {
     tloader->loadAsync(PAUSE_SCREEN_OVERLAY, "textures/pause-overlay.png");
-    
+    tloader->loadAsync(CHUNKY_QUIVER, "textures/chunky_quiver.png");
 }
 
 void loadHUD(TextureLoader* tloader) {
