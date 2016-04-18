@@ -443,10 +443,10 @@
 		4072DF861C9F44BE00F7DAA4 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */,
-				4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */,
 				406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */,
 				406E53E61CA4A72B001E2EBD /* BackgroundView.h */,
+				4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */,
+				4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -621,7 +621,7 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = BJ293T3427;
+						DevelopmentTeam = NK7Y3376G8;
 					};
 				};
 			};
@@ -844,7 +844,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ekotlikoff.edu.cornell.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -882,7 +882,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ekotlikoff.edu.cornell.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;

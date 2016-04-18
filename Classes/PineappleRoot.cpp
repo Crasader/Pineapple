@@ -135,40 +135,6 @@ void PineappleRoot::update(float deltaTime) {
     if ((_gameplay->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _gameplay) ||
         (_loadingScreen->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _loadingScreen) ) {
         
-        _levelSelect->setTransitionStatus(TRANSITION_TO_VISIBLE);
-    }
-    
-    if ((_levelSelect->getTransitionStatus() == TRANSITION_TO_GAME && _activeController == _levelSelect) ||
-        (_loadingScreen->getTransitionStatus() == TRANSITION_TO_GAME && _activeController == _loadingScreen)) {
-        
-        _gameplay->setTransitionStatus(TRANSITION_TO_VISIBLE);
-    }
-    
-    
-    //Transitioning to gameplay
-    if (_gameplay->getTransitionStatus() == TRANSITION_TO_VISIBLE) {
-        
-        if (_activeController == _levelSelect) {
-            removeChild(_levelSelectRoot);
-        }
-        
-        if (_activeController == _loadingScreen) {
-            removeChild(_loadingScreenRoot);
-        }
-        
-        _activeController = _gameplay;
-        
-        if (! _gameplay->isInitted()) {
-            _gameplay->init(_gameRoot, &_inputController);
-        }
-        
-        addChild(_gameRoot, GAME_ROOT_Z);
-        _gameplay->setTransitionStatus(TRANSITION_NONE);
-    }
-    
-    //Transitioning to level select
-    if (_levelSelect->getTransitionStatus() == TRANSITION_TO_VISIBLE) {
-        
         if (_activeController == _gameplay) {
             removeChild(_gameRoot);
         }
@@ -184,29 +150,34 @@ void PineappleRoot::update(float deltaTime) {
         }
         
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
+        
+        _gameplay->setTransitionStatus(TRANSITION_NONE);
+        _loadingScreen->setTransitionStatus(TRANSITION_NONE);
         _levelSelect->setTransitionStatus(TRANSITION_NONE);
+
     }
     
-    
-    //Transitioning to loadingscreen
-    if (_loadingScreen->getTransitionStatus() == TRANSITION_TO_VISIBLE) {
+    if ((_levelSelect->getTransitionStatus() == TRANSITION_TO_GAME && _activeController == _levelSelect)) {
         
-        if (_activeController == _levelSelect) {
-            removeChild(_levelSelectRoot);
+        string levelKey = LevelSelectController::LEVEL_KEYS[_levelSelect->getSelectedLevel()];
+        string levelFile = LevelSelectController::LEVEL_FILES[_levelSelect->getSelectedLevel()];
+        
+        _levelSelect->clearSelectedLevel();
+        
+        removeChild(_levelSelectRoot);
+        
+        if (! _gameplay->isInitted()) {
+            _gameplay->init(_gameRoot, &_inputController, levelKey, levelFile);
+        } else {
+            _gameplay->reset();
         }
         
-        if (_activeController == _gameplay) {
-            removeChild(_gameRoot);
-        }
+        _activeController = _gameplay;
+        addChild(_gameRoot, GAME_ROOT_Z);
         
-        _activeController = _loadingScreen;
-        
-        if (! _loadingScreen->isInitted()) {
-            _loadingScreen->init(_loadingScreenRoot);
-        }
-        
-        addChild(_loadingScreenRoot, LOADING_ROOT_Z);
+        _gameplay->setTransitionStatus(TRANSITION_NONE);
         _loadingScreen->setTransitionStatus(TRANSITION_NONE);
+        _levelSelect->setTransitionStatus(TRANSITION_NONE);
     }
     
     //Do the updating

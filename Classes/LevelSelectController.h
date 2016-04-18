@@ -22,6 +22,11 @@
 
 #include "InputController.h"
 #include "AbsScreenController.h"
+#include "Levels.h"
+#include "ui/CocosGUI.h"
+
+#define NUM_LEVELS                  10
+#define NO_LEVEL_SELECTED           -1
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -35,6 +40,7 @@ namespace cocos2d {
 class CollisionController;
 
 using namespace cocos2d;
+using namespace cocos2d::ui;
 using namespace std;
 
 #pragma mark -
@@ -69,6 +75,12 @@ protected:
     /** The node representing the background image drawn for this screen */
     Node* _backgroundNode;
     
+    // array of buttons
+    Button* _buttons[NUM_LEVELS];
+    
+    /** The level button that is selected. -1 when none */
+    int _levelSelected;
+    
 #pragma mark Internal Object Management
     /**
      * Lays out the game geography.
@@ -90,6 +102,10 @@ protected:
     void addObstacle(Obstacle* obj, int zOrder);
     
 public:
+    
+    const static string LEVEL_KEYS[NUM_LEVELS];
+    const static string LEVEL_FILES[NUM_LEVELS];
+    
 #pragma mark -
 #pragma mark Initialization
     /**
@@ -129,6 +145,12 @@ public:
     
 #pragma mark -
 #pragma mark State Access
+    /** Returns the selected level, -1 if none */
+    int getSelectedLevel() { return _levelSelected; }
+    
+    /** Resets the selected level to none */
+    void clearSelectedLevel() { _levelSelected = NO_LEVEL_SELECTED; }
+    
     /**
      * Returns true if debug mode is active.
      *

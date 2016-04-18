@@ -65,8 +65,8 @@ _debug(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input) {
-    return init(root,input,SCREEN);
+bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile) {
+    return init(root, input, levelKey, levelFile, SCREEN);
 }
 
 /**
@@ -87,14 +87,14 @@ bool GameController::init(Node* root, InputController* input) {
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input, const Rect& rect) {
+bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile, const Rect& rect) {
     _rootnode = root;
     _rootnode->retain();
     
     _input = input;
     
-    _levelKey = LEVEL_ONE_KEY;
-    _levelFile = LEVEL_ONE_FILE;
+    _levelKey = levelKey;
+    _levelFile = levelFile;
     
     _assets = AssetManager::getInstance()->getCurrent();
     _level = _assets->get<LevelModel>(_levelKey);

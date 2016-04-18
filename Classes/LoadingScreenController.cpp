@@ -64,7 +64,6 @@ void loadPauseScreen(TextureLoader* tloader) {
 
 void loadLevelSelectScreen(TextureLoader *tloader) {
     tloader->loadAsync(LEVEL_SELECT_BACKGROUND, "textures/level_select_bg.png");
-    
 }
 
 void loadFonts(SceneManager* assets) {

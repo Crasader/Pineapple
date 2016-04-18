@@ -26,12 +26,25 @@
 #include "Texture.h"
 #include "Levels.h"
 
+const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE};
+const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY};
+
 /** Level Select Z indexes */
 #define LEVEL_SELECT_BACKGROUND_Z   1
 #define LEVEL_SELECT_BUTTON_Z       2
 #define LEVEL_SELECT_TEXT_Z         3
 
-using namespace cocos2d;
+/** Button texture paths */
+#define LEVEL_SELECT_BUTTON_OFF_FILEPATH  "textures/buttons/level_button.png"
+#define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
+
+/** Graphics scaling constants for button layout */
+#define BUTTONS_PER_ROW             5
+#define LEVEL_SELECT_TOP_MARGIN     100
+#define BUTTON_WIDTH_MARGIN         0.3f //As a percentage of button width, distributed to both sides
+#define BUTTON_HEIGHT_MARGIN        0.3f //As a percentage of button width, distributed to both sides
+
+
 //using namespace std;
 
 
@@ -49,6 +62,7 @@ _worldnode(nullptr),
 _debugnode(nullptr),
 _backgroundNode(nullptr),
 _world(nullptr),
+_levelSelected(NO_LEVEL_SELECTED),
 _debug(false){}
 
 /**
@@ -116,6 +130,37 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     
     _rootnode->addChild(_backgroundNode, LEVEL_SELECT_BACKGROUND_Z);
     
+    
+    //Lay out the buttons
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        Button* button = Button::create();
+        button->loadTextureNormal(LEVEL_SELECT_BUTTON_OFF_FILEPATH);
+        button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
+        button->setAnchorPoint(Vec2(0.5f, 0.5f));
+    
+        float row = (i / BUTTONS_PER_ROW) + 0.5f;
+        float col = (i % BUTTONS_PER_ROW) + 0.6f;
+        
+        int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN);
+        int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN);
+        
+        button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
+        
+        button->setVisible(true);
+        button->retain();
+        
+        button->setTag(i);
+        
+        button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+            if (type == ui::Widget::TouchEventType::ENDED) {
+                _levelSelected = ((Node*)sender)->getTag();
+            }
+        });
+        
+        _buttons[i] = button;
+        _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
+    }
+    
     _isInitted = true;
     setDebug(false);
     
@@ -136,6 +181,12 @@ LevelSelectController::~LevelSelectController() {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void LevelSelectController::dispose() {
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        if (_buttons[i] != nullptr) {
+            _buttons[i]->release();
+            _buttons[i] = nullptr;
+        }
+    }
     _backgroundNode = nullptr;
     _worldnode = nullptr;
     _debugnode = nullptr;
@@ -163,14 +214,8 @@ void LevelSelectController::update(float dt) {
     
     _input->update(dt);
     
-    if (_input->didJump()) {
+    if (_levelSelected != NO_LEVEL_SELECTED) {
         setTransitionStatus(TRANSITION_TO_GAME);
         return;
     }
-    
-    // Turn the physics engine crank
-    //_world->update(dt);
-    
-    // Since items may be deleted, garbage collect
-    //_world->garbageCollect();
 }
