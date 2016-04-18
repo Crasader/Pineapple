@@ -58,7 +58,9 @@ void PineappleRoot::start() {
     AssetManager::getInstance()->at(scene)->attach<LevelModel>(levels);
     AssetManager::getInstance()->startScene(scene);
     
-    _preloaded = false;
+    _backgroundSound = nullptr;
+    _loadStarted = false;
+    _loadFinished = false;
     
     RootLayer::start(); // YOU MUST END with call to parent
 }
@@ -100,13 +102,18 @@ void PineappleRoot::onFirstUpdate() {
     screen.origin.x *= scale.x;    screen.origin.y *= scale.y;
     screen.size.width *= scale.x;  screen.size.height *= scale.y;
     
+    _assets = AssetManager::getInstance()->getCurrent();
+    
     _inputController.init(screen);
     _inputController.start();
     
-    _loadingScreen->init(_loadingScreenRoot);
-    _activeController = _loadingScreen;
-    addChild(_loadingScreenRoot);
+    _gameplay->setTransitionStatus(TRANSITION_NONE);
     _loadingScreen->setTransitionStatus(TRANSITION_NONE);
+    _levelSelect->setTransitionStatus(TRANSITION_NONE);
+    
+    _loadingScreen->init(_loadingScreenRoot);
+    addChild(_loadingScreenRoot, LOADING_ROOT_Z);
+    _activeController = _loadingScreen;
 }
 
 /**
@@ -149,6 +156,17 @@ void PineappleRoot::update(float deltaTime) {
             _levelSelect->init(_levelSelectRoot, &_inputController);
         }
         
+        if (_backgroundSoundKey != LEVEL_SELECT_BACKGROUND_SOUND) {
+            if (_backgroundSound != nullptr) {
+                SoundEngine::getInstance()->stopMusic();
+            }
+            
+            _backgroundSoundKey = LEVEL_SELECT_BACKGROUND_SOUND;
+            _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        }
+        
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
         
         _gameplay->setTransitionStatus(TRANSITION_NONE);
@@ -172,6 +190,17 @@ void PineappleRoot::update(float deltaTime) {
             _gameplay->reset();
         }
         
+        if (_backgroundSoundKey != GAME_BACKGROUND_SOUND) {
+            if (_backgroundSound != nullptr) {
+                SoundEngine::getInstance()->stopMusic();
+            }
+            
+            _backgroundSoundKey = GAME_BACKGROUND_SOUND;
+            _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        }
+        
         _activeController = _gameplay;
         addChild(_gameRoot, GAME_ROOT_Z);
         
@@ -183,11 +212,12 @@ void PineappleRoot::update(float deltaTime) {
     //Do the updating
     _activeController->update(deltaTime);
     
-    if (_activeController == _loadingScreen) {
-        if (!_preloaded) {
+    if (! _loadFinished) {
+        if (!_loadStarted) {
             _loadingScreen->preload();
-            _preloaded = true;
+            _loadStarted = true;
         } else if (AssetManager::getInstance()->getCurrent()->isComplete()) {
+            _loadFinished = true;
             _loadingScreen->setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
         }
     }

@@ -88,19 +88,16 @@
 #define LOAD_MESSAGE    "Loading"
 /** The color of the lose message */
 #define LOAD_COLOR      Color3B::WHITE
+/** The size of default fonts */
+#define DEFAULT_FONT_SIZE      64.0f
 
-/** The key the basic game music */
-#define GAME_MUSIC      "game"
-/** The key the victory game music */
-#define WIN_MUSIC       "win"
-/** The key the failure game music */
-#define LOSE_MUSIC      "lose"
-/** The sound effect for firing a bullet */
-#define PEW_EFFECT      "pew"
-/** The sound effect for a bullet collision */
-#define POP_EFFECT      "pop"
-/** The sound effect for jumping */
-#define JUMP_EFFECT     "jump"
+/** The key for no currently playing music */
+#define NO_BACKGROUND_SOUND "no_background_music"
+/** The key for the main background music */
+#define GAME_BACKGROUND_SOUND "game_background_music"
+/** The key for the level select background music */
+#define LEVEL_SELECT_BACKGROUND_SOUND "level_select_background_music"
+
 /** The volume for the music */
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */

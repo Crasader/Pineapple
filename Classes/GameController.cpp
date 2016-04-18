@@ -265,7 +265,6 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        Sound* source = _assets->get<Sound>(WIN_MUSIC);
         ////SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _winnode->setVisible(true);
         _countdown = EXIT_COUNT;
@@ -285,7 +284,6 @@ void GameController::setComplete(bool value) {
 void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
-        Sound* source = _assets->get<Sound>(LOSE_MUSIC);
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
         _losenode->setVisible(true);
         _countdown = EXIT_COUNT;
@@ -389,7 +387,6 @@ void GameController::update(float dt) {
         _level->getPineapple()->applyForce();
         
         if (_level->getPineapple()->isJumping()) {
-            Sound* source = _assets->get<Sound>(JUMP_EFFECT);
             //SoundEngine::getInstance()->playEffect(JUMP_EFFECT,source,false,EFFECT_VOLUME);
         }
         

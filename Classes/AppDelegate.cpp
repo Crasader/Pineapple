@@ -103,6 +103,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     // Start any global asset managers (Sound, etc...)
     SoundEngine::start();
+    
     AssetManager::init();
     
     // MODIFY this line to use your root class
