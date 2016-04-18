@@ -42,7 +42,7 @@ void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstac
 void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel* jello) {
 	if (!will->isCollidingWithJello()) {
 		will->setCollidingWithJello(true);
-		if (!will->isLarge()) {
+		if (will->isSmall()) {
 			//Jump!
 			b2Body* body = will->getBody();
 			will->setVY(0);
@@ -143,7 +143,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         // with jello
         if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
             // if will is large and traveling downwards, squish
-            if (will->isLarge() && will->getVY() < MAX_V_TO_CRUSH) {
+            if (!will->isSmall() && will->getVY() < MAX_V_TO_CRUSH) {
                 // set v to 0 because sometimes the sensor touches too early for the physics
                 // engine to do it
                 will->setVY(0);
@@ -153,7 +153,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         // with cup
         if (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C) {
             // if will is large and traveling downwards, crush
-            if (will->isLarge() && will->getVY() < MAX_V_TO_CRUSH) {
+            if (!will->isSmall() && will->getVY() < MAX_V_TO_CRUSH) {
                 // set v to 0 because sometimes the sensor touches too early for the physics
                 // engine to do it
                 will->setVY(0);
