@@ -88,6 +88,8 @@
 #define LOAD_MESSAGE    "Loading"
 /** The color of the lose message */
 #define LOAD_COLOR      Color3B::WHITE
+/** The size of default fonts */
+#define DEFAULT_FONT_SIZE      64.0f
 
 /** The key for no currently playing music */
 #define NO_BACKGROUND_SOUND "no_background_music"

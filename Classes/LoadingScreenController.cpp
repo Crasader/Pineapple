@@ -84,7 +84,6 @@ void loadLevelSelectScreen(TextureLoader *tloader) {
 
 void loadFonts(SceneManager* assets) {
     assets->loadAsync<TTFont>(MESSAGE_FONT, "fonts/RetroGame.ttf");
-    assets->loadAsync<TTFont>(LEVEL_SELECT_BUTTON_FONT, LEVEL_SELECT_BUTTON_FONT_LOCATION);
 }
 
 void loadSounds(SceneManager* assets) {
@@ -119,25 +118,35 @@ void LoadingScreenController::preload() {
 
 void LoadingScreenController::init(Node* root) {
     // Load the font NOW
-    AssetManager::getInstance()->getCurrent()->load<TTFont>(LOADING_FONT_NAME, "fonts/MarkerFelt.ttf");
+    AssetManager::getInstance()->getCurrent()->load<TTFont>(ELECTRIC_CIRCUS_FONT, ELECTRIC_CIRCUS_FONT_LOCATION);
+    AssetManager::getInstance()->getCurrent()->load<Texture2D>(LOADING_BACKGROUND, "textures/loadingBackground.png");
     _loadingLabel = nullptr;
     _rootnode = root;
     _isInitted = true;
+    
+    Size size = _rootnode->getContentSize();
+    Vec2 center(size.width/2.0f,size.height/2.0f);
+    
+    //Create the background image
+//    Texture2D* image = AssetManager::getInstance()->getCurrent()->get<Texture2D>(LOADING_BACKGROUND);
+//    _loadingImage = PolygonNode::createWithTexture(image);
+//    _loadingImage->setPosition(center);
+//    _loadingImage->setAnchorPoint(Vec2(0.5f, 0.5f));
+//    _loadingImage->setScale(size.width/image->getContentSize().width, size.height/image->getContentSize().height);
+//    
+//    _rootnode->addChild(_loadingImage, 0);
+    
+    // Create the message label.
+    _loadingLabel = Label::create();
+    _loadingLabel->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(ELECTRIC_CIRCUS_FONT)->getTTF());
+    _loadingLabel->setAnchorPoint(Vec2(0.5f,0.5f));
+    _loadingLabel->setPosition(center);
+    _loadingLabel->setString("Loading...");
+    
+    // Add the label as a child to loading screen
+    _rootnode->addChild(_loadingLabel, 1);
 }
 
 void LoadingScreenController::update(float dt) {
-    if (_loadingLabel == nullptr) {
-        Size size = _rootnode->getContentSize();
-        Vec2 center(size.width/2.0f,size.height/2.0f);
-        
-        // Create the message label.
-        _loadingLabel = Label::create();
-        _loadingLabel->setTTFConfig(AssetManager::getInstance()->getCurrent()->get<TTFont>(LOADING_FONT_NAME)->getTTF());
-        _loadingLabel->setAnchorPoint(Vec2(0.5f,0.5f));
-        _loadingLabel->setPosition(center);
-        _loadingLabel->setString(LOADING_MESSAGE);
-        
-        // Add the label as a child to loading screen
-        _rootnode->addChild(_loadingLabel, 5);
-    }
+    
 }

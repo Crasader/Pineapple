@@ -67,7 +67,8 @@ protected:
     InputController _inputController;
     
     /** Whether or not we have finished preloading all assets */
-    bool _preloaded;
+    bool _loadStarted;
+    bool _loadFinished;
     
     /**
      * Builds the scene graph for the loading screen.

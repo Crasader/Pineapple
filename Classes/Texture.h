@@ -21,8 +21,8 @@
 #define MESSAGE_FONT     "retro"
 
 /** The key for the font for level select buttons in the asset manager */
-#define LEVEL_SELECT_BUTTON_FONT            "level_select_button_font"
-#define LEVEL_SELECT_BUTTON_FONT_LOCATION  "fonts/ElectricCircus.ttf"
+#define ELECTRIC_CIRCUS_FONT            "level_select_button_font"
+#define ELECTRIC_CIRCUS_FONT_LOCATION  "fonts/ElectricCircus.ttf"
 
 /** The texture for the character avatar */
 #define PINEAPPLE_TEXTURE "pineapple"
@@ -98,6 +98,10 @@
 #define STATUS_THREE       "three"
 #define STATUS_FOUR        "four"
 #define SLASH_FOUR         "slash_four"
+
+/** The key for the loading screen background texture in the asset manager */
+#define LOADING_BACKGROUND      "loading_background"
+
 /** The key for the level select background texture in the asset manager */
 #define LEVEL_SELECT_BACKGROUND "level_select_background"
 /** The key for the unselected level button texture in the asset manager */

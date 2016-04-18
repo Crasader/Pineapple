@@ -59,7 +59,8 @@ void PineappleRoot::start() {
     AssetManager::getInstance()->startScene(scene);
     
     _backgroundSound = nullptr;
-    _preloaded = false;
+    _loadStarted = false;
+    _loadFinished = false;
     
     RootLayer::start(); // YOU MUST END with call to parent
 }
@@ -106,10 +107,13 @@ void PineappleRoot::onFirstUpdate() {
     _inputController.init(screen);
     _inputController.start();
     
-    _loadingScreen->init(_loadingScreenRoot);
-    _activeController = _loadingScreen;
-    addChild(_loadingScreenRoot);
+    _gameplay->setTransitionStatus(TRANSITION_NONE);
     _loadingScreen->setTransitionStatus(TRANSITION_NONE);
+    _levelSelect->setTransitionStatus(TRANSITION_NONE);
+    
+    _loadingScreen->init(_loadingScreenRoot);
+    addChild(_loadingScreenRoot, LOADING_ROOT_Z);
+    _activeController = _loadingScreen;
 }
 
 /**
@@ -208,11 +212,12 @@ void PineappleRoot::update(float deltaTime) {
     //Do the updating
     _activeController->update(deltaTime);
     
-    if (_activeController == _loadingScreen) {
-        if (!_preloaded) {
+    if (! _loadFinished) {
+        if (!_loadStarted) {
             _loadingScreen->preload();
-            _preloaded = true;
+            _loadStarted = true;
         } else if (AssetManager::getInstance()->getCurrent()->isComplete()) {
+            _loadFinished = true;
             _loadingScreen->setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
         }
     }
