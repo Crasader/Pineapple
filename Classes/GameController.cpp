@@ -388,8 +388,9 @@ void GameController::update(float dt) {
 					_level->getBlender()->setIsBlending(true);
 					_splatCount = SPLAT_COUNT;
 				}
-			}            
-            if (_level->getKid(i)->getPosition().y < 0) {
+			}
+            // check if off bounds death
+            if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
                 _level->kill(_level->getKid(i));
             }
         }
