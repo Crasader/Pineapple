@@ -373,6 +373,9 @@ void GameController::update(float dt) {
         if(_level->getKid(i) != nullptr) {
             _level->getKid(i)->dampTowardsWalkspeed();
             _level->getKid(i)->animate();
+            if (_level->getKid(i)->getPosition().y < 0) {
+                _level->kill(_level->getKid(i));
+            }
         }
     }
     
@@ -391,6 +394,10 @@ void GameController::update(float dt) {
         }
         
         _level->getPineapple()->animate();
+        
+        if (_level->getPineapple()->getPosition().y < 0) {
+            _level->kill(_level->getPineapple());
+        }
     }
     
     HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);

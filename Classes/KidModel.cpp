@@ -264,17 +264,18 @@ void KidModel::dampTowardsWalkspeed() {
         return;
     }
 
-    
-    if(getVX() != KID_WALKSPEED) {
-        if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
-            setVX(KID_WALKSPEED);
-        } else if (getVX() > getWalkingSpeed()) {
-            b2Vec2 force(-KID_FORCE,0);
-            _body->ApplyForce(force,_body->GetPosition(),true);
-        }
-        else if (getVX() < getWalkingSpeed()) {
-            b2Vec2 force(KID_FORCE,0);
-            _body->ApplyForce(force,_body->GetPosition(),true);
+    if (_isGrounded) {
+        if(getVX() != KID_WALKSPEED) {
+            if(fabs(getVX() - KID_WALKSPEED) < KID_SPEED_EPSILON) {
+                setVX(KID_WALKSPEED);
+            } else if (getVX() > getWalkingSpeed()) {
+                b2Vec2 force(-KID_FORCE,0);
+                _body->ApplyForce(force,_body->GetPosition(),true);
+            }
+            else if (getVX() < getWalkingSpeed()) {
+                b2Vec2 force(KID_FORCE,0);
+                _body->ApplyForce(force,_body->GetPosition(),true);
+            }
         }
     }
     
