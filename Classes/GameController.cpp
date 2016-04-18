@@ -30,8 +30,9 @@
 using namespace cocos2d;
 //using namespace std;
 
-#define WIN_SPLASH_Z 4
-#define LOSE_SPLASH_Z 5
+#define SPLAT_Z         5
+#define WIN_SPLASH_Z    7
+#define LOSE_SPLASH_Z   8
 
 /** The number of frames to wait before removing the splat */
 #define SPLAT_COUNT     20
@@ -125,7 +126,7 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
 	_splat = PolygonNode::createWithTexture(_assets->get<Texture2D>(SPLAT_TEXTURE_1));
 	_splat->retain();
 	_splat->setVisible(false);
-	root->addChild(_splat,8);
+	root->addChild(_splat, SPLAT_Z);
 	_splatCount = -1;
 	_rootSize = root->getContentSize();
     
@@ -265,6 +266,9 @@ void GameController::onReset() {
     _world->onEndContact = [this](b2Contact* contact) {
         _collision->endContact(contact);
     };
+    
+    _splat->setVisible(false);
+    _splatCount = -1;
     
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
