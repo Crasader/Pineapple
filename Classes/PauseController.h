@@ -18,7 +18,7 @@
 #define BUTTON_Z_ORDER         2
 #define NUM_BUTTONS            4
 #define BUTTON_HEIGHT          400.0f
-#define PAUSE_MENU_Z_ORDER     10
+#define PAUSE_MENU_Z_ORDER     6
 
 using namespace cocos2d;
 using namespace cocos2d::ui;

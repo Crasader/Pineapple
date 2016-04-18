@@ -31,7 +31,6 @@ void PauseController::init(AbsScreenController* gameController, Node* worldNode,
         float bheight = button->getContentSize().height;
         button->setPositionY(PAUSE_CONTROLLER->_center.y - bheight/2.0f + BUTTON_HEIGHT/2.0f - (i * BUTTON_HEIGHT)/(float)NUM_BUTTONS);
         button->setLocalZOrder(BUTTON_Z_ORDER);
-        button->setVisible(true);
         button->retain();
         PAUSE_CONTROLLER->_buttons[i] = button;
         PAUSE_CONTROLLER->_pauseNode->addChild(button);

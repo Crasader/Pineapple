@@ -10,8 +10,6 @@
 #define __AbsScreenController_h__
 
 #define TRANSITION_NONE                     0
-#define TRANSITION_TO_VISIBLE               1
-
 
 #define TRANSITION_TO_LEVEL_SELECT          10
 #define TRANSITION_TO_GAME                  11
