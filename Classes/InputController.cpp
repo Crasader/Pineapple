@@ -419,7 +419,7 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
             case Zone::MAIN:
                 // Only check for double tap in Main if nothing else down
                 if (_ltouch.touchid == -1 && _rtouch.touchid == -1 && _btouch.touchid == -1 && _mtouch.touchid == -1) {
-                    _keyDebug = (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK);
+                    //_keyDebug = (elapsed_millis(_dbtaptime,current) <= EVENT_DOUBLE_CLICK);
                 }
                 
                 // Keep count of touches in Main zone.

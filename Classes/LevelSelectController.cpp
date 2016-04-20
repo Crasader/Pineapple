@@ -87,6 +87,8 @@ bool LevelSelectController::init(Node* root, InputController* input) {
 }
 
 Button* LevelSelectController::initButton(Size dimen, int i) {
+    float cscale = Director::getInstance()->getContentScaleFactor();
+    
     Button* button = Button::create();
     button->loadTextureNormal(LEVEL_SELECT_BUTTON_OFF_FILEPATH);
     button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
@@ -105,8 +107,8 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     row += 0.5f;
     col += 0.6f;
     
-    int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN);
-    int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN);
+    int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN) * cscale;
+    int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN) * cscale;
     
     button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
     button->setVisible(true);
