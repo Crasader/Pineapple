@@ -99,16 +99,12 @@ void MoveablePlatformModel::resetSceneNode() {
     Texture2D* nubImage = scene->get<Texture2D>(LEFT_NUBBIN_TEXTURE_RED);
     Texture2D* centerImage = scene->get<Texture2D>(MIDDLE_TEXTURE_RED);
     Size nubbinSize = nubImage->getContentSize();
-    nubbinSize.width  *= cscale;
-    nubbinSize.height *= cscale;
     Size centerSize = centerImage->getContentSize();
-    centerSize.width  *= cscale;
-    centerSize.height *= cscale;
     
     if(_isVertical) {
-        _maxXStretch = _length/2 * _drawScale.y * cscale / centerSize.width;
+        _maxXStretch = _length/2 * _drawScale.y / centerSize.width;
     } else {
-        _maxXStretch = _length/2 * _drawScale.x * cscale / centerSize.width;
+        _maxXStretch = _length/2 * _drawScale.x / centerSize.width;
     }
     
     Rect bounds;
@@ -161,11 +157,11 @@ void MoveablePlatformModel::resetSceneNode() {
     //Left Center
     ob = (BoxObstacle*) _bodies[2];
     if(_isVertical) {
-        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length/4.0f));
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length / cscale /4.0f));
         ob->setDimension(_length/2 * _drawScale.y/_drawScale.x,
                          pnode->getContentSize().height * SCALE / _drawScale.y);
     } else {
-        ob->setPosition(Vec2(_pos.x - _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x - _length /cscale /4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
         ob->setDimension(_length/2,
                          pnode->getContentSize().height * SCALE / _drawScale.y);
     }
@@ -183,11 +179,11 @@ void MoveablePlatformModel::resetSceneNode() {
     //Right Center
     ob = (BoxObstacle*) _bodies[3];
     if(_isVertical) {
-        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + _length/4.0f));
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + _length / cscale /4.0f));
         ob->setDimension(_length/2 * _drawScale.y/_drawScale.x,
                          pnode->getContentSize().height * SCALE / _drawScale.y);
     } else {
-        ob->setPosition(Vec2(_pos.x + _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x + _length / cscale / 4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
         ob->setDimension(_length/2,
                          pnode->getContentSize().height * SCALE / _drawScale.y);
     }
