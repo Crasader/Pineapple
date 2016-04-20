@@ -19,9 +19,12 @@ using namespace std;
 using namespace cocos2d;
 using namespace cocos2d::ui;
 
-#define NUM_BUTTONS_MODAL 2
-#define VERTICAL_MARGIN             -150
-#define HORIZONTAL_MARGIN           100
+
+#define MODAL_MAIN_SCALE        1.35f
+
+#define NUM_BUTTONS_MODAL       2
+#define VERTICAL_MARGIN         -225
+#define HORIZONTAL_MARGIN       150
 
 class ModalView {
 protected:
@@ -46,10 +49,13 @@ protected:
     /** Button that goes to level select */
     Button* _toLevelSelectButton;
     
+    /** The draw scale used by the current resolution */
+    Vec2 _scale;
+    
     bool _transferToReset;
     bool _transferToLevelSelect;
     
-    void init(Node* rootNode, SceneManager* assets, string textureID);
+    void init(Node* rootNode, SceneManager* assets, Vec2 scale, string textureID);
     
 public:
     bool shouldReset() { return _transferToReset; }

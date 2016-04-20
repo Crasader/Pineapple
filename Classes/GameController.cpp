@@ -143,12 +143,12 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     _loseroot = Node::create();
     _loseroot->setContentSize(_rootnode->getContentSize());
     _loseroot->retain();
-    _loseview = LoseView::create(_loseroot, _assets);
+    _loseview = LoseView::create(_loseroot, _assets, _level->getDrawScale());
     
     _winroot = Node::create();
     _winroot->setContentSize(_rootnode->getContentSize());
     _winroot->retain();
-    _winview = WinView::create(_winroot, _assets);
+    _winview = WinView::create(_winroot, _assets, _level->getDrawScale());
     
     _collision->setLevel(_level);
     

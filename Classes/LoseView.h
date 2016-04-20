@@ -29,7 +29,7 @@ protected:
 
     
 public:
-    static LoseView* create(Node* root, SceneManager* assets);
+    static LoseView* create(Node* root, SceneManager* assets, Vec2 scale);
     
     void position();
     
@@ -38,7 +38,7 @@ public:
     void update(float dt);
     
 private:
-    void init(Node* root, SceneManager* assets);
+    void init(Node* root, SceneManager* assets, Vec2 scale);
 
 };
 

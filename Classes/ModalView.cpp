@@ -14,10 +14,13 @@
 const string ModalView::BUTTON_FILES[NUM_BUTTONS_MODAL*2] = {"textures/buttons/restart.png", "textures/buttons/restart_inverse.png", "textures/buttons/level_select.png","textures/buttons/level_select_inverse.png"};
 
 
-void ModalView::init(Node *root, SceneManager *assets, string splashTexture) {
+void ModalView::init(Node *root, SceneManager *assets, Vec2 scale, string splashTexture) {
     _root = root;
     _assets = assets;
     _splashTextureID = splashTexture;
+    _scale = scale;
+    
+    float cscale = Director::getInstance()->getContentScaleFactor();
     
     Texture2D* image = assets->get<Texture2D>(PAUSE_SCREEN_OVERLAY);
     _backgroundOverlay = PolygonNode::createWithTexture(image);
@@ -30,13 +33,14 @@ void ModalView::init(Node *root, SceneManager *assets, string splashTexture) {
     _splashImage = PolygonNode::createWithTexture(image);
     _splashImage->setAnchorPoint(Vec2(0.5f, 0.5f));
     _splashImage->retain();
+    _splashImage->setScale(MODAL_MAIN_SCALE * cscale);
     
     _resetButton = Button::create();
-    _resetButton->setScale(BUTTON_SCALE);
     _resetButton->retain();
     _resetButton->loadTextureNormal(BUTTON_FILES[0]);
     _resetButton->loadTexturePressed(BUTTON_FILES[1]);
     _resetButton->setAnchorPoint(Vec2(0,0));
+    _resetButton->setScale(MODAL_MAIN_SCALE * BUTTON_SCALE * cscale);
     
     _resetButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
@@ -46,11 +50,11 @@ void ModalView::init(Node *root, SceneManager *assets, string splashTexture) {
     
     
     _toLevelSelectButton = Button::create();
-    _toLevelSelectButton->setScale(BUTTON_SCALE);
     _toLevelSelectButton->retain();
     _toLevelSelectButton->loadTextureNormal(BUTTON_FILES[2]);
     _toLevelSelectButton->loadTexturePressed(BUTTON_FILES[3]);
     _toLevelSelectButton->setAnchorPoint(Vec2(0,0));
+    _toLevelSelectButton->setScale(MODAL_MAIN_SCALE * BUTTON_SCALE * cscale);
     
     _toLevelSelectButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
@@ -67,10 +71,13 @@ void ModalView::position() {
     Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
     _backgroundOverlay->setPosition(center);
     _splashImage->setPosition(center);
+    float cscale = Director::getInstance()->getContentScaleFactor();
     
-    _resetButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width/4, center.y + VERTICAL_MARGIN));
-    _toLevelSelectButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width/4,
-                                           center.y + VERTICAL_MARGIN + _resetButton->getContentSize().height));
+    _resetButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width*MODAL_MAIN_SCALE*cscale/4,
+                                   center.y + VERTICAL_MARGIN));
+    
+    _toLevelSelectButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width*MODAL_MAIN_SCALE*cscale/4,
+                                           center.y + VERTICAL_MARGIN + _resetButton->getContentSize().height*MODAL_MAIN_SCALE*cscale));
     
 }
 
