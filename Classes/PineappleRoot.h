@@ -117,6 +117,13 @@ public:
      * to release any objects that you have retained.
      */
     void stop() override;
+    
+private:
+    /** A helper method that transitions to levelSelect */
+    void transitionToLevelSelect();
+    
+    /** A helper method that transitions to gameplay on the given level */
+    void transitionToGame(int levelIndex);
 };
 
 #endif /* defined(__PF_GAME_ROOT_H__) */

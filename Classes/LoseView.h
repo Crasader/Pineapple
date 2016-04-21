@@ -15,6 +15,12 @@
 
 class LoseView : public ModalView {
 protected:
+    /** Button that causes the level to reset */
+    Button* _resetButton;
+    
+    /** Button that goes to level select */
+    Button* _toLevelSelectButton;
+    
     /** The animation for will. Null if the will was the one who died */
     Node* _willAnimation;
     
@@ -26,10 +32,9 @@ protected:
     
     /** The current frame of will */
     float _willFrame;
-
     
 public:
-    static LoseView* create(Node* root, SceneManager* assets);
+    static LoseView* create(Node* root, SceneManager* assets, Vec2 scale);
     
     void position();
     
@@ -38,7 +43,7 @@ public:
     void update(float dt);
     
 private:
-    void init(Node* root, SceneManager* assets);
+    void init(Node* root, SceneManager* assets, Vec2 scale);
 
 };
 

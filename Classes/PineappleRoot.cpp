@@ -116,6 +116,80 @@ void PineappleRoot::onFirstUpdate() {
     _activeController = _loadingScreen;
 }
 
+/** Helper method that transitions to level select */
+void PineappleRoot::transitionToLevelSelect() {
+    if (_activeController == _gameplay) {
+        removeChild(_gameRoot);
+        addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
+    }
+    
+    if (_activeController == _loadingScreen) {
+        removeChild(_loadingScreenRoot);
+        addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
+    }
+    
+    _activeController = _levelSelect;
+    
+    if (! _levelSelect->isInitted()) {
+        _levelSelect->init(_levelSelectRoot, &_inputController);
+    }
+    
+    if (_backgroundSoundKey != LEVEL_SELECT_BACKGROUND_SOUND) {
+        if (_backgroundSound != nullptr) {
+            SoundEngine::getInstance()->stopMusic();
+        }
+        
+        _backgroundSoundKey = LEVEL_SELECT_BACKGROUND_SOUND;
+        _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+        SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+    }
+    
+    _gameplay->setTransitionStatus(TRANSITION_NONE);
+    _loadingScreen->setTransitionStatus(TRANSITION_NONE);
+    _levelSelect->setTransitionStatus(TRANSITION_NONE);
+
+}
+
+/** Helper method that transitions to gameplay on the given level */
+void PineappleRoot::transitionToGame(int levelIndex) {
+    string levelKey = LevelSelectController::LEVEL_KEYS[levelIndex];
+    string levelFile = LevelSelectController::LEVEL_FILES[levelIndex];
+    
+    if (! _gameplay->isInitted()) {
+        _gameplay->init(_gameRoot, &_inputController, levelIndex, levelKey, levelFile);
+    } else {
+        _gameplay->reset(levelIndex, levelKey, levelFile);
+    }
+    
+    if (_backgroundSoundKey != GAME_BACKGROUND_SOUND) {
+        if (_backgroundSound != nullptr) {
+            SoundEngine::getInstance()->stopMusic();
+        }
+        
+        _backgroundSoundKey = GAME_BACKGROUND_SOUND;
+        _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+        SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+    }
+    
+    if (_activeController == _levelSelect) {
+        removeChild(_levelSelectRoot);
+        addChild(_gameRoot);
+    }
+    
+    if (_activeController == _loadingScreen) {
+        removeChild(_loadingScreenRoot);
+        addChild(_gameRoot);
+    }
+    
+    _activeController = _gameplay;
+    
+    _gameplay->setTransitionStatus(TRANSITION_NONE);
+    _loadingScreen->setTransitionStatus(TRANSITION_NONE);
+    _levelSelect->setTransitionStatus(TRANSITION_NONE);
+}
+
 /**
  * Updates the game for a single animation frame
  *
@@ -141,72 +215,22 @@ void PineappleRoot::update(float deltaTime) {
     //Check for transitions
     if ((_gameplay->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _gameplay) ||
         (_loadingScreen->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _loadingScreen) ) {
-        
-        if (_activeController == _gameplay) {
-            removeChild(_gameRoot);
-        }
-        
-        if (_activeController == _loadingScreen) {
-            removeChild(_loadingScreenRoot);
-        }
-        
-        _activeController = _levelSelect;
-        
-        if (! _levelSelect->isInitted()) {
-            _levelSelect->init(_levelSelectRoot, &_inputController);
-        }
-        
-        if (_backgroundSoundKey != LEVEL_SELECT_BACKGROUND_SOUND) {
-            if (_backgroundSound != nullptr) {
-                SoundEngine::getInstance()->stopMusic();
-            }
-            
-            _backgroundSoundKey = LEVEL_SELECT_BACKGROUND_SOUND;
-            _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
-            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
-            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
-        }
-        
-        addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
-        
-        _gameplay->setTransitionStatus(TRANSITION_NONE);
-        _loadingScreen->setTransitionStatus(TRANSITION_NONE);
-        _levelSelect->setTransitionStatus(TRANSITION_NONE);
-
+        transitionToLevelSelect();
     }
     
     if ((_levelSelect->getTransitionStatus() == TRANSITION_TO_GAME && _activeController == _levelSelect)) {
-        
-        string levelKey = LevelSelectController::LEVEL_KEYS[_levelSelect->getSelectedLevel()];
-        string levelFile = LevelSelectController::LEVEL_FILES[_levelSelect->getSelectedLevel()];
-        
+        transitionToGame(_levelSelect->getSelectedLevel());
         _levelSelect->clearSelectedLevel();
+    }
+    
+    if((_gameplay->getTransitionStatus() == TRANSITION_TO_NEXT_LEVEL && _activeController == _gameplay)) {
+        int levelIndex = _gameplay->getLevelIndex() + 1;
         
-        removeChild(_levelSelectRoot);
-        
-        if (! _gameplay->isInitted()) {
-            _gameplay->init(_gameRoot, &_inputController, levelKey, levelFile);
+        if (levelIndex < LEVELS_CREATED) {
+            transitionToGame(levelIndex);
         } else {
-            _gameplay->reset(levelKey, levelFile);
+            transitionToLevelSelect();
         }
-        
-        if (_backgroundSoundKey != GAME_BACKGROUND_SOUND) {
-            if (_backgroundSound != nullptr) {
-                SoundEngine::getInstance()->stopMusic();
-            }
-            
-            _backgroundSoundKey = GAME_BACKGROUND_SOUND;
-            _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
-            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
-            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
-        }
-        
-        _activeController = _gameplay;
-        addChild(_gameRoot, GAME_ROOT_Z);
-        
-        _gameplay->setTransitionStatus(TRANSITION_NONE);
-        _loadingScreen->setTransitionStatus(TRANSITION_NONE);
-        _levelSelect->setTransitionStatus(TRANSITION_NONE);
     }
     
     //Do the updating

@@ -93,14 +93,13 @@ void MoveablePlatformModel::resetSceneNode() {
     
     //Calculate sizes
     float cscale = Director::getInstance()->getContentScaleFactor();
+    
+    float SCALE = MOVEABLE_PLATFORM_SCALE * cscale;
+    
     Texture2D* nubImage = scene->get<Texture2D>(LEFT_NUBBIN_TEXTURE_RED);
     Texture2D* centerImage = scene->get<Texture2D>(MIDDLE_TEXTURE_RED);
     Size nubbinSize = nubImage->getContentSize();
-    nubbinSize.width  *= cscale;
-    nubbinSize.height *= cscale;
     Size centerSize = centerImage->getContentSize();
-    centerSize.width  *= cscale;
-    centerSize.height *= cscale;
     
     if(_isVertical) {
         _maxXStretch = _length/2 * _drawScale.y / centerSize.width;
@@ -115,17 +114,17 @@ void MoveablePlatformModel::resetSceneNode() {
     PolygonNode* pnode = PolygonNode::createWithTexture(leftNubbin);
     bounds.size = pnode->getContentSize();
     pnode->setPolygon(bounds);
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    pnode->setScale(SCALE);
     _bodies[0]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[0];
     if (_isVertical) {
-        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE/ _drawScale.y  + _length / 2.0f));
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + nubbinSize.width/2.0f * SCALE/ _drawScale.y  + _length / 2.0f));
     } else {
-        ob->setPosition(Vec2(_pos.x - nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE/ _drawScale.x - _length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x - nubbinSize.width/2.0f * SCALE/ _drawScale.x - _length/2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
-    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE/ _drawScale.y);
+    ob->setDimension(pnode->getContentSize().width * SCALE / _drawScale.x,
+                     pnode->getContentSize().height * SCALE/ _drawScale.y);
     
     
     if(_nubbinsVisible) {
@@ -138,18 +137,17 @@ void MoveablePlatformModel::resetSceneNode() {
     bounds.size = pnode->getContentSize();
     
     pnode->setPolygon(bounds);
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
+    pnode->setScale(SCALE);
     _bodies[1]->setSceneNode(pnode);
     
     ob = (BoxObstacle*) _bodies[1];
     if(_isVertical) {
-        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE/ _drawScale.y - _length/2.0f));
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - nubbinSize.width/2.0f * SCALE/ _drawScale.y - _length/2.0f));
     } else {
-        ob->setPosition(Vec2(_pos.x + nubbinSize.width/2.0f * MOVEABLE_PLATFORM_SCALE/ _drawScale.x  + _length / 2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x + nubbinSize.width/2.0f * SCALE/ _drawScale.x  + _length / 2.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
     }
-    pnode->setScale(MOVEABLE_PLATFORM_SCALE);
-    ob->setDimension(pnode->getContentSize().width * MOVEABLE_PLATFORM_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE/ _drawScale.y);
+    ob->setDimension(pnode->getContentSize().width * SCALE / _drawScale.x,
+                     pnode->getContentSize().height * SCALE/ _drawScale.y);
     
     
     if(_nubbinsVisible) {
@@ -159,13 +157,13 @@ void MoveablePlatformModel::resetSceneNode() {
     //Left Center
     ob = (BoxObstacle*) _bodies[2];
     if(_isVertical) {
-        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length/4.0f));
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y - _length / cscale /4.0f));
         ob->setDimension(_length/2 * _drawScale.y/_drawScale.x,
-                         pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
+                         pnode->getContentSize().height * SCALE / _drawScale.y);
     } else {
-        ob->setPosition(Vec2(_pos.x - _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x - _length /cscale /4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
         ob->setDimension(_length/2,
-                         pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
+                         pnode->getContentSize().height * SCALE / _drawScale.y);
     }
 
     pnode = PolygonNode::createWithTexture(box);
@@ -173,7 +171,7 @@ void MoveablePlatformModel::resetSceneNode() {
     
     pnode->setPolygon(bounds);
     pnode->setScaleX(_xStretch);
-    pnode->setScaleY(MOVEABLE_PLATFORM_SCALE);
+    pnode->setScaleY(SCALE);
     _bodies[2]->setSceneNode(pnode);
     
     _node->addChild(pnode);
@@ -181,13 +179,13 @@ void MoveablePlatformModel::resetSceneNode() {
     //Right Center
     ob = (BoxObstacle*) _bodies[3];
     if(_isVertical) {
-        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + _length/4.0f));
+        ob->setPosition(Vec2(_pos.x - MOVEABLE_PLATFORM_WIDTH / 2.0f, _pos.y + _length / cscale /4.0f));
         ob->setDimension(_length/2 * _drawScale.y/_drawScale.x,
-                         pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
+                         pnode->getContentSize().height * SCALE / _drawScale.y);
     } else {
-        ob->setPosition(Vec2(_pos.x + _length/4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
+        ob->setPosition(Vec2(_pos.x + _length / cscale / 4.0f, _pos.y - MOVEABLE_PLATFORM_WIDTH/2.0f));
         ob->setDimension(_length/2,
-                         pnode->getContentSize().height * MOVEABLE_PLATFORM_SCALE / _drawScale.y);
+                         pnode->getContentSize().height * SCALE / _drawScale.y);
     }
     
     pnode = PolygonNode::createWithTexture(box);
@@ -195,7 +193,7 @@ void MoveablePlatformModel::resetSceneNode() {
     
     pnode->setPolygon(bounds);
     pnode->setScaleX(_xStretch);
-    pnode->setScaleY(MOVEABLE_PLATFORM_SCALE);
+    pnode->setScaleY(SCALE);
     _bodies[3]->setSceneNode(pnode);
     
     _node->addChild(pnode);
