@@ -31,15 +31,15 @@
  * \------------------------------------/
  */
 
-#define GOAL_Z_INDEX                0
+#define GOAL_Z_INDEX                29
  
 #define WALL_Z_INDEX                10
 #define MOVEABLE_PLATFORM_Z_INDEX   11
 
 #define CUP_Z_INDEX                 20
 #define JELLO_Z_INDEX               21
-#define BUTTON_SWITCH_Z_INDEX       28
-#define SPIKES_Z_INDEX              29
+#define BUTTON_SWITCH_Z_INDEX       27
+#define SPIKES_Z_INDEX              28
 
 #define KID_Z_INDEX                 30 //30...30+NUM_CHILDREN-1 used by Kids
 

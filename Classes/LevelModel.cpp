@@ -667,7 +667,7 @@ void LevelModel::setRootNode(Node* node) {
         initDebugProperties(_goalDoor);
 				_goalDoor->setY(_goalDoor->getY() + 0.7);
         
-        addObstacle(_goalDoor, WALL_Z_INDEX);
+        addObstacle(_goalDoor, GOAL_Z_INDEX);
     }
     
     if (_pineapple != nullptr) {

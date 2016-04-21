@@ -9,6 +9,10 @@
                  "height":128,
                  "id":1,
                  "name":"wall",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -20,6 +24,10 @@
                  "height":128,
                  "id":57,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -31,6 +39,10 @@
                  "height":128,
                  "id":89,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -42,6 +54,10 @@
                  "height":64,
                  "id":104,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -66,6 +82,10 @@
                  "height":64,
                  "id":10,
                  "name":"will",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -90,6 +110,10 @@
                  "height":64,
                  "id":11,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -102,6 +126,10 @@
                  "height":64,
                  "id":27,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -114,6 +142,10 @@
                  "height":64,
                  "id":28,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -126,6 +158,10 @@
                  "height":64,
                  "id":29,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -150,6 +186,10 @@
                  "height":64,
                  "id":120,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -162,6 +202,10 @@
                  "height":64,
                  "id":124,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -186,6 +230,10 @@
                  "height":64,
                  "id":96,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -198,11 +246,15 @@
                  "height":64,
                  "id":122,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":2112,
+                 "x":2048,
                  "y":640
                 }, 
                 {
@@ -210,6 +262,10 @@
                  "height":64,
                  "id":123,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -234,12 +290,16 @@
                  "height":64,
                  "id":21,
                  "name":"goal",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":4544,
-                 "y":640
+                 "x":4672,
+                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -258,6 +318,10 @@
                  "height":64,
                  "id":119,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -286,11 +350,6 @@
                     {
                      "isSwitch":"true",
                      "linkID":"1"
-                    },
-                 "propertytypes":
-                    {
-                     "isSwitch":"string",
-                     "linkID":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -323,13 +382,6 @@
                      "linkID":"1",
                      "nubbinsVisible":"false"
                     },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -348,13 +400,6 @@
                      "isVertical":"true",
                      "linkID":"1",
                      "nubbinsVisible":"false"
-                    },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -377,22 +422,20 @@
      "BlenderStartX":"-20",
      "BlenderStartY":"6"
     },
- "propertytypes":
-    {
-     "BlenderStartX":"string",
-     "BlenderStartY":"string"
-    },
  "renderorder":"right-down",
  "tileheight":64,
  "tilesets":[
         {
-         "columns":10,
          "firstgid":1,
          "image":"..\/..\/tiledTextures\/Sheet.png",
          "imageheight":640,
          "imagewidth":640,
          "margin":0,
          "name":"ImageSheet",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":100,
          "tileheight":64,
