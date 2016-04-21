@@ -13,12 +13,18 @@
 #define PINEAPPLE_Z     2
 #define BUTTON_Z        3
 
-#define WILL_SCALE      1.0f
-#define KID_SCALE       0.25f
 #define HAPPY_KID_FRAME_COUNT   14
 #define HAPPY_WILL_FRAME_COUNT  28
 
+#define WILL_SCALE      1.0f
+#define KID_SCALE       0.25f
 #define KID_SPACING     1.0f/7.0f
+
+#define BUTTON_SCALE            0.8f
+#define BUTTON_FONT_SIZE        30
+#define NEXT_LEVEL_TEXT         "Next\nLevel"
+#define RESET_TEXT              "Try\nAgain"
+#define LEVEL_SELECT_TEXT       "Level\nSelect"
 
 using namespace std;
 
@@ -37,8 +43,9 @@ WinView* WinView::create(Node* root, SceneManager *assets, Vec2 scale) {
         }
     }
     
-    //root->addChild(view->_resetButton, BUTTON_Z);
-    //root->addChild(view->_toLevelSelectButton, BUTTON_Z);
+    root->addChild(view->_toNextLevelButton, BUTTON_Z);
+    root->addChild(view->_resetButton, BUTTON_Z);
+    root->addChild(view->_toLevelSelectButton, BUTTON_Z);
     
     return view;
 }
@@ -46,6 +53,43 @@ WinView* WinView::create(Node* root, SceneManager *assets, Vec2 scale) {
 void WinView::init(Node *root, SceneManager *assets, Vec2 scale){
     ModalView::init(root, assets, scale, WIN_SPLASH);
     float cscale = Director::getInstance()->getContentScaleFactor();
+    
+    _toNextLevelButton = Button::create();
+    _toNextLevelButton->retain();
+    
+    _toNextLevelButton->setScale(MODAL_MAIN_SCALE * BUTTON_SCALE * cscale);
+    initButton(_toNextLevelButton, BUTTON_FONT_SIZE, NEXT_LEVEL_TEXT);
+    
+    _toNextLevelButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _transferToNextLevel = true;
+        }
+    });
+    
+    _resetButton = Button::create();
+    _resetButton->retain();
+    
+    _resetButton->setScale(MODAL_MAIN_SCALE * BUTTON_SCALE * cscale);
+    initButton(_resetButton, BUTTON_FONT_SIZE, RESET_TEXT);
+    
+    _resetButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _transferToReset = true;
+        }
+    });
+    
+    _toLevelSelectButton = Button::create();
+    _toLevelSelectButton->retain();
+    
+    _toLevelSelectButton->setScale(MODAL_MAIN_SCALE * BUTTON_SCALE * cscale);
+    initButton(_toLevelSelectButton, BUTTON_FONT_SIZE, LEVEL_SELECT_TEXT);
+    
+    _toLevelSelectButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _transferToLevelSelect = true;
+        }
+    });
+
     
     Texture2D* image = assets->get<Texture2D>(WIN_SPLASH_WILL);
     _willAnimation = AnimationNode::create(image, 1, HAPPY_WILL_FRAME_COUNT, HAPPY_WILL_FRAME_COUNT);
@@ -75,6 +119,15 @@ void WinView::position() {
     
     Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
     
+    _toLevelSelectButton->setPosition(Vec2(center.x + _toLevelSelectButton->getContentSize().width*MODAL_MAIN_SCALE*cscale/4,
+                                           center.y + VERTICAL_MARGIN - 20));
+    
+    _resetButton->setPosition(Vec2(center.x + _resetButton->getContentSize().width*MODAL_MAIN_SCALE*cscale/4,
+                                   _toLevelSelectButton->getPositionY() + _resetButton->getContentSize().height*MODAL_MAIN_SCALE*cscale * 0.75f));
+    
+    _toNextLevelButton->setPosition(Vec2(center.x + _toNextLevelButton->getContentSize().width*MODAL_MAIN_SCALE*cscale/4,
+                                   _resetButton->getPositionY() + _toNextLevelButton->getContentSize().height*MODAL_MAIN_SCALE*cscale * 0.75f));
+    
     _willAnimation->setPosition(center.x - _willAnimation->getContentSize().width*MODAL_MAIN_SCALE*cscale/1.25f, center.y + VERTICAL_MARGIN + 20);
     
     for (int i = 0; i < KID_COUNT; i++) {
@@ -100,6 +153,21 @@ void WinView::update(float dt) {
 void WinView::dispose() {
     ModalView::dispose();
     
+    if (_toLevelSelectButton != nullptr) {
+        _toLevelSelectButton->release();
+        _toLevelSelectButton = nullptr;
+    }
+    
+    if (_resetButton != nullptr) {
+        _resetButton->release();
+        _resetButton = nullptr;
+    }
+    
+    
+    if (_toNextLevelButton != nullptr) {
+        _toNextLevelButton->release();
+        _toNextLevelButton = nullptr;
+    }
     
     if (_willAnimation != nullptr) {
         _willAnimation->release();

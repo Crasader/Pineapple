@@ -42,7 +42,6 @@ void LoseView::init(Node *root, SceneManager *assets, Vec2 scale){
     ModalView::init(root, assets, scale, LOSE_SPLASH);
     float cscale = Director::getInstance()->getContentScaleFactor();
     
-    
     _resetButton = Button::create();
     _resetButton->retain();
     
