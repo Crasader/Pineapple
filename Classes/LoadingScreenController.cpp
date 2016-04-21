@@ -49,10 +49,10 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_GREEN, "textures/lever-green-reverse.png");
     tloader->loadAsync(SWITCH_REVERSE_TEXTURE_BLUE,   "textures/lever-blue-reverse.png");
 	
-	tloader->loadAsync(SPLAT_TEXTURE_1, "textures/splat1.png");
-	tloader->loadAsync(SPLAT_TEXTURE_2, "textures/splat2.png");
-	tloader->loadAsync(SPLAT_TEXTURE_3, "textures/splat3.png");
-	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splat4.png");
+	tloader->loadAsync(SPLAT_TEXTURE_1, "textures/splatcycle1.png");
+	tloader->loadAsync(SPLAT_TEXTURE_2, "textures/splatcycle2.png");
+	tloader->loadAsync(SPLAT_TEXTURE_3, "textures/splatcycle3.png");
+	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splatcycle4.png");
 }
 
 void loadBackground(TextureLoader* tloader) {
