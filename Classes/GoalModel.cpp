@@ -10,7 +10,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define GOAL_SIZE Size(1.54,1.45) //Size in box2d units
+#define GOAL_SCALE	1.0f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -175,18 +175,28 @@ void GoalModel::resetSceneNode() {
         
         SceneManager* assets =  AssetManager::getInstance()->getCurrent();
         Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
+		
+		setDimension(image->getContentSize().width * GOAL_SCALE / _drawScale.x,
+			image->getContentSize().height * GOAL_SCALE / _drawScale.y);
+
+		Rect bounds;
+		bounds.size = getDimension();
+		bounds.size.width *= _drawScale.x;
+		bounds.size.height *= _drawScale.y;
+
+		pnode->setTexture(image);
+		pnode->setPolygon(bounds);
+		pnode->setScale(cscale);
+		
+        /*Rect bounds;
+        bounds.size = pnode->getContentSize();
         
-        setDimension(Size(GOAL_SIZE.width /cscale,
-                          GOAL_SIZE.height/cscale));
-        
-        Rect bounds;
-        bounds.size = getDimension();
-        bounds.size.width *= _drawScale.x;
-        bounds.size.height *= _drawScale.y;
-        
-        pnode->setTexture(image);
+		pnode->setTexture(image);
         pnode->setPolygon(bounds);
-        pnode->setScale(cscale);
+        pnode->setScale(cscale * GOAL_SCALE);
+
+		setDimension(pnode->getContentSize().width * GOAL_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * GOAL_SCALE / _drawScale.y);*/	
     }
 }
 
