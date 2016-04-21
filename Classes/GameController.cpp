@@ -34,9 +34,6 @@ using namespace cocos2d;
 #define WIN_SPLASH_Z    7
 #define LOSE_SPLASH_Z   8
 
-/** The number of frames to wait before removing the splat */
-#define SPLAT_COUNT     20
-
 
 #pragma mark -
 #pragma mark Initialization
@@ -50,7 +47,7 @@ using namespace cocos2d;
 GameController::GameController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
-_splat(nullptr), 
+_splatCycle(nullptr),
 _world(nullptr),
 _active(false),
 _collision(nullptr),
@@ -123,11 +120,13 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
 
-	_splat = PolygonNode::createWithTexture(_assets->get<Texture2D>(SPLAT_TEXTURE_1));
-	_splat->retain();
-	_splat->setVisible(false);
-	root->addChild(_splat, SPLAT_Z);
-	_splatCount = -1;
+	_splatCycle = AnimationNode::create(_assets->get<Texture2D>(SPLAT_TEXTURE_1), 1, 14, 14);
+	_splatCycle->setFrame(0);
+	_splatCycle->setVisible(false);
+	_splatCycle->retain();
+	root->addChild(_splatCycle, SPLAT_Z);
+	_splatFrame = 0.0f;
+	_hasSplat = false;
 	_rootSize = root->getContentSize();
     
     PauseController::init(this, _worldnode, _assets, root, _input);
@@ -211,8 +210,8 @@ void GameController::dispose() {
     _background = nullptr;
     PauseController::release();
     _debugnode = nullptr;
-	_splat->release();
-	_splat = nullptr; 
+	_splatCycle->release();
+	_splatCycle = nullptr;
     _winnode = nullptr;
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
@@ -274,8 +273,10 @@ void GameController::onReset() {
         _collision->endContact(contact);
     };
     
-    _splat->setVisible(false);
-    _splatCount = -1;
+	_splatCycle->setVisible(false);
+	_splatCycle->setFrame(0);
+	_splatFrame = 0.0f;
+	_hasSplat = false;
     
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
@@ -451,11 +452,9 @@ void GameController::update(float dt) {
                     _level->getKid(i)->setFixedRotation(false);
                     _level->getKid(i)->setAngularVelocity(6.0f);
                     if (_level->getKid(i)->getIsDead()) {
-                        bool offScreen = (_level->getBlender()->getX() + (_level->getBlender()->getWidth() / 2.0f)) < _levelOffset;
-                        activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)), offScreen);
+                        activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)));
                         _level->kill(_level->getKid(i));
                         _level->getBlender()->setIsBlending(true);
-                        _splatCount = SPLAT_COUNT;
                     }
                 }
                 // check if off bounds death
@@ -509,6 +508,19 @@ void GameController::update(float dt) {
         
         // Animate the blender
         _level->getBlender()->animate();
+
+		// Animate the splats
+		if (_hasSplat) {
+			_splatFrame += 0.25f;
+			int tmp = (int)rint(_splatFrame);
+			if (tmp < _splatCycle->getSize()) {
+				_splatCycle->setFrame(tmp);
+			} 
+			else {
+				_hasSplat = false;
+				_splatCycle->setVisible(false);
+			}
+		}
         
         HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
         
@@ -560,17 +572,20 @@ void GameController::handleScrolling() {
 /**
 * Activate the splat effect when shit hits the fan
 */
-void GameController::activateSplat(Texture2D* image, bool offScreen) {
-	_splat->setTexture(image);
-	_splat->setScale(2.0f, 2.0f);
-	_splat->setVisible(true);
+void GameController::activateSplat(Texture2D* image) {
+	_splatCycle->setTexture(image);
+	_splatCycle->setFrame(0);
+	_splatCycle->setScale(4.0f, 4.0f);
+	_splatCycle->setVisible(true);
+	_splatFrame = 0.0f;
+	_hasSplat = true;
 
-	if (offScreen) {
-		_splat->setPosition(0.0f, _rootSize.height/2.0f);
-	}
-	else {
-		_splat->setPosition(_rootSize.width/2.0f, _rootSize.height / 2.0f);
-	}
+	// Randomize location of splat on screen 
+	int windowX = (int)rint(_rootSize.width / 2.0f);
+	int windowY = (int)rint(_rootSize.height / 2.0f);
+	float randX = (float)((rand() % windowX) + (_rootSize.width / 4.0f));
+	float randY = (float)((rand() % windowY) + (_rootSize.height / 4.0f));
+	_splatCycle->setPosition(randX, randY);
 }
 
 #pragma mark -

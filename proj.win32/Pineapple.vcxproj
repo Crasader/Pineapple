@@ -160,6 +160,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\LevelModel.cpp" />
     <ClCompile Include="..\Classes\LevelSelectController.cpp" />
     <ClCompile Include="..\Classes\LoadingScreenController.cpp" />
+    <ClCompile Include="..\Classes\LoseView.cpp" />
+    <ClCompile Include="..\Classes\ModalView.cpp" />
     <ClCompile Include="..\Classes\MoveablePlatformModel.cpp" />
     <ClCompile Include="..\Classes\NonPhysicalObstacleModel.cpp" />
     <ClCompile Include="..\Classes\PauseController.cpp" />
@@ -170,6 +172,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\SpikeModel.cpp" />
     <ClCompile Include="..\Classes\SpinnerModel.cpp" />
     <ClCompile Include="..\Classes\WallModel.cpp" />
+    <ClCompile Include="..\Classes\WinView.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +195,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Levels.h" />
     <ClInclude Include="..\Classes\LevelSelectController.h" />
     <ClInclude Include="..\Classes\LoadingScreenController.h" />
+    <ClInclude Include="..\Classes\LoseView.h" />
+    <ClInclude Include="..\Classes\ModalView.h" />
     <ClInclude Include="..\Classes\MoveablePlatformModel.h" />
     <ClInclude Include="..\Classes\NonPhysicalObstacleModel.h" />
     <ClInclude Include="..\Classes\PauseController.h" />
@@ -203,6 +208,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\SpinnerModel.h" />
     <ClInclude Include="..\Classes\Texture.h" />
     <ClInclude Include="..\Classes\WallModel.h" />
+    <ClInclude Include="..\Classes\WinView.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

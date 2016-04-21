@@ -81,9 +81,11 @@ protected:
     WorldController* _world;
 
 	/** Reference to the splat */
-	PolygonNode* _splat; 
-	/** Countdown till splat is removed */
-	int _splatCount;
+	AnimationNode* _splatCycle;
+	/** Current frame of the splatcycle */
+	float _splatFrame;
+	/** Whether there is a splat on the screen */
+	bool _hasSplat;
 	/** Size of root */
 	Size _rootSize;
     
@@ -321,7 +323,7 @@ public:
 	/**
 	* Activate the splat effect when shit hits the fan
 	*/
-	void activateSplat(Texture2D* image, bool offScreen);
+	void activateSplat(Texture2D* image);
 
 };
 
