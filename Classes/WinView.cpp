@@ -37,8 +37,8 @@ WinView* WinView::create(Node* root, SceneManager *assets, Vec2 scale) {
         }
     }
     
-    root->addChild(view->_resetButton, BUTTON_Z);
-    root->addChild(view->_toLevelSelectButton, BUTTON_Z);
+    //root->addChild(view->_resetButton, BUTTON_Z);
+    //root->addChild(view->_toLevelSelectButton, BUTTON_Z);
     
     return view;
 }

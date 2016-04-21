@@ -22,9 +22,11 @@ using namespace cocos2d::ui;
 
 #define MODAL_MAIN_SCALE        1.35f
 
-#define NUM_BUTTONS_MODAL       2
 #define VERTICAL_MARGIN         -225
 #define HORIZONTAL_MARGIN       150
+
+#define BUTTON_UNPRESSED_TEXTURE_LOCATION   "textures/buttons/level_button.png"
+#define BUTTON_PRESSED_TEXTURE_LOCATION     "textures/buttons/level_button_inverse.png"
 
 class ModalView {
 protected:
@@ -43,36 +45,34 @@ protected:
     /** The splash image */
     Node* _splashImage;
     
-    /** Button that causes the level to reset */
-    Button* _resetButton;
-    
-    /** Button that goes to level select */
-    Button* _toLevelSelectButton;
-    
     /** The draw scale used by the current resolution */
     Vec2 _scale;
     
     bool _transferToReset;
     bool _transferToLevelSelect;
+    bool _transferToNextLevel;
     
     void init(Node* rootNode, SceneManager* assets, Vec2 scale, string textureID);
     
 public:
+    
+    void initButton(Button* button, int fontSize, string text);
+    
     bool shouldReset() { return _transferToReset; }
     
     bool shouldTransferToLevelSelect() { return _transferToLevelSelect; }
     
+    bool shouldTransferToNextLevel() { return _transferToNextLevel; }
+    
     void resetButtons() {
         _transferToReset = false;
         _transferToLevelSelect = false;
+        _transferToNextLevel = false;
     }
     
     void position();
     
     void dispose();
-    
-    const static string BUTTON_FILES[NUM_BUTTONS_MODAL*2];
-    
 };
 
 #endif /* ModalView_h */
