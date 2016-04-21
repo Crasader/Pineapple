@@ -96,6 +96,8 @@ protected:
     /** Reference to current level */
     LevelModel* _level;
     
+    /** The index of this level in the array of levels */
+    int _levelIndex;
     /** Name of the level that is currently loaded */
     string _levelKey;
     /** Filename of the level that is currently loaded */
@@ -160,7 +162,7 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root, InputController* input, string levelKey, string levelFile);
+    bool init(Node* root, InputController* input, int levelIndex, string levelKey, string levelFile);
 
     /**
      * Initializes the controller contents, and starts the game
@@ -179,11 +181,14 @@ public:
      * @retain a reference to the root layer
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(Node* root, InputController* input, string levelKey, string levelFile, const Rect& rect);
+    bool init(Node* root, InputController* input, int levelIndex, string levelKey, string levelFile, const Rect& rect);
     
     
 #pragma mark -
 #pragma mark State Access
+    /** Returns the levelindex of the currently playing level */
+    int getLevelIndex() { return _levelIndex; }
+    
     /**
      * Returns true if the gameplay controller is currently active
      *
@@ -290,14 +295,14 @@ public:
 #pragma mark -
 #pragma mark Gameplay Handling
     
-    void reset() { reset(_levelKey, _levelFile); }
+    void reset() { reset(_levelIndex, _levelKey, _levelFile); }
     
     /**
      * Resets the status of the game so that we can play again.
      *
      * This method disposes of the world and creates a new one.
      */
-    void reset(string levelKey, string levelFile) ;
+    void reset(int levelIndex, string levelKey, string levelFile) ;
     
     /** Called after the asynced level reloading finishes.
       * a helper for reset() */

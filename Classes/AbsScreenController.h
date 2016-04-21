@@ -13,6 +13,7 @@
 
 #define TRANSITION_TO_LEVEL_SELECT          10
 #define TRANSITION_TO_GAME                  11
+#define TRANSITION_TO_NEXT_LEVEL            12
 
 
 #define TRANSITION_TO_EXIT                  99
