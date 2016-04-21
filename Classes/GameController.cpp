@@ -72,8 +72,8 @@ _winViewVisible(false){}
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile) {
-    return init(root, input, levelKey, levelFile, SCREEN);
+bool GameController::init(Node* root, InputController* input, int levelIndex, string levelKey, string levelFile) {
+    return init(root, input, levelIndex, levelKey, levelFile, SCREEN);
 }
 
 /**
@@ -94,12 +94,13 @@ bool GameController::init(Node* root, InputController* input, string levelKey, s
  * @retain a reference to the root layer
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameController::init(Node* root, InputController* input, string levelKey, string levelFile, const Rect& rect) {
+bool GameController::init(Node* root, InputController* input, int levelIndex, string levelKey, string levelFile, const Rect& rect) {
     _rootnode = root;
     _rootnode->retain();
     
     _input = input;
     
+    _levelIndex = levelIndex;
     _levelKey = levelKey;
     _levelFile = levelFile;
     
@@ -229,7 +230,7 @@ void GameController::dispose() {
  *
  * This method disposes of the world and creates a new one.
  */
-void GameController::reset(string levelKey, string levelFile) {
+void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
 	
@@ -241,6 +242,7 @@ void GameController::reset(string levelKey, string levelFile) {
     _assets->unload<LevelModel>(_levelKey);
     
     // Load a new level and quit update
+    _levelIndex = levelIndex;
     _levelKey = levelKey;
     _levelFile = levelFile;
 
@@ -437,6 +439,13 @@ void GameController::update(float dt) {
             SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
             setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
             return;
+        } else if (_winview->shouldTransferToNextLevel()) {
+            _winview->resetButtons();
+            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            setTransitionStatus(TRANSITION_TO_NEXT_LEVEL);
+            return;
+
         }
     } else {
         // Process kids

@@ -26,6 +26,7 @@
 #include "ui/CocosGUI.h"
 
 #define NUM_LEVELS                  13
+#define LEVELS_CREATED              4
 #define NO_LEVEL_SELECTED           -1
 
 // We need a lot of forward references to the classes used by this controller
