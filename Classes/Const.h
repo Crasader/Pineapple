@@ -48,6 +48,7 @@
 #define KID_C					3
 #define BLENDER_C               5
 #define BUTTON_SWITCH_C         9
+#define GOAL_C                  11
 
 //Elements that count as ground
 #define JELLO_C                 2

@@ -639,7 +639,7 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = NK7Y3376G8;
+						DevelopmentTeam = BJ293T3427;
 					};
 				};
 			};
@@ -868,7 +868,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = emmett.edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -906,7 +906,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = emmett.edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
