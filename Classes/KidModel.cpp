@@ -373,6 +373,7 @@ void KidModel::spiral(float x, float y) {
 	float newX = getX() - val;
 	if (newX < x) {
 		setIsDead(true);
+        Device::vibrate(VIBRATION_DURATION);
 	}
 	else {
 		setX(newX);

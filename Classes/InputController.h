@@ -85,16 +85,19 @@ protected:
     // The distance in last timestep
     float _previousDelta;
     // One of the touches in the gesture, -1 if no current gesture
+    // we're assuming here that assumed usage is only two fingers maximum down at a time
     int _id1;
     Vec2 _touch1;
     // timestamp for touchdown of _touch1;
     timestamp_t _time1;
+    // if id1 did a gesture on this touch down, used to block an otherwise tap to jump
+    bool _id1didGesture = false;
     // The other one, -1 if no current gesture
     int _id2;
     Vec2 _touch2;
     timestamp_t _time2;
-    // previous tap location
-    Vec2 _prevTap;
+    // if id2 did a gesture on this touch down, used to block an otherwise tap to jump
+    bool _id2didGesture = false;
     
     // Input results
     /** Whether the reset action was chosen. */
@@ -120,16 +123,24 @@ protected:
         return _id1 == -1 || _id2 == -1;
     }
     
+    // if this touch did a gesture during its touch down
+    bool didGesture(Touch* touch) {
+        if (touch->getID() == _id1) {
+            return _id1didGesture;
+        } else if (touch->getID() == _id2) {
+            return _id2didGesture;
+        }
+        return false;
+    }
+    
 #pragma mark Internal Touch Management   
-    // The screen is divided into four zones: Left, Bottom, Right and Main/
+    // The screen is divided into three zones: Left, Right and Main/
     // These are all shown in the diagram below.
     //
     //   |---------------|
     //   |   |       |   |
     //   | L |   M   | R |
     //   |   |       |   |
-    //   -----------------
-    //   |       B       |
     //   -----------------
     //
     // The meaning of any touch depends on the zone it begins in.
@@ -152,8 +163,6 @@ protected:
         LEFT,
         /** The touch was in the right zone (as shown above) */
         RIGHT,
-        /** The touch was in the bottom zone (as shown above) */
-        BOTTOM,
         /** The touch was in the main zone (as shown above) */
         MAIN
     };
@@ -164,22 +173,18 @@ protected:
     Rect _lzone;
     /** The bounds of the right touch zone */
     Rect _rzone;
-    /** The bounds of the bottom touch zone */
-    Rect _bzone;
     
     // Each zone can have only one touch
     /** The current touch location for the left zone */
     TouchInstance _ltouch;
     /** The current touch location for the right zone */
     TouchInstance _rtouch;
-    /** The current touch location for the main zone */
-    TouchInstance _btouch;
     /** The current touch location for the bottom zone */
     TouchInstance _mtouch;
     
     /** The timestamp for the beginning of the current swipe gesture */
     timestamp_t _swipetime;
-    /** The timestamp for a double tap (main zone only) */
+    /** The timestamp for a tap (main zone only) */
     timestamp_t _dbtaptime;
     
     /**

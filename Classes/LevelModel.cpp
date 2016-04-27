@@ -820,7 +820,6 @@ void LevelModel::kill(PineappleModel* will) {
     clearPineapple();
 	// TODO: Move failure to main game loop?
     setFailure(true); 
-	Device::vibrate(VIBRATION_DURATION);
 }
 
 void LevelModel::kill(KidModel* kid) {
@@ -832,7 +831,6 @@ void LevelModel::kill(KidModel* kid) {
         if (_kidsRemaining == 0) {
             setFailure(true);
         }
-		Device::vibrate(VIBRATION_DURATION);
     }
 }
 

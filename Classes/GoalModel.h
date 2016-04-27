@@ -124,6 +124,8 @@ public:
      */
     void applyForce();
     
+    int getCollisionClass() override { return GOAL_C; };
+    
 #pragma mark Drawing Methods
     /**
      * Performs any necessary additions to the scene graph node.
