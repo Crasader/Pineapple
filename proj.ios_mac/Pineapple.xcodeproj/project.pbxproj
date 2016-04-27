@@ -45,6 +45,8 @@
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		402F4EBE1CD17556009B36BA /* HomeScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 402F4EBC1CD17556009B36BA /* HomeScreenController.cpp */; };
+		402F4EBF1CD17556009B36BA /* HomeScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 402F4EBC1CD17556009B36BA /* HomeScreenController.cpp */; };
 		4039B4DE1CB33B3E001E8B6E /* GoalModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */; };
 		4039B4DF1CB33B3E001E8B6E /* GoalModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */; };
 		4039B4E21CB34015001E8B6E /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
@@ -209,6 +211,8 @@
 		4016BA721CA36D9700557450 /* CollisionObjectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionObjectModel.h; sourceTree = "<group>"; };
 		4016BA771CA36D9700557450 /* NonPhysicalObstacleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonPhysicalObstacleModel.h; sourceTree = "<group>"; };
 		4016BAAB1CA3745100557450 /* LevelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelModel.cpp; sourceTree = "<group>"; };
+		402F4EBC1CD17556009B36BA /* HomeScreenController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HomeScreenController.cpp; sourceTree = "<group>"; };
+		402F4EBD1CD17556009B36BA /* HomeScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenController.h; sourceTree = "<group>"; };
 		4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoalModel.cpp; sourceTree = "<group>"; };
 		4039B4E01CB33B47001E8B6E /* GoalModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoalModel.h; sourceTree = "<group>"; };
 		404380BD1CC095F7003BE560 /* LevelSelectController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelSelectController.cpp; sourceTree = "<group>"; };
@@ -491,6 +495,8 @@
 				0373D6EE1CBF205A00B00A7E /* PauseController.cpp */,
 				0373D6EF1CBF205A00B00A7E /* PauseController.h */,
 				404380C11CC09912003BE560 /* AbsScreenController.h */,
+				402F4EBC1CD17556009B36BA /* HomeScreenController.cpp */,
+				402F4EBD1CD17556009B36BA /* HomeScreenController.h */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -639,7 +645,7 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = BJ293T3427;
+						DevelopmentTeam = NK7Y3376G8;
 					};
 				};
 			};
@@ -778,6 +784,7 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
+				402F4EBE1CD17556009B36BA /* HomeScreenController.cpp in Sources */,
 				0313B5E91CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */,
 				406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
 				403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */,
@@ -789,6 +796,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4072DF911C9F68B300F7DAA4 /* CollisionController.cpp in Sources */,
+				402F4EBF1CD17556009B36BA /* HomeScreenController.cpp in Sources */,
 				4072DFA61C9F68C500F7DAA4 /* JelloModel.cpp in Sources */,
 				4072DFA31C9F68C500F7DAA4 /* PhysicalObstacleModel.cpp in Sources */,
 				403B05781CA37B5E003F47CB /* LevelModel.cpp in Sources */,
@@ -868,7 +876,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = emmett.edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -906,7 +914,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = emmett.edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
