@@ -18,9 +18,10 @@
 
 using namespace cocos2d;
 
-#define GAME_ROOT_Z             1
-#define LEVEL_SELECT_ROOT_Z     2
-#define LOADING_ROOT_Z          3
+#define HOME_ROOT_Z             1
+#define GAME_ROOT_Z             2
+#define LEVEL_SELECT_ROOT_Z     3
+#define LOADING_ROOT_Z          4
 
 #pragma mark -
 #pragma mark Gameplay Control
@@ -33,6 +34,11 @@ using namespace cocos2d;
  */
 void PineappleRoot::start() {
     int scene = AssetManager::getInstance()->createScene();
+    
+    _homeScreen = new HomeScreenController();
+    _homeRoot = Node::create();
+    _homeRoot->setContentSize(getContentSize());
+    _homeRoot->retain();
     
     _gameplay = new GameController();
     _gameRoot = Node::create();
@@ -76,6 +82,9 @@ void PineappleRoot::stop() {
     RootLayer::stop();  // YOU MUST BEGIN with call to parent
     int scene = AssetManager::getInstance()->getCurrentIndex();
     
+    if (_homeScreen->isInitted()) {
+        _homeScreen->dispose();
+    }
     if (_gameplay->isInitted()) {
         _gameplay->dispose();
     }
@@ -85,6 +94,7 @@ void PineappleRoot::stop() {
     
     removeAllChildren();
 
+    _homeRoot->release();
     _gameRoot->release();
     _levelSelectRoot->release();
     _loadingScreenRoot->release();
@@ -116,8 +126,44 @@ void PineappleRoot::onFirstUpdate() {
     _activeController = _loadingScreen;
 }
 
+/** Helper method that transitions to home */
+void PineappleRoot::transitionToHomeScreen() {
+    if (_activeController == _gameplay) {
+        removeChild(_gameRoot);
+        addChild(_homeRoot, HOME_ROOT_Z);
+    }
+    
+    if (_activeController == _loadingScreen) {
+        removeChild(_loadingScreenRoot);
+        addChild(_homeRoot, HOME_ROOT_Z);
+    }
+    
+    if (_activeController == _levelSelect) {
+        removeChild(_levelSelectRoot);
+        addChild(_homeRoot, HOME_ROOT_Z);
+    }
+    
+    _activeController = _homeScreen;
+    
+    if (!_homeScreen->isInitted()) {
+        _homeScreen->init(_homeRoot, &_inputController);
+    }
+    
+    //TODO - home sound
+    
+    _homeScreen->setTransitionStatus(TRANSITION_NONE);
+    _gameplay->setTransitionStatus(TRANSITION_NONE);
+    _loadingScreen->setTransitionStatus(TRANSITION_NONE);
+    _levelSelect->setTransitionStatus(TRANSITION_NONE);
+}
+
 /** Helper method that transitions to level select */
 void PineappleRoot::transitionToLevelSelect() {
+    if (_activeController == _homeScreen) {
+        removeChild(_homeRoot);
+        addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
+    }
+    
     if (_activeController == _gameplay) {
         removeChild(_gameRoot);
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
@@ -147,6 +193,7 @@ void PineappleRoot::transitionToLevelSelect() {
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
     }
     
+    _homeScreen->setTransitionStatus(TRANSITION_NONE);
     _gameplay->setTransitionStatus(TRANSITION_NONE);
     _loadingScreen->setTransitionStatus(TRANSITION_NONE);
     _levelSelect->setTransitionStatus(TRANSITION_NONE);
@@ -175,6 +222,11 @@ void PineappleRoot::transitionToGame(int levelIndex) {
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
     }
     
+    if (_activeController == _homeScreen) {
+        removeChild(_homeRoot);
+        addChild(_gameRoot);
+    }
+    
     if (_activeController == _levelSelect) {
         removeChild(_levelSelectRoot);
         addChild(_gameRoot);
@@ -187,6 +239,7 @@ void PineappleRoot::transitionToGame(int levelIndex) {
     
     _activeController = _gameplay;
     
+    _homeScreen->setTransitionStatus(TRANSITION_NONE);
     _gameplay->setTransitionStatus(TRANSITION_NONE);
     _loadingScreen->setTransitionStatus(TRANSITION_NONE);
     _levelSelect->setTransitionStatus(TRANSITION_NONE);
@@ -215,7 +268,15 @@ void PineappleRoot::update(float deltaTime) {
     }
     
     //Check for transitions
-    if ((_gameplay->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _gameplay) ||
+    if ((_gameplay->getTransitionStatus() == TRANSITION_TO_HOME && _activeController == _gameplay) ||
+        (_levelSelect->getTransitionStatus() == TRANSITION_TO_HOME && _activeController == _levelSelect) ||
+        (_loadingScreen->getTransitionStatus() == TRANSITION_TO_HOME && _activeController == _loadingScreen) ) {
+        transitionToHomeScreen();
+    }
+
+    
+    if ((_homeScreen->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _homeScreen) ||
+        (_gameplay->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _gameplay) ||
         (_loadingScreen->getTransitionStatus() == TRANSITION_TO_LEVEL_SELECT && _activeController == _loadingScreen) ) {
         transitionToLevelSelect();
     }
@@ -244,7 +305,7 @@ void PineappleRoot::update(float deltaTime) {
             _loadStarted = true;
         } else if (AssetManager::getInstance()->getCurrent()->isComplete()) {
             _loadFinished = true;
-            _loadingScreen->setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+            _loadingScreen->setTransitionStatus(TRANSITION_TO_HOME);
         }
     }
 }

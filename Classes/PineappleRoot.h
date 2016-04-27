@@ -21,6 +21,7 @@
 #include "LevelSelectController.h"
 #include "LoadingScreenController.h"
 #include "InputController.h"
+#include "HomeScreenController.h"
 
 using namespace cocos2d;
 
@@ -40,6 +41,11 @@ class PineappleRoot : public RootLayer {
 protected:
     /** A pointer to the currently active controller */
     AbsScreenController* _activeController;
+    
+    /** The controller for the home screen */
+    HomeScreenController* _homeScreen;
+    /** The root node for the home screen */
+    Node* _homeRoot;
     
     /** The primary controller for the game world */
     GameController* _gameplay;
@@ -119,6 +125,9 @@ public:
     void stop() override;
     
 private:
+    /** A helper method that transitions to home */
+    void transitionToHomeScreen();
+    
     /** A helper method that transitions to levelSelect */
     void transitionToLevelSelect();
     
