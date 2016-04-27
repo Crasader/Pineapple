@@ -196,6 +196,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 		}
         // Will x ButtonSwitch
         if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+            std::cout << "WILL AND SWITCH\n";
             ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
             handleButtonSwitchStartCollision(will, buttonSwitch);
         }
