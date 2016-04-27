@@ -176,7 +176,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         }
     }
 	// WILL COLLISIONS
-	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
+	else if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
@@ -196,11 +196,20 @@ void CollisionController::beginContact(b2Contact* contact) {
 		}
         // Will x ButtonSwitch
         if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
-            std::cout << "WILL AND SWITCH\n";
+            std::cout << will << "\n";
             ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
-            handleButtonSwitchStartCollision(will, buttonSwitch);
+            if (bd1 == will && bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+                std::cout << " PREV: " << _willSmallPrevFrame << "\n";
+                std::cout << " NOW: " << will->isSmall() << "\n";
+                // only collided if will didn't JUST grow/shrink
+                if (_willSmallPrevFrame == will->isSmall()) {
+                    handleButtonSwitchStartCollision(will, buttonSwitch);
+                } else {
+                    std::cout << "PREVENTED\n";
+                }
+            }
         }
-        
+        _willSmallPrevFrame = will->isSmall();
 	} // END WILL COLLISIONS
 
 	// KID COLLISIONS
