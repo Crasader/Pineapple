@@ -263,10 +263,6 @@ void CollisionController::endContact(b2Contact* contact) {
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			will->setCollidingWithJello(false);
 		}
-		// Will x Goal
-		if (_level->getGoal() != nullptr && (bd1 == _level->getGoal() || bd2 == _level->getGoal())) {
-			will->setReachedGoal(false);
-		}
         // Will x ButtonSwitch
         if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
             ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
