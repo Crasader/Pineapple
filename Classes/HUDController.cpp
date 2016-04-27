@@ -171,10 +171,11 @@ void HUDController::update(int childrenAlive, float blenderLoc, vector<KidModel*
         KidModel* kid = children[i];
         if (kid != nullptr) {
             float pos = unitsToTopBarX(kid->getPosition().x, goalLoc);
-            pos += HUD_CONTROLLER->_children[i]->getContentSize().width * KID_ICON_SCALE * cscale / 2.0f;
-            if (pos >= 0 &&
-                pos <= HUD_CONTROLLER->_progressBarWidth -
-                    (KID_COUNT - i * HUD_CONTROLLER->_children[i]->getContentSize().width/2.0f)) {
+            float width = HUD_CONTROLLER->_children[i]->getContentSize().width * KID_ICON_SCALE * cscale;
+            pos += width / 2.0f;
+            if (pos >= HUD_CONTROLLER->_progressBarLeftXPos &&
+                pos <= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth -
+                    ((KID_COUNT - (i + 1)) * width/2.0f)) {
                 HUD_CONTROLLER->_children[i]->setPositionX(pos);
             }
         } else {
@@ -186,9 +187,11 @@ void HUDController::update(int childrenAlive, float blenderLoc, vector<KidModel*
     // update will
     if (will) {
         pos = unitsToTopBarX(will->getPosition().x, goalLoc);
+        float width = HUD_CONTROLLER->_will->getContentSize().width * WILL_SCALE * cscale;
         // now center it
-        pos += HUD_CONTROLLER->_will->getContentSize().width * WILL_SCALE * cscale / 2.0f;
-        if (pos <= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth) {
+        pos += width / 2.0f;
+        if (pos >= HUD_CONTROLLER->_progressBarLeftXPos &&
+            pos <= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth) {
             HUD_CONTROLLER->_will->setPositionX(pos);
         }
     } else {
