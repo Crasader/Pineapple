@@ -166,7 +166,7 @@ void CollisionController::beginContact(b2Contact* contact) {
             if (!will->isSmall() && will->getVY() < MAX_V_TO_CRUSH) {
                 // set v to 0 because sometimes the sensor touches too early for the physics
                 // engine to do it
-                will->setVY(0);
+                will->setVY(4);
                 _level->removeObstacle(bd1->getCollisionClass() == CUP_C ? bd1 : bd2);
             }
         }
