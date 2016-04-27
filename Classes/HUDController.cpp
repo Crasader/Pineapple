@@ -168,14 +168,24 @@ void HUDController::update(int childrenAlive, float blenderLoc, vector<KidModel*
     
     // update children icons
     for (int i = 0; i < KID_COUNT; i++) {
+        // get child's current place
         KidModel* kid = children[i];
+        int place = KID_COUNT;
+        for (int j = 0; j < KID_COUNT; j++) {
+            // if this child is dead then I'm beating him
+            if (children[j] == nullptr) {
+                place -= 1;
+            } else if (kid != nullptr && j != i && kid->getX() > children[j]->getX()) {
+                place -= 1;
+            }
+        }
         if (kid != nullptr) {
             float pos = unitsToTopBarX(kid->getPosition().x, goalLoc);
             float width = HUD_CONTROLLER->_children[i]->getContentSize().width * KID_ICON_SCALE * cscale;
             pos += width / 2.0f;
             if (pos >= HUD_CONTROLLER->_progressBarLeftXPos &&
                 pos <= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth -
-                    ((KID_COUNT - (i + 1)) * width/2.0f)) {
+                    (place * width/2.0f)) {
                 HUD_CONTROLLER->_children[i]->setPositionX(pos);
             }
         } else {

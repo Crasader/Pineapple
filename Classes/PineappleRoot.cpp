@@ -136,7 +136,9 @@ void PineappleRoot::transitionToLevelSelect() {
     
     if (_backgroundSoundKey != LEVEL_SELECT_BACKGROUND_SOUND) {
         if (_backgroundSound != nullptr) {
-            SoundEngine::getInstance()->stopMusic();
+            if (SoundEngine::getInstance()->getMusicState() == SoundEngine::SoundState::PLAYING) {
+                SoundEngine::getInstance()->stopMusic();
+            }
         }
         
         _backgroundSoundKey = LEVEL_SELECT_BACKGROUND_SOUND;
