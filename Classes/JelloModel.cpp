@@ -50,6 +50,7 @@
 #pragma mark Physics Constants
 
 #define JELLO_SCALE			0.39
+#define JELLO_H_SHRINK      0.8
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
 #define JELLO_DOWN_SHIFT	0
@@ -237,7 +238,7 @@ void JelloModel::resetSceneNode() {
         pnode->setScale(cscale * JELLO_SCALE);
 		pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
+        setDimension(pnode->getContentSize().width * JELLO_SCALE * JELLO_H_SHRINK / _drawScale.x,
                      pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
 
 		_jelloRestcycleFrame = 0.0f;
