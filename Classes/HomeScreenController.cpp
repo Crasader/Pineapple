@@ -10,14 +10,26 @@
 #include <cornell.h>
 #include "Texture.h"
 
-#define PLAY_BUTTON_POSITION     Vec2(700,150)
-#define PLAY_BUTTON_SCALE   2.0f
+#define PLAY_BUTTON_POSITION            Vec2(700,150)
+#define PLAY_BUTTON_SCALE               2.0f
+
+#define WILL_POPUP_FRAME_COUNT          12
+#define WILL_POPUP_OFFSCREEN            Vec2(-100, -100)
+#define WILL_POPUP_SCALE                0.75f
+
+#define MIN_DELAY                       15
+#define MAX_DELAY                       30
 
 #define HOME_SCREEN_BACKGROUND_Z_INDEX  0
 #define HOME_SCREEN_BUTTON_Z_INDEX      1
+#define HOME_SCREEN_WILL_Z_INDEX        2
 
 bool HomeScreenController::init(Node *root, InputController* input) {
     return init(root, input, SCREEN);
+}
+
+int getRandomDelay() {
+    return (rand() % (MAX_DELAY - MIN_DELAY)) + MIN_DELAY;
 }
 
 bool HomeScreenController::init(Node *root, InputController *input, const Rect &rect) {
@@ -66,15 +78,67 @@ bool HomeScreenController::init(Node *root, InputController *input, const Rect &
     _playButton->retain();
     _rootnode->addChild(_playButton, HOME_SCREEN_BUTTON_Z_INDEX);
     
+    //Create the will animation
+    _willPopup = AnimationNode::create(_assets->get<Texture2D>(HOME_SCREEN_WILL_ANIMATION), 1, WILL_POPUP_FRAME_COUNT);
+    _willPopup->setAnchorPoint(Vec2(0,0));
+    _willPopup->setPosition(WILL_POPUP_OFFSCREEN);
+    _willPopup->setScale(WILL_POPUP_SCALE);
+    _willPopup->retain();
+    _rootnode->addChild(_willPopup, HOME_SCREEN_WILL_Z_INDEX);
+    
+    _willFrame = - getRandomDelay();
+    
     _isInitted = true;
     return true;
 }
 
-void HomeScreenController::update(float dt) {
+void HomeScreenController::positionWill() {
     
+    int side = rand() % 4;
+    if (side == _mostRecentSide) {
+        side = (side + 1) % 4;
+    }
+    
+    _mostRecentSide = side;
+    _willPopup->setRotation(90 * side);
+    
+    int x = (rand() % (int)(_rootnode->getContentSize().width - _willPopup->getContentSize().width)) + _willPopup->getContentSize().width / 2;
+    int y = (rand() % (int)(_rootnode->getContentSize().height - _willPopup->getContentSize().width)) + _willPopup->getContentSize().width / 2;
+    
+    if (side == 0) {
+        y = 0;
+    } else if (side == 1) {
+        x = 0;
+    } else if (side == 2) {
+        y = (int)_rootnode->getContentSize().height;
+    } else {
+        x = (int)_rootnode->getContentSize().width;
+    }
+    
+    _willPopup->setPosition(x, y);
+}
+
+void HomeScreenController::update(float dt) {
+    _input->update(dt);
+    
+    if (_willFrame >= 0 && _willFrame <= 0.2) {
+        positionWill();
+    } else if (_willFrame > 0 && (int)_willFrame < WILL_POPUP_FRAME_COUNT) {
+        _willPopup->setFrame((int)_willFrame % WILL_POPUP_FRAME_COUNT);
+    } else if ((int)_willFrame >= WILL_POPUP_FRAME_COUNT) {
+        _willFrame = -getRandomDelay();
+        _willPopup->setPosition(WILL_POPUP_OFFSCREEN);
+    }
+    
+    _willFrame += 0.2;
 }
 
 void HomeScreenController::dispose() {
+    if (_willPopup != nullptr) {
+        _willPopup->release();
+        _willPopup = nullptr;
+    }
+    
     if (_playButton != nullptr)  {
         _playButton->release();
         _playButton = nullptr;

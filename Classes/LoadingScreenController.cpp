@@ -57,6 +57,7 @@ void loadObstacles(TextureLoader* tloader) {
 
 void loadHomeScreen(TextureLoader* tloader) {
     tloader->loadAsync(HOME_SCREEN_BACKGROUND, "textures/home_screen.png");
+    tloader->loadAsync(HOME_SCREEN_WILL_ANIMATION, "textures/will_pop_out.png");
 }
 
 void loadBackground(TextureLoader* tloader) {

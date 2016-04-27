@@ -20,8 +20,19 @@ protected:
     /** The button that begins the game */
     Button* _playButton;
     
+    /** The popup will animation */
+    AnimationNode* _willPopup;
+    
     /** The background image displayed for the home screen */
     Node* _backgroundNode;
+    
+    /** The current count of will's animation frame */
+    float _willFrame;
+    
+    /** The most recent side that will appeared out of */
+    int _mostRecentSide;
+    
+    void positionWill();
     
 public:
     /**

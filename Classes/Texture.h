@@ -122,6 +122,8 @@
 #define HOME_SCREEN_PLAY_BUTTON_OFF_FILEPATH  "textures/play_button.png"
 /** The filepath for the play button in its on state */
 #define HOME_SCREEN_PLAY_BUTTON_ON_FILEPATH  "textures/play_button_inverse.png"
+/** The key for the will popup animation used on the homescreen */
+#define HOME_SCREEN_WILL_ANIMATION  "home_screen_will_animation"
 
 /** The key for the level select background texture in the asset manager */
 #define LEVEL_SELECT_BACKGROUND "level_select_background"
