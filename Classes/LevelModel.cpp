@@ -206,7 +206,7 @@ bool LevelModel::load() {
                 } else if (layerName == GOAL_OBJECT_GROUP) {
                     addGoal(position);
                 } else if (layerName == JELLO_OBJECT_GROUP) {
-                    addJello(position);
+                    addJello(position, x, y);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
                     position[0] += 0.5;
                     addSpikes(position);
@@ -215,7 +215,7 @@ bool LevelModel::load() {
                 } else if (layerName == KIDS_OBJECT_GROUP) {
                     addKid(position);
                 } else if (layerName == CUP_OBJECT_GROUP) {
-                    addCup(position);
+                    addCup(position, x, y);
                 } else if (layerName == BUTTON_SWITCH_OBJECT_GROUP) {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
                     
@@ -524,15 +524,15 @@ void LevelModel::addKid(float kidPos[POS_COORDS]) {
     }
 }
 
-void LevelModel::addJello(float jelloPos[POS_COORDS]) {
-    JelloModel* jello = JelloModel::create(jelloPos);
+void LevelModel::addJello(float jelloPos[POS_COORDS], int x, int y) {
+    JelloModel* jello = JelloModel::create(x, y, jelloPos);
     initSensor(jello);
     jello->setName(JELLO_NAME);
     _jellos.push_back(jello);
 }
 
-void LevelModel::addCup(float cupPos[POS_COORDS]) {
-    CrushableModel* cup = CrushableModel::create(RED_CUP_TEXTURE, cupPos);
+void LevelModel::addCup(float cupPos[POS_COORDS], int x, int y) {
+    CrushableModel* cup = CrushableModel::create(RED_CUP_TEXTURE, x, y, cupPos);
     initPhysicalObstacle(cup);
     cup->setName(CUP_NAME);
     _crushables.push_back(cup);
@@ -598,6 +598,29 @@ void LevelModel::addAnonymousObstacle(cocos2d::Obstacle *obj, int zOrder) {
     addObstacle(obj, zOrder);
 }
 
+/** Returns true if there is a jello at the given location */
+JelloModel* hasJelloAt(std::vector<JelloModel*> jellos, int x, int y) {
+    for(auto it = jellos.begin(); it != jellos.end(); ++it) {
+        JelloModel* jello = *it;
+        if (jello->getTiledXCoord() == x && jello->getTiledYCoord() == y) return jello;
+    }
+    return nullptr;
+}
+
+/** Returns true if there is a cup at the given location */
+CrushableModel* hasCupAt(std::vector<CrushableModel*> cups, int x, int y) {
+    for(auto it = cups.begin(); it != cups.end(); ++it) {
+        CrushableModel* cup = *it;
+        if (cup->getTiledXCoord() == x && cup->getTiledYCoord() == y) return cup;
+    }
+    return nullptr;
+}
+
+/** Compares crushablemodels by their tiled y coordinates. For use in sorting in setRootNode */
+bool sortCupsByYCoord(CrushableModel* c1, CrushableModel* c2) {
+    return c1->getTiledYCoord() < c2->getTiledYCoord();
+}
+
 /**
  * Sets the scene graph node for drawing purposes.
  *
@@ -612,7 +635,8 @@ void LevelModel::addAnonymousObstacle(cocos2d::Obstacle *obj, int zOrder) {
  */
 void LevelModel::setRootNode(Node* node) {
     if (_rootnode != nullptr) {
-        clearRootNode();
+        //Shouldn't set root node of a level twice
+        CC_ASSERT(false);
     }
     
     SceneManager* assets =  AssetManager::getInstance()->getCurrent();
@@ -733,17 +757,33 @@ void LevelModel::setRootNode(Node* node) {
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }
     
+    //Sort cups so that lower cups come first
+    std::sort(_crushables.begin(), _crushables.end(), sortCupsByYCoord);
+    
     for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
         CrushableModel* cup = *it;
-        
         
         Texture2D* image = assets->get<Texture2D>(cup->getTextureName());
         cup->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);
         cup->setSceneNode(poly);
         initDebugProperties(cup);
-        
         addAnonymousObstacle(cup, CUP_Z_INDEX);
+        
+        //Check for moving down
+        if (! cup->isMovedDown()) {
+            int x = cup->getTiledXCoord();
+            int y = cup->getTiledYCoord()-1;
+            JelloModel* jello = hasJelloAt(_jellos, x, y);
+            if (jello != nullptr) {
+                cup->setMovedDown(true);
+            } else {
+                CrushableModel* cup2 = hasCupAt(_crushables, x, y);
+                if (cup2 != nullptr && cup2->isMovedDown()) {
+                    cup->setMovedDown(true);
+                }
+            }
+        }
     }
     
     for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {

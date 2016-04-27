@@ -50,6 +50,7 @@
 #pragma mark Physics Constants
 
 #define JELLO_SCALE			0.39
+#define JELLO_H_SHRINK      0.8
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
 #define JELLO_DOWN_SHIFT	0
@@ -94,9 +95,9 @@ JelloModel* JelloModel::create() {
  *
  * @return  An retained physics object
  */
-JelloModel* JelloModel::create(const Vec2& pos) {
+JelloModel* JelloModel::create(int xCoord, int yCoord, const Vec2& pos) {
     JelloModel* jello = new (std::nothrow) JelloModel();
-    if (jello && jello->init(pos)) {
+    if (jello && jello->init(xCoord, yCoord, pos)) {
         jello->retain();
         return jello;
     }
@@ -119,9 +120,9 @@ JelloModel* JelloModel::create(const Vec2& pos) {
  *
  * @return  An retained physics object
  */
-JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
+JelloModel* JelloModel::create(int xCoord, int yCoord, const Vec2& pos, const Vec2& scale) {
     JelloModel* jello = new (std::nothrow) JelloModel();
-    if (jello && jello->init(pos,scale)) {
+    if (jello && jello->init(xCoord, yCoord, pos,scale)) {
         jello->retain();
         return jello;
     }
@@ -148,10 +149,13 @@ JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool JelloModel::init(const Vec2& pos, const Vec2& scale) {
+bool JelloModel::init(int x, int y, const Vec2& pos, const Vec2& scale) {
     Vec2 pos2 = Vec2(pos.x, pos.y - JELLO_DOWN_SHIFT);
     if (BoxObstacle::init(pos2,Size(scale))) {
         
+        _tiledXCoord = x;
+        _tiledYCoord = y;
+
         // Gameplay attributes
         return true;
     }
@@ -234,7 +238,7 @@ void JelloModel::resetSceneNode() {
         pnode->setScale(cscale * JELLO_SCALE);
 		pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
+        setDimension(pnode->getContentSize().width * JELLO_SCALE * JELLO_H_SHRINK / _drawScale.x,
                      pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
 
 		_jelloRestcycleFrame = 0.0f;
