@@ -55,6 +55,10 @@ void loadObstacles(TextureLoader* tloader) {
 	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splatcycle4.png");
 }
 
+void loadHomeScreen(TextureLoader* tloader) {
+    tloader->loadAsync(HOME_SCREEN_BACKGROUND, "textures/home_screen.png");
+}
+
 void loadBackground(TextureLoader* tloader) {
     tloader->loadAsync(FRONT_BACKGROUND,  "textures/backgroundFull.png");
     tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
@@ -68,7 +72,6 @@ void loadPauseScreen(TextureLoader* tloader) {
 }
 
 void loadHUD(TextureLoader* tloader) {
-    // HUD
     tloader->loadAsync(TOP_BAR, "textures/HUD/topBar.png");
     tloader->loadAsync(TOP_BLENDER, "textures/HUD/blender.png");
     tloader->loadAsync(TOP_CHILD_BOW, "textures/HUD/top_bar_bow.png");
@@ -129,6 +132,7 @@ void LoadingScreenController::preload() {
     loadBackground(tloader);
     loadPauseScreen(tloader);
     loadHUD(tloader);
+    loadHomeScreen(tloader);
     loadLevelSelectScreen(tloader);
     loadSplashScreens(tloader);
     

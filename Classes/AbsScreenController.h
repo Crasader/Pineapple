@@ -21,7 +21,9 @@
 
 
 #include "ui/CocosGUI.h"
+#include <cornell.h>
 #include "Texture.h"
+#include "InputController.h"
 
 namespace cocos2d {
     class RootLayer;
@@ -33,6 +35,12 @@ using namespace cocos2d::ui;
 class AbsScreenController {
     
 protected:
+    /** The scene manager for this game demo */
+    SceneManager* _assets;
+    
+    /** Controller for abstracting out input away from layer */
+    InputController* _input;
+    
     /** Reference to the root node of the scene graph */
     Node* _rootnode;
     

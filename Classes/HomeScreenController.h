@@ -20,8 +20,8 @@ protected:
     /** The button that begins the game */
     Button* _playButton;
     
-    /** The background image displayed for the loading view */
-    Node* _loadingImage;
+    /** The background image displayed for the home screen */
+    Node* _backgroundNode;
     
 public:
     /**

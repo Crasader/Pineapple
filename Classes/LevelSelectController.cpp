@@ -33,10 +33,6 @@ const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEV
 #define LEVEL_SELECT_BUTTON_Z       2
 #define LEVEL_SELECT_TEXT_Z         3
 
-/** Button texture paths */
-#define LEVEL_SELECT_BUTTON_OFF_FILEPATH  "textures/buttons/level_button.png"
-#define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
-
 /** Graphics scaling constants for button layout */
 #define BUTTONS_PER_ROW_TOP         5
 #define BUTTONS_PER_ROW_MIDDLE      5
