@@ -246,9 +246,9 @@ public:
     
     void addKid(float kidPos[]);
     
-    void addJello(float jelloPos[]);
+    void addJello(float jelloPos[], int x, int y);
     
-    void addCup(float cupPos[]);
+    void addCup(float cupPos[], int x, int y);
     
     void addSpikes(float spikePos[]);
     

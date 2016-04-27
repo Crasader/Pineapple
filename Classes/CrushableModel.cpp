@@ -49,9 +49,9 @@
 *
 * @return  An retained physics object
 */
-CrushableModel* CrushableModel::create(const char* texture, const Vec2& pos) {
+CrushableModel* CrushableModel::create(const char* texture, int x, int y, const Vec2& pos) {
 	CrushableModel* crushable = new (std::nothrow) CrushableModel();
-	if (crushable && crushable->init(texture, pos)) {
+	if (crushable && crushable->init(texture, x, y, pos)) {
 		crushable->retain();
 		return crushable;
 	}
@@ -74,9 +74,9 @@ CrushableModel* CrushableModel::create(const char* texture, const Vec2& pos) {
 *
 * @return  An retain physics object
 */
-CrushableModel* CrushableModel::create(const char* texture, const Vec2& pos, const Vec2& scale) {
+CrushableModel* CrushableModel::create(const char* texture, int x, int y, const Vec2& pos, const Vec2& scale) {
 	CrushableModel* crushable = new (std::nothrow) CrushableModel();
-	if (crushable && crushable->init(texture, pos, scale)) {
+	if (crushable && crushable->init(texture, x, y, pos, scale)) {
 		crushable->retain();
 		return crushable;
 	}
@@ -102,9 +102,12 @@ CrushableModel* CrushableModel::create(const char* texture, const Vec2& pos, con
 *
 * @return  true if the obstacle is initialized properly, false otherwise.
 */
-bool CrushableModel::init(const char* texture, const Vec2& pos, const Vec2& scale) {
+bool CrushableModel::init(const char* texture, int x, int y, const Vec2& pos, const Vec2& scale) {
 	if (BoxObstacle::init(pos, Size(scale))) {
+        _movedDown = false;
         _textureName = texture;
+        _tiledYCoord = y;
+        _tiledXCoord = x;
 		setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
 		setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
 		return true;

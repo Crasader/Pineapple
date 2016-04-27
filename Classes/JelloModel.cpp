@@ -94,9 +94,9 @@ JelloModel* JelloModel::create() {
  *
  * @return  An retained physics object
  */
-JelloModel* JelloModel::create(const Vec2& pos) {
+JelloModel* JelloModel::create(int xCoord, int yCoord, const Vec2& pos) {
     JelloModel* jello = new (std::nothrow) JelloModel();
-    if (jello && jello->init(pos)) {
+    if (jello && jello->init(xCoord, yCoord, pos)) {
         jello->retain();
         return jello;
     }
@@ -119,9 +119,9 @@ JelloModel* JelloModel::create(const Vec2& pos) {
  *
  * @return  An retained physics object
  */
-JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
+JelloModel* JelloModel::create(int xCoord, int yCoord, const Vec2& pos, const Vec2& scale) {
     JelloModel* jello = new (std::nothrow) JelloModel();
-    if (jello && jello->init(pos,scale)) {
+    if (jello && jello->init(xCoord, yCoord, pos,scale)) {
         jello->retain();
         return jello;
     }
@@ -148,10 +148,13 @@ JelloModel* JelloModel::create(const Vec2& pos, const Vec2& scale) {
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool JelloModel::init(const Vec2& pos, const Vec2& scale) {
+bool JelloModel::init(int x, int y, const Vec2& pos, const Vec2& scale) {
     Vec2 pos2 = Vec2(pos.x, pos.y - JELLO_DOWN_SHIFT);
     if (BoxObstacle::init(pos2,Size(scale))) {
         
+        _tiledXCoord = x;
+        _tiledYCoord = y;
+
         // Gameplay attributes
         return true;
     }
