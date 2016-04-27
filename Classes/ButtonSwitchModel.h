@@ -53,7 +53,7 @@ public:
     /**
      *	returns collision class
      */
-    int getCollisionClass() { return BUTTON_SWITCH_C; };
+    int getCollisionClass() override { return BUTTON_SWITCH_C; };
     
 #pragma mark Static Constructors
     

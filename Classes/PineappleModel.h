@@ -104,7 +104,9 @@ public:
 	/**
 	*	returns collision class
 	*/
-	int getCollisionClass() { return PINEAPPLE_C; };
+	int getCollisionClass() override { return PINEAPPLE_C; };
+    const b2Fixture* const getCore() { return _core; }
+    
 
 #pragma mark Static Constructors
 	/**
