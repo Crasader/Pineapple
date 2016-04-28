@@ -144,12 +144,15 @@ void WallModel::resetSceneNode() {
             _leftNode->setScale(getSize().height * _drawScale.y /_leftNode->getContentSize().height);
             _leftNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) -
                                    Vec2(getSize().width * _drawScale.x/2 - _leftNode->getContentSize().width * _leftNode->getScale()/2, 0));
+        
         }
         
         if (_rightNode != nullptr) {
             _rightNode->setScale(getSize().height * _drawScale.y /_rightNode->getContentSize().height);
             _rightNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) +
-                                   Vec2(getSize().width * _drawScale.x/2 - _rightNode->getContentSize().width * _rightNode->getScale()/2, 0));
+                                        Vec2(getSize().width * _drawScale.x/2 - _rightNode->getContentSize().width * _rightNode->getScale()/2, 0));
+                
+
         }
     }
 }
