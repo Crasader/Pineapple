@@ -49,8 +49,8 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SCALE			0.39
-#define JELLO_H_SHRINK      0.8
+#define JELLO_SCALE			0.59f //0.39
+#define JELLO_H_SHRINK      0.8f
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
 #define JELLO_DOWN_SHIFT	0
@@ -157,6 +157,8 @@ bool JelloModel::init(int x, int y, const Vec2& pos, const Vec2& scale) {
         _tiledYCoord = y;
 
         // Gameplay attributes
+		_bouncing = false;
+		_tmp = false;
         return true;
     }
     return false;
@@ -203,12 +205,30 @@ void JelloModel::update(float dt) {
 }
 
 /**
-* Animate the resting Jello
-*/
+ * Animate the jello
+ */
 void JelloModel::animate() {
-	_jelloRestcycleFrame += 0.25f;
-	int tmp = (int)rint(_jelloRestcycleFrame);
-	_jelloRestcycle->setFrame(tmp % JELLO_FRAME_COUNT);
+	if (!_bouncing) {
+		_jelloRestcycleFrame += 0.25f;
+		int tmp = (int)rint(_jelloRestcycleFrame);
+		_jelloRestcycle->setFrame(tmp % 16);
+	}
+	else {
+		if (!_tmp) {
+			_jelloRestcycleFrame = -0.25f;
+			_tmp = true;
+		}
+		_jelloRestcycleFrame += 0.25f;
+		int tmp = (int)rint(_jelloRestcycleFrame);
+		if (tmp > 14) {
+			_jelloRestcycleFrame = 0.0f;
+			_bouncing = false;
+			_tmp = false;
+		}
+		else {
+			_jelloRestcycle->setFrame((tmp % 16) + 16);
+		}
+	}
 }
 
 
