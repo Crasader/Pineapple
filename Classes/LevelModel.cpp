@@ -819,7 +819,6 @@ void LevelModel::showDebug(bool flag) {
 void LevelModel::kill(PineappleModel* will) {
 	removeObstacle(will);
   clearPineapple();
-	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, false);
   setFailure(true); 
 }
 

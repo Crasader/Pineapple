@@ -29,6 +29,18 @@ void CollisionController::setLevel(LevelModel* level) {
 }
 
 #pragma mark -
+#pragma mark Collision Sound Playing
+
+void playSoundEffect(char* key, float volume) {
+	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
+	SoundEngine::getInstance()->playEffect(key, source, false, volume);
+}
+
+void playSoundEffect(char* key) {
+	playSoundEffect(key, EFFECT_VOLUME);
+}
+
+#pragma mark -
 #pragma mark Collision Handling
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
@@ -51,8 +63,7 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 			body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
 			will->setJumping(true);
 			will->setGrounded(false);
-			Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(JELLO_BOING);
-			SoundEngine::getInstance()->playEffect(JELLO_BOING, source, false, EFFECT_VOLUME);
+			playSoundEffect(JELLO_BOING);
 		}
 	}
 }
@@ -68,26 +79,43 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 		kid->setVY(10);
 		kid->setVX(KID_WALKSPEED + 4);
 		kid->setCollidingWithJello(true);
-		Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(JELLO_BOING);
-		SoundEngine::getInstance()->playEffect(JELLO_BOING, source, false, EFFECT_VOLUME);
+		playSoundEffect(JELLO_BOING);
 	}
 }
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
+	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(WILL_DEATH_SOUND);
+	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, source, false, EFFECT_VOLUME);
 	will->setIsBlended(true);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
+	char* key;
+	int i = kid->getIndex();
+	switch (i) {
+		case 0: key = PINEAPPLET1_DEATH_SOUND;
+			break;
+		case 1: key = PINEAPPLET2_DEATH_SOUND;
+			break;
+		case 2: key = PINEAPPLET3_DEATH_SOUND;
+			break;
+		case 3: key = PINEAPPLET4_DEATH_SOUND;
+			break;
+		default: key = "we gon crash if this happens, but it won't so it's chill.";
+	}
+	playSoundEffect(key);
 	kid->setIsBlended(true);
 }
 
 void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
 	_level->kill(will);
+	playSoundEffect(SPLAT_SOUND);
 	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
 	_level->kill(kid);
+	playSoundEffect(SPLAT_SOUND);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
@@ -172,6 +200,7 @@ void CollisionController::beginContact(b2Contact* contact) {
             if (!will->isSmall() && will->getVY() < MAX_V_TO_CRUSH) {
                 // set v to 0 because sometimes the sensor touches too early for the physics
                 // engine to do it
+								playSoundEffect(CUP_CRUSH_SOUND);
                 will->setVY(4);
                 _level->removeObstacle(bd1->getCollisionClass() == CUP_C ? bd1 : bd2);
             }
