@@ -514,6 +514,18 @@ void GameController::update(float dt) {
             JelloModel* jello = *it;
             jello->animate();
         }
+
+		// Animate cups if they're being smashed and remove them when they're done
+		std::vector<CrushableModel*> cups = _level->getCups();
+		for (auto it = cups.begin(); it != cups.end(); ++it) {
+			CrushableModel* cup = *it;
+			
+			cup->animate();
+			if (cup->getSmashed()) {
+				_level->removeObstacle(cup);
+				//cups.erase(it);
+			}
+		}
         
         // Animate the blender
         _level->getBlender()->animate();

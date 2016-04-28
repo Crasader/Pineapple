@@ -7,9 +7,9 @@
 #pragma mark -
 #pragma mark Physics Constants
 	/** The amount to shrink the body fixture (vertically) relative to the image */
-#define CRUSHABLE_VSHRINK  1.0f
+#define CRUSHABLE_VSHRINK  1.5f
 	/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define CRUSHABLE_HSHRINK  1.0f
+#define CRUSHABLE_HSHRINK  1.5f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -107,6 +107,9 @@ bool CrushableModel::init(const char* texture, const Vec2& pos, const Vec2& scal
         _textureName = texture;
 		setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
 		setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+		_smashCycleFrame = 0.0f;
+		_smashing = false;
+		_smashed = false;
 		return true;
 	}
 	return false;
@@ -152,6 +155,22 @@ void CrushableModel::update(float dt) {
 	BoxObstacle::update(dt);
 }
 
+/**
+* Animate the cup  if it's being smashed
+*/
+void CrushableModel::animate() {
+	if (_smashing) {
+		_smashCycleFrame += 0.5f;
+		int tmp = (int)rint(_smashCycleFrame);
+		if (tmp < CUP_SMASH_FRAMES) {
+			_smashCycle->setFrame(tmp);
+		}
+		else {
+			_smashed = true;
+		}
+	}
+}
+
 
 #pragma mark -
 #pragma mark Scene Graph Methods
@@ -163,7 +182,7 @@ void CrushableModel::update(float dt) {
  * manage our own afterburner animations.
  */
 void CrushableModel::resetSceneNode() {
-    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
@@ -178,8 +197,11 @@ void CrushableModel::resetSceneNode() {
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * CRUSHABLE_SCALE);
         
-        setDimension(pnode->getContentSize().width * pnode->getScale() / _drawScale.x,
-                     pnode->getContentSize().height * pnode->getScale() / _drawScale.y);
+        setDimension(pnode->getContentSize().width * 0.5f * pnode->getScale() / _drawScale.x,
+                     pnode->getContentSize().height * 0.5f * pnode->getScale() / _drawScale.y);
+
+		_smashCycleFrame = 0.0f;
+		_smashCycle = pnode;
     }
 }
 

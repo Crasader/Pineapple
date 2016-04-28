@@ -2,7 +2,7 @@
 #define __CRUSHABLE_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
-//#include "CollisionObjectModel.h"
+#include <cornell/CUAnimationNode.h>
 #include "Const.h"
 
 using namespace cocos2d;
@@ -10,7 +10,8 @@ using namespace cocos2d;
 #pragma mark -
 #pragma mark Physics Constants
 /** The Crushable specific scaling */
-#define CRUSHABLE_SCALE      0.5f
+#define CRUSHABLE_SCALE     0.75f
+#define CUP_SMASH_FRAMES	6
 
 #pragma mark -
 #pragma mark Drawing Constants
@@ -49,6 +50,14 @@ protected:
     
     /** The name of this texture that will be attached to the crushableObject */
     const char* _textureName;
+	/** Whether the cup smashing animation is happening */
+	bool _smashing;
+	/** Whether the cup has been smashed */
+	bool _smashed;
+	/** Filmstrip for smashing animation */
+	AnimationNode* _smashCycle;
+	/** Frame counter for smashing animation */
+	float _smashCycleFrame;
 
 public:
 	/**
@@ -142,6 +151,17 @@ public:
 	*/
 	void applyForce();
 
+	/** 
+	* Returns true if the cup has been smashed
+	*/
+	bool getSmashed() { return _smashed; }
+
+	/**
+	* Sets whether the cup smashing animation is happening
+	*/
+	void setSmashing(bool smash) { _smashing = smash; }
+
+
 #pragma mark Drawing Methods
     /**
      * Performs any necessary additions to the scene graph node.
@@ -151,6 +171,11 @@ public:
      * manage our own afterburner animations.
      */
     virtual void resetSceneNode() override;
+
+	/**
+	 * Animate the cup smashing and set _smashed to true if animation is done
+	 */
+	void animate();
     
 
 CC_CONSTRUCTOR_ACCESS:

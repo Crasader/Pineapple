@@ -721,7 +721,6 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
         SpikeModel* spike = *it;
         
-        
         Texture2D* image = assets->get<Texture2D>(SPIKE_TEXTURE);
         spike->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);
@@ -736,10 +735,9 @@ void LevelModel::setRootNode(Node* node) {
     for(auto it = _crushables.begin(); it != _crushables.end(); ++it) {
         CrushableModel* cup = *it;
         
-        
         Texture2D* image = assets->get<Texture2D>(cup->getTextureName());
         cup->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        poly = AnimationNode::create(image, 1, CUP_SMASH_FRAMES, CUP_SMASH_FRAMES);
         cup->setSceneNode(poly);
         initDebugProperties(cup);
         

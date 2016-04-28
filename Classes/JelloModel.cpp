@@ -49,7 +49,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SCALE			0.39
+#define JELLO_SCALE			0.52
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
 #define JELLO_DOWN_SHIFT	0
@@ -153,6 +153,8 @@ bool JelloModel::init(const Vec2& pos, const Vec2& scale) {
     if (BoxObstacle::init(pos2,Size(scale))) {
         
         // Gameplay attributes
+		_bouncing = false;
+		_tmp = false;
         return true;
     }
     return false;
@@ -199,12 +201,30 @@ void JelloModel::update(float dt) {
 }
 
 /**
-* Animate the resting Jello
-*/
+ * Animate the jello
+ */
 void JelloModel::animate() {
-	_jelloRestcycleFrame += 0.25f;
-	int tmp = (int)rint(_jelloRestcycleFrame);
-	_jelloRestcycle->setFrame(tmp % JELLO_FRAME_COUNT);
+	if (!_bouncing) {
+		_jelloRestcycleFrame += 0.25f;
+		int tmp = (int)rint(_jelloRestcycleFrame);
+		_jelloRestcycle->setFrame(tmp % 16);
+	}
+	else {
+		if (!_tmp) {
+			_jelloRestcycleFrame = -0.25f;
+			_tmp = true;
+		}
+		_jelloRestcycleFrame += 0.25f;
+		int tmp = (int)rint(_jelloRestcycleFrame);
+		if (tmp > 14) {
+			_jelloRestcycleFrame = 0.0f;
+			_bouncing = false;
+			_tmp = false;
+		}
+		else {
+			_jelloRestcycle->setFrame((tmp % 16) + 16);
+		}
+	}
 }
 
 
@@ -234,8 +254,8 @@ void JelloModel::resetSceneNode() {
         pnode->setScale(cscale * JELLO_SCALE);
 		pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * JELLO_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
+        setDimension(pnode->getContentSize().width * 0.45f / _drawScale.x,
+                     pnode->getContentSize().height * 0.45f / _drawScale.y);
 
 		_jelloRestcycleFrame = 0.0f;
 		_jelloRestcycle = pnode;

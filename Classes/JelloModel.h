@@ -67,7 +67,7 @@ using namespace cocos2d;
 #define JELLO_HORIZONTAL_FORCE 5.0f
 
 /** Number of frames in the rest animation */
-#define JELLO_FRAME_COUNT	16
+#define JELLO_FRAME_COUNT	31
 
 
 #pragma mark -
@@ -98,6 +98,9 @@ protected:
 	AnimationNode* _jelloRestcycle;
 	/** Frame counter for restcycle animation */
 	float _jelloRestcycleFrame;
+	/** Whether something is bouncing on the jello */
+	bool _bouncing;
+	bool _tmp;
 
 public:
 	/**
@@ -201,6 +204,16 @@ public:
 	* Animate the resting Jello
 	*/
 	void animate();
+
+	/** 
+	* Returns true if something is bouncing on the jello
+	*/
+	bool getBouncing() { return _bouncing; }
+
+	/**
+	* Sets whether something is bouncing on the jello
+	*/
+	void setBouncing(bool bounce) { _bouncing = bounce; }
 
     
 CC_CONSTRUCTOR_ACCESS:

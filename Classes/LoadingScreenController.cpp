@@ -19,12 +19,12 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
     tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
     
-    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
+    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_full.png");
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives2.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
     tloader->loadAsync(GOAL_TEXTURE,      "textures/fridge.png");
-    tloader->loadAsync(RED_CUP_TEXTURE,   "textures/redcup.png");
+    tloader->loadAsync(RED_CUP_TEXTURE,   "textures/cup_smash.png");
     tloader->loadAsync(BLUE_CUP_TEXTURE,  "textures/bluecup.png");
     tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
     tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
@@ -57,7 +57,7 @@ void loadObstacles(TextureLoader* tloader) {
 
 void loadBackground(TextureLoader* tloader) {
     tloader->loadAsync(FRONT_BACKGROUND,  "textures/backgroundFull.png");
-    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
+    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills2.png");
     tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
 }
