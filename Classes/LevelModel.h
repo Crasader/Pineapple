@@ -34,7 +34,7 @@
 #define GOAL_Z_INDEX                29
  
 #define WALL_Z_INDEX                10
-#define MOVEABLE_PLATFORM_Z_INDEX   11
+#define MOVEABLE_PLATFORM_Z_INDEX   12
 
 #define JELLO_Z_INDEX               20
 #define CUP_Z_INDEX                 21

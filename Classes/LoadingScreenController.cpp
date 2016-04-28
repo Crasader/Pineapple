@@ -17,7 +17,9 @@ void loadCharacters(TextureLoader* tloader) {
 void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
-    tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
+    tloader->loadAsync(PLATFORM_CENTER_TEXTURE,  "textures/platform-center.png");
+    tloader->loadAsync(PLATFORM_EDGE_RIGHT_TEXTURE,  "textures/platform-right.png");
+    tloader->loadAsync(PLATFORM_EDGE_LEFT_TEXTURE,  "textures/platform-left.png");
     
     tloader->loadAsync(JELLO_TEXTURE, "textures/jello_full.png");
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives2.png");
@@ -114,10 +116,10 @@ void loadSounds(SceneManager* assets) {
 }
 
 void loadLevels(SceneManager* assets) {
-    assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
+    //assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
     assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_THREE_KEY, LEVEL_THREE_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_FOUR_KEY, LEVEL_FOUR_FILE);
+    //assets->loadAsync<LevelModel>(LEVEL_THREE_KEY, LEVEL_THREE_FILE);
+    //assets->loadAsync<LevelModel>(LEVEL_FOUR_KEY, LEVEL_FOUR_FILE);
 }
 
 
