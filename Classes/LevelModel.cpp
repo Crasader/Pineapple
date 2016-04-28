@@ -365,6 +365,9 @@ void LevelModel::unload() {
                 
                 if ((*it)->isFloor()) {
                     _worldnode->removeChild((*it)->getTopNode());
+                } else {
+                    _worldnode->removeChild((*it)->getLeftNode());
+                    _worldnode->removeChild((*it)->getRightNode());
                 }
             }
             (*it)->release();
@@ -673,14 +676,25 @@ void LevelModel::setRootNode(Node* node) {
         if (wall->isFloor()) {
             Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
             wall->setTopNode(PolygonNode::createWithTexture(topImage));
+        } else {
+            Texture2D* edgeImage = assets->get<Texture2D>(PLATFORM_EDGE_TEXTURE);
+            PolygonNode* left = PolygonNode::createWithTexture(edgeImage);
+            PolygonNode* right =PolygonNode::createWithTexture(edgeImage);
+            
+            wall->setLeftNode(left);
+            wall->setRightNode(right);
         }
         
         wall->setSceneNode(poly);
         initDebugProperties(wall);
         
         addObstacle(wall, WALL_Z_INDEX);
+        
         if (wall->isFloor()) {
             _worldnode->addChild(wall->getTopNode(),WALL_Z_INDEX + 1);
+        } else {
+            _worldnode->addChild(wall->getRightNode(), WALL_Z_INDEX+1);
+            _worldnode->addChild(wall->getLeftNode(), WALL_Z_INDEX+1);
         }
     }
     

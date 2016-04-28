@@ -103,7 +103,15 @@ WallModel* WallModel::create(const Poly2& poly, const Vec2& anchor) {
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool WallModel::init(const Poly2& poly, const Vec2& anchor) {
-    return PolygonObstacle::init(poly,anchor);
+    if (PolygonObstacle::init(poly,anchor)) {
+        _topNode = nullptr;
+        _leftNode = nullptr;
+        _rightNode = nullptr;
+        
+        return true;
+    }
+    
+    return false;
 }
 
 
@@ -130,6 +138,14 @@ void WallModel::resetSceneNode() {
                           pnode->getPositionY() + (pnode->getContentSize().height-_topNode->getContentSize().height)/2);
             _topNode->setPosition(p);
             _topNode->setScaleX(pnode->getContentSize().width/_topNode->getContentSize().width);
+        }
+        
+        if (_leftNode != nullptr) {
+            _leftNode->setPosition(getPosition());
+        }
+        
+        if (_rightNode != nullptr) {
+            _rightNode->setPosition(getPosition() + Vec2(pnode->getContentSize().width - _rightNode->getContentSize().width, 0));
         }
     }
 }
