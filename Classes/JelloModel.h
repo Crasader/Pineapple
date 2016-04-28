@@ -98,15 +98,29 @@ protected:
 	AnimationNode* _jelloRestcycle;
 	/** Frame counter for restcycle animation */
 	float _jelloRestcycleFrame;
+
 	/** Whether something is bouncing on the jello */
 	bool _bouncing;
 	bool _tmp;
+    
+    /** Jello x coordinate in tiled level */
+    int _tiledXCoord;
+    /** Jello y coordinate in tiled level */
+    int _tiledYCoord;
+
 
 public:
 	/**
 	*	returns collision class
 	*/
 	int getCollisionClass() { return JELLO_C; };
+    
+    /** Returns the x coordinate for this crushable in the tiled level */
+    int getTiledXCoord() { return _tiledXCoord; }
+    
+    /** Returns the y coordinate for this crushable in the tiled level */
+    int getTiledYCoord() { return _tiledYCoord; }
+    
 #pragma mark Static Constructors
     /**
      * Creates a new jello at the origin.
@@ -136,7 +150,7 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static JelloModel* create(const Vec2& pos);
+    static JelloModel* create(int xCoord, int yCoord, const Vec2& pos);
     
     /**
      * Creates a new jello at the given position.
@@ -153,7 +167,7 @@ public:
      *
      * @return  An autoreleased physics object
      */
-    static JelloModel* create(const Vec2& pos, const Vec2& scale);
+    static JelloModel* create(int xCoord, int yCoord, const Vec2& pos, const Vec2& scale);
     
 #pragma mark Drawing Methods
     /**
@@ -240,7 +254,7 @@ CC_CONSTRUCTOR_ACCESS:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init() override { return init(Vec2::ZERO, Vec2::ONE); }
+    virtual bool init() override { return init(0, 0, Vec2::ZERO, Vec2::ONE); }
     
     /**
      * Initializes a new jello at the given position.
@@ -256,7 +270,7 @@ CC_CONSTRUCTOR_ACCESS:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos) override { return init(pos, Vec2::ONE); }
+    virtual bool init(int x, int y, const Vec2& pos) { return init(x, y, pos, Vec2::ONE); }
     
     /**
      * Initializes a new jello at the given position.
@@ -273,7 +287,7 @@ CC_CONSTRUCTOR_ACCESS:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos, const Vec2& scale);
+    virtual bool init(int x, int y, const Vec2& pos, const Vec2& scale);
 };
 
 #endif /* __PF_JELLO_MODEL_H__ */

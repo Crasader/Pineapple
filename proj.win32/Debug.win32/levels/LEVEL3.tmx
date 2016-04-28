@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="77" height="12" tilewidth="64" tileheight="64" nextobjectid="128">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="77" height="12" tilewidth="64" tileheight="64" nextobjectid="129">
  <properties>
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
@@ -36,6 +36,7 @@
  </objectgroup>
  <objectgroup name="Cups">
   <object id="119" gid="21" x="1216" y="576" width="64" height="64"/>
+  <object id="128" gid="21" x="1216" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Switches">
   <object id="111" gid="41" x="3648" y="448" width="64" height="64">

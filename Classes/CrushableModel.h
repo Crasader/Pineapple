@@ -58,13 +58,44 @@ protected:
 	AnimationNode* _smashCycle;
 	/** Frame counter for smashing animation */
 	float _smashCycleFrame;
+	
+    /** The x coordinate for this crushable in the tiled level */
+    int _tiledXCoord;
+    /** The y coordinate for this crushable in the tiled level */
+    int _tiledYCoord;    
+    /** True iff this has had its position moved down because it is in a stack that should be moved down */
+    bool _movedDown;
+
 
 public:
 	/**
 	*	returns collision class
 	*/
 	int getCollisionClass() { return CUP_C; };
-
+    
+    /** Returns the x coordinate for this crushable in the tiled level */
+    int getTiledXCoord() { return _tiledXCoord; }
+    
+    /** Returns the y coordinate for this crushable in the tiled level */
+    int getTiledYCoord() { return _tiledYCoord; }
+    
+    /** True iff this has had its position moved down because it is in a stack that should be moved down */
+    bool isMovedDown() { return _movedDown; }
+    
+    /** Sets moved down to m,
+     * True iff this has had its position moved down because it is in a stack that should be moved down */
+    void setMovedDown(bool m) {
+        if (_movedDown == m) return;
+        
+        _movedDown = m;
+        
+        if (_movedDown) {
+            setPosition(getPosition() - Vec2(0, getHeight()/2));
+        } else {
+            setPosition(getPosition() + Vec2(0, getHeight()/2));
+        }
+    }
+    
     /** Return the name of the texture that should be used for this */
     const char* getTextureName() { return _textureName; }
     
@@ -97,7 +128,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static CrushableModel* create(const char* texture, const Vec2& pos);
+	static CrushableModel* create(const char* texture, int x, int y, const Vec2& pos);
 
 	/**
 	* Creates a new crushable at the given position.
@@ -114,7 +145,7 @@ public:
 	*
 	* @return  An autoreleased physics object
 	*/
-	static CrushableModel* create(const char* texture, const Vec2& pos, const Vec2& scale);
+	static CrushableModel* create(const char* texture, int x, int y, const Vec2& pos, const Vec2& scale);
 
 #pragma mark Physics Methods
 	/**
@@ -200,7 +231,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init(const char* texture) { return init(texture, Vec2::ZERO, Vec2::ONE); }
+	virtual bool init(const char* texture) { return init(texture, 0, 0, Vec2::ZERO, Vec2::ONE); }
 
 	/**
 	* Initializes a new crushable at the given position.
@@ -216,7 +247,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init(const char* texture, const Vec2& pos) { return init(texture, pos, Vec2::ONE); }
+	virtual bool init(const char* texture, int x, int y, const Vec2& pos) { return init(texture, x, y, pos, Vec2::ONE); }
 
 	/**
 	* Initializes a new crushable at the given position.
@@ -233,7 +264,7 @@ CC_CONSTRUCTOR_ACCESS:
 	*
 	* @return  true if the obstacle is initialized properly, false otherwise.
 	*/
-	virtual bool init(const char* texture, const Vec2& pos, const Vec2& scale);
+	virtual bool init(const char* texture, int x, int y, const Vec2& pos, const Vec2& scale);
 };
 
 #endif /* __PF_JELLO_MODEL_H__ */
