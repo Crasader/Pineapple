@@ -104,9 +104,36 @@ WallModel* WallModel::create(const Poly2& poly, const Vec2& anchor) {
  */
 bool WallModel::init(const Poly2& poly, const Vec2& anchor) {
     if (PolygonObstacle::init(poly,anchor)) {
+        
+        //Find the two top points
+        int i = 0;
+        float yMin = INT_MAX;
+        
+        for(auto it = poly.getVertices().begin(); it != poly.getVertices().end(); ++it) {
+            Vec2 v = (Vec2) *it;
+            yMin = min(yMin, v.y);
+        }
+        
+        for(auto it = poly.getVertices().begin(); it != poly.getVertices().end(); ++it) {
+            Vec2 v = (Vec2) *it;
+
+            if (v.y != yMin) {
+                _topPoints[i] = v;
+                i++;
+            }
+        }
+        
+        //Check if need right left flip
+        if (_topPoints[0].x > _topPoints[1].x) {
+            Vec2 v = _topPoints[0];
+            _topPoints[0] = _topPoints[1];
+            _topPoints[1] = v;
+        }
+                
         _topNode = nullptr;
         _leftNode = nullptr;
         _rightNode = nullptr;
+        
         
         return true;
     }
@@ -134,10 +161,23 @@ void WallModel::resetSceneNode() {
         // completely redo the level layout.  We can help if this is an issue.
         
         if( _topNode != nullptr) {
+            float yMin = min(_topPoints[0].y, _topPoints[1].y);
+            float y = fabs(_topPoints[0].y - _topPoints[1].y);
+            float x =fabs(_topPoints[0].x - _topPoints[1].x);
+            
             Vec2 p = Vec2(pnode->getPositionX(),
-                          pnode->getPositionY() + (pnode->getContentSize().height-_topNode->getContentSize().height)/2);
+                          pnode->getPositionY() + (yMin * _drawScale.y -_topNode->getContentSize().height)/2);
+            
             _topNode->setPosition(p);
-            _topNode->setScaleX(pnode->getContentSize().width/_topNode->getContentSize().width);
+            
+            float angle = atan((y*_drawScale.y)/(x*_drawScale.x)) * 180.0f / M_PI;
+            
+            if (_topPoints[0].y < _topPoints[1].y) {
+                angle = -angle;
+            }
+            
+            _topNode->setScaleX(sqrt(x*x + y*y) * _drawScale.x /_topNode->getContentSize().width);
+            _topNode->setRotation(angle);
         }
         
         if (_leftNode != nullptr) {

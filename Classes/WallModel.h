@@ -66,6 +66,9 @@ protected:
      *  only used in platforms*/
     PolygonNode* _leftNode;
     
+    /** The two points that make up the top left and top right corners of the wall */
+    Vec2 _topPoints[2];
+    
 #pragma mark -
 #pragma mark Static Constructors
 public:
