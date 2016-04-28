@@ -305,6 +305,7 @@ void GameController::setComplete(bool value) {
         _winview->position();
         _winViewVisible = true;
         HUDController::setEnabled(false);
+        cout << "WINNING\n";
     } else {
         if (_winViewVisible) {
             _rootnode->removeChild(_winroot);

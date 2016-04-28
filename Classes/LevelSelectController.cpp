@@ -24,6 +24,7 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
+#include "storage/local-storage/LocalStorage.h"
 
 const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE, LEVEL_FOUR_FILE};
 const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY, LEVEL_FOUR_KEY};
@@ -184,8 +185,11 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     _rootnode->addChild(_backgroundNode, LEVEL_SELECT_BACKGROUND_Z);
     
     
+    //Get the number of levels completed
+    int* levelsCompleted;
+    localStorageGetItem(LEVELS_COMPLETED_KEY, (string*)levelsCompleted);
     //Lay out the buttons
-    for(int i = 0; i < NUM_LEVELS; i++) {
+    for(int i = 0; i < NUM_LEVELS && i <= *levelsCompleted; i++) {
         _buttons[i] = initButton(dimen, i);
         _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
     }

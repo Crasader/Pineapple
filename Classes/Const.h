@@ -99,6 +99,11 @@
 /** The key for the level select background music */
 #define LEVEL_SELECT_BACKGROUND_SOUND "level_select_background_music"
 
+/** The full path to saved values */
+#define LOCAL_STORAGE_PATH      "Resources/.savedState.txt"
+/** The key for saved state int */
+#define LEVELS_COMPLETED_KEY    "levels_completed"
+
 /** The volume for the music */
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */
