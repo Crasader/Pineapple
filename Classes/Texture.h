@@ -16,7 +16,9 @@
 /** The key for the platform texture in the asset manager */
 #define PLATFORM_CENTER_TEXTURE "platform"
 /** the key for the platform edge texture in the asset manager */
-#define PLATFORM_EDGE_TEXTURE   "platform_edge"
+#define PLATFORM_EDGE_LEFT_TEXTURE   "platform_edge_left"
+/** the key for the platform edge texture in the asset manager */
+#define PLATFORM_EDGE_RIGHT_TEXTURE   "platform_edge_right"
 /** The key for the win door texture in the asset manager */
 #define GOAL_TEXTURE     "goal"
 /** The key for the font for victory/failure messages in the asset manager */

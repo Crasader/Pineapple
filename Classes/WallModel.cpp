@@ -141,11 +141,15 @@ void WallModel::resetSceneNode() {
         }
         
         if (_leftNode != nullptr) {
-            _leftNode->setPosition(getPosition());
+            _leftNode->setScale(pnode->getContentSize().height/_leftNode->getContentSize().height);
+            _leftNode->setPosition(pnode->getPosition() -
+                                   Vec2(pnode->getContentSize().width/2 - _leftNode->getContentSize().width * _leftNode->getScale()/2, 0));
         }
         
         if (_rightNode != nullptr) {
-            _rightNode->setPosition(getPosition() + Vec2(pnode->getContentSize().width - _rightNode->getContentSize().width, 0));
+            _rightNode->setScale(pnode->getContentSize().height/_rightNode->getContentSize().height);
+            _rightNode->setPosition(pnode->getPosition() +
+                                    Vec2(pnode->getContentSize().width/2 - _rightNode->getContentSize().width*_rightNode->getScale()/2, 0));
         }
     }
 }

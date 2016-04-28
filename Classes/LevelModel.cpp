@@ -677,15 +677,15 @@ void LevelModel::setRootNode(Node* node) {
             Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
             wall->setTopNode(PolygonNode::createWithTexture(topImage));
         } else {
-            Texture2D* edgeImage = assets->get<Texture2D>(PLATFORM_EDGE_TEXTURE);
-            PolygonNode* left = PolygonNode::createWithTexture(edgeImage);
-            PolygonNode* right =PolygonNode::createWithTexture(edgeImage);
+            PolygonNode* left = PolygonNode::createWithTexture(assets->get<Texture2D>(PLATFORM_EDGE_LEFT_TEXTURE));
+            PolygonNode* right =PolygonNode::createWithTexture(assets->get<Texture2D>(PLATFORM_EDGE_RIGHT_TEXTURE));
             
             wall->setLeftNode(left);
             wall->setRightNode(right);
         }
         
         wall->setSceneNode(poly);
+        
         initDebugProperties(wall);
         
         addObstacle(wall, WALL_Z_INDEX);
