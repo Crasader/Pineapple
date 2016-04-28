@@ -669,14 +669,16 @@ void LevelModel::setRootNode(Node* node) {
         WallModel* wall = *it;
         
         Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
-        image->setTexParameters(params);
         wall->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
         
         if (wall->isFloor()) {
+            image->setTexParameters(params);
+            poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
             Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
             wall->setTopNode(PolygonNode::createWithTexture(topImage));
         } else {
+            poly = PolygonNode::createWithTexture(image);
+            poly->setScale(wall->getSize().width*_scale.x/poly->getContentSize().width, wall->getSize().height*_scale.y/poly->getContentSize().height);
             PolygonNode* left = PolygonNode::createWithTexture(assets->get<Texture2D>(PLATFORM_EDGE_LEFT_TEXTURE));
             PolygonNode* right =PolygonNode::createWithTexture(assets->get<Texture2D>(PLATFORM_EDGE_RIGHT_TEXTURE));
             
