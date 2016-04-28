@@ -442,8 +442,6 @@ void GameController::update(float dt) {
             return;
         } else if (_winview->shouldTransferToNextLevel()) {
             _winview->resetButtons();
-            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
-            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
             setTransitionStatus(TRANSITION_TO_NEXT_LEVEL);
             return;
 
