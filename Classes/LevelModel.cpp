@@ -32,6 +32,9 @@
 #define TILE_HEIGHT_PROPERTY        "tileheight"
 #define OBJECT_PROPERTIES_PROPERTY  "properties"
 
+/** Walls */
+#define WALL_IS_POLY_PROPERTY       "polygon"
+
 /** All Object Properties */
 #define WIDTH_PROPERTY      "width"
 #define HEIGHT_PROPERTY     "height"
@@ -194,14 +197,28 @@ bool LevelModel::load() {
                 position[1] = y+0.5;
                 
                 if (layerName == WALL_OBJECT_GROUP) {
-                    position[0] = x;
-                    position[1] = y-h;
-                    position[2] = x;
-                    position[3] = y;
-                    position[4] = x+w;
-                    position[5] = y;
-                    position[6] = x+w;
-                    position[7] = y-h;
+                    if (reader.startArray(WALL_IS_POLY_PROPERTY)) {
+                        for (int kk = 0; kk < WALL_VERTS; kk += 2) {
+                            reader.startObject();
+                            float x2 = reader.getNumber(X_PROPERTY) / tileX + x;
+                            float y2 = -reader.getNumber(Y_PROPERTY) / tileY + y;
+                            position[kk] = x2;
+                            position[kk+1] = y2;
+                            reader.endObject();
+                            reader.advance();
+                        }
+                        reader.endArray();
+                    } else {
+                        reader.endArray();
+                        position[0] = x;
+                        position[1] = y-h;
+                        position[2] = x;
+                        position[3] = y;
+                        position[4] = x+w;
+                        position[5] = y;
+                        position[6] = x+w;
+                        position[7] = y-h;
+                    }
                     addWall(position);
                 } else if (layerName == GOAL_OBJECT_GROUP) {
                     addGoal(position);
