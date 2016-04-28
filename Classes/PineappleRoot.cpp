@@ -149,7 +149,19 @@ void PineappleRoot::transitionToHomeScreen() {
         _homeScreen->init(_homeRoot, &_inputController);
     }
     
-    //TODO - home sound
+    if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
+        if (_backgroundSound != nullptr) {
+            if (SoundEngine::getInstance()->getMusicState() == SoundEngine::SoundState::PLAYING) {
+                SoundEngine::getInstance()->stopMusic();
+            }
+        }
+        
+        _backgroundSoundKey = LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND;
+        _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
+        SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+    }
+
     
     _homeScreen->setTransitionStatus(TRANSITION_NONE);
     _gameplay->setTransitionStatus(TRANSITION_NONE);
@@ -180,14 +192,14 @@ void PineappleRoot::transitionToLevelSelect() {
         _levelSelect->init(_levelSelectRoot, &_inputController);
     }
     
-    if (_backgroundSoundKey != LEVEL_SELECT_BACKGROUND_SOUND) {
+    if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
         if (_backgroundSound != nullptr) {
             if (SoundEngine::getInstance()->getMusicState() == SoundEngine::SoundState::PLAYING) {
                 SoundEngine::getInstance()->stopMusic();
             }
         }
         
-        _backgroundSoundKey = LEVEL_SELECT_BACKGROUND_SOUND;
+        _backgroundSoundKey = LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND;
         _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
         SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);

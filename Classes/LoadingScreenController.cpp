@@ -110,7 +110,7 @@ void loadFonts(SceneManager* assets) {
 
 void loadSounds(SceneManager* assets) {
     assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
-    assets->loadAsync<Sound>(LEVEL_SELECT_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
+    assets->loadAsync<Sound>(LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
 }
 
 void loadLevels(SceneManager* assets) {

@@ -97,7 +97,7 @@
 /** The key for the main background music */
 #define GAME_BACKGROUND_SOUND "game_background_music"
 /** The key for the level select background music */
-#define LEVEL_SELECT_BACKGROUND_SOUND "level_select_background_music"
+#define LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND "level_select_background_music"
 
 /** The volume for the music */
 #define MUSIC_VOLUME    0.7f
