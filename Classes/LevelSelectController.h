@@ -64,12 +64,6 @@ protected:
     /** The Box2D world */
     WorldController* _world;
     
-    /** The scene manager for this game demo */
-    SceneManager* _assets;
-    
-    /** Controller for abstracting out input away from layer */
-    InputController* _input;
-    
     /** True iff we should display the debug nodes of the physics bodies */
     bool _debug;
     

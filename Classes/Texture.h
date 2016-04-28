@@ -112,12 +112,29 @@
 /** The key for the loading screen background texture in the asset manager */
 #define LOADING_BACKGROUND      "loading_background"
 
+/** The key for the home screen background texture */
+#define HOME_SCREEN_BACKGROUND "home_sceen_background"
+/** The key for the play button on the home screen in its unpushed state */
+#define HOME_SCREEN_PLAY_BUTTON_OFF "home_screen_play_button_off"
+/** The key for the play button on the home screen in its unpushed state */
+#define HOME_SCREEN_PLAY_BUTTON_ON "home_screen_play_button_on"
+/** The filepath for the play button in its off state */
+#define HOME_SCREEN_PLAY_BUTTON_OFF_FILEPATH  "textures/play_button.png"
+/** The filepath for the play button in its on state */
+#define HOME_SCREEN_PLAY_BUTTON_ON_FILEPATH  "textures/play_button_inverse.png"
+/** The key for the will popup animation used on the homescreen */
+#define HOME_SCREEN_WILL_ANIMATION  "home_screen_will_animation"
+
 /** The key for the level select background texture in the asset manager */
 #define LEVEL_SELECT_BACKGROUND "level_select_background"
 /** The key for the unselected level button texture in the asset manager */
 #define LEVEL_SELECT_LEVEL_BUTTON_OFF "level_select_level_button"
 /** The key for the selected level button texture in the asset manager */
 #define LEVEL_SELECT_LEVEL_BUTTON_ON "level_select_level_button_selected"
+/** The filepath for the level select button in its off state */
+#define LEVEL_SELECT_BUTTON_OFF_FILEPATH  "textures/buttons/level_button.png"
+/** The filepath for the level select button in its on state */
+#define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
 
 /** The key for the lose splash screen */
 #define LOSE_SPLASH    "lose_splash"

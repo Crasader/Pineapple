@@ -89,8 +89,6 @@ protected:
 	/** Size of root */
 	Size _rootSize;
     
-    /** The scene manager for this game demo */
-    SceneManager* _assets;
     /** The background view */
     BackgroundView* _background;
     /** Reference to current level */
@@ -102,9 +100,6 @@ protected:
     string _levelKey;
     /** Filename of the level that is currently loaded */
     string _levelFile;
-    
-    /** Controller for abstracting out input away from layer */
-    InputController* _input;
     
     /** Controller for collision handling */
     CollisionController* _collision;
