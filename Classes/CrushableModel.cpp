@@ -199,6 +199,7 @@ void CrushableModel::resetSceneNode() {
         
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * CRUSHABLE_SCALE);
+		pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * 0.5f * pnode->getScale() / _drawScale.x,
                      pnode->getContentSize().height * 0.5f * pnode->getScale() / _drawScale.y);

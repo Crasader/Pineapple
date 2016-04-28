@@ -301,6 +301,7 @@ void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+		_level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
         _winview->position();
         _winViewVisible = true;
@@ -512,6 +513,9 @@ void GameController::update(float dt) {
             JelloModel* jello = *it;
             jello->animate();
         }
+
+		// Animate the fridge
+		_level->getGoal()->animate();
 
 		// Animate cups if they're being smashed and remove them when they're done
 		std::vector<CrushableModel*> cups = _level->getCups();

@@ -153,6 +153,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\CrushableModel.cpp" />
     <ClCompile Include="..\Classes\GameController.cpp" />
     <ClCompile Include="..\Classes\GoalModel.cpp" />
+    <ClCompile Include="..\Classes\HomeScreenController.cpp" />
     <ClCompile Include="..\Classes\HUDController.cpp" />
     <ClCompile Include="..\Classes\InputController.cpp" />
     <ClCompile Include="..\Classes\JelloModel.cpp" />
@@ -187,6 +188,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\CrushableModel.h" />
     <ClInclude Include="..\Classes\GameController.h" />
     <ClInclude Include="..\Classes\GoalModel.h" />
+    <ClInclude Include="..\Classes\HomeScreenController.h" />
     <ClInclude Include="..\Classes\HUDController.h" />
     <ClInclude Include="..\Classes\InputController.h" />
     <ClInclude Include="..\Classes\JelloModel.h" />

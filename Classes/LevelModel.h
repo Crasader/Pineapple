@@ -55,7 +55,7 @@ protected:
     Size _tileSize;
     
 	/** Reference to the goalDoor (for collision detection) */
-	BoxObstacle*    _goalDoor;
+	GoalModel*    _goalDoor;
 	/** Reference to the player avatar */
 	PineappleModel*      _pineapple;
 	/** References to the kid avatars */
@@ -122,7 +122,7 @@ public:
 	/**
 	 *
 	 */
-	BoxObstacle* getGoal() { return _goalDoor; }
+	GoalModel* getGoal() { return _goalDoor; }
 
 	/**
 	*

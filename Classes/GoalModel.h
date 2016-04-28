@@ -6,6 +6,7 @@
 #define __GOAL_MODEL_H__
 #include <cornell/CUBoxObstacle.h>
 #include <cornell/CUWireNode.h>
+#include <cornell/CUAnimationNode.h>
 #include "Const.h"
 #include "Texture.h"
 
@@ -14,6 +15,8 @@ using namespace cocos2d;
 
 #pragma mark -
 #pragma mark Physics Constants
+/** The number of frames in the fridge animation strip */
+#define GOAL_FRAME_COUNT	9
 
 #pragma mark -
 #pragma mark Goal Model
@@ -28,6 +31,13 @@ class GoalModel : public BoxObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CC_DISALLOW_COPY_AND_ASSIGN(GoalModel);
+
+	/** Filmstrip for open fridge animation */
+	AnimationNode* _fridgeCycle;
+	/** Frame counter for open fridge animation */
+	float _fridgeCycleFrame;
+	/** Whether fridge is closed */
+	bool _closed;
     
 protected:
     /**
@@ -125,6 +135,11 @@ public:
     void applyForce();
     
     int getCollisionClass() override { return GOAL_C; };
+
+	/** 
+	 * Sets whether the fridge is closed
+	 */
+	void setClosed(bool closed) { _closed = closed; }
     
 #pragma mark Drawing Methods
     /**
@@ -135,6 +150,11 @@ public:
      * manage our own afterburner animations.
      */
     virtual void resetSceneNode() override;
+
+	/**
+	 * Animate the open fridge door
+	 */
+	void animate();
     
 CC_CONSTRUCTOR_ACCESS:
 #pragma mark Hidden Constructors

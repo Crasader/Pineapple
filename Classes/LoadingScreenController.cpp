@@ -23,7 +23,7 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives2.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
-    tloader->loadAsync(GOAL_TEXTURE,      "textures/fridge.png");
+    tloader->loadAsync(GOAL_TEXTURE,      "textures/fridge_wLight.png");
     tloader->loadAsync(RED_CUP_TEXTURE,   "textures/cup_smash.png");
     tloader->loadAsync(BLUE_CUP_TEXTURE,  "textures/bluecup.png");
     tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");

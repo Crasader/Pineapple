@@ -10,7 +10,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define GOAL_SCALE	1.0f
+#define GOAL_SCALE	1.5f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -108,6 +108,8 @@ GoalModel* GoalModel::create(const Vec2& pos, const Vec2& scale) {
  */
 bool GoalModel::init(const Vec2& pos, const Vec2& scale) {
     if (BoxObstacle::init(pos, Size(scale))) {
+		_fridgeCycleFrame = 0.0f;
+		_closed = false;
         return true;
     }
     return false;
@@ -153,6 +155,20 @@ void GoalModel::update(float dt) {
     BoxObstacle::update(dt);
 }
 
+/**
+ * Animate the open fridge door
+ */
+void GoalModel::animate() {
+	if (!_closed) {
+		_fridgeCycleFrame += 0.1f;
+		int tmp = (int)rint(_fridgeCycleFrame);
+		_fridgeCycle->setFrame(tmp % (GOAL_FRAME_COUNT - 1));
+	}
+	else {
+		_fridgeCycle->setFrame(GOAL_FRAME_COUNT - 1);
+	}
+}
+
 
 #pragma mark -
 #pragma mark Scene Graph Methods
@@ -164,7 +180,7 @@ void GoalModel::update(float dt) {
  * manage our own afterburner animations.
  */
 void GoalModel::resetSceneNode() {
-    PolygonNode* pnode = dynamic_cast<PolygonNode*>(_node);
+    AnimationNode* pnode = dynamic_cast<AnimationNode*>(_node);
     if (pnode != nullptr) {
         // We need to know the content scale for resolution independence
         // If the device is higher resolution than 1024x576, Cocos2d will scale it
@@ -173,30 +189,18 @@ void GoalModel::resetSceneNode() {
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
         
-        SceneManager* assets =  AssetManager::getInstance()->getCurrent();
-        Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
-		
-		setDimension(image->getContentSize().width * GOAL_SCALE / _drawScale.x,
-			image->getContentSize().height * GOAL_SCALE / _drawScale.y);
-
-		Rect bounds;
-		bounds.size = getDimension();
-		bounds.size.width *= _drawScale.x;
-		bounds.size.height *= _drawScale.y;
-
-		pnode->setTexture(image);
-		pnode->setPolygon(bounds);
-		pnode->setScale(cscale);
-		
-        /*Rect bounds;
+        Rect bounds;
         bounds.size = pnode->getContentSize();
         
-		pnode->setTexture(image);
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * GOAL_SCALE);
+		pnode->setFrame(0);
 
 		setDimension(pnode->getContentSize().width * GOAL_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * GOAL_SCALE / _drawScale.y);*/	
+                     pnode->getContentSize().height * GOAL_SCALE / _drawScale.y);	
+
+		_fridgeCycleFrame = 0.0f;
+		_fridgeCycle = pnode;
     }
 }
 
