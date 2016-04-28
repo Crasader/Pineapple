@@ -194,7 +194,7 @@ bool LevelModel::load() {
                 float h = (float) reader.getNumber(HEIGHT_PROPERTY) / tileY;
                 
                 position[0] = x;
-                position[1] = y+0.5;
+                position[1] = y;
                 
                 if (layerName == WALL_OBJECT_GROUP) {
                     if (reader.startArray(WALL_IS_POLY_PROPERTY)) {
@@ -226,12 +226,15 @@ bool LevelModel::load() {
                     addJello(position, x, y);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
                     position[0] += 0.5;
+                    position[1] += 0.5;
                     addSpikes(position);
                 } else if (layerName == WILL_OBJECT_GROUP) {
                     addPineapple(position);
                 } else if (layerName == KIDS_OBJECT_GROUP) {
                     addKid(position);
                 } else if (layerName == CUP_OBJECT_GROUP) {
+                    position[0] += 0.5;
+                    position[1] += 0.5;
                     addCup(position, x, y);
                 } else if (layerName == BUTTON_SWITCH_OBJECT_GROUP) {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
@@ -770,8 +773,6 @@ void LevelModel::setRootNode(Node* node) {
         jello->setSceneNode(poly);
         initDebugProperties(jello);
         
-        jello->setY(jello->getY() - (1 - jello->getHeight())/2);
-                
         addAnonymousObstacle(jello, JELLO_Z_INDEX);
     }
     
@@ -783,8 +784,6 @@ void LevelModel::setRootNode(Node* node) {
         poly = PolygonNode::createWithTexture(image);
         spike->setSceneNode(poly);
         initDebugProperties(spike);
-        
-        spike->setY(spike->getY() - (1 - spike->getHeight())/2);
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }

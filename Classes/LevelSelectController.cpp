@@ -25,8 +25,10 @@
 #include "Texture.h"
 #include "Levels.h"
 
-const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE, LEVEL_FOUR_FILE};
-const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY, LEVEL_FOUR_KEY};
+const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE,
+    LEVEL_FOUR_FILE, LEVEL_FIVE_FILE};
+const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY,
+    LEVEL_FOUR_KEY, LEVEL_FIVE_KEY};
 
 /** Level Select Z indexes */
 #define LEVEL_SELECT_BACKGROUND_Z   1
