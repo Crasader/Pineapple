@@ -411,7 +411,7 @@
                      "isOpen":"false",
                      "isVertical":"true",
                      "linkID":"1",
-                     "nubbinsVisible":"false"
+                     "nubbinsVisible":"true"
                     },
                  "rotation":0,
                  "type":"",
@@ -449,7 +449,7 @@
                      "isOpen":"true",
                      "isVertical":"true",
                      "linkID":"1",
-                     "nubbinsVisible":"false"
+                     "nubbinsVisible":"true"
                     },
                  "rotation":0,
                  "type":"",

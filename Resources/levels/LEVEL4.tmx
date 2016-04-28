@@ -51,7 +51,7 @@
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="true"/>
     <property name="linkID" value="1"/>
-    <property name="nubbinsVisible" value="false"/>
+    <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
   <object id="61" gid="42" x="1984" y="704" width="128" height="64">
@@ -67,7 +67,7 @@
     <property name="isOpen" value="true"/>
     <property name="isVertical" value="true"/>
     <property name="linkID" value="1"/>
-    <property name="nubbinsVisible" value="false"/>
+    <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
  </objectgroup>

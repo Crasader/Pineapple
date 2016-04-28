@@ -7,7 +7,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 	/** The amount to shrink the body fixture (vertically) relative to the image */
-#define CRUSHABLE_VSHRINK  0.4f
+#define CRUSHABLE_VSHRINK  0.3f
 	/** The amount to shrink the body fixture (horizontally) relative to the image */
 #define CRUSHABLE_HSHRINK  0.3f
 
