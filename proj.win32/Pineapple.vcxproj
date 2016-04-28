@@ -204,13 +204,13 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PineappleModel.h" />
     <ClInclude Include="..\Classes\PineappleRoot.h" />
     <ClInclude Include="..\Classes\ProgressHUD.h" />
+    <ClInclude Include="..\Classes\Sounds.h" />
     <ClInclude Include="..\Classes\SpikeModel.h" />
     <ClInclude Include="..\Classes\SpinnerModel.h" />
     <ClInclude Include="..\Classes\Texture.h" />
     <ClInclude Include="..\Classes\WallModel.h" />
     <ClInclude Include="..\Classes\WinView.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="Sounds.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cocos2d\cocos\2d\libcocos2d.vcxproj">

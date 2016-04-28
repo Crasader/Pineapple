@@ -30,6 +30,7 @@ protected:
 	LevelController* _levelCtrlr;
 	/** Mark set to handle more sophisticated collision callbacks */
 	unordered_set<b2Fixture*> _pSensorFixtures;
+	bool blenderstarted;//SOUNDSMARK
 #pragma mark -
 #pragma mark Collision Handling
 

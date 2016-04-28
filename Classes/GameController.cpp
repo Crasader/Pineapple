@@ -25,6 +25,7 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
+#include "Sounds.h"//SOUNDSMARK
 
 
 using namespace cocos2d;
@@ -288,6 +289,7 @@ void GameController::onReset() {
     _debugnode->setPositionX(0.0f);
     _background->reset(_worldnode);
     _isReloading = false;
+
 }
 
 /**
@@ -497,6 +499,10 @@ void GameController::update(float dt) {
                 
                 // Scroll the screen (with parallax) if necessary
                 handleScrolling();
+								//SOUNDSMARK
+								if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) != SoundEngine::SoundState::INACTIVE) {
+									_level->getBlender()->updateVolume(_level->getPineapple()->getPosition());
+								} //ENDSOUNDSMARK
             } else {
                 _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
                 _level->getPineapple()->setFixedRotation(false);

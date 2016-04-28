@@ -17,6 +17,7 @@
 #pragma mark Initialization
 
 CollisionController::CollisionController() :
+	blenderstarted(false), //SOUNDSMARK
 	_level(nullptr) {}
 	//_levelCtrlr(nullptr){}
 
@@ -207,6 +208,11 @@ void CollisionController::beginContact(b2Contact* contact) {
         }
         // with ground
         if (bd1->getCollisionClass() % 2 == 0 || bd2->getCollisionClass() % 2 == 0) {
+					//SOUNDSMARK
+					if (!blenderstarted) {
+						_level->getBlender()->startBlendingSound(will->getPosition());
+						blenderstarted = true;
+					} //ENDSOUNDSMARK
             ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
         }
     }

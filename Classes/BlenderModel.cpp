@@ -9,6 +9,8 @@
 #include <cornell/CUPolygonNode.h>
 #include <cornell/CUAssetManager.h>
 #include <cornell/CUSceneManager.h>
+#include <cornell/CUSoundEngine.h> // SOUNDSMARK
+#include "Sounds.h" // SOUNDSMARK
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -260,5 +262,19 @@ void BlenderModel::animate() {
 	else {
 		_blendcycle->setFrame(tmp % 2);
 	}
+}
+
+// SOUNDSMARK
+void BlenderModel::startBlendingSound(Vec2 willPos) {
+	float volScale = NORMAL_BLENDER_DISTANCE / this->getPosition().distance(willPos);
+	volScale = volScale > MAX_VOL_SCALE ? MAX_VOL_SCALE : volScale;
+	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+	SoundEngine::getInstance()->playEffect(BLENDER_SOUND, source, true, EFFECT_VOLUME*volScale);
+}
+
+void BlenderModel::updateVolume(Vec2 willPos) {
+	float volScale = NORMAL_BLENDER_DISTANCE / this->getPosition().distance(willPos);
+	volScale = volScale > MAX_VOL_SCALE ? MAX_VOL_SCALE : volScale;
+	SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, EFFECT_VOLUME*volScale);
 }
 

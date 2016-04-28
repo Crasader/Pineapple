@@ -206,7 +206,7 @@
     <ClInclude Include="..\Classes\LoseView.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Sounds.h">
+    <ClInclude Include="..\Classes\Sounds.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
