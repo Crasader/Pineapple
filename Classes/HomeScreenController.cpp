@@ -17,12 +17,18 @@
 #define WILL_POPUP_OFFSCREEN            Vec2(-100, -100)
 #define WILL_POPUP_SCALE                0.75f
 
+#define HAPPY_KID_FRAME_COUNT           14
+#define KID_SCALE                       0.5f
+#define KID_SPACING                     70
+#define KID_BASE_POSITION               Vec2(80, 190)
+
 #define MIN_DELAY                       15
 #define MAX_DELAY                       30
 
 #define HOME_SCREEN_BACKGROUND_Z_INDEX  0
 #define HOME_SCREEN_BUTTON_Z_INDEX      1
-#define HOME_SCREEN_WILL_Z_INDEX        2
+#define HOME_SCREEN_KID_Z_INDEX         2
+#define HOME_SCREEN_WILL_Z_INDEX        3
 
 bool HomeScreenController::init(Node *root, InputController* input) {
     return init(root, input, SCREEN);
@@ -36,6 +42,8 @@ bool HomeScreenController::init(Node *root, InputController *input, const Rect &
     
     _assets = AssetManager::getInstance()->getCurrent();
     _input = input;
+    
+    float cscale = Director::getInstance()->getContentScaleFactor();
     
     // Determine the center of the screen
     Size dimen  = root->getContentSize();
@@ -67,7 +75,7 @@ bool HomeScreenController::init(Node *root, InputController *input, const Rect &
     _playButton->loadTexturePressed(HOME_SCREEN_PLAY_BUTTON_ON_FILEPATH);
     
     _playButton->setPosition(PLAY_BUTTON_POSITION);
-    _playButton->setScale(PLAY_BUTTON_SCALE);
+    _playButton->setScale(PLAY_BUTTON_SCALE * cscale);
     
     _playButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
@@ -82,11 +90,28 @@ bool HomeScreenController::init(Node *root, InputController *input, const Rect &
     _willPopup = AnimationNode::create(_assets->get<Texture2D>(HOME_SCREEN_WILL_ANIMATION), 1, WILL_POPUP_FRAME_COUNT);
     _willPopup->setAnchorPoint(Vec2(0,0));
     _willPopup->setPosition(WILL_POPUP_OFFSCREEN);
-    _willPopup->setScale(WILL_POPUP_SCALE);
+    _willPopup->setScale(WILL_POPUP_SCALE * cscale);
     _willPopup->retain();
     _rootnode->addChild(_willPopup, HOME_SCREEN_WILL_Z_INDEX);
     
     _willFrame = - getRandomDelay();
+    
+    string texIDs[] = {WIN_SPLASH_CHILD_4, WIN_SPLASH_CHILD_1, WIN_SPLASH_CHILD_3, WIN_SPLASH_CHILD_2};
+    for (int i = 0; i < KID_COUNT; i++) {
+        image = _assets->get<Texture2D>(texIDs[i]);
+        _kidAnimations[i] = AnimationNode::create(image, 1, HAPPY_KID_FRAME_COUNT, HAPPY_KID_FRAME_COUNT);
+        _kidAnimations[i]->setAnchorPoint(Vec2(0, 0));
+        _kidAnimations[i]->setScale(KID_SCALE * cscale);
+        
+        _kidAnimations[i]->setPosition(KID_BASE_POSITION + Vec2(i * KID_SPACING, 0));
+        
+        _kidAnimations[i]->retain();
+        _rootnode->addChild(_kidAnimations[i], HOME_SCREEN_KID_Z_INDEX);
+    }
+    
+    for (int i = 0; i < KID_COUNT; i++) {
+        _kidFrames[i] = i*2;
+    }
     
     _isInitted = true;
     return true;
@@ -131,6 +156,11 @@ void HomeScreenController::update(float dt) {
     }
     
     _willFrame += 0.2;
+    
+    for (int i = 0; i < KID_COUNT; i++) {
+        _kidFrames[i] += 0.4;
+        _kidAnimations[i]->setFrame((int)(_kidFrames[i])%HAPPY_KID_FRAME_COUNT);
+    }
 }
 
 void HomeScreenController::dispose() {
@@ -142,5 +172,12 @@ void HomeScreenController::dispose() {
     if (_playButton != nullptr)  {
         _playButton->release();
         _playButton = nullptr;
+    }
+    
+    for(int i = 0; i <KID_COUNT; i++) {
+        if (_kidAnimations[i] != nullptr) {
+            _kidAnimations[i]->release();
+        }
+        _kidAnimations[i] = nullptr;
     }
 }

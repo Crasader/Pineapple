@@ -32,6 +32,13 @@ protected:
     /** The most recent side that will appeared out of */
     int _mostRecentSide;
     
+    /** The animations for the kids.
+     * May contain null entries if that kid is not present */
+    AnimationNode* _kidAnimations[KID_COUNT];
+    
+    /** The current frame for each kid. */
+    float _kidFrames[KID_COUNT];
+    
     void positionWill();
     
 public:
