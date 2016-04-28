@@ -10,6 +10,8 @@
 #include "CrushableModel.h"
 #include "LevelModel.h"
 #include "ButtonSwitchModel.h"
+#include <cornell/CUSoundEngine.h>
+#include "Sounds.h"
 
 #pragma mark -
 #pragma mark Initialization
@@ -49,6 +51,8 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 			body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
 			will->setJumping(true);
 			will->setGrounded(false);
+			Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(JELLO_BOING);
+			SoundEngine::getInstance()->playEffect(JELLO_BOING, source, false, EFFECT_VOLUME);
 		}
 	}
 }
@@ -64,6 +68,8 @@ void CollisionController::handleJelloCollision(KidModel* kid) {
 		kid->setVY(10);
 		kid->setVX(KID_WALKSPEED + 4);
 		kid->setCollidingWithJello(true);
+		Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(JELLO_BOING);
+		SoundEngine::getInstance()->playEffect(JELLO_BOING, source, false, EFFECT_VOLUME);
 	}
 }
 

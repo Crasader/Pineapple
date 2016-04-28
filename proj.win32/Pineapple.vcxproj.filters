@@ -206,6 +206,9 @@
     <ClInclude Include="..\Classes\LoseView.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="Sounds.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

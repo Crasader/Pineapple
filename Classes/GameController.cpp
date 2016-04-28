@@ -423,7 +423,7 @@ void GameController::update(float dt) {
         } else if (_loseview->shouldTransferToLevelSelect()) {
             _loseview->resetButtons();
             Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
-            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);//TODO CHECK THIS OUT FOR SOUNDS YO
             setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
             return;
         }

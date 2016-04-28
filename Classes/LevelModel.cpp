@@ -4,6 +4,7 @@
 #include <cornell/CUStrings.h>
 #include "MoveablePlatformModel.h"
 #include "Const.h"
+#include "Sounds.h"
 
 #define UNSET_LENGTH -2
 
@@ -817,9 +818,9 @@ void LevelModel::showDebug(bool flag) {
 
 void LevelModel::kill(PineappleModel* will) {
 	removeObstacle(will);
-    clearPineapple();
-	// TODO: Move failure to main game loop?
-    setFailure(true); 
+  clearPineapple();
+	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, false);
+  setFailure(true); 
 }
 
 void LevelModel::kill(KidModel* kid) {
