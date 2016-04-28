@@ -161,6 +161,11 @@ public:
 	*
 	*/
 	std::vector<JelloModel*> getJellos() { return _jellos; }
+	
+	/**
+	*
+	*/
+	std::vector<CrushableModel*> getCups() { return _crushables; }
 
 	/**
 	*
