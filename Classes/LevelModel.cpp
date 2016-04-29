@@ -889,9 +889,8 @@ void LevelModel::showDebug(bool flag) {
 
 void LevelModel::kill(PineappleModel* will) {
 	removeObstacle(will);
-    clearPineapple();
-	// TODO: Move failure to main game loop?
-    setFailure(true); 
+  clearPineapple();
+  setFailure(true); 
 }
 
 void LevelModel::kill(KidModel* kid) {

@@ -105,10 +105,16 @@
 /** The volume for the music */
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */
-#define EFFECT_VOLUME   0.8f
+#define EFFECT_VOLUME   1.0f
 
 /** The duration of the vibration when a kid / you are blended */
 #define VIBRATION_DURATION  1.0f
+
+// Max value for scaling blender sound based on distance
+#define MAX_VOL_SCALE						3.0f
+
+// The distance value for which the blending sound will play at EFFECT_VOLUME
+#define NORMAL_BLENDER_DISTANCE 1.0f
 
 
 #endif /* Const_h */

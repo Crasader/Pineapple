@@ -252,6 +252,8 @@ public:
      * @param value whether the level is failed.
      */
     void setFailure(bool value);
+
+		float getBlenderVolScale();
     
     
 #pragma mark -

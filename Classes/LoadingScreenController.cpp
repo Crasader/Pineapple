@@ -113,6 +113,15 @@ void loadFonts(SceneManager* assets) {
 
 void loadSounds(SceneManager* assets) {
     assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
+		assets->loadAsync<Sound>(PINEAPPLET1_DEATH_SOUND, "sounds/kid1_death.mp3");
+		assets->loadAsync<Sound>(PINEAPPLET2_DEATH_SOUND, "sounds/kid2_death.mp3");
+		assets->loadAsync<Sound>(PINEAPPLET3_DEATH_SOUND, "sounds/kid3_death.mp3");
+		assets->loadAsync<Sound>(PINEAPPLET4_DEATH_SOUND, "sounds/kid4_death.mp3");
+		assets->loadAsync<Sound>(WILL_DEATH_SOUND, "sounds/will_death.mp3");
+		assets->loadAsync<Sound>(SPLAT_SOUND, "sounds/splat.mp3");
+		assets->loadAsync<Sound>(JELLO_BOING, "sounds/boing.mp3");
+		assets->loadAsync<Sound>(CUP_CRUSH_SOUND, "sounds/cup_crush.mp3");
+		assets->loadAsync<Sound>(BLENDER_SOUND, "sounds/blender_sound.mp3");
     assets->loadAsync<Sound>(LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
 }
 

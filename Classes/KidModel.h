@@ -50,7 +50,7 @@ private:
 
 protected:
     /** The index of this kid in the array of kids */
-    float _index;
+    int _index;
     /** The current horizontal movement of the character */
     float _movement;
     /** Whether this kid is currently colliding with jello */

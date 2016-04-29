@@ -10,6 +10,8 @@
 #include "CrushableModel.h"
 #include "LevelModel.h"
 #include "ButtonSwitchModel.h"
+#include <cornell/CUSoundEngine.h>
+#include "Sounds.h"
 
 #pragma mark -
 #pragma mark Initialization
@@ -27,11 +29,40 @@ void CollisionController::setLevel(LevelModel* level) {
 }
 
 #pragma mark -
+#pragma mark Collision Sound Playing
+
+void playSoundEffect(char* key, float volume) {
+	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
+	SoundEngine::getInstance()->playEffect(key, source, false, volume);
+}
+
+void playSoundEffect(char* key) {
+	playSoundEffect(key, EFFECT_VOLUME);
+}
+
+#pragma mark -
 #pragma mark Collision Handling
 
 void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstacle *ground) {
     will->setGrounded(true);
     _pSensorFixtures.emplace(fix);
+}
+
+void playKidScream(KidModel* kid) {
+	char* key;
+	int i = kid->getIndex();
+	switch (i) {
+	case 0: key = PINEAPPLET1_DEATH_SOUND;
+		break;
+	case 1: key = PINEAPPLET2_DEATH_SOUND;
+		break;
+	case 2: key = PINEAPPLET3_DEATH_SOUND;
+		break;
+	case 3: key = PINEAPPLET4_DEATH_SOUND;
+		break;
+	default: key = "we gon crash if this happens, but it won't so it's chill.";
+	}
+	playSoundEffect(key);
 }
 
 /**
@@ -50,6 +81,7 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 			body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
 			will->setJumping(true);
 			will->setGrounded(false);
+			playSoundEffect(JELLO_BOING);
 		}
 	}
 }
@@ -66,10 +98,13 @@ void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello)
 		kid->setVY(10);
 		kid->setVX(KID_WALKSPEED + 4);
 		kid->setCollidingWithJello(true);
+		playSoundEffect(JELLO_BOING);
 	}
 }
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
+	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(WILL_DEATH_SOUND);
+	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, source, false, EFFECT_VOLUME);
 	will->setIsBlended(true);
     b2Filter b = will->getFilterData();
     b.maskBits = BLENDER_MASK;
@@ -77,6 +112,7 @@ void CollisionController::handleBlenderCollision(PineappleModel* will) {
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
+	playKidScream(kid);
 	kid->setIsBlended(true);
     b2Filter b = kid->getFilterData();
     b.maskBits = BLENDER_MASK;
@@ -85,23 +121,28 @@ void CollisionController::handleBlenderCollision(KidModel* kid) {
 
 void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
 	_level->kill(will);
+	playSoundEffect(SPLAT_SOUND);
 	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
 	_level->kill(kid);
+	playSoundEffect(SPLAT_SOUND);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
 	_level->spikeAndKill(will);
+	playSoundEffect(WILL_DEATH_SOUND);
 	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleSpikeCollision(KidModel* kid) {
+	playKidScream(kid);
 	_level->spikeAndKill(kid);
 }
 
 void CollisionController::handleCupCollision(PineappleModel* will, CrushableModel* cup) {
+	playSoundEffect(CUP_CRUSH_SOUND);
 	will->setVY(4);
 	cup->setSmashing(true);
 	/*if (isBelowChar(cup, will)) {
@@ -174,7 +215,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         if (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C) {
             // if will is large and traveling downwards, crush
             if (!will->isSmall() && will->getVY() < MAX_V_TO_CRUSH) {
-				handleCupCollision(will, bd1->getCollisionClass() == CUP_C ? (CrushableModel*)bd1 : (CrushableModel*)bd2);
+								handleCupCollision(will, bd1->getCollisionClass() == CUP_C ? (CrushableModel*)bd1 : (CrushableModel*)bd2);
             }
         }
         // with ground
