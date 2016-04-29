@@ -308,7 +308,7 @@ bool LevelModel::load() {
         position[5] = DEFAULT_HEIGHT;
         position[6] = -2;
         position[7] = 0;
-        //addWall(position);
+        addWall(position);
         for(int i = 0; i < WALL_VERTS; i += 2) {
             position[i] += 2 + _length;
         }
