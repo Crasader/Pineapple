@@ -48,6 +48,23 @@ void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstac
     _pSensorFixtures.emplace(fix);
 }
 
+void playKidScream(KidModel* kid) {
+	char* key;
+	int i = kid->getIndex();
+	switch (i) {
+	case 0: key = PINEAPPLET1_DEATH_SOUND;
+		break;
+	case 1: key = PINEAPPLET2_DEATH_SOUND;
+		break;
+	case 2: key = PINEAPPLET3_DEATH_SOUND;
+		break;
+	case 3: key = PINEAPPLET4_DEATH_SOUND;
+		break;
+	default: key = "we gon crash if this happens, but it won't so it's chill.";
+	}
+	playSoundEffect(key);
+}
+
 /**
 * Applies the jello force to the given pinepple.
 * This method is called when the given pineapple collides with a jello
@@ -92,20 +109,7 @@ void CollisionController::handleBlenderCollision(PineappleModel* will) {
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
-	char* key;
-	int i = kid->getIndex();
-	switch (i) {
-		case 0: key = PINEAPPLET1_DEATH_SOUND;
-			break;
-		case 1: key = PINEAPPLET2_DEATH_SOUND;
-			break;
-		case 2: key = PINEAPPLET3_DEATH_SOUND;
-			break;
-		case 3: key = PINEAPPLET4_DEATH_SOUND;
-			break;
-		default: key = "we gon crash if this happens, but it won't so it's chill.";
-	}
-	playSoundEffect(key);
+	playKidScream(kid);
 	kid->setIsBlended(true);
 }
 
@@ -122,10 +126,12 @@ void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
 	_level->spikeAndKill(will);
+	playSoundEffect(WILL_DEATH_SOUND);
 	//_pSensorFixtures.clear();
 }
 
 void CollisionController::handleSpikeCollision(KidModel* kid) {
+	playKidScream(kid);
 	_level->spikeAndKill(kid);
 }
 

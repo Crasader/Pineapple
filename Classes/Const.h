@@ -103,7 +103,7 @@
 #define LEVELS_COMPLETED_KEY    "levels_completed"
 
 /** The volume for the music */
-#define MUSIC_VOLUME    0.7f
+#define MUSIC_VOLUME    0.2f
 /** The volume for sound effects */
 #define EFFECT_VOLUME   0.8f
 
@@ -114,7 +114,7 @@
 #define MAX_VOL_SCALE						2.0f
 
 // The distance value for which the blending sound will play at EFFECT_VOLUME
-#define NORMAL_BLENDER_DISTANCE 3.0f
+#define NORMAL_BLENDER_DISTANCE 1.5f
 
 
 #endif /* Const_h */

@@ -25,6 +25,7 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
+#include "Sounds.h"
 
 
 using namespace cocos2d;
@@ -478,7 +479,21 @@ void GameController::update(float dt) {
                 }
                 // check if off bounds death
                 if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
-                    _level->kill(_level->getKid(i));
+									char* key;
+									switch (i) {
+									case 0: key = PINEAPPLET1_DEATH_SOUND;
+										break;
+									case 1: key = PINEAPPLET2_DEATH_SOUND;
+										break;
+									case 2: key = PINEAPPLET3_DEATH_SOUND;
+										break;
+									case 3: key = PINEAPPLET4_DEATH_SOUND;
+										break;
+									default: key = "we gon crash if this happens, but it won't so it's chill.";
+									}
+									Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
+									SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
+                  _level->kill(_level->getKid(i));
                 }
             }
         }
