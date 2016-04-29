@@ -34,6 +34,7 @@ using namespace cocos2d;
 #define SPLAT_Z         5
 #define WIN_SPLASH_Z    7
 #define LOSE_SPLASH_Z   8
+#define GOAL_DOOR_Z		36
 
 
 #pragma mark -
@@ -49,6 +50,7 @@ GameController::GameController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
 _splatCycle(nullptr),
+_fridgeDoor(nullptr),
 _world(nullptr),
 _active(false),
 _collision(nullptr),
@@ -130,6 +132,14 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
 	_splatFrame = 0.0f;
 	_hasSplat = false;
 	_rootSize = root->getContentSize();
+
+	_fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
+	_fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
+	_fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x, 
+							 _level->getDrawScale().y*_level->getGoal()->getPosition().y);
+	_fridgeDoor->setVisible(true);
+	_fridgeDoor->retain();
+	_worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
     
     PauseController::init(this, _worldnode, _assets, root, _input);
     HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
@@ -214,6 +224,8 @@ void GameController::dispose() {
     _debugnode = nullptr;
 	_splatCycle->release();
 	_splatCycle = nullptr;
+	_fridgeDoor->release();
+	_fridgeDoor = nullptr;
     _winnode = nullptr;
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
@@ -290,6 +302,8 @@ void GameController::onReset() {
     _background->reset(_worldnode);
     _isReloading = false;
 
+	_fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+							 _level->getDrawScale().y*_level->getGoal()->getPosition().y);
 }
 
 /**
@@ -303,6 +317,7 @@ void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+		_level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
         _winview->position();
         _winViewVisible = true;
@@ -540,6 +555,9 @@ void GameController::update(float dt) {
             JelloModel* jello = *it;
             jello->animate();
         }
+
+		// Animate the fridge
+		_level->getGoal()->animate();
 
 		// Animate cups if they're being smashed and remove them when they're done
 		std::vector<CrushableModel*> cups = _level->getCups();

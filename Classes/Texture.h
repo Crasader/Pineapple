@@ -21,6 +21,8 @@
 #define PLATFORM_EDGE_RIGHT_TEXTURE   "platform_edge_right"
 /** The key for the win door texture in the asset manager */
 #define GOAL_TEXTURE     "goal"
+/** The key for the fridge door */
+#define GOAL_DOOR_TEXTURE "goalDoor"
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT     "retro"
 

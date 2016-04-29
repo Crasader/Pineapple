@@ -308,7 +308,7 @@ bool LevelModel::load() {
         position[5] = DEFAULT_HEIGHT;
         position[6] = -2;
         position[7] = 0;
-        //addWall(position);
+        addWall(position);
         for(int i = 0; i < WALL_VERTS; i += 2) {
             position[i] += 2 + _length;
         }
@@ -721,11 +721,12 @@ void LevelModel::setRootNode(Node* node) {
     }
     
     if (_goalDoor != nullptr) {
+		Texture2D* image = assets->get<Texture2D>(GOAL_TEXTURE);
         _goalDoor->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::create();
+		poly = AnimationNode::create(image, 1, GOAL_FRAME_COUNT, GOAL_FRAME_COUNT);
         _goalDoor->setSceneNode(poly);
         initDebugProperties(_goalDoor);
-				_goalDoor->setY(_goalDoor->getY() + 0.7);
+		_goalDoor->setY(_goalDoor->getY() + 0.7);
         
         addObstacle(_goalDoor, GOAL_Z_INDEX);
     }

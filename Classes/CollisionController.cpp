@@ -106,11 +106,17 @@ void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(WILL_DEATH_SOUND);
 	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, source, false, EFFECT_VOLUME);
 	will->setIsBlended(true);
+    b2Filter b = will->getFilterData();
+    b.maskBits = BLENDER_MASK;
+    will->setFilterData(b);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
 	playKidScream(kid);
 	kid->setIsBlended(true);
+    b2Filter b = kid->getFilterData();
+    b.maskBits = BLENDER_MASK;
+    kid->setFilterData(b);
 }
 
 void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
