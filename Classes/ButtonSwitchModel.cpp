@@ -10,13 +10,10 @@
 #include <cornell/CUPolygonNode.h>
 
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define SWITCH_VSHRINK  1.0f
+#define BUTTON_SWITCH_VSHRINK  1.0f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define SWITCH_HSHRINK  1.0f
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define BUTTON_VSHRINK  1.0f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define BUTTON_HSHRINK  1.0f
+#define BUTTON_SWITCH_HSHRINK  1.0f
+
 
 ButtonSwitchModel* ButtonSwitchModel::create(const Vec2& pos, const Vec2& scale, const bool isSwitch, const Color color) {
     ButtonSwitchModel* button_switch = new (std::nothrow) ButtonSwitchModel();
@@ -145,7 +142,7 @@ void ButtonSwitchModel::resetSceneNode() {
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
         float cscale = Director::getInstance()->getContentScaleFactor();
-        float scale = _isSwitch ? SWITCH_SCALE : BUTTON_SCALE;
+        float scale = BUTTON_SWITCH_SCALE;
         
         Rect bounds;
         bounds.size = pnode->getContentSize();
@@ -153,8 +150,8 @@ void ButtonSwitchModel::resetSceneNode() {
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * scale);
         
-        setDimension(pnode->getContentSize().width * scale / _drawScale.x,
-                     pnode->getContentSize().height * scale / _drawScale.y);
+        setDimension(pnode->getContentSize().width * scale *  BUTTON_SWITCH_HSHRINK / _drawScale.x,
+                     pnode->getContentSize().height * scale * BUTTON_SWITCH_VSHRINK / _drawScale.y);
         
         updateTexture();
     }

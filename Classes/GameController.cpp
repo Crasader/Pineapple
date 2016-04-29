@@ -306,6 +306,12 @@ void GameController::setComplete(bool value) {
         _winview->position();
         _winViewVisible = true;
         HUDController::setEnabled(false);
+        // If we just beat the most recent level increment the saved state for level select controller
+        // to see upon update
+        int currentLevelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
+        if (_levelIndex == currentLevelsComplete) {
+            UserDefault::getInstance()->setIntegerForKey(LEVELS_COMPLETED_KEY, currentLevelsComplete + 1);
+        }
     } else {
         if (_winViewVisible) {
             _rootnode->removeChild(_winroot);
@@ -448,8 +454,6 @@ void GameController::update(float dt) {
             return;
         } else if (_winview->shouldTransferToNextLevel()) {
             _winview->resetButtons();
-            Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
-            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
             setTransitionStatus(TRANSITION_TO_NEXT_LEVEL);
             return;
 
@@ -521,6 +525,18 @@ void GameController::update(float dt) {
             JelloModel* jello = *it;
             jello->animate();
         }
+
+		// Animate cups if they're being smashed and remove them when they're done
+		std::vector<CrushableModel*> cups = _level->getCups();
+		for (auto it = cups.begin(); it != cups.end(); ++it) {
+			CrushableModel* cup = *it;
+			
+			cup->animate();
+			if (cup->getSmashed()) {
+				_level->removeObstacle(cup);
+				//cups.erase(it);
+			}
+		}
         
         // Animate the blender
         _level->getBlender()->animate();

@@ -34,10 +34,10 @@
 #define GOAL_Z_INDEX                29
  
 #define WALL_Z_INDEX                10
-#define MOVEABLE_PLATFORM_Z_INDEX   11
+#define MOVEABLE_PLATFORM_Z_INDEX   12
 
-#define CUP_Z_INDEX                 20
-#define JELLO_Z_INDEX               21
+#define JELLO_Z_INDEX               20
+#define CUP_Z_INDEX                 21
 #define BUTTON_SWITCH_Z_INDEX       27
 #define SPIKES_Z_INDEX              28
 
@@ -161,6 +161,11 @@ public:
 	*
 	*/
 	std::vector<JelloModel*> getJellos() { return _jellos; }
+	
+	/**
+	*
+	*/
+	std::vector<CrushableModel*> getCups() { return _crushables; }
 
 	/**
 	*
@@ -251,9 +256,9 @@ public:
     
     void addKid(float kidPos[]);
     
-    void addJello(float jelloPos[]);
+    void addJello(float jelloPos[], int x, int y);
     
-    void addCup(float cupPos[]);
+    void addCup(float cupPos[], int x, int y);
     
     void addSpikes(float spikePos[]);
     
