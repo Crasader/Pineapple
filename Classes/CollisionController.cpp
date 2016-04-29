@@ -71,10 +71,16 @@ void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello)
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	will->setIsBlended(true);
+    b2Filter b = will->getFilterData();
+    b.maskBits = BLENDER_MASK;
+    will->setFilterData(b);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
 	kid->setIsBlended(true);
+    b2Filter b = kid->getFilterData();
+    b.maskBits = BLENDER_MASK;
+    kid->setFilterData(b);
 }
 
 void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
