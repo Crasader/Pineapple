@@ -115,7 +115,7 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
     button->setTitleFontSize(BUTTON_FONT_SIZE);
     
-    button->setEnabled(i < LEVELS_CREATED);
+    button->setEnabled(i < LEVELS_CREATED && i <= _levelsComplete);
     
     button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
@@ -179,7 +179,7 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     //Get the number of levels completed, if it doesn't exist it returns 0, perfect!
     _levelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
     //Lay out the buttons
-    for(int i = 0; i < NUM_LEVELS && i <= _levelsComplete; i++) {
+    for(int i = 0; i < NUM_LEVELS; i++) {
         _buttons[i] = initButton(_dimen, i);
         _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
     }
