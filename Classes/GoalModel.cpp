@@ -11,6 +11,7 @@
 #pragma mark Physics Constants
 
 #define GOAL_SCALE	1.5f
+#define GOAL_H_SHRINK   0.95f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -196,7 +197,7 @@ void GoalModel::resetSceneNode() {
         pnode->setScale(cscale * GOAL_SCALE);
 		pnode->setFrame(0);
 
-		setDimension(pnode->getContentSize().width * GOAL_SCALE / _drawScale.x,
+		setDimension(pnode->getContentSize().width * GOAL_SCALE * GOAL_H_SHRINK / _drawScale.x,
                      pnode->getContentSize().height * GOAL_SCALE / _drawScale.y);	
 
 		_fridgeCycleFrame = 0.0f;
