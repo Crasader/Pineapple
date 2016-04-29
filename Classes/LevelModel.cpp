@@ -4,7 +4,6 @@
 #include <cornell/CUStrings.h>
 #include "MoveablePlatformModel.h"
 #include "Const.h"
-#include "Sounds.h"
 
 #define UNSET_LENGTH -2
 

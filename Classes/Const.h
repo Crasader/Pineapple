@@ -107,5 +107,11 @@
 /** The duration of the vibration when a kid / you are blended */
 #define VIBRATION_DURATION  1.0f
 
+// Max value for scaling blender sound based on distance
+#define MAX_VOL_SCALE						2.0f
+
+// The distance value for which the blending sound will play at EFFECT_VOLUME
+#define NORMAL_BLENDER_DISTANCE 3.0f
+
 
 #endif /* Const_h */

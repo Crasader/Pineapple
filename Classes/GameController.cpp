@@ -25,7 +25,6 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
-#include "Sounds.h"//SOUNDSMARK
 
 
 using namespace cocos2d;
@@ -341,6 +340,11 @@ void GameController::setFailure(bool value){
     
 }
 
+float GameController::getBlenderVolScale() {
+		float scale = NORMAL_BLENDER_DISTANCE / _level->getBlenderPineappleDistance();
+		return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
+}
+
 void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _avatar) {
     int size = 0;
     float scale = 1.0f;
@@ -499,10 +503,7 @@ void GameController::update(float dt) {
                 
                 // Scroll the screen (with parallax) if necessary
                 handleScrolling();
-								//SOUNDSMARK
-								if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) != SoundEngine::SoundState::INACTIVE) {
-									_level->getBlender()->updateVolume(_level->getPineapple()->getPosition());
-								} //ENDSOUNDSMARK
+
             } else {
                 _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
                 _level->getPineapple()->setFixedRotation(false);

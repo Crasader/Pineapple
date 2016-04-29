@@ -149,7 +149,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\BlenderModel.cpp" />
     <ClCompile Include="..\Classes\ButtonSwitchModel.cpp" />
     <ClCompile Include="..\Classes\CollisionController.cpp" />
-    <ClCompile Include="..\Classes\CollisionObjectModel.cpp" />
     <ClCompile Include="..\Classes\CrushableModel.cpp" />
     <ClCompile Include="..\Classes\GameController.cpp" />
     <ClCompile Include="..\Classes\GoalModel.cpp" />
@@ -163,12 +162,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\LoseView.cpp" />
     <ClCompile Include="..\Classes\ModalView.cpp" />
     <ClCompile Include="..\Classes\MoveablePlatformModel.cpp" />
-    <ClCompile Include="..\Classes\NonPhysicalObstacleModel.cpp" />
     <ClCompile Include="..\Classes\PauseController.cpp" />
-    <ClCompile Include="..\Classes\PhysicalObstacleModel.cpp" />
     <ClCompile Include="..\Classes\PineappleModel.cpp" />
     <ClCompile Include="..\Classes\PineappleRoot.cpp" />
-    <ClCompile Include="..\Classes\ProgressHUD.cpp" />
     <ClCompile Include="..\Classes\SpikeModel.cpp" />
     <ClCompile Include="..\Classes\SpinnerModel.cpp" />
     <ClCompile Include="..\Classes\WallModel.cpp" />
@@ -182,7 +178,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\BlenderModel.h" />
     <ClInclude Include="..\Classes\ButtonSwitchModel.h" />
     <ClInclude Include="..\Classes\CollisionController.h" />
-    <ClInclude Include="..\Classes\CollisionObjectModel.h" />
     <ClInclude Include="..\Classes\Const.h" />
     <ClInclude Include="..\Classes\CrushableModel.h" />
     <ClInclude Include="..\Classes\GameController.h" />
@@ -198,12 +193,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\LoseView.h" />
     <ClInclude Include="..\Classes\ModalView.h" />
     <ClInclude Include="..\Classes\MoveablePlatformModel.h" />
-    <ClInclude Include="..\Classes\NonPhysicalObstacleModel.h" />
     <ClInclude Include="..\Classes\PauseController.h" />
-    <ClInclude Include="..\Classes\PhysicalObstacleModel.h" />
     <ClInclude Include="..\Classes\PineappleModel.h" />
     <ClInclude Include="..\Classes\PineappleRoot.h" />
-    <ClInclude Include="..\Classes\ProgressHUD.h" />
     <ClInclude Include="..\Classes\Sounds.h" />
     <ClInclude Include="..\Classes\SpikeModel.h" />
     <ClInclude Include="..\Classes\SpinnerModel.h" />
