@@ -15,7 +15,6 @@
 #include "PineappleRoot.h"
 #include "LoadingScreenController.h"
 #include <cornell/CUGenericLoader.h>
-#include "storage/local-storage/LocalStorage.h"
 
 using namespace cocos2d;
 
@@ -62,14 +61,6 @@ void PineappleRoot::start() {
     _backgroundSound = nullptr;
     _loadStarted = false;
     _loadFinished = false;
-    
-    // init the local storage
-    localStorageInit(LOCAL_STORAGE_PATH);
-    int* levelsCompleted;
-    localStorageGetItem(LEVELS_COMPLETED_KEY, (string*)levelsCompleted);
-    if (levelsCompleted == nullptr) {
-        localStorageSetItem(LEVELS_COMPLETED_KEY, 0);
-    }
     
     RootLayer::start(); // YOU MUST END with call to parent
 }
@@ -129,6 +120,7 @@ void PineappleRoot::onFirstUpdate() {
 void PineappleRoot::transitionToLevelSelect() {
     if (_activeController == _gameplay) {
         removeChild(_gameRoot);
+        _levelSelect->update();
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
     }
     

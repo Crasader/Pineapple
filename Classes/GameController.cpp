@@ -305,7 +305,10 @@ void GameController::setComplete(bool value) {
         _winview->position();
         _winViewVisible = true;
         HUDController::setEnabled(false);
-        cout << "WINNING\n";
+        int currentLevelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
+        if (_levelIndex == currentLevelsComplete) {
+            UserDefault::getInstance()->setIntegerForKey(LEVELS_COMPLETED_KEY, currentLevelsComplete + 1);
+        }
     } else {
         if (_winViewVisible) {
             _rootnode->removeChild(_winroot);

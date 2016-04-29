@@ -24,7 +24,6 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
-#include "storage/local-storage/LocalStorage.h"
 
 const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE, LEVEL_FOUR_FILE};
 const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY, LEVEL_FOUR_KEY};
@@ -159,8 +158,8 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     _input = input;
     
     // Determine the center of the screen
-    Size dimen  = root->getContentSize();
-    Vec2 center(dimen.width/2.0f,dimen.height/2.0f);
+    _dimen  = root->getContentSize();
+    Vec2 center(_dimen.width/2.0f,_dimen.height/2.0f);
     
     // Create the scale and notify the input handler
     Vec2 scale = Vec2(root->getContentSize().width/rect.size.width,
@@ -180,17 +179,16 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     _backgroundNode = PolygonNode::createWithTexture(image);
     _backgroundNode->setPosition(center);
     _backgroundNode->setAnchorPoint(Vec2(0.5f, 0.5f));
-    _backgroundNode->setScale(dimen.width/image->getContentSize().width, dimen.height/image->getContentSize().height);
+    _backgroundNode->setScale(_dimen.width/image->getContentSize().width, _dimen.height/image->getContentSize().height);
     
     _rootnode->addChild(_backgroundNode, LEVEL_SELECT_BACKGROUND_Z);
     
     
-    //Get the number of levels completed
-    int* levelsCompleted;
-    localStorageGetItem(LEVELS_COMPLETED_KEY, (string*)levelsCompleted);
+    //Get the number of levels completed, if it doesn't exist it returns 0, perfect!
+    _levelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
     //Lay out the buttons
-    for(int i = 0; i < NUM_LEVELS && i <= *levelsCompleted; i++) {
-        _buttons[i] = initButton(dimen, i);
+    for(int i = 0; i < NUM_LEVELS && i <= _levelsComplete; i++) {
+        _buttons[i] = initButton(_dimen, i);
         _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
     }
     
@@ -198,6 +196,17 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     setDebug(false);
     
     return true;
+}
+
+void LevelSelectController::update() {
+    int newLevelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
+    if (newLevelsComplete != _levelsComplete) {
+        _levelsComplete++;
+        if (_levelsComplete < NUM_LEVELS) {
+            _buttons[_levelsComplete] = initButton(_dimen, _levelsComplete);
+            _rootnode->addChild(_buttons[_levelsComplete], LEVEL_SELECT_BUTTON_Z);
+        }
+    }
 }
 
 /**
