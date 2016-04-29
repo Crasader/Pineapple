@@ -25,17 +25,15 @@
 #include "Texture.h"
 #include "Levels.h"
 
-const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE, LEVEL_FOUR_FILE};
-const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY, LEVEL_FOUR_KEY};
+const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE,
+    LEVEL_FOUR_FILE, LEVEL_FIVE_FILE};
+const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY,
+    LEVEL_FOUR_KEY, LEVEL_FIVE_KEY};
 
 /** Level Select Z indexes */
 #define LEVEL_SELECT_BACKGROUND_Z   1
 #define LEVEL_SELECT_BUTTON_Z       2
 #define LEVEL_SELECT_TEXT_Z         3
-
-/** Button texture paths */
-#define LEVEL_SELECT_BUTTON_OFF_FILEPATH  "textures/buttons/level_button.png"
-#define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
 
 /** Graphics scaling constants for button layout */
 #define BUTTONS_PER_ROW_TOP         5
@@ -93,6 +91,8 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
     button->setAnchorPoint(Vec2(0.5f, 0.5f));
     
+    initButtonTextOps(button);
+    
     float row = i / BUTTONS_PER_ROW_TOP;
     float col;
     if (row == 0) {
@@ -110,27 +110,19 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN) * cscale;
     
     button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
-    button->setVisible(true);
     button->setTag(i);
     
     button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
     button->setTitleFontSize(BUTTON_FONT_SIZE);
-    button->setTitleFontName(ELECTRIC_CIRCUS_FONT_LOCATION);
-    button->setTitleColor(Color3B::WHITE);
     
     button->setEnabled(i < LEVELS_CREATED);
     
     button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
-        if (type == ui::Widget::TouchEventType::BEGAN) {
-            ((Button*)sender)->setTitleColor(Color3B::BLACK);
-        } else if (type == ui::Widget::TouchEventType::CANCELED) {
-            ((Button*)sender)->setTitleColor(Color3B::WHITE);
-        } else if (type == ui::Widget::TouchEventType::ENDED) {
+        if (type == ui::Widget::TouchEventType::ENDED) {
             _levelSelected = ((Node*)sender)->getTag();
-            ((Button*)sender)->setTitleColor(Color3B::WHITE);
         }
     });
-    
+
     button->retain();
     return button;
 }

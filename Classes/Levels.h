@@ -24,5 +24,8 @@
 #define LEVEL_FOUR_KEY "level_four"
 #define LEVEL_FOUR_FILE "levels/export/LEVEL4.json"
 
+#define LEVEL_FIVE_KEY "level_five"
+#define LEVEL_FIVE_FILE "levels/export/LEVEL5.json"
+
 
 #endif /* Level_h */

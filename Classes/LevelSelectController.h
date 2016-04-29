@@ -26,7 +26,7 @@
 #include "ui/CocosGUI.h"
 
 #define NUM_LEVELS                  13
-#define LEVELS_CREATED              4
+#define LEVELS_CREATED              5
 #define NO_LEVEL_SELECTED           -1
 
 // We need a lot of forward references to the classes used by this controller
@@ -63,12 +63,6 @@ protected:
     Node* _debugnode;
     /** The Box2D world */
     WorldController* _world;
-    
-    /** The scene manager for this game demo */
-    SceneManager* _assets;
-    
-    /** Controller for abstracting out input away from layer */
-    InputController* _input;
     
     /** True iff we should display the debug nodes of the physics bodies */
     bool _debug;

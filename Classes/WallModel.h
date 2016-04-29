@@ -54,12 +54,27 @@ protected:
      */
     virtual void resetSceneNode() override;
     
-    /** A reference to the node that defines the top texture (drawing only) */
+    /** A reference to the node that defines the top texture (drawing only)
+      * only used in floors */
     PolygonNode* _topNode;
+    
+    /** A reference to the node that defines the right texture (drawing only) 
+      * only used in platforms */
+    PolygonNode* _rightNode;
+    
+    /** A reference to the node that defines the left texture (drawing only)
+     *  only used in platforms*/
+    PolygonNode* _leftNode;
+    
+    /** The two points that make up the top left and top right corners of the wall */
+    Vec2 _topPoints[2];
     
 #pragma mark -
 #pragma mark Static Constructors
 public:
+    
+    /** Returns the central texture used for this wall. Depends if floor or platform */ 
+    string getTextureID() { return isFloor() ? FLOOR_TEXTURE : PLATFORM_CENTER_TEXTURE; }
     
     /** 
      * Returns true if this wall represents a floor (is touching the bottom of the screen),
@@ -69,18 +84,23 @@ public:
         return getY() - getHeight()/2 == 0;
     }
     
-    /**
-     * Returns the texture ID to use for this wall, depending if it is a floor or platform 
-     */
-    string getTextureID() {
-        return isFloor() ? FLOOR_TEXTURE : PLATFORM_TEXTURE;
-    }
-    
     /** Returns the node that draws the top border of the wall */
     PolygonNode* getTopNode() { return _topNode; }
     
     /** Sets the node that draws the top border of the wall */
     void setTopNode(PolygonNode* topNode) { _topNode = topNode; }
+    
+    /** Returns the node that draws the top border of the wall */
+    PolygonNode* getRightNode() { return _rightNode; }
+    
+    /** Sets the node that draws the top border of the wall */
+    void setRightNode(PolygonNode* topNode) { _rightNode = topNode; }
+    
+    /** Returns the node that draws the top border of the wall */
+    PolygonNode* getLeftNode() { return _leftNode; }
+    
+    /** Sets the node that draws the top border of the wall */
+    void setLeftNode(PolygonNode* topNode) { _leftNode = topNode; }
     
     int getCollisionClass() { return WALL_C; };
     /**

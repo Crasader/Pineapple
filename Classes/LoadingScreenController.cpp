@@ -17,14 +17,16 @@ void loadCharacters(TextureLoader* tloader) {
 void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
-    tloader->loadAsync(PLATFORM_TEXTURE,  "textures/platform.png");
+    tloader->loadAsync(PLATFORM_CENTER_TEXTURE,  "textures/platform-center.png");
+    tloader->loadAsync(PLATFORM_EDGE_RIGHT_TEXTURE,  "textures/platform-right.png");
+    tloader->loadAsync(PLATFORM_EDGE_LEFT_TEXTURE,  "textures/platform-left.png");
     
-    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_restcycle_reduced.png");
+    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_full.png");
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives2.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
     tloader->loadAsync(GOAL_TEXTURE,      "textures/fridge.png");
-    tloader->loadAsync(RED_CUP_TEXTURE,   "textures/redcup.png");
+    tloader->loadAsync(RED_CUP_TEXTURE,   "textures/cup_smash.png");
     tloader->loadAsync(BLUE_CUP_TEXTURE,  "textures/bluecup.png");
     tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
     tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
@@ -55,9 +57,14 @@ void loadObstacles(TextureLoader* tloader) {
 	tloader->loadAsync(SPLAT_TEXTURE_4, "textures/splatcycle4.png");
 }
 
+void loadHomeScreen(TextureLoader* tloader) {
+    tloader->loadAsync(HOME_SCREEN_BACKGROUND, "textures/home_screen.png");
+    tloader->loadAsync(HOME_SCREEN_WILL_ANIMATION, "textures/will_pop_out.png");
+}
+
 void loadBackground(TextureLoader* tloader) {
     tloader->loadAsync(FRONT_BACKGROUND,  "textures/backgroundFull.png");
-    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills.png");
+    tloader->loadAsync(MIDDLE_BACKGROUND, "textures/hills2.png");
     tloader->loadAsync(BACK_BACKGROUND,   "textures/clouds.png");
     
 }
@@ -68,7 +75,6 @@ void loadPauseScreen(TextureLoader* tloader) {
 }
 
 void loadHUD(TextureLoader* tloader) {
-    // HUD
     tloader->loadAsync(TOP_BAR, "textures/HUD/topBar.png");
     tloader->loadAsync(TOP_BLENDER, "textures/HUD/blender.png");
     tloader->loadAsync(TOP_CHILD_BOW, "textures/HUD/top_bar_bow.png");
@@ -106,7 +112,7 @@ void loadFonts(SceneManager* assets) {
 
 void loadSounds(SceneManager* assets) {
     assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
-    assets->loadAsync<Sound>(LEVEL_SELECT_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
+    assets->loadAsync<Sound>(LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
 }
 
 void loadLevels(SceneManager* assets) {
@@ -114,6 +120,7 @@ void loadLevels(SceneManager* assets) {
     assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
     assets->loadAsync<LevelModel>(LEVEL_THREE_KEY, LEVEL_THREE_FILE);
     assets->loadAsync<LevelModel>(LEVEL_FOUR_KEY, LEVEL_FOUR_FILE);
+    assets->loadAsync<LevelModel>(LEVEL_FIVE_KEY, LEVEL_FIVE_FILE);
 }
 
 
@@ -129,6 +136,7 @@ void LoadingScreenController::preload() {
     loadBackground(tloader);
     loadPauseScreen(tloader);
     loadHUD(tloader);
+    loadHomeScreen(tloader);
     loadLevelSelectScreen(tloader);
     loadSplashScreens(tloader);
     

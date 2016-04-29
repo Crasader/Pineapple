@@ -32,6 +32,9 @@
 #define TILE_HEIGHT_PROPERTY        "tileheight"
 #define OBJECT_PROPERTIES_PROPERTY  "properties"
 
+/** Walls */
+#define WALL_IS_POLY_PROPERTY       "polygon"
+
 /** All Object Properties */
 #define WIDTH_PROPERTY      "width"
 #define HEIGHT_PROPERTY     "height"
@@ -191,17 +194,31 @@ bool LevelModel::load() {
                 float h = (float) reader.getNumber(HEIGHT_PROPERTY) / tileY;
                 
                 position[0] = x;
-                position[1] = y+0.5;
+                position[1] = y;
                 
                 if (layerName == WALL_OBJECT_GROUP) {
-                    position[0] = x;
-                    position[1] = y-h;
-                    position[2] = x;
-                    position[3] = y;
-                    position[4] = x+w;
-                    position[5] = y;
-                    position[6] = x+w;
-                    position[7] = y-h;
+                    if (reader.startArray(WALL_IS_POLY_PROPERTY)) {
+                        for (int kk = 0; kk < WALL_VERTS; kk += 2) {
+                            reader.startObject();
+                            float x2 = reader.getNumber(X_PROPERTY) / tileX + x;
+                            float y2 = -reader.getNumber(Y_PROPERTY) / tileY + y;
+                            position[kk] = x2;
+                            position[kk+1] = y2;
+                            reader.endObject();
+                            reader.advance();
+                        }
+                        reader.endArray();
+                    } else {
+                        reader.endArray();
+                        position[0] = x;
+                        position[1] = y-h;
+                        position[2] = x;
+                        position[3] = y;
+                        position[4] = x+w;
+                        position[5] = y;
+                        position[6] = x+w;
+                        position[7] = y-h;
+                    }
                     addWall(position);
                 } else if (layerName == GOAL_OBJECT_GROUP) {
                     addGoal(position);
@@ -209,12 +226,15 @@ bool LevelModel::load() {
                     addJello(position, x, y);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
                     position[0] += 0.5;
+                    position[1] += 0.5;
                     addSpikes(position);
                 } else if (layerName == WILL_OBJECT_GROUP) {
                     addPineapple(position);
                 } else if (layerName == KIDS_OBJECT_GROUP) {
                     addKid(position);
                 } else if (layerName == CUP_OBJECT_GROUP) {
+                    position[0] += 0.5;
+                    position[1] += 0.5;
                     addCup(position, x, y);
                 } else if (layerName == BUTTON_SWITCH_OBJECT_GROUP) {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
@@ -365,6 +385,9 @@ void LevelModel::unload() {
                 
                 if ((*it)->isFloor()) {
                     _worldnode->removeChild((*it)->getTopNode());
+                } else {
+                    _worldnode->removeChild((*it)->getLeftNode());
+                    _worldnode->removeChild((*it)->getRightNode());
                 }
             }
             (*it)->release();
@@ -666,21 +689,34 @@ void LevelModel::setRootNode(Node* node) {
         WallModel* wall = *it;
         
         Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
-        image->setTexParameters(params);
         wall->setDrawScale(_scale.x , _scale.y);
-        poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
         
         if (wall->isFloor()) {
+            image->setTexParameters(params);
+            poly = PolygonNode::createWithTexture(image, wall->getPolygon() * _scale);
             Texture2D* topImage = assets->get<Texture2D>(FLOOR_TOP_TEXTURE);
             wall->setTopNode(PolygonNode::createWithTexture(topImage));
+        } else {
+            poly = PolygonNode::createWithTexture(image);
+            poly->setScale(wall->getSize().width*_scale.x/poly->getContentSize().width, wall->getSize().height*_scale.y/poly->getContentSize().height);
+            PolygonNode* left = PolygonNode::createWithTexture(assets->get<Texture2D>(PLATFORM_EDGE_LEFT_TEXTURE));
+            PolygonNode* right =PolygonNode::createWithTexture(assets->get<Texture2D>(PLATFORM_EDGE_RIGHT_TEXTURE));
+            
+            wall->setLeftNode(left);
+            wall->setRightNode(right);
         }
         
         wall->setSceneNode(poly);
+        
         initDebugProperties(wall);
         
         addObstacle(wall, WALL_Z_INDEX);
+        
         if (wall->isFloor()) {
             _worldnode->addChild(wall->getTopNode(),WALL_Z_INDEX + 1);
+        } else {
+            _worldnode->addChild(wall->getRightNode(), WALL_Z_INDEX+1);
+            _worldnode->addChild(wall->getLeftNode(), WALL_Z_INDEX+1);
         }
     }
     
@@ -737,22 +773,17 @@ void LevelModel::setRootNode(Node* node) {
         jello->setSceneNode(poly);
         initDebugProperties(jello);
         
-        jello->setY(jello->getY() - (1 - jello->getHeight())/2);
-                
         addAnonymousObstacle(jello, JELLO_Z_INDEX);
     }
     
     for(auto it = _spikes.begin(); it != _spikes.end(); ++it) {
         SpikeModel* spike = *it;
         
-        
         Texture2D* image = assets->get<Texture2D>(SPIKE_TEXTURE);
         spike->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);
         spike->setSceneNode(poly);
         initDebugProperties(spike);
-        
-        spike->setY(spike->getY() - (1 - spike->getHeight())/2);
         
         addAnonymousObstacle(spike, SPIKES_Z_INDEX);
     }
@@ -765,7 +796,7 @@ void LevelModel::setRootNode(Node* node) {
         
         Texture2D* image = assets->get<Texture2D>(cup->getTextureName());
         cup->setDrawScale(_scale.x, _scale.y);
-        poly = PolygonNode::createWithTexture(image);
+        poly = AnimationNode::create(image, 1, CUP_SMASH_FRAMES, CUP_SMASH_FRAMES);
         cup->setSceneNode(poly);
         initDebugProperties(cup);
         addAnonymousObstacle(cup, CUP_Z_INDEX);
