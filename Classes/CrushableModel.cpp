@@ -7,9 +7,9 @@
 #pragma mark -
 #pragma mark Physics Constants
 	/** The amount to shrink the body fixture (vertically) relative to the image */
-#define CRUSHABLE_VSHRINK  1.5f
+#define CRUSHABLE_VSHRINK  0.3f
 	/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define CRUSHABLE_HSHRINK  1.5f
+#define CRUSHABLE_HSHRINK  0.3f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -108,8 +108,6 @@ bool CrushableModel::init(const char* texture, int x, int y, const Vec2& pos, co
         _textureName = texture;
         _tiledYCoord = y;
         _tiledXCoord = x;
-		setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-		setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
 		_smashCycleFrame = 0.0f;
 		_smashing = false;
 		_smashed = false;
@@ -201,8 +199,10 @@ void CrushableModel::resetSceneNode() {
         pnode->setScale(cscale * CRUSHABLE_SCALE);
 		pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * 0.5f * pnode->getScale() / _drawScale.x,
-                     pnode->getContentSize().height * 0.5f * pnode->getScale() / _drawScale.y);
+        setDimension(pnode->getContentSize().width * CRUSHABLE_HSHRINK / _drawScale.x,
+                     pnode->getContentSize().height * CRUSHABLE_VSHRINK / _drawScale.y);
+        
+        pnode->setFrame(0);
 
 		_smashCycleFrame = 0.0f;
 		_smashCycle = pnode;

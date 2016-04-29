@@ -26,7 +26,7 @@
 #include "ui/CocosGUI.h"
 
 #define NUM_LEVELS                  13
-#define LEVELS_CREATED              4
+#define LEVELS_CREATED              5
 #define NO_LEVEL_SELECTED           -1
 
 // We need a lot of forward references to the classes used by this controller
@@ -72,6 +72,11 @@ protected:
     
     // array of buttons
     Button* _buttons[NUM_LEVELS];
+    // The controller's local idea of the number of levels completed, this is updated upon new level
+    // completion along with the extra button in update()
+    int _levelsComplete;
+    // Keep track of screen dimension for update()
+    Size _dimen;
     
     /** The level button that is selected. -1 when none */
     int _levelSelected;
@@ -139,6 +144,9 @@ public:
      * @return  true if the controller is initialized properly, false otherwise.
      */
     bool init(Node* root, InputController* input, const Rect& rect);
+    
+    // called upon transition to the level select, adds new button if latest level has been completed
+    void update();
     
     
 #pragma mark -
