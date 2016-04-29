@@ -31,23 +31,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
+                 "width":128,
                  "x":1344,
-                 "y":256
-                }, 
-                {
-                 "height":192,
-                 "id":51,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":1664,
                  "y":256
                 }, 
                 {
@@ -61,23 +46,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":640,
-                 "x":1728,
-                 "y":256
-                }, 
-                {
-                 "height":192,
-                 "id":60,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":2368,
+                 "width":768,
+                 "x":1664,
                  "y":256
                 }, 
                 {
@@ -263,8 +233,8 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":2944,
-                 "y":448
+                 "x":2816,
+                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -433,7 +403,7 @@
          "objects":[
                 {
                  "gid":42,
-                 "height":192,
+                 "height":320,
                  "id":33,
                  "name":"",
                  "properties":
@@ -441,7 +411,7 @@
                      "isOpen":"false",
                      "isVertical":"true",
                      "linkID":"1",
-                     "nubbinsVisible":"false"
+                     "nubbinsVisible":"true"
                     },
                  "rotation":0,
                  "type":"",
@@ -471,7 +441,7 @@
                 }, 
                 {
                  "gid":42,
-                 "height":192,
+                 "height":320,
                  "id":62,
                  "name":"",
                  "properties":
@@ -479,7 +449,7 @@
                      "isOpen":"true",
                      "isVertical":"true",
                      "linkID":"1",
-                     "nubbinsVisible":"false"
+                     "nubbinsVisible":"true"
                     },
                  "rotation":0,
                  "type":"",
@@ -495,7 +465,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":99,
+ "nextobjectid":104,
  "orientation":"orthogonal",
  "properties":
     {
