@@ -178,7 +178,6 @@ void PineappleRoot::transitionToLevelSelect() {
     
     if (_activeController == _gameplay) {
         removeChild(_gameRoot);
-        _levelSelect->update();
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
     }
     
@@ -192,6 +191,9 @@ void PineappleRoot::transitionToLevelSelect() {
     if (! _levelSelect->isInitted()) {
         _levelSelect->init(_levelSelectRoot, &_inputController);
     }
+    
+    // Updates to add a new button if new level was unlocked
+    _levelSelect->update();
     
     if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
         if (_backgroundSound != nullptr) {
