@@ -162,37 +162,54 @@ void HUDController::update(int childrenAlive, float blenderLoc, vector<KidModel*
     if (blenderLoc < 0) {
         blenderLoc = 0;
     }
-    float pos = unitsToTopBarX(blenderLoc, goalLoc);
+    float blenderPos = unitsToTopBarX(blenderLoc, goalLoc);
     // now make it intuitive when you're gonna die
-    HUD_CONTROLLER->_blender->setPositionX(pos);
+    HUD_CONTROLLER->_blender->setPositionX(blenderPos);
     
     // update children icons
     for (int i = 0; i < KID_COUNT; i++) {
+        // get child's current place
         KidModel* kid = children[i];
+        int place = KID_COUNT;
+        for (int j = 0; j < KID_COUNT; j++) {
+            // if this child is dead then I'm beating him
+            if (children[j] == nullptr) {
+                place -= 1;
+            } else if (kid != nullptr && j != i && kid->getX() > children[j]->getX()) {
+                place -= 1;
+            }
+        }
         if (kid != nullptr) {
             float pos = unitsToTopBarX(kid->getPosition().x, goalLoc);
-            pos += HUD_CONTROLLER->_children[i]->getContentSize().width * KID_ICON_SCALE * cscale / 2.0f;
-            if (pos <= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth - (KID_COUNT - i * HUD_CONTROLLER->_children[i]->getContentSize().width/2.0f)) {
-                HUD_CONTROLLER->_children[i]->setPositionX(pos);
+            float width = HUD_CONTROLLER->_children[i]->getContentSize().width * KID_ICON_SCALE * cscale;
+            pos += width / 2.0f;
+            if (pos <= blenderPos) {
+                if (HUD_CONTROLLER->_hudNode->getChildren().contains(HUD_CONTROLLER->_children[i])) {
+                    HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_children[i]);
+                }
+            } else if (pos >= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth -
+                    (place * width/2.0f)) {
+                pos = HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth -
+                (place * width/2.0f);
             }
-        } else {
-            if (HUD_CONTROLLER->_hudNode->getChildren().contains(HUD_CONTROLLER->_children[i])) {
-                HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_children[i]);
-            }
+            HUD_CONTROLLER->_children[i]->setPositionX(pos);
         }
     }
+    float willPos = 0.0f;
     // update will
     if (will) {
-        pos = unitsToTopBarX(will->getPosition().x, goalLoc);
+        willPos = unitsToTopBarX(will->getPosition().x, goalLoc);
+        float width = HUD_CONTROLLER->_will->getContentSize().width * WILL_SCALE * cscale;
         // now center it
-        pos += HUD_CONTROLLER->_will->getContentSize().width * WILL_SCALE * cscale / 2.0f;
-        if (pos <= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth) {
-            HUD_CONTROLLER->_will->setPositionX(pos);
+        willPos += width / 2.0f;
+        if (willPos <= blenderPos) {
+            if (HUD_CONTROLLER->_hudNode->getChildren().contains(HUD_CONTROLLER->_will)) {
+                HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_will);
+            }
+        } else if (willPos >= HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth) {
+            willPos = HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth;
         }
-    } else {
-        if (HUD_CONTROLLER->_hudNode->getChildren().contains(HUD_CONTROLLER->_will)) {
-            HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_will);
-        }
+        HUD_CONTROLLER->_will->setPositionX(willPos);
     }
 }
 

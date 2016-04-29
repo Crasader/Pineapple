@@ -22,7 +22,7 @@
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT				0.07f
 /** offset for the foot sensor to enable some logic in collisions before the pineapples physics kick in */
-#define SENSOR_V_OFFSET             -0.078f
+#define SENSOR_V_OFFSET             -0.085f
 /** The density of the character */
 #define PINEAPPLE_DENSITY			0.5f
 /** The impulse for the character jump */

@@ -41,6 +41,7 @@ void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstac
 */
 void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel* jello) {
 	if (!will->isCollidingWithJello()) {
+		jello->setBouncing(true);
 		will->setCollidingWithJello(true);
 		if (will->isSmall()) {
 			//Jump!
@@ -58,9 +59,10 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 * This method is called when a kid collides with a jello
 * to trigger upward momentum, and a jello quiver animation
 */
-void CollisionController::handleJelloCollision(KidModel* kid) {
+void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello) {
 	//Jump!
 	if (!kid->isCollidingWithJello()) {
+		jello->setBouncing(true);
 		kid->setVY(10);
 		kid->setVX(KID_WALKSPEED + 4);
 		kid->setCollidingWithJello(true);
@@ -94,9 +96,11 @@ void CollisionController::handleSpikeCollision(KidModel* kid) {
 }
 
 void CollisionController::handleCupCollision(PineappleModel* will, CrushableModel* cup) {
-	if (isBelowChar(cup, will)) {
+	will->setVY(4);
+	cup->setSmashing(true);
+	/*if (isBelowChar(cup, will)) {
 		_level->removeObstacle(cup);
-	}
+	}*/
 }
 
 void CollisionController::handleButtonSwitchStartCollision(PineappleModel* will, ButtonSwitchModel* buttonSwitch) {
@@ -164,10 +168,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         if (bd1->getCollisionClass() == CUP_C || bd2->getCollisionClass() == CUP_C) {
             // if will is large and traveling downwards, crush
             if (!will->isSmall() && will->getVY() < MAX_V_TO_CRUSH) {
-                // set v to 0 because sometimes the sensor touches too early for the physics
-                // engine to do it
-                will->setVY(0);
-                _level->removeObstacle(bd1->getCollisionClass() == CUP_C ? bd1 : bd2);
+				handleCupCollision(will, bd1->getCollisionClass() == CUP_C ? (CrushableModel*)bd1 : (CrushableModel*)bd2);
             }
         }
         // with ground
@@ -219,7 +220,7 @@ void CollisionController::beginContact(b2Contact* contact) {
         }
 		// Kid x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
-			handleJelloCollision(kid);
+			handleJelloCollision(kid, bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
             kid->setGrounded(false);
 		}
 		// Kid x Goal

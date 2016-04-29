@@ -52,7 +52,7 @@ protected:
 	* This method is called when a kid collides with a jello
 	* to trigger upward momentum, and a jello quiver animation
 	*/
-	void handleJelloCollision(KidModel* kid);
+	void handleJelloCollision(KidModel* kid, JelloModel* jello);
 
 	/**
 	 * Triggers blending of will
