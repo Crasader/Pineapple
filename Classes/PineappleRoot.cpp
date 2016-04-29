@@ -192,6 +192,9 @@ void PineappleRoot::transitionToLevelSelect() {
         _levelSelect->init(_levelSelectRoot, &_inputController);
     }
     
+    // Updates to add a new button if new level was unlocked
+    _levelSelect->update();
+    
     if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
         if (_backgroundSound != nullptr) {
             if (SoundEngine::getInstance()->getMusicState() == SoundEngine::SoundState::PLAYING) {
