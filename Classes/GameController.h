@@ -88,6 +88,9 @@ protected:
 	bool _hasSplat;
 	/** Size of root */
 	Size _rootSize;
+
+	/** Reference to the fridge door */
+	PolygonNode* _fridgeDoor;
     
     /** The background view */
     BackgroundView* _background;

@@ -44,7 +44,7 @@
 #define KID_Z_INDEX                 30 //30...30+NUM_CHILDREN-1 used by Kids
 
 #define PINEAPPLE_Z_INDEX           35
-#define BLENDER_Z_INDEX             36
+#define BLENDER_Z_INDEX             37
 
 
 using namespace cocos2d;
@@ -55,7 +55,7 @@ protected:
     Size _tileSize;
     
 	/** Reference to the goalDoor (for collision detection) */
-	BoxObstacle*    _goalDoor;
+	GoalModel*    _goalDoor;
 	/** Reference to the player avatar */
 	PineappleModel*      _pineapple;
 	/** References to the kid avatars */
@@ -122,7 +122,7 @@ public:
 	/**
 	 *
 	 */
-	BoxObstacle* getGoal() { return _goalDoor; }
+	GoalModel* getGoal() { return _goalDoor; }
 
 	/**
 	*
