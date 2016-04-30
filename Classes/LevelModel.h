@@ -44,7 +44,7 @@
 #define KID_Z_INDEX                 30 //30...30+NUM_CHILDREN-1 used by Kids
 
 #define PINEAPPLE_Z_INDEX           35
-#define BLENDER_Z_INDEX             37
+#define BLENDER_Z_INDEX             40
 
 
 using namespace cocos2d;
