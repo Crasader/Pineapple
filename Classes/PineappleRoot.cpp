@@ -207,6 +207,10 @@ void PineappleRoot::transitionToLevelSelect() {
         SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
     }
+
+		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::PLAYING) {
+			SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
+		}
     
     _homeScreen->setTransitionStatus(TRANSITION_NONE);
     _gameplay->setTransitionStatus(TRANSITION_NONE);
@@ -236,6 +240,15 @@ void PineappleRoot::transitionToGame(int levelIndex) {
         SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
     }
+
+		// Blender soundddd
+		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::INACTIVE) {
+			float volScale = _gameplay->getBlenderVolScale();
+			if (volScale >= 0) {
+				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+				SoundEngine::getInstance()->playEffect(BLENDER_SOUND, source, true, EFFECT_VOLUME*volScale);
+			}
+		}
     
     if (_activeController == _homeScreen) {
         removeChild(_homeRoot);
@@ -310,6 +323,13 @@ void PineappleRoot::update(float deltaTime) {
             transitionToLevelSelect();
         }
     }
+
+		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::PLAYING) {
+			float volScale = _gameplay->getBlenderVolScale();
+			if (volScale >= 0) {
+				SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, volScale*EFFECT_VOLUME);
+			}
+		}
     
     //Do the updating
     _activeController->update(deltaTime);

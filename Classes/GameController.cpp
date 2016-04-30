@@ -25,6 +25,7 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
+#include "Sounds.h"
 
 
 using namespace cocos2d;
@@ -361,6 +362,11 @@ void GameController::setFailure(bool value){
     
 }
 
+float GameController::getBlenderVolScale() {
+		float scale = NORMAL_BLENDER_DISTANCE / _level->getBlenderPineappleDistance();
+		return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
+}
+
 void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _avatar) {
     int size = 0;
     float scale = 1.0f;
@@ -445,7 +451,7 @@ void GameController::update(float dt) {
         } else if (_loseview->shouldTransferToLevelSelect()) {
             _loseview->resetButtons();
             Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
-            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);//TODO CHECK THIS OUT FOR SOUNDS YO
             setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
             return;
         }
@@ -488,7 +494,21 @@ void GameController::update(float dt) {
                 }
                 // check if off bounds death
                 if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
-                    _level->kill(_level->getKid(i));
+									char* key;
+									switch (i) {
+									case 0: key = PINEAPPLET1_DEATH_SOUND;
+										break;
+									case 1: key = PINEAPPLET2_DEATH_SOUND;
+										break;
+									case 2: key = PINEAPPLET3_DEATH_SOUND;
+										break;
+									case 3: key = PINEAPPLET4_DEATH_SOUND;
+										break;
+									default: key = "we gon crash if this happens, but it won't so it's chill.";
+									}
+									Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
+									SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
+                  _level->kill(_level->getKid(i));
                 }
             }
         }
@@ -517,6 +537,7 @@ void GameController::update(float dt) {
                 
                 // Scroll the screen (with parallax) if necessary
                 handleScrolling();
+
             } else {
                 _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
                 _level->getPineapple()->setFixedRotation(false);

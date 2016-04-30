@@ -218,6 +218,11 @@ public:
     bool isActive() { return _isActive; }
     
     WorldController* getWorld() { return _world; }
+
+		float getBlenderPineappleDistance() {
+			if (_pineapple == nullptr) { return -1.0f; }
+			return _pineapple->getPosition().distance(_blender->getPosition());
+		}
     
 #pragma mark -
 #pragma mark Allocation
