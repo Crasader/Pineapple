@@ -33,7 +33,7 @@ using namespace cocos2d;
 #define SPLAT_Z         5
 #define WIN_SPLASH_Z    7
 #define LOSE_SPLASH_Z   8
-#define GOAL_DOOR_Z		36
+#define GOAL_DOOR_Z		38
 
 
 #pragma mark -

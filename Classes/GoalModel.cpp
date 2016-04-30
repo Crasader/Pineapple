@@ -10,8 +10,8 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define GOAL_SCALE	1.5f
-#define GOAL_H_SHRINK   0.95f
+#define GOAL_SCALE		1.5f
+#define GOAL_H_SHRINK   0.79f
 
 #pragma mark -
 #pragma mark Static Constructors
