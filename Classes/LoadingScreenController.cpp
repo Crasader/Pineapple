@@ -117,7 +117,7 @@ void loadTutorial(TextureLoader *tloader) {
     tloader->loadAsync(TUTORIAL_DOOR_IMAGE, "textures/tutorial/door_animation.png");
     tloader->loadAsync(TUTORIAL_SWITCH_IMAGE, "textures/tutorial/switch_animation.png");
     tloader->loadAsync(TUTORIAL_POINTER_IMAGE, "textures/tutorial/pointer.png");
-    tloader->loadAsync(TUTORIAL_SMASH_IMAGE, "textures/tutorial/smash_animation");
+    tloader->loadAsync(TUTORIAL_SMASH_IMAGE, "textures/tutorial/smash_animation.png");
 }
 
 void loadLevelSelectScreen(TextureLoader *tloader) {
