@@ -411,8 +411,8 @@ void GameController::setTutorialVisible(TutorialView* view) {
     
     if (value) {
         _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
-        view->position();
         view->addToRoot();
+        view->position();
         _activeTutorialView = view;
         HUDController::setEnabled(false);
     } else {

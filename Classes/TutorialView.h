@@ -15,13 +15,14 @@
 
 using namespace std;
 
-#define TUTORIAL_GRADIENT_Z      0
-#define TUTORIAL_BUTTON_Z        2
+#define TUTORIAL_GRADIENT_Z         0
+#define TUTORIAL_IMAGE_Z            1
+#define TUTORIAL_BUTTON_Z           2
 
 class TutorialView : public ModalView {
 protected:
     /** The animations drawn on this tutorial view */
-    vector<TutorialAnimationTuple> _animations;
+    vector<TutorialAnimationTuple*> _animations;
     
     /** The frame count for the animations */
     float _frameCount;
@@ -36,6 +37,8 @@ protected:
     bool _dismissed;
     
 public:
+    void addAnimation(TutorialAnimationTuple* t);
+    
     float getTriggerX() { return _triggerX; }
     
     void update(float dt);
@@ -46,7 +49,7 @@ public:
     
     bool isDismissed() { return _dismissed; }
     
-    vector<TutorialAnimationTuple> getAnimations() { return _animations; }
+    vector<TutorialAnimationTuple*> getAnimations() { return _animations; }
     
     static TutorialView* create(int tutorialID, float triggerX);
     
@@ -54,12 +57,23 @@ public:
     
     void addToRoot() {
         _root->addChild(_backgroundOverlay, TUTORIAL_GRADIENT_Z);
+        
+        for(auto it = _animations.begin(); it != _animations.end(); ++it) {
+            TutorialAnimationTuple* t = *it;
+            _root->addChild(t->createNode(_assets), TUTORIAL_IMAGE_Z);
+        }
+        
         _root->addChild(_dismissButton, TUTORIAL_BUTTON_Z);
     }
     
     void clearFromRoot() {
         _root->removeChild(_backgroundOverlay);
         _root->removeChild(_dismissButton);
+        
+        for(auto it = _animations.begin(); it != _animations.end(); ++it) {
+            TutorialAnimationTuple* t = *it;
+            _root->removeChild(t->getNode());
+        }
     }
     
 };

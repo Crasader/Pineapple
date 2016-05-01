@@ -158,11 +158,19 @@
 #define WIN_SPLASH_WILL     "win_splash_will"
 
 
-/** Tutorial images */
+/** Tutorial messages */
 #define TUTORIAL_GROW_MESSAGE   "grow_message"
 #define TUTORIAL_JUMP_MESSAGE   "jump_message"
 #define TUTORIAL_MOVE_MESSAGE   "move_message"
 #define TUTORIAL_SHRINK_MESSAGE "shrink_message"
 #define TUTORIAL_SWITCH_MESSAGE "switch_message"
+
+/** Tutorial images */
+#define TUTORIAL_SHRINK_IMAGE   "shrink_image"
+#define TUTORIAL_GROW_IMAGE     "grow_image"
+#define TUTORIAL_JUMP_IMAGE     "jump_image"
+#define TUTORIAL_DOOR_IMAGE     "door_image"
+#define TUTORIAL_SWITCH_IMAGE   "switch_image"
+#define TUTORIAL_POINTER_IMAGE  "pointer_image"
 
 #endif /* Texture_h */
