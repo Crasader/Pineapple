@@ -12,12 +12,13 @@
 #define TUTORIAL_BUTTON_FONT            28
 #define TUTORIAL_BUTTON_Y_DIFF          -220
 
-#define TUTORIAL_MOVE_ID    0
-#define TUTORIAL_JUMP_ID    1
-#define TUTORIAL_SHRINK_ID  2
-#define TUTORIAL_GROW_ID    3
-#define TUTORIAL_SWITCH_ID  4
-#define TUTORIAL_SMASH_ID   5
+#define TUTORIAL_MOVE_ID        0
+#define TUTORIAL_JUMP_ID        1
+#define TUTORIAL_SHRINK_ID      2
+#define TUTORIAL_GROW_ID        3
+#define TUTORIAL_SWITCH_ID      4
+#define TUTORIAL_JUMP_SIZE_ID   5
+#define TUTORIAL_SMASH_ID       6
 
 #define TUTORIAL_MESSAGE_SCALE      0.2f
 #define TUTORIAL_MESSAGE_OFFSET   Vec2(0,0.18f)
@@ -68,7 +69,19 @@ void createShrinkTutorial(TutorialView* t) {
 }
 
 void createSmashTutorial(TutorialView* t) {
+    float elmYDiff = -0.05f;
+
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_SMASH_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_SMASH_IMAGE, 12, Vec2(0,elmYDiff), 0.6f, 0.15f));
+
+}
+
+void createJumpSizeTutorial(TutorialView* t) {
+    float elmYDiff = -0.10f;
+
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_JUMP_SIZE_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_JUMP_IMAGE, 14, Vec2(0,elmYDiff), 0.8f, 0.35f));
+
 }
 
 void createSwitchTutorial(TutorialView* t) {
@@ -108,6 +121,9 @@ TutorialView* TutorialView::create(int id, float triggerX) {
             break;
         case TUTORIAL_SWITCH_ID:
             createSwitchTutorial(t);
+            break;
+        case TUTORIAL_JUMP_SIZE_ID:
+            createJumpSizeTutorial(t);
             break;
         case TUTORIAL_SMASH_ID:
             createSmashTutorial(t);

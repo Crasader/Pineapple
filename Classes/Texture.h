@@ -159,12 +159,13 @@
 
 
 /** Tutorial messages */
-#define TUTORIAL_GROW_MESSAGE   "grow_message"
-#define TUTORIAL_JUMP_MESSAGE   "jump_message"
-#define TUTORIAL_MOVE_MESSAGE   "move_message"
-#define TUTORIAL_SHRINK_MESSAGE "shrink_message"
-#define TUTORIAL_SWITCH_MESSAGE "switch_message"
-#define TUTORIAL_SMASH_MESSAGE  "smash_message"
+#define TUTORIAL_GROW_MESSAGE       "grow_message"
+#define TUTORIAL_JUMP_MESSAGE       "jump_message"
+#define TUTORIAL_MOVE_MESSAGE       "move_message"
+#define TUTORIAL_SHRINK_MESSAGE     "shrink_message"
+#define TUTORIAL_SWITCH_MESSAGE     "switch_message"
+#define TUTORIAL_SMASH_MESSAGE      "smash_message"
+#define TUTORIAL_JUMP_SIZE_MESSAGE "jump_size_message"
 
 /** Tutorial images */
 #define TUTORIAL_SHRINK_IMAGE   "shrink_image"
@@ -176,9 +177,9 @@
 #define TUTORIAL_SMASH_IMAGE    "smash_image"
 
 /** Tutorial buttons */
-#define TUTORIAL_BUTTON     "tutorial_button"
-#define TUTORIAL_BUTTON_FILEPATH    "textures/tutorial/tutorial_button.png"
-#define TUTORIAL_BUTTON_ON     "tutorial_button_on"
+#define TUTORIAL_BUTTON                 "tutorial_button"
+#define TUTORIAL_BUTTON_FILEPATH        "textures/tutorial/tutorial_button.png"
+#define TUTORIAL_BUTTON_ON              "tutorial_button_on"
 #define TUTORIAL_BUTTON_ON_FILEPATH    "textures/tutorial/tutorial_button_inverse.png"
 
 #endif /* Texture_h */

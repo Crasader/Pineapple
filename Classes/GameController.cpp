@@ -500,6 +500,7 @@ void GameController::update(float dt) {
         return;
     }
     
+    // Check for failure
     if (_level->haveFailed() && ! _loseViewVisible) {
         setFailure(true);
     }
@@ -507,6 +508,15 @@ void GameController::update(float dt) {
     // Check for Victory
     if (checkForVictory() && ! _level->haveFailed() && ! _winViewVisible) {
         setComplete(true);
+    }
+    
+    // Check for tutorials
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        TutorialView* view = (*it);
+        if (! view->isDismissed() && _level->getPineapple()->getPosition().x > view->getTriggerX()) {
+            setTutorialVisible(view);
+            break;
+        }
     }
     
     if (_loseViewVisible)  {
@@ -611,14 +621,6 @@ void GameController::update(float dt) {
                 
                 if (_level->getPineapple()->getPosition().y < 0) {
                     _level->kill(_level->getPineapple());
-                }
-                
-                for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
-                    TutorialView* view = (*it);
-                    if (! view->isDismissed() && _level->getPineapple()->getPosition().x > view->getTriggerX()) {
-                        setTutorialVisible(view);
-                        break;
-                    }
                 }
                 
                 // Scroll the screen (with parallax) if necessary
