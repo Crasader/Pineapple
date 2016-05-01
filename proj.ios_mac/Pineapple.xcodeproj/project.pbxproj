@@ -249,6 +249,7 @@
 		409043141CD6645C0062CE01 /* Sounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sounds.h; sourceTree = "<group>"; };
 		409043151CD664CC0062CE01 /* TutorialView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TutorialView.cpp; sourceTree = "<group>"; };
 		409043161CD664CC0062CE01 /* TutorialView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialView.h; sourceTree = "<group>"; };
+		4090431A1CD67C8B0062CE01 /* TutorialAnimationTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialAnimationTuple.h; sourceTree = "<group>"; };
 		40C8F6ED1CB20F50000D9055 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		40C8F6EE1CB20F50000D9055 /* tiledTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tiledTextures; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
@@ -458,6 +459,7 @@
 				40660A961CC4A3C90064EBD9 /* WinView.h */,
 				409043151CD664CC0062CE01 /* TutorialView.cpp */,
 				409043161CD664CC0062CE01 /* TutorialView.h */,
+				4090431A1CD67C8B0062CE01 /* TutorialAnimationTuple.h */,
 			);
 			name = View;
 			sourceTree = "<group>";

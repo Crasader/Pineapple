@@ -14,6 +14,7 @@ void ModalView::init(Node *root, SceneManager *assets, Vec2 scale, string splash
     _splashTextureID = splashTexture;
     _scale = scale;
     
+    _dismiss = false;
     _transferToReset = false;
     _transferToNextLevel = false;
     _transferToLevelSelect = false;
@@ -27,11 +28,13 @@ void ModalView::init(Node *root, SceneManager *assets, Vec2 scale, string splash
                                  _root->getContentSize().height/image->getContentSize().height);
     _backgroundOverlay->retain();
     
-    image = assets->get<Texture2D>(_splashTextureID);
-    _splashImage = PolygonNode::createWithTexture(image);
-    _splashImage->setAnchorPoint(Vec2(0.5f, 0.5f));
-    _splashImage->retain();
-    _splashImage->setScale(MODAL_MAIN_SCALE * cscale);
+    if (splashTexture != "") {
+        image = assets->get<Texture2D>(_splashTextureID);
+        _splashImage = PolygonNode::createWithTexture(image);
+        _splashImage->setAnchorPoint(Vec2(0.5f, 0.5f));
+        _splashImage->retain();
+        _splashImage->setScale(MODAL_MAIN_SCALE * cscale);
+    }
 
 }
 
@@ -60,8 +63,13 @@ void ModalView::initButton(Button *button, int fontSize, string text) {
 
 void ModalView::position() {
     Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
-    _backgroundOverlay->setPosition(center);
-    _splashImage->setPosition(center);
+    
+    if (_backgroundOverlay != nullptr) {
+        _backgroundOverlay->setPosition(center);
+    }
+    if (_splashImage != nullptr) {
+        _splashImage->setPosition(center);
+    }
 }
 
 void ModalView::dispose() {

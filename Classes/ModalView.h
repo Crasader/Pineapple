@@ -48,6 +48,7 @@ protected:
     /** The draw scale used by the current resolution */
     Vec2 _scale;
     
+    bool _dismiss;
     bool _transferToReset;
     bool _transferToLevelSelect;
     bool _transferToNextLevel;
@@ -58,6 +59,8 @@ public:
     
     void initButton(Button* button, int fontSize, string text);
     
+    bool shouldDismiss() { return _dismiss; }
+    
     bool shouldReset() { return _transferToReset; }
     
     bool shouldTransferToLevelSelect() { return _transferToLevelSelect; }
@@ -65,6 +68,7 @@ public:
     bool shouldTransferToNextLevel() { return _transferToNextLevel; }
     
     void resetButtons() {
+        _dismiss = false;
         _transferToReset = false;
         _transferToLevelSelect = false;
         _transferToNextLevel = false;
