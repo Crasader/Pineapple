@@ -8,9 +8,9 @@
 
 #include "TutorialView.h"
 
-#define TUTORIAL_BUTTON_SCALE           0.5f
+#define TUTORIAL_BUTTON_SCALE           0.4f
 #define TUTORIAL_BUTTON_FONT            28
-#define TUTORIAL_BUTTON_Y_DIFF          -220
+#define TUTORIAL_BUTTON_OFFSET          Vec2(0.85, -0.6)
 
 #define TUTORIAL_MOVE_ID        0
 #define TUTORIAL_JUMP_ID        1
@@ -69,7 +69,7 @@ void createShrinkTutorial(TutorialView* t) {
 }
 
 void createSmashTutorial(TutorialView* t) {
-    float elmYDiff = -0.05f;
+    float elmYDiff = -0.15f;
 
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_SMASH_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_SMASH_IMAGE, 12, Vec2(0,elmYDiff), 0.6f, 0.15f));
@@ -77,7 +77,7 @@ void createSmashTutorial(TutorialView* t) {
 }
 
 void createJumpSizeTutorial(TutorialView* t) {
-    float elmYDiff = -0.10f;
+    float elmYDiff = -0.15f;
 
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_JUMP_SIZE_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_JUMP_IMAGE, 14, Vec2(0,elmYDiff), 0.8f, 0.35f));
@@ -182,7 +182,10 @@ void TutorialView::position() {
     }
     
     if (_dismissButton != nullptr) {
-        _dismissButton->setPosition(center + Vec2(0, TUTORIAL_BUTTON_Y_DIFF * cscale));
+        float w = _dismissButton->getContentSize().width;
+        float h = _dismissButton->getContentSize().height;
+        
+        _dismissButton->setPosition(center + Vec2(w * TUTORIAL_BUTTON_OFFSET.x * cscale, h*TUTORIAL_BUTTON_OFFSET.y*cscale));
     }
 }
 
