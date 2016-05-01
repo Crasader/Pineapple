@@ -33,6 +33,8 @@ public:
     
     void dispose();
     
+    vector<TutorialAnimationTuple> getAnimations() { return _animations; }
+    
 private:
     void init(Node* root, SceneManager* assets, Vec2 scale);
 };

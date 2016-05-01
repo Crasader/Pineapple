@@ -10,7 +10,7 @@
 
 #define TUTORIAL_BUTTON_SCALE           1.0f
 #define TUTORIAL_BUTTON_FONT            30
-#define TUTORIAL_BUTTON_DISMISS_TEXT    "Got it"
+#define TUTORIAL_BUTTON_DISMISS_TEXT    "OK"
 
 void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
     ModalView::init(root, assets, scale, ""); //TODO - add texture id here

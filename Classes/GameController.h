@@ -28,6 +28,7 @@
 #include "BackgroundView.h"
 #include "LoseView.h"
 #include "WinView.h"
+#include "TutorialView.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -60,8 +61,6 @@ protected:
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
-    /** Reference to the win message label */
-    Label* _winnode;
     
     /** The node that is the root of the lose splash screen */
     Node* _loseroot;
@@ -76,6 +75,13 @@ protected:
     WinView* _winview;
     /** True once the winview is visible */
     bool _winViewVisible;
+    
+    /** The node that is the root of the tutorial splash screen */
+    Node* _tutorialroot;
+    /** Reference to the tutorial splash screen */
+    TutorialView* _tutorialview;
+    /** True once the tutorialview is visible */
+    bool _tutorialViewVisible;
     
     /** The Box2D world */
     WorldController* _world;
@@ -253,7 +259,10 @@ public:
      */
     void setFailure(bool value);
 
-		float getBlenderVolScale();
+    /** Sets whether or not the tutorial view is visible. */
+    void setTutorialVisible(bool value);
+    
+    float getBlenderVolScale();
     
     
 #pragma mark -

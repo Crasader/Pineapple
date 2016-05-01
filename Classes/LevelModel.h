@@ -18,6 +18,7 @@
 #include "MoveablePlatformModel.h"
 #include "Const.h"
 #include "Texture.h"
+#include "TutorialView.h"
 #include <cornell.h>
 #include <vector>
 
@@ -76,7 +77,6 @@ protected:
 
 	/** Length of the level in box2d units */
 	float _length;
-
     
     /** Reference to all the walls */
     std::vector<WallModel*> _walls;
@@ -91,6 +91,9 @@ protected:
     /** Reference to all of the moveable platforms */
     std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
+    /** The tutorial image for this level, if there is one. Null otherwise */
+    TutorialView* _tutorialView;
+    
 	/** The Box2D world */
 	WorldController* _world;
 	/** The world scale (computed from root node) */
@@ -223,6 +226,8 @@ public:
 			if (_pineapple == nullptr) { return -1.0f; }
 			return _pineapple->getPosition().distance(_blender->getPosition());
 		}
+    
+    TutorialView* getTutorialView() { return _tutorialView; }
     
 #pragma mark -
 #pragma mark Allocation
