@@ -166,6 +166,9 @@
 
 
 /** Tutorial messages */
+#define TUTORIAL_BLENDER_MESSAGE    "blender_message"
+#define TUTORIAL_FRIDGE_MESSAGE     "fridge_message"
+#define TUTORIAL_KNIVES_MESSAGE     "knives_message"
 #define TUTORIAL_GROW_MESSAGE       "grow_message"
 #define TUTORIAL_JUMP_MESSAGE       "jump_message"
 #define TUTORIAL_MOVE_MESSAGE       "move_message"

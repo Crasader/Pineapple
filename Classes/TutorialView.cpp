@@ -19,6 +19,9 @@
 #define TUTORIAL_SWITCH_ID      4
 #define TUTORIAL_JUMP_SIZE_ID   5
 #define TUTORIAL_SMASH_ID       6
+#define TUTORIAL_BLENDER_ID     7
+#define TUTORIAL_FRIDGE_ID      8
+#define TUTORIAL_KNIVES_ID      9
 
 #define TUTORIAL_MESSAGE_SCALE      0.2f
 #define TUTORIAL_MESSAGE_OFFSET   Vec2(0,0.18f)
@@ -34,6 +37,21 @@
 #define TUTORIAL_SWITCH_DOOR_SCALE      1.0f
 #define TUTORIAL_SWITCH_DOOR_FRAMES     14
 #define TUTORIAL_SWITCH_DOOR_FRAMERATE  0.15f
+
+void createBlenderTutorial(TutorialView* t) {
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_BLENDER_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+
+}
+
+void createFridgeTutorial(TutorialView *t) {
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_FRIDGE_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+
+}
+
+void createKnivesTutorial(TutorialView *t) {
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_KNIVES_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+
+}
 
 void createMoveTutorial(TutorialView* t) {
     float pointerXDiff = 1.7f;
@@ -127,6 +145,15 @@ TutorialView* TutorialView::create(int id, float triggerX) {
             break;
         case TUTORIAL_SMASH_ID:
             createSmashTutorial(t);
+            break;
+        case TUTORIAL_BLENDER_ID:
+            createBlenderTutorial(t);
+            break;
+        case TUTORIAL_FRIDGE_ID:
+            createFridgeTutorial(t);
+            break;
+        case TUTORIAL_KNIVES_ID:
+            createKnivesTutorial(t);
             break;
         default:
             CC_ASSERT(false);
