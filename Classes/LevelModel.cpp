@@ -318,6 +318,8 @@ bool LevelModel::load() {
         //End JSON object
         reader.endObject();
         
+        _tutorialView = TutorialView::create();
+        
         _isLoaded = true;
     }
     

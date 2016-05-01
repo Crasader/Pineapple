@@ -161,6 +161,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _tutorialroot->setContentSize(_rootnode->getContentSize());
     _tutorialroot->retain();
     _tutorialview = _level->getTutorialView();
+    _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
     
     _collision->setLevel(_level);
     
@@ -265,6 +266,7 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
+    setTutorialVisible(false);
 	
     // clear state
     _collision->reset();
@@ -302,6 +304,7 @@ void GameController::onReset() {
     _collision->setLevel(_level);
     
     _tutorialview = _level->getTutorialView();
+    _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
     
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
@@ -455,7 +458,10 @@ void GameController::update(float dt) {
             PauseController::unPause();
         }
     }
-    if (_input->didDebug()) { setDebug(!isDebug()); }
+    if (_input->didDebug()) {
+        setDebug(!isDebug());
+        //setTutorialVisible(!_tutorialViewVisible);
+    }
     if (_input->didReset()) {
         reset();
         return;
@@ -515,6 +521,7 @@ void GameController::update(float dt) {
         _tutorialview->update(dt);
         
         if (_tutorialview->shouldDismiss()) {
+            _tutorialview->resetButtons();
             setTutorialVisible(false);
             return;
         }

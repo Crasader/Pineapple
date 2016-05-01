@@ -35,8 +35,10 @@ public:
     
     vector<TutorialAnimationTuple> getAnimations() { return _animations; }
     
-private:
+    static TutorialView* create();
+    
     void init(Node* root, SceneManager* assets, Vec2 scale);
+    
 };
 
 #endif /* TutorialView_hpp */

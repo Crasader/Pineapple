@@ -12,6 +12,10 @@
 #define TUTORIAL_BUTTON_FONT            30
 #define TUTORIAL_BUTTON_DISMISS_TEXT    "OK"
 
+TutorialView* TutorialView::create() {
+    return new (std::nothrow) TutorialView();
+}
+
 void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
     ModalView::init(root, assets, scale, ""); //TODO - add texture id here
     
@@ -29,11 +33,18 @@ void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
             _dismiss = true;
         }
     });
+    
+    root->addChild(_dismissButton);
 }
 
 void TutorialView::position() {
     ModalView::position();
     
+    Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
+    
+    if (_dismissButton != nullptr) {
+        _dismissButton->setPosition(center);
+    }
 }
 
 void TutorialView::dispose() {
