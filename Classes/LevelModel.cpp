@@ -20,6 +20,7 @@
 #define CUP_OBJECT_GROUP                "Cups"
 #define BUTTON_SWITCH_OBJECT_GROUP      "Switches"
 #define MOVEABLE_PLATFORMS_GROUP        "Bridges"
+#define TUTORIAL_IMAGES_GROUP           "Tutorial"
 
 /** Properties that Tiled Objects and maps posess */
 /** Level Properties */
@@ -29,10 +30,6 @@
 
 #define BLENDER_START_X_PROPERTY    "BlenderStartX"
 #define BLENDER_Y_PROPERTY          "BlenderStartY"
-
-#define TUTORIAL_ID                 "TutorialID"
-#define TUTORIAL_TRIGGER_X          "TutorialTriggerX"
-
 #define TILE_WIDTH_PROPERTY         "tilewidth"
 #define TILE_HEIGHT_PROPERTY        "tileheight"
 #define OBJECT_PROPERTIES_PROPERTY  "properties"
@@ -56,6 +53,9 @@
 #define NUBBINS_VISIBLE         "nubbinsVisible"
 #define IS_OPEN_PROPERTY        "isOpen"
 #define IS_VERTICAL_PROPERTY    "isVertical"
+
+/** Tutorial image properties */
+#define TUTORIAL_ID             "id"
 
 /**
  *	Will replace this constructor with some kind of populate/build level via levelController
@@ -272,6 +272,15 @@ bool LevelModel::load() {
                     
                     reader.endObject();
                     addMoveablePlatform(position, length, isOpen, isVertical, nubbinsVisible, color);
+                } else if (layerName == TUTORIAL_IMAGES_GROUP) {
+                    reader.startObject(OBJECT_PROPERTIES_PROPERTY);
+
+                    int ID = cocos2d::stod(reader.getString(TUTORIAL_ID));
+                    addTutorialImage(ID, x);
+                    
+                    reader.endObject();
+                } else {
+                    cout << " Unknown layer name " << layerName;
                 }
                 
                 //End object in array
@@ -304,18 +313,6 @@ bool LevelModel::load() {
         position[0] = cocos2d::stod(reader.getString(BLENDER_START_X_PROPERTY));
         position[1] = cocos2d::stod(reader.getString(BLENDER_Y_PROPERTY));
         addBlender(position);
-        
-        //TUTORIAL IMAGE (if present)
-        string tutorialID = reader.getString(TUTORIAL_ID);
-        string tutorialStartX = reader.getString(TUTORIAL_TRIGGER_X);
-        if (tutorialID != "" && tutorialStartX != "") {
-            //_tutorialView = TutorialView::create((int)cocos2d::stod(tutorialID), cocos2d::stod(tutorialStartX));
-        } else if (tutorialID == "" && tutorialStartX == "") {
-            //_tutorialView = nullptr;
-        } else {
-            cout << " got tutorialID of " << tutorialID << " but trigger x of " << tutorialStartX;
-            CC_ASSERT(false);
-        }
         
         //Add walls that are offscreen and prevent you from going past end of level
         position[0] = 0;
@@ -624,6 +621,11 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
+}
+
+void LevelModel::addTutorialImage(int ID, float x) {
+    TutorialView* view = TutorialView::create(ID, x);
+    _tutorialViews.push_back(view);
 }
 
 void LevelModel::setDrawScale(const Vec2& value) {

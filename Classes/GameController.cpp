@@ -162,7 +162,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     
     _tutorialviews = _level->getTutorialViews();
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
-        it->init(_tutorialroot, _assets, _level->getDrawScale());
+        (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
     }
     
     _collision->setLevel(_level);
@@ -230,8 +230,8 @@ void GameController::dispose() {
         _winroot = nullptr;
     }
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
-        it->clearFromRoot();
-        it->dispose();
+        (*it)->clearFromRoot();
+        (*it)->dispose();
     }
     _tutorialviews.clear();
     
@@ -280,6 +280,13 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     _collision->reset();
     
     // Unload the level but keep in memory temporarily
+    
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        (*it)->clearFromRoot();
+        (*it)->dispose();
+    }
+    _tutorialviews.clear();
+    
     _level->retain();
     _assets->unload<LevelModel>(_levelKey);
     
@@ -314,7 +321,7 @@ void GameController::onReset() {
     _tutorialroot->removeAllChildren();
     _tutorialviews = _level->getTutorialViews();
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
-        it->init(_tutorialroot, _assets, _level->getDrawScale());
+        (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
     }
     
     _world->activateCollisionCallbacks(true);
@@ -573,7 +580,9 @@ void GameController::update(float dt) {
 										break;
 									case 3: key = PINEAPPLET4_DEATH_SOUND;
 										break;
-									default: key = "we gon crash if this happens, but it won't so it's chill.";
+									default:
+                                            key = "we gon crash if this happens, but it won't so it's chill.";
+                                            CC_ASSERT(false);
 									}
 									Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
 									SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
@@ -602,6 +611,14 @@ void GameController::update(float dt) {
                 
                 if (_level->getPineapple()->getPosition().y < 0) {
                     _level->kill(_level->getPineapple());
+                }
+                
+                for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+                    TutorialView* view = (*it);
+                    if (! view->isDismissed() && _level->getPineapple()->getPosition().x > view->getTriggerX()) {
+                        setTutorialVisible(view);
+                        break;
+                    }
                 }
                 
                 // Scroll the screen (with parallax) if necessary

@@ -79,7 +79,7 @@ protected:
     /** The node that is the root of the tutorial splash screen */
     Node* _tutorialroot;
     /** Reference to the tutorial splash screens */
-    vector<TutorialView> _tutorialviews;
+    vector<TutorialView*> _tutorialviews;
     /** Reference to the currently active tutorial view, if any */
     TutorialView* _activeTutorialView;
     /** True once a tutorialview is visible */

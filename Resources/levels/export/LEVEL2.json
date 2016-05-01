@@ -459,15 +459,41 @@
          "width":0,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":12,
+         "name":"Tutorial",
+         "objects":[
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":126,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"1"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":960,
+                 "y":384
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":67,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":126,
+ "nextobjectid":127,
  "orientation":"orthogonal",
  "properties":
     {
      "BlenderStartX":"-20",
-     "BlenderStartY":"6",
-     "TutorialID":"1",
-     "TutorialTriggerX":"10.0"
+     "BlenderStartY":"6"
     },
  "renderorder":"right-down",
  "tileheight":64,
