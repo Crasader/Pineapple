@@ -8,11 +8,27 @@
 
 #include "TutorialView.h"
 
+#define TUTORIAL_BUTTON_SCALE           1.0f
+#define TUTORIAL_BUTTON_FONT            30
+#define TUTORIAL_BUTTON_DISMISS_TEXT    "Got it"
 
 void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
     ModalView::init(root, assets, scale, ""); //TODO - add texture id here
     
+    float cscale = Director::getInstance()->getContentScaleFactor();
+    
     _frameCount = 0;
+    
+    _dismissButton = Button::create();
+    _dismissButton->retain();
+    _dismissButton->setScale(MODAL_MAIN_SCALE * TUTORIAL_BUTTON_SCALE * cscale);
+    initButton(_dismissButton, TUTORIAL_BUTTON_FONT, TUTORIAL_BUTTON_DISMISS_TEXT);
+    
+    _dismissButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _dismiss = true;
+        }
+    });
 }
 
 void TutorialView::position() {
@@ -27,6 +43,11 @@ void TutorialView::dispose() {
         tuple.dispose();
     }
     _animations.clear();
+    
+    if (_dismissButton != nullptr) {
+        _dismissButton->release();
+        _dismissButton = nullptr;
+    }
 }
 
 void TutorialView::update(float dt) {
