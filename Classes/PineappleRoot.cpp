@@ -190,7 +190,6 @@ void PineappleRoot::transitionToLevelSelect() {
     }
     
     if (_activeController == _gameplay) {
-        updateScore(_gameplay);
         removeChild(_gameRoot);
         addChild(_levelSelectRoot, LEVEL_SELECT_ROOT_Z);
     }
@@ -241,7 +240,6 @@ void PineappleRoot::transitionToGame(int levelIndex) {
     if (! _gameplay->isInitted()) {
         _gameplay->init(_gameRoot, &_inputController, levelIndex, levelKey, levelFile);
     } else {
-        updateScore(_gameplay);
         _gameplay->reset(levelIndex, levelKey, levelFile);
     }
     
@@ -352,6 +350,11 @@ void PineappleRoot::update(float deltaTime) {
     
     //Do the updating
     _activeController->update(deltaTime);
+    
+    if (_levelSelect && _gameplay && _levelSelect->isInitted()) {
+        // Check if we beat a level and update the score if needed
+        updateScore(_gameplay);
+    }
     
     if (! _loadFinished) {
         if (!_loadStarted) {
