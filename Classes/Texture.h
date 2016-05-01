@@ -164,6 +164,7 @@
 #define TUTORIAL_MOVE_MESSAGE   "move_message"
 #define TUTORIAL_SHRINK_MESSAGE "shrink_message"
 #define TUTORIAL_SWITCH_MESSAGE "switch_message"
+#define TUTORIAL_SMASH_MESSAGE  "smash_message"
 
 /** Tutorial images */
 #define TUTORIAL_SHRINK_IMAGE   "shrink_image"
@@ -172,6 +173,7 @@
 #define TUTORIAL_DOOR_IMAGE     "door_image"
 #define TUTORIAL_SWITCH_IMAGE   "switch_image"
 #define TUTORIAL_POINTER_IMAGE  "pointer_image"
+#define TUTORIAL_SMASH_IMAGE    "smash_image"
 
 /** Tutorial buttons */
 #define TUTORIAL_BUTTON     "tutorial_button"

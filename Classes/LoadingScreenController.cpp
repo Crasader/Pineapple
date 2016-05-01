@@ -109,6 +109,7 @@ void loadTutorial(TextureLoader *tloader) {
     tloader->loadAsync(TUTORIAL_SHRINK_MESSAGE, "textures/tutorial/shrink_message.png");
     tloader->loadAsync(TUTORIAL_JUMP_MESSAGE, "textures/tutorial/jump_message.png");
     tloader->loadAsync(TUTORIAL_SWITCH_MESSAGE, "textures/tutorial/switch_message.png");
+    tloader->loadAsync(TUTORIAL_SMASH_MESSAGE, "textures/tutorial/cup_crush_message.png");
     
     tloader->loadAsync(TUTORIAL_SHRINK_IMAGE, "textures/tutorial/shrink_animation.png");
     tloader->loadAsync(TUTORIAL_GROW_IMAGE, "textures/tutorial/grow_animation.png");
@@ -116,6 +117,7 @@ void loadTutorial(TextureLoader *tloader) {
     tloader->loadAsync(TUTORIAL_DOOR_IMAGE, "textures/tutorial/door_animation.png");
     tloader->loadAsync(TUTORIAL_SWITCH_IMAGE, "textures/tutorial/switch_animation.png");
     tloader->loadAsync(TUTORIAL_POINTER_IMAGE, "textures/tutorial/pointer.png");
+    tloader->loadAsync(TUTORIAL_SMASH_IMAGE, "textures/tutorial/smash_animation");
 }
 
 void loadLevelSelectScreen(TextureLoader *tloader) {
