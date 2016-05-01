@@ -304,6 +304,7 @@ void GameController::onReset() {
     _collision->setLevel(_level);
     
     _tutorialview = _level->getTutorialView();
+    _tutorialroot->removeAllChildren();
     _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
     
     _world->activateCollisionCallbacks(true);

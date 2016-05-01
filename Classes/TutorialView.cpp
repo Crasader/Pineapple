@@ -12,6 +12,9 @@
 #define TUTORIAL_BUTTON_FONT            30
 #define TUTORIAL_BUTTON_DISMISS_TEXT    "OK"
 
+#define TUTORIAL_GRADIENT_Z      0
+#define TUTORIAL_BUTTON_Z        2
+
 TutorialView* TutorialView::create() {
     return new (std::nothrow) TutorialView();
 }
@@ -34,7 +37,8 @@ void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
         }
     });
     
-    root->addChild(_dismissButton);
+    root->addChild(_backgroundOverlay, TUTORIAL_GRADIENT_Z);
+    root->addChild(_dismissButton, TUTORIAL_BUTTON_Z);
 }
 
 void TutorialView::position() {
