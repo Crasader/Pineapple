@@ -8,7 +8,7 @@
 
 #include "TutorialView.h"
 
-#define TUTORIAL_BUTTON_SCALE           1.2f
+#define TUTORIAL_BUTTON_SCALE           1.15f
 #define TUTORIAL_BUTTON_FONT            28
 #define TUTORIAL_BUTTON_DISMISS_TEXT    "GOT IT!"
 #define TUTORIAL_BUTTON_Y_DIFF          -180
@@ -20,30 +20,38 @@
 #define TUTORIAL_SWITCH_ID  4
 
 #define TUTORIAL_MESSAGE_SCALE      0.2f
-#define TUTORIAL_MESSAGE_MOVEMENT   Vec2(0,0.16f)
+#define TUTORIAL_MESSAGE_OFFSET   Vec2(0,0.18f)
+
+#define TUTORIAL_POINTER_FRAMES 8
+#define TUTORIAL_POINTER_SCALE  0.75f
 
 void createMoveTutorial(TutorialView* t) {
-    float pointerFrames = 8;
+    float pointerXDiff = 1.7f;
     
-    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_MOVE_MESSAGE,   1, TUTORIAL_MESSAGE_MOVEMENT, TUTORIAL_MESSAGE_SCALE));
-    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_POINTER_IMAGE,  pointerFrames, Vec2(-1.6f,0), 0.75f));
-    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_POINTER_IMAGE,  pointerFrames, Vec2(1.6f,0), 0.75f));
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_MOVE_MESSAGE,   1, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_POINTER_IMAGE,
+                                                   TUTORIAL_POINTER_FRAMES, Vec2(-pointerXDiff,0), TUTORIAL_POINTER_SCALE));
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_POINTER_IMAGE,
+                                                   TUTORIAL_POINTER_FRAMES, Vec2(pointerXDiff,0), TUTORIAL_POINTER_SCALE));
 }
 
 void createJumpTutorial(TutorialView* t) {
-    
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_JUMP_MESSAGE, 1, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
 }
 
 void createGrowTutorial(TutorialView* t) {
-    
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_GROW_MESSAGE, 1, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+
 }
 
 void createShrinkTutorial(TutorialView* t) {
-    
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_SHRINK_MESSAGE, 1, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+
 }
 
 void createSwitchTutorial(TutorialView* t) {
-    
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_SWITCH_MESSAGE, 1, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
+
 }
 
 void TutorialView::addAnimation(TutorialAnimationTuple *t) {
@@ -106,14 +114,15 @@ void TutorialView::position() {
     ModalView::position();
     
     Vec2 center = Vec2(_root->getContentSize().width/2.0f, _root->getContentSize().height/2.0f);
+    float cscale = Director::getInstance()->getContentScaleFactor();
     
     for(auto it = _animations.begin(); it != _animations.end(); ++it) {
         TutorialAnimationTuple* tuple = *it;
         
         AnimationNode* node = tuple->getNode();
         
-        float dx = tuple->getPosition().x;
-        float dy = tuple->getPosition().y;
+        float dx = tuple->getPosition().x * cscale;
+        float dy = tuple->getPosition().y * cscale;
         
         float w = node->getContentSize().width;
         float h = node->getContentSize().height;
@@ -124,7 +133,7 @@ void TutorialView::position() {
     }
     
     if (_dismissButton != nullptr) {
-        _dismissButton->setPosition(center + Vec2(0, TUTORIAL_BUTTON_Y_DIFF));
+        _dismissButton->setPosition(center + Vec2(0, TUTORIAL_BUTTON_Y_DIFF * cscale));
     }
 }
 

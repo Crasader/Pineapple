@@ -478,8 +478,72 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":960,
+                 "x":512,
+                 "y":192
+                }, 
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":127,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"1"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":512,
+                 "y":256
+                }, 
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":128,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"2"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":512,
+                 "y":320
+                }, 
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":129,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"3"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":512,
                  "y":384
+                }, 
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":130,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"4"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":512,
+                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -488,7 +552,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":127,
+ "nextobjectid":131,
  "orientation":"orthogonal",
  "properties":
     {
