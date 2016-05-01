@@ -142,6 +142,13 @@
 /** The filepath for the level select button in its on state */
 #define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
 
+/** The filepath for the different score textures, used in level select */
+#define LEVEL_SELECT_SCORE_FILEPATH_0 "textures/scores/0_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_1 "textures/scores/1_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_2 "textures/scores/2_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_3 "textures/scores/3_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_4 "textures/scores/4_score.png"
+
 /** The key for the lose splash screen */
 #define LOSE_SPLASH    "lose_splash"
 /** The key for the image of the juice cup for the lose splash screen */

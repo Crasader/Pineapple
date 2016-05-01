@@ -83,6 +83,22 @@ bool LevelSelectController::init(Node* root, InputController* input) {
     return init(root,input,SCREEN);
 }
 
+// helper to get score texture filepaths
+const string getScoreTexture(int score) {
+    switch (score) {
+        case 0:
+            return LEVEL_SELECT_SCORE_FILEPATH_0;
+        case 1:
+            return LEVEL_SELECT_SCORE_FILEPATH_1;
+        case 2:
+            return LEVEL_SELECT_SCORE_FILEPATH_2;
+        case 3:
+            return LEVEL_SELECT_SCORE_FILEPATH_3;
+        case 4:
+            return LEVEL_SELECT_SCORE_FILEPATH_4;
+    }
+}
+
 Button* LevelSelectController::initButton(Size dimen, int i) {
     float cscale = Director::getInstance()->getContentScaleFactor();
     
@@ -125,6 +141,17 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
 
     button->retain();
     return button;
+}
+
+PolygonNode* LevelSelectController::initScore(Button* button, int i) {
+    _scores[i] = UserDefault::getInstance()->getIntegerForKey(LevelSelectController::LEVEL_KEYS[i].c_str());
+    PolygonNode* node = PolygonNode::createWithFile(getScoreTexture(_scores[i]));
+    node->setTexture(getScoreTexture(_scores[i]));
+    node->setPosition(button->getPosition().x, button->getPosition().y + SCORE_V_OFFSET);
+    node->setScale(Director::getInstance()->getContentScaleFactor() * SCORE_SCALE);
+    
+    node->retain();
+    return node;
 }
 
 /**
@@ -178,9 +205,11 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     
     //Get the number of levels completed, if it doesn't exist it returns 0, perfect!
     _levelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
-    //Lay out the buttons
+    //Lay out the buttons and scores
     for(int i = 0; i < NUM_LEVELS; i++) {
         _buttons[i] = initButton(_dimen, i);
+        _scoreNodes[i] = initScore(_buttons[i], i);
+        _rootnode->addChild(_scoreNodes[i], LEVEL_SELECT_BUTTON_Z);
         _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
     }
     
@@ -197,6 +226,18 @@ void LevelSelectController::update() {
         if (_levelsComplete < NUM_LEVELS) {
             _buttons[_levelsComplete] = initButton(_dimen, _levelsComplete);
             _rootnode->addChild(_buttons[_levelsComplete], LEVEL_SELECT_BUTTON_Z);
+        }
+    }
+    // update scores
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        int newScore = UserDefault::getInstance()->getIntegerForKey(LEVEL_KEYS[i].c_str());
+        // scores are only udpated if greater, so don't need to check that
+        if (newScore != _scores[i]) {
+            _scores[i] = newScore;
+            _rootnode->removeChild(_scoreNodes[i]);
+            _scoreNodes[i]->release();
+            _scoreNodes[i] = initScore(_buttons[i], i);
+            _rootnode->addChild(_scoreNodes[i], LEVEL_SELECT_BUTTON_Z);
         }
     }
 }
@@ -219,6 +260,10 @@ void LevelSelectController::dispose() {
         if (_buttons[i] != nullptr) {
             _buttons[i]->release();
             _buttons[i] = nullptr;
+        }
+        if (_scoreNodes[i] != nullptr) {
+            _scoreNodes[i]->release();
+            _scoreNodes[i] = nullptr;
         }
     }
     _backgroundNode = nullptr;

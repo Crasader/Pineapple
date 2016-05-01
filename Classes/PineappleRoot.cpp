@@ -126,6 +126,19 @@ void PineappleRoot::onFirstUpdate() {
     _activeController = _loadingScreen;
 }
 
+// Helper to update score after completing a level, didn't want to give gameplay controller access
+// to LevelSelectController so decided to put this up here.  Because of this we need to think about where
+// to call this.  Currently after beating a level you can transition to the next level, replay the current
+// level, or go to level select.  After each we call updateScore here.
+void updateScore(GameController* gameplay) {
+    const char *lvlKey = LevelSelectController::LEVEL_KEYS[gameplay->getLevelIndex()].c_str();
+    int prevScore = UserDefault::getInstance()->getIntegerForKey(lvlKey);
+    int thisScore = gameplay->getScore();
+    if (gameplay->isComplete() && thisScore > prevScore) {
+        UserDefault::getInstance()->setIntegerForKey(lvlKey, thisScore);
+    }
+}
+
 /** Helper method that transitions to home */
 void PineappleRoot::transitionToHomeScreen() {
     if (_activeController == _gameplay) {
@@ -192,7 +205,7 @@ void PineappleRoot::transitionToLevelSelect() {
         _levelSelect->init(_levelSelectRoot, &_inputController);
     }
     
-    // Updates to add a new button if new level was unlocked
+    // Updates to add a new button if new level was unlocked or update new high score
     _levelSelect->update();
     
     if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
@@ -314,6 +327,10 @@ void PineappleRoot::update(float deltaTime) {
         _levelSelect->clearSelectedLevel();
     }
     
+    if (_gameplay->getTransitionStatus() == TRANSITION_TO_RESET && _activeController == _gameplay) {
+        int levelIndex = _gameplay->getLevelIndex();
+        transitionToGame(levelIndex);
+    }
     if((_gameplay->getTransitionStatus() == TRANSITION_TO_NEXT_LEVEL && _activeController == _gameplay)) {
         int levelIndex = _gameplay->getLevelIndex() + 1;
         
@@ -333,6 +350,11 @@ void PineappleRoot::update(float deltaTime) {
     
     //Do the updating
     _activeController->update(deltaTime);
+    
+    if (_levelSelect && _gameplay && _levelSelect->isInitted()) {
+        // Check if we beat a level and update the score if needed
+        updateScore(_gameplay);
+    }
     
     if (! _loadFinished) {
         if (!_loadStarted) {

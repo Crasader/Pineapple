@@ -538,7 +538,7 @@ void GameController::update(float dt) {
         
         if (_winview->shouldReset()) {
             _winview->resetButtons();
-            reset();
+            setTransitionStatus(TRANSITION_TO_RESET);
             return;
         } else if (_winview->shouldTransferToLevelSelect()) {
             _winview->resetButtons();
