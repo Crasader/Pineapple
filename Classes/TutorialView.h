@@ -26,7 +26,12 @@ protected:
     /** Button that dismisses the tutorial view */
     Button* _dismissButton;
     
+    /** The x coordinate to pass for this tutorial view to become visible */
+    float _triggerX;
+    
 public:
+    float getTriggerX() { return _triggerX; }
+    
     void update(float dt);
     
     void position();
@@ -35,7 +40,7 @@ public:
     
     vector<TutorialAnimationTuple> getAnimations() { return _animations; }
     
-    static TutorialView* create();
+    static TutorialView* create(int tutorialID, float triggerX);
     
     void init(Node* root, SceneManager* assets, Vec2 scale);
     

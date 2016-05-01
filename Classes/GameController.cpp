@@ -467,7 +467,7 @@ void GameController::update(float dt) {
     }
     if (_input->didDebug()) {
         setDebug(!isDebug());
-        //setTutorialVisible(!_tutorialViewVisible);
+        //setTutorialVisible(_tutorialview != nullptr && !_tutorialViewVisible);
     }
     if (_input->didReset()) {
         reset();

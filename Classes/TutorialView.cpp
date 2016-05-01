@@ -15,8 +15,57 @@
 #define TUTORIAL_GRADIENT_Z      0
 #define TUTORIAL_BUTTON_Z        2
 
-TutorialView* TutorialView::create() {
+#define TUTORIAL_MOVE_ID    0
+#define TUTORIAL_JUMP_ID    1
+#define TUTORIAL_SHRINK_ID  2
+#define TUTORIAL_GROW_ID    3
+#define TUTORIAL_SWITCH_ID  4
+
+void createMoveTutorial(TutorialView* t) {
+    
+}
+
+void createJumpTutorial(TutorialView* t) {
+    
+}
+
+void createGrowTutorial(TutorialView* t) {
+    
+}
+
+void createShrinkTutorial(TutorialView* t) {
+    
+}
+
+void createSwitchTutorial(TutorialView* t) {
+    
+}
+
+TutorialView* TutorialView::create(int id, float triggerX) {
     TutorialView* t = new (std::nothrow) TutorialView();
+    
+    switch (id) {
+        case TUTORIAL_MOVE_ID:
+            createMoveTutorial(t);
+            break;
+        case TUTORIAL_JUMP_ID:
+            createJumpTutorial(t);
+            break;
+        case TUTORIAL_GROW_ID:
+            createGrowTutorial(t);
+            break;
+        case TUTORIAL_SHRINK_ID:
+            createShrinkTutorial(t);
+            break;
+        case TUTORIAL_SWITCH_ID:
+            createSwitchTutorial(t);
+            break;
+        default:
+            CC_ASSERT(false);
+            break;
+    }
+    
+    t->_triggerX = triggerX;
     
     return t;
 }

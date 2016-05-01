@@ -465,7 +465,9 @@
  "properties":
     {
      "BlenderStartX":"-20",
-     "BlenderStartY":"6"
+     "BlenderStartY":"6",
+     "TutorialID":"1",
+     "TutorialTriggerX":"10.0"
     },
  "renderorder":"right-down",
  "tileheight":64,

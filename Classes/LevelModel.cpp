@@ -26,8 +26,13 @@
 #define LAYERS_PROPERTY             "layers"
 #define LAYER_NAME_PROPERTY         "name"
 #define LAYER_OBJECTS_PROPERTY      "objects"
+
 #define BLENDER_START_X_PROPERTY    "BlenderStartX"
 #define BLENDER_Y_PROPERTY          "BlenderStartY"
+
+#define TUTORIAL_ID                 "TutorialID"
+#define TUTORIAL_TRIGGER_X          "TutorialTriggerX"
+
 #define TILE_WIDTH_PROPERTY         "tilewidth"
 #define TILE_HEIGHT_PROPERTY        "tileheight"
 #define OBJECT_PROPERTIES_PROPERTY  "properties"
@@ -296,9 +301,22 @@ bool LevelModel::load() {
         //Start map properties
         reader.startObject(OBJECT_PROPERTIES_PROPERTY);
         
+        //BLENDER
         position[0] = cocos2d::stod(reader.getString(BLENDER_START_X_PROPERTY));
         position[1] = cocos2d::stod(reader.getString(BLENDER_Y_PROPERTY));
         addBlender(position);
+        
+        //TUTORIAL IMAGE (if present)
+        string tutorialID = reader.getString(TUTORIAL_ID);
+        string tutorialStartX = reader.getString(TUTORIAL_TRIGGER_X);
+        if (tutorialID != "" && tutorialStartX != "") {
+            _tutorialView = TutorialView::create((int)cocos2d::stod(tutorialID), cocos2d::stod(tutorialStartX));
+        } else if (tutorialID == "" && tutorialStartX == "") {
+            _tutorialView = nullptr;
+        } else {
+            cout << " got tutorialID of " << tutorialID << " but trigger x of " << tutorialStartX;
+            CC_ASSERT(false);
+        }
         
         //Add walls that are offscreen and prevent you from going past end of level
         position[0] = 0;
@@ -315,10 +333,9 @@ bool LevelModel::load() {
         }
         addWall(position);
         
-        //End JSON object
         reader.endObject();
         
-        _tutorialView = TutorialView::create();
+        reader.endJSON();
         
         _isLoaded = true;
     }
