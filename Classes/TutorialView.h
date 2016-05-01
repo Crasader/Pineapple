@@ -24,9 +24,6 @@ protected:
     /** The animations drawn on this tutorial view */
     vector<TutorialAnimationTuple*> _animations;
     
-    /** The frame count for the animations */
-    float _frameCount;
-    
     /** Button that dismisses the tutorial view */
     Button* _dismissButton;
     

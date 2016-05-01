@@ -29,15 +29,23 @@ protected:
     /** The scale of this animation node */
     float _scale;
     
+    /** Keeps track of the current frame. Always modded by frameCount */
+    float _currentFrame;
+    
+    /** The rate at which this animation goes, as a function of the number of update loops */
+    float _framerate;
+    
     /** The actual animation node. Null until it is created */
     AnimationNode* _node;
     
     /** Tuple constructor - assigns the fields. Keeps node null until it is later initialized */
-    TutorialAnimationTuple(string textureID, int frameCount, Vec2 position, float scale) {
+    TutorialAnimationTuple(string textureID, int frameCount, Vec2 position, float scale, float framerate) {
         _textureID = textureID;
         _frameCount = frameCount;
         _position = position;
         _scale = scale;
+        _framerate = framerate;
+        _currentFrame = 0.0f;
         _node = nullptr;
     }
     
@@ -50,6 +58,11 @@ public:
     Vec2 getPosition() { return _position; }
     
     float getScale() { return _scale; }
+    
+    float incAndGetFrame() {
+        _currentFrame += _framerate;
+        return _currentFrame;
+    }
     
     /** Creates the animation node represented by this tuple. If called multiple times, just returns the created node */
     AnimationNode* createNode(SceneManager* assets) {
@@ -65,9 +78,13 @@ public:
         return _node;
     }
     
+    static TutorialAnimationTuple* create(string textureID, Vec2 position, float scale) {
+        return create(textureID, 1, position, scale, 1);
+    }
+    
     /** Creates a tuple with the given arguments. */
-    static TutorialAnimationTuple* create(string textureID, int frameCount, Vec2 position, float scale) {
-        TutorialAnimationTuple* t = new (std::nothrow) TutorialAnimationTuple(textureID, frameCount, position, scale);
+    static TutorialAnimationTuple* create(string textureID, int frameCount, Vec2 position, float scale, float framerate) {
+        TutorialAnimationTuple* t = new (std::nothrow) TutorialAnimationTuple(textureID, frameCount, position, scale, framerate);
         
         return t;
     }

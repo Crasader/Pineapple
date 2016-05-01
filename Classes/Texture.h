@@ -173,4 +173,10 @@
 #define TUTORIAL_SWITCH_IMAGE   "switch_image"
 #define TUTORIAL_POINTER_IMAGE  "pointer_image"
 
+/** Tutorial buttons */
+#define TUTORIAL_BUTTON     "tutorial_button"
+#define TUTORIAL_BUTTON_FILEPATH    "textures/tutorial/tutorial_button.png"
+#define TUTORIAL_BUTTON_ON     "tutorial_button_on"
+#define TUTORIAL_BUTTON_ON_FILEPATH    "textures/tutorial/tutorial_button_inverse.png"
+
 #endif /* Texture_h */
