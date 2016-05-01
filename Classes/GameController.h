@@ -187,6 +187,8 @@ public:
     /** Returns the levelindex of the currently playing level */
     int getLevelIndex() { return _levelIndex; }
     
+    int getScore() { return _level->getKidsRemaining(); }
+    
     /**
      * Returns true if the gameplay controller is currently active
      *

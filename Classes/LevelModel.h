@@ -147,6 +147,8 @@ public:
         return vec;
     }
     
+    int getKidsRemaining() { return _kidsRemaining; }
+    
 	/**
 	*
 	*/
