@@ -78,9 +78,11 @@ protected:
     
     /** The node that is the root of the tutorial splash screen */
     Node* _tutorialroot;
-    /** Reference to the tutorial splash screen */
-    TutorialView* _tutorialview;
-    /** True once the tutorialview is visible */
+    /** Reference to the tutorial splash screens */
+    vector<TutorialView> _tutorialviews;
+    /** Reference to the currently active tutorial view, if any */
+    TutorialView* _activeTutorialView;
+    /** True once a tutorialview is visible */
     bool _tutorialViewVisible;
     
     /** The Box2D world */
@@ -259,8 +261,9 @@ public:
      */
     void setFailure(bool value);
 
-    /** Sets whether or not the tutorial view is visible. */
-    void setTutorialVisible(bool value);
+    /** Sets whether or not a tutorial view is visible. 
+      * takes the view to set visible. If null, removes all from visibility */
+    void setTutorialVisible(TutorialView* view);
     
     float getBlenderVolScale();
     

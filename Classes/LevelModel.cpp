@@ -68,7 +68,6 @@ _blender(nullptr),
 _failed(false),
 _length(UNSET_LENGTH),
 _kidsRemaining(0),
-_tutorialView(nullptr),
 _world(nullptr),
 _rootnode(nullptr),
 _debugnode(nullptr),
@@ -310,9 +309,9 @@ bool LevelModel::load() {
         string tutorialID = reader.getString(TUTORIAL_ID);
         string tutorialStartX = reader.getString(TUTORIAL_TRIGGER_X);
         if (tutorialID != "" && tutorialStartX != "") {
-            _tutorialView = TutorialView::create((int)cocos2d::stod(tutorialID), cocos2d::stod(tutorialStartX));
+            //_tutorialView = TutorialView::create((int)cocos2d::stod(tutorialID), cocos2d::stod(tutorialStartX));
         } else if (tutorialID == "" && tutorialStartX == "") {
-            _tutorialView = nullptr;
+            //_tutorialView = nullptr;
         } else {
             cout << " got tutorialID of " << tutorialID << " but trigger x of " << tutorialStartX;
             CC_ASSERT(false);

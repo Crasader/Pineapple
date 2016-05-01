@@ -12,9 +12,6 @@
 #define TUTORIAL_BUTTON_FONT            30
 #define TUTORIAL_BUTTON_DISMISS_TEXT    "OK"
 
-#define TUTORIAL_GRADIENT_Z      0
-#define TUTORIAL_BUTTON_Z        2
-
 #define TUTORIAL_MOVE_ID    0
 #define TUTORIAL_JUMP_ID    1
 #define TUTORIAL_SHRINK_ID  2
@@ -66,6 +63,7 @@ TutorialView* TutorialView::create(int id, float triggerX) {
     }
     
     t->_triggerX = triggerX;
+    t->_dismissed = false;
     
     return t;
 }
@@ -84,13 +82,12 @@ void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
     
     _dismissButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
-            _dismiss = true;
+            _dismissed = true;
         }
     });
-    
-    root->addChild(_backgroundOverlay, TUTORIAL_GRADIENT_Z);
-    root->addChild(_dismissButton, TUTORIAL_BUTTON_Z);
 }
+
+
 
 void TutorialView::position() {
     ModalView::position();

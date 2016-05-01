@@ -14,7 +14,6 @@ void ModalView::init(Node *root, SceneManager *assets, Vec2 scale, string splash
     _splashTextureID = splashTexture;
     _scale = scale;
     
-    _dismiss = false;
     _transferToReset = false;
     _transferToNextLevel = false;
     _transferToLevelSelect = false;

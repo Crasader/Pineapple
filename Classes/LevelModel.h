@@ -91,8 +91,8 @@ protected:
     /** Reference to all of the moveable platforms */
     std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
-    /** The tutorial image for this level, if there is one. Null otherwise */
-    TutorialView* _tutorialView;
+    /** The tutorial images for this level. May be empty if none */
+    std::vector<TutorialView> _tutorialView;
     
 	/** The Box2D world */
 	WorldController* _world;
@@ -227,7 +227,7 @@ public:
 			return _pineapple->getPosition().distance(_blender->getPosition());
 		}
     
-    TutorialView* getTutorialView() { return _tutorialView; }
+    vector<TutorialView> getTutorialViews() { return _tutorialView; }
     
 #pragma mark -
 #pragma mark Allocation

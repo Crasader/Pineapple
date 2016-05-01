@@ -59,7 +59,6 @@ _background(nullptr),
 _debug(false),
 _loseViewVisible(false),
 _winViewVisible(false),
-_tutorialview(nullptr),
 _tutorialViewVisible(false){}
 
 /**
@@ -161,9 +160,9 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _tutorialroot->setContentSize(_rootnode->getContentSize());
     _tutorialroot->retain();
     
-    _tutorialview = _level->getTutorialView();
-    if (_tutorialview) {
-        _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
+    _tutorialviews = _level->getTutorialViews();
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        it->init(_tutorialroot, _assets, _level->getDrawScale());
     }
     
     _collision->setLevel(_level);
@@ -185,6 +184,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     setComplete(false);
     setDebug(false);
     setFailure(false);
+    setTutorialVisible(nullptr);
     _isInitted = true;
     _isReloading = false;
     _loseViewVisible = false;
@@ -216,6 +216,7 @@ void GameController::dispose() {
         _loseview = nullptr;
     }
     if (_loseroot != nullptr) {
+        _loseroot->removeAllChildren();
         _loseroot->release();
         _loseroot = nullptr;
     }
@@ -224,14 +225,18 @@ void GameController::dispose() {
         _winview = nullptr;
     }
     if (_winroot != nullptr) {
+        _winroot->removeAllChildren();
         _winroot->release();
         _winroot = nullptr;
     }
-    if (_tutorialview != nullptr) {
-        _tutorialview->dispose();
-        _tutorialview = nullptr;
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        it->clearFromRoot();
+        it->dispose();
     }
+    _tutorialviews.clear();
+    
     if (_tutorialroot != nullptr) {
+        _tutorialroot->removeAllChildren();
         _tutorialroot->release();
         _tutorialroot = nullptr;
     }
@@ -269,7 +274,7 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
-    setTutorialVisible(false);
+    setTutorialVisible(nullptr);
 	
     // clear state
     _collision->reset();
@@ -306,10 +311,10 @@ void GameController::onReset() {
     
     _collision->setLevel(_level);
     
-    _tutorialview = _level->getTutorialView();
     _tutorialroot->removeAllChildren();
-    if (_tutorialview != nullptr) {
-        _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
+    _tutorialviews = _level->getTutorialViews();
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        it->init(_tutorialroot, _assets, _level->getDrawScale());
     }
     
     _world->activateCollisionCallbacks(true);
@@ -393,16 +398,22 @@ void GameController::setFailure(bool value){
     }
 }
 
-void GameController::setTutorialVisible(bool value) {
+void GameController::setTutorialVisible(TutorialView* view) {
+    bool value = view != nullptr;
     if (value == _tutorialViewVisible) return;
-    CC_ASSERT(value == false || _tutorialview != nullptr); // should never set a null view to visible
     
     if (value) {
         _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
-        _tutorialview->position();
+        view->position();
+        view->addToRoot();
+        _activeTutorialView = view;
         HUDController::setEnabled(false);
     } else {
         _rootnode->removeChild(_tutorialroot);
+        if (_activeTutorialView != nullptr) {
+            _activeTutorialView->clearFromRoot();
+        }
+        _activeTutorialView = nullptr;
         HUDController::setEnabled(true);
     }
     
@@ -525,11 +536,11 @@ void GameController::update(float dt) {
 
         }
     } else if (_tutorialViewVisible) {
-        _tutorialview->update(dt);
+        _activeTutorialView->update(dt);
         
-        if (_tutorialview->shouldDismiss()) {
-            _tutorialview->resetButtons();
-            setTutorialVisible(false);
+        if (_activeTutorialView->isDismissed()) {
+            _activeTutorialView->resetButtons();
+            setTutorialVisible(nullptr);
             return;
         }
     } else {
