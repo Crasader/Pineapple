@@ -16,7 +16,9 @@
 #define TUTORIAL_BUTTON_Z        2
 
 TutorialView* TutorialView::create() {
-    return new (std::nothrow) TutorialView();
+    TutorialView* t = new (std::nothrow) TutorialView();
+    
+    return t;
 }
 
 void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {

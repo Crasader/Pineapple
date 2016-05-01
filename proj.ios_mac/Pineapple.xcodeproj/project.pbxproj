@@ -508,13 +508,13 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				409043141CD6645C0062CE01 /* Sounds.h */,
-				4072DF871C9F44C900F7DAA4 /* Controller */,
-				4072DF851C9F44B800F7DAA4 /* Model */,
-				4072DF861C9F44BE00F7DAA4 /* View */,
 				406E53E91CA4ACA4001E2EBD /* Const.h */,
-				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4072DF871C9F44C900F7DAA4 /* Controller */,
 				4085B3961CB44EA900C7BD81 /* Levels.h */,
+				4072DF851C9F44B800F7DAA4 /* Model */,
+				409043141CD6645C0062CE01 /* Sounds.h */,
+				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4072DF861C9F44BE00F7DAA4 /* View */,
 			);
 			name = Classes;
 			path = ../Classes;

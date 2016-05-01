@@ -160,8 +160,11 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _tutorialroot = Node::create();
     _tutorialroot->setContentSize(_rootnode->getContentSize());
     _tutorialroot->retain();
+    
     _tutorialview = _level->getTutorialView();
-    _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
+    if (_tutorialview) {
+        _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
+    }
     
     _collision->setLevel(_level);
     
@@ -305,7 +308,9 @@ void GameController::onReset() {
     
     _tutorialview = _level->getTutorialView();
     _tutorialroot->removeAllChildren();
-    _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
+    if (_tutorialview != nullptr) {
+        _tutorialview->init(_tutorialroot, _assets, _level->getDrawScale());
+    }
     
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
@@ -390,6 +395,7 @@ void GameController::setFailure(bool value){
 
 void GameController::setTutorialVisible(bool value) {
     if (value == _tutorialViewVisible) return;
+    CC_ASSERT(value == false || _tutorialview != nullptr); // should never set a null view to visible
     
     if (value) {
         _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);

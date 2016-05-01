@@ -103,6 +103,14 @@ void loadSplashScreens(TextureLoader *tloader) {
     tloader->loadAsync(WIN_SPLASH_WILL, "textures/happy-will-spritesheet.png");
 }
 
+void loadTutorial(TextureLoader *tloader) {
+    tloader->loadAsync(TUTORIAL_MOVE_MESSAGE, "textures/tutorial/movement_message.png");
+    tloader->loadAsync(TUTORIAL_GROW_MESSAGE, "textures/tutorial/grow_message.png");
+    tloader->loadAsync(TUTORIAL_SHRINK_MESSAGE, "textures/tutorial/shrink_message.png");
+    tloader->loadAsync(TUTORIAL_JUMP_MESSAGE, "textures/tutorial/jump_message.png");
+    tloader->loadAsync(TUTORIAL_SWITCH_MESSAGE, "textures/tutorial/switch_message.png");
+}
+
 void loadLevelSelectScreen(TextureLoader *tloader) {
     tloader->loadAsync(LEVEL_SELECT_BACKGROUND, "textures/level_select_bg.png");
 }
@@ -113,15 +121,15 @@ void loadFonts(SceneManager* assets) {
 
 void loadSounds(SceneManager* assets) {
     assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
-		assets->loadAsync<Sound>(PINEAPPLET1_DEATH_SOUND, "sounds/kid1_death.mp3");
-		assets->loadAsync<Sound>(PINEAPPLET2_DEATH_SOUND, "sounds/kid2_death.mp3");
-		assets->loadAsync<Sound>(PINEAPPLET3_DEATH_SOUND, "sounds/kid3_death.mp3");
-		assets->loadAsync<Sound>(PINEAPPLET4_DEATH_SOUND, "sounds/kid4_death.mp3");
-		assets->loadAsync<Sound>(WILL_DEATH_SOUND, "sounds/will_death.mp3");
-		assets->loadAsync<Sound>(SPLAT_SOUND, "sounds/splat.mp3");
-		assets->loadAsync<Sound>(JELLO_BOING, "sounds/boing.mp3");
-		assets->loadAsync<Sound>(CUP_CRUSH_SOUND, "sounds/cup_crush.mp3");
-		assets->loadAsync<Sound>(BLENDER_SOUND, "sounds/blender_sound.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET1_DEATH_SOUND, "sounds/kid1_death.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET2_DEATH_SOUND, "sounds/kid2_death.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET3_DEATH_SOUND, "sounds/kid3_death.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET4_DEATH_SOUND, "sounds/kid4_death.mp3");
+    assets->loadAsync<Sound>(WILL_DEATH_SOUND, "sounds/will_death.mp3");
+    assets->loadAsync<Sound>(SPLAT_SOUND, "sounds/splat.mp3");
+    assets->loadAsync<Sound>(JELLO_BOING, "sounds/boing.mp3");
+    assets->loadAsync<Sound>(CUP_CRUSH_SOUND, "sounds/cup_crush.mp3");
+    assets->loadAsync<Sound>(BLENDER_SOUND, "sounds/blender_sound.mp3");
     assets->loadAsync<Sound>(LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
 }
 
@@ -149,6 +157,7 @@ void LoadingScreenController::preload() {
     loadHomeScreen(tloader);
     loadLevelSelectScreen(tloader);
     loadSplashScreens(tloader);
+    loadTutorial(tloader);
     
     loadSounds(assets);
     loadFonts(assets);

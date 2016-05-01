@@ -157,4 +157,12 @@
 #define WIN_SPLASH_CHILD_4  "win_splash_child_4"
 #define WIN_SPLASH_WILL     "win_splash_will"
 
+
+/** Tutorial images */
+#define TUTORIAL_GROW_MESSAGE   "grow_message"
+#define TUTORIAL_JUMP_MESSAGE   "jump_message"
+#define TUTORIAL_MOVE_MESSAGE   "move_message"
+#define TUTORIAL_SHRINK_MESSAGE "shrink_message"
+#define TUTORIAL_SWITCH_MESSAGE "switch_message"
+
 #endif /* Texture_h */
