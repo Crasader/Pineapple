@@ -154,6 +154,7 @@ void loadLevels(SceneManager* assets) {
     assets->loadAsync<LevelModel>(LEVEL_FOUR_KEY, LEVEL_FOUR_FILE);
     assets->loadAsync<LevelModel>(LEVEL_FIVE_KEY, LEVEL_FIVE_FILE);
     assets->loadAsync<LevelModel>(LEVEL_SIX_KEY, LEVEL_SIX_FILE);
+    assets->loadAsync<LevelModel>(LEVEL_SEVEN_KEY, LEVEL_SEVEN_FILE);
 }
 
 
