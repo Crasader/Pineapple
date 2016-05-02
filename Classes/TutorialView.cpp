@@ -204,6 +204,13 @@ void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
     
     float cscale = Director::getInstance()->getContentScaleFactor();
     
+    Texture2D* image = assets->get<Texture2D>(PAUSE_SCREEN_OVERLAY);
+    _backgroundOverlayTwo = PolygonNode::createWithTexture(image);
+    _backgroundOverlayTwo->setAnchorPoint(Vec2(0.5f, 0.5f));
+    _backgroundOverlayTwo->setScale(_root->getContentSize().width/image->getContentSize().width,
+                                 _root->getContentSize().height/image->getContentSize().height);
+    _backgroundOverlayTwo->retain();
+
     _dismissButton = Button::create();
     _dismissButton->retain();
     _dismissButton->setScale(MODAL_MAIN_SCALE * TUTORIAL_BUTTON_SCALE * cscale);
@@ -241,6 +248,10 @@ void TutorialView::position() {
         node->setPosition(center + Vec2(w*dx, h*dy));
     }
     
+    if (_backgroundOverlayTwo != nullptr) {
+        _backgroundOverlayTwo->setPosition(center);
+    }
+    
     if (_dismissButton != nullptr) {
         float w = _dismissButton->getContentSize().width;
         float h = _dismissButton->getContentSize().height;
@@ -256,6 +267,11 @@ void TutorialView::dispose() {
         tuple->dispose();
     }
     _animations.clear();
+    
+    if (_backgroundOverlayTwo != nullptr) {
+        _backgroundOverlayTwo->release();
+        _backgroundOverlayTwo = nullptr;
+    }
     
     if (_dismissButton != nullptr) {
         _dismissButton->release();

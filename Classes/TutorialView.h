@@ -16,13 +16,16 @@
 using namespace std;
 
 #define TUTORIAL_GRADIENT_Z         0
-#define TUTORIAL_IMAGE_Z            1
-#define TUTORIAL_BUTTON_Z           2
+#define TUTORIAL_IMAGE_Z            2
+#define TUTORIAL_BUTTON_Z           3
 
 class TutorialView : public ModalView {
 protected:
     /** The animations drawn on this tutorial view */
     vector<TutorialAnimationTuple*> _animations;
+    
+    /** A second translucent gray overlay */
+    Node* _backgroundOverlayTwo;
     
     /** Button that dismisses the tutorial view */
     Button* _dismissButton;
@@ -54,6 +57,7 @@ public:
     
     void addToRoot() {
         _root->addChild(_backgroundOverlay, TUTORIAL_GRADIENT_Z);
+        _root->addChild(_backgroundOverlayTwo, TUTORIAL_GRADIENT_Z+1);
         
         for(auto it = _animations.begin(); it != _animations.end(); ++it) {
             TutorialAnimationTuple* t = *it;
