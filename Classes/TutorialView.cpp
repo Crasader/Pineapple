@@ -61,7 +61,7 @@ void createFridgeTutorial(TutorialView *t) {
 
 void createKnivesTutorial(TutorialView *t) {
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_KNIVES_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
-
+    t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_KNIVES_IMAGE, Vec2(0,-0.35), 1.5f));
 }
 
 void createMoveTutorial(TutorialView* t) {

@@ -185,6 +185,7 @@
 #define TUTORIAL_SWITCH_IMAGE   "switch_image"
 #define TUTORIAL_POINTER_IMAGE  "pointer_image"
 #define TUTORIAL_SMASH_IMAGE    "smash_image"
+#define TUTORIAL_KNIVES_IMAGE   "knives_image"
 
 /** Tutorial buttons */
 #define TUTORIAL_BUTTON                 "tutorial_button"
