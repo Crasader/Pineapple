@@ -293,7 +293,6 @@ void GameController::dispose() {
 	_splatCycle = nullptr;
 	_fridgeDoor->release();
 	_fridgeDoor = nullptr;
-    _winnode = nullptr;
     _moveRightView->release();
     _moveRightView = nullptr;
     _moveLeftView->release();
@@ -573,7 +572,8 @@ void GameController::update(float dt) {
     // Check for tutorials
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
         TutorialView* view = (*it);
-        if (! view->isDismissed() && _level->getPineapple()->getPosition().x > view->getTriggerX()) {
+        if (! view->isDismissed() && _level->getPineapple() != nullptr &&
+            _level->getPineapple()->getPosition().x > view->getTriggerX()) {
             setTutorialVisible(view);
             break;
         }

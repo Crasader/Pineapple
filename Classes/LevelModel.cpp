@@ -329,6 +329,17 @@ bool LevelModel::load() {
         }
         addWall(position);
         
+        //Add roof wall
+        position[0] = 0;
+        position[1] = DEFAULT_HEIGHT + 1;
+        position[2] = 0;
+        position[3] = DEFAULT_HEIGHT + 3;
+        position[4] = _length;
+        position[5] = DEFAULT_HEIGHT + 3;
+        position[6] = _length;
+        position[7] = DEFAULT_HEIGHT + 1;
+        addWall(position);
+        
         reader.endObject();
         
         reader.endJSON();
