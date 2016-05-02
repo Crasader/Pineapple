@@ -26,7 +26,7 @@
 #include "ui/CocosGUI.h"
 
 #define NUM_LEVELS                  13
-#define LEVELS_CREATED              5
+#define LEVELS_CREATED              6
 #define NO_LEVEL_SELECTED           -1
 
 // V offset of a score from its corresponding button
