@@ -289,14 +289,16 @@ void GameController::dispose() {
         _fridgeDoor = nullptr;
     }
     
-	_splatCycle->release();
-	_splatCycle = nullptr;
-	_fridgeDoor->release();
-	_fridgeDoor = nullptr;
-    _moveRightView->release();
-    _moveRightView = nullptr;
-    _moveLeftView->release();
-    _moveLeftView = nullptr;
+    if (_moveRightView != nullptr) {
+        _moveRightView->release();
+        _moveRightView = nullptr;
+    }
+    
+    if (_moveLeftView) {
+        _moveLeftView->release();
+        _moveLeftView = nullptr;
+    }
+
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
