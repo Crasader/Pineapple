@@ -122,7 +122,7 @@ void loadTutorial(TextureLoader *tloader) {
     tloader->loadAsync(TUTORIAL_SWITCH_IMAGE, "textures/tutorial/switch_animation.png");
     tloader->loadAsync(TUTORIAL_POINTER_IMAGE, "textures/tutorial/pointer.png");
     tloader->loadAsync(TUTORIAL_SMASH_IMAGE, "textures/tutorial/smash_animation.png");
-    tloader->loadAsync(TUTORIAL_KNIVES_IMAGE, "textures/tutorial/dead_on_knives.png");
+    tloader->loadAsync(TUTORIAL_KNIVES_IMAGE, "textures/tutorial/knife_death_animation.png");
 }
 
 void loadLevelSelectScreen(TextureLoader *tloader) {
