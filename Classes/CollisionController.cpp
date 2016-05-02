@@ -223,9 +223,22 @@ void CollisionController::beginContact(b2Contact* contact) {
             ground(will, bd1->getCollisionClass() == PINEAPPLE_C ? fix2 : fix1, will == bd1 ? (BoxObstacle*)bd2 : (BoxObstacle*)bd1);
         }
     }
+    // WILL BODY SENSOR COLLISIONS
+    // (needed because collisions are on fixture level, will is made of 3 fixtures)
+    else if (fix1->GetUserData() == _level->getPineapple()->getSensorBodyName() ||
+             fix2->GetUserData() == _level->getPineapple()->getSensorBodyName()) {
+        // Will x ButtonSwitch
+        if (bd1->getCollisionClass() == BUTTON_SWITCH_C ||
+            bd2->getCollisionClass() == BUTTON_SWITCH_C) {
+            ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
+            // only collided if will didn't JUST grow/shrink
+            if (!will->justGrewShrank()) {
+                handleButtonSwitchStartCollision(will, buttonSwitch);
+            }
+        }
+    }
 	// WILL COLLISIONS
-	if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
-
+	else if (bd1->getCollisionClass() == PINEAPPLE_C || bd2->getCollisionClass() == PINEAPPLE_C) {
 		// Will x Jello
 		if (bd1->getCollisionClass() == JELLO_C || bd2->getCollisionClass() == JELLO_C) {
 			handleJelloCollision(will, bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2);
@@ -242,12 +255,6 @@ void CollisionController::beginContact(b2Contact* contact) {
 		if (bd1->getCollisionClass() == SPIKES_C || bd2->getCollisionClass() == SPIKES_C) {
 			handleSpikeCollision(will);
 		}
-        // Will x ButtonSwitch
-        if (bd1->getCollisionClass() == BUTTON_SWITCH_C || bd2->getCollisionClass() == BUTTON_SWITCH_C) {
-            ButtonSwitchModel* buttonSwitch = bd1->getCollisionClass() == BUTTON_SWITCH_C ? (ButtonSwitchModel*)bd1 : (ButtonSwitchModel*)bd2;
-            handleButtonSwitchStartCollision(will, buttonSwitch);
-        }
-        
 	} // END WILL COLLISIONS
 
 	// KID COLLISIONS

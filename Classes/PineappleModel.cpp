@@ -185,7 +185,7 @@ void PineappleModel::createFixtures() {
     sensorDef.density = PINEAPPLE_DENSITY;
     sensorDef.isSensor = true;
     
-    // Sensor dimensions
+    // Foot sensor dimensions
     b2Vec2 corners[4];
     corners[0].x = -PINEAPPLE_SSHRINK*getWidth() / 2.0f;
     corners[0].y = SENSOR_V_OFFSET + (-getHeight() + SENSOR_HEIGHT) / 2.0f;
@@ -202,6 +202,18 @@ void PineappleModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     _sensorFixture = _body->CreateFixture(&sensorDef);
     _sensorFixture->SetUserData(getSensorName());
+    
+    // Body sensor dimensions
+    corners[0].y = getHeight() / 2.0f;
+    corners[1].y = -getHeight() / 2.0f;
+    corners[2].y = -getHeight() / 2.0f;
+    corners[3].y = getHeight() / 2.0f;
+    
+    b2PolygonShape sensorBodyShape;
+    sensorBodyShape.Set(corners, 4);
+    sensorDef.shape = &sensorBodyShape;
+    _sensorBodyFixture = _body->CreateFixture(&sensorDef);
+    _sensorBodyFixture->SetUserData(&_sensorBodyName);
     
     // Override mass based on shape sizes to custom values
     b2MassData massData = b2MassData();
@@ -225,6 +237,10 @@ void PineappleModel::releaseFixtures() {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
     }
+    if (_sensorBodyFixture != nullptr) {
+        _body->DestroyFixture(_sensorBodyFixture);
+        _sensorBodyFixture = nullptr;
+    }
 }
 
 int PineappleModel::grow() {
@@ -233,6 +249,7 @@ int PineappleModel::grow() {
         setDimension(_normalSize);
         setY(getY() + (getDimension().height - currentHeight)/2);
         setIsSmall(false);
+        _justGrewShrank = true;
         return 1;
     }
     return 0;
@@ -244,6 +261,7 @@ int PineappleModel::shrink() {
         setDimension(_normalSize * PINEAPPLE_SHRINK_SCALE);
         setY(getY() + (getDimension().height - currentHeight)/2);
         setIsSmall(true);
+        _justGrewShrank = true;
         return 1;
     }
     return 0;
@@ -297,7 +315,13 @@ void PineappleModel::update(float dt) {
     else if (isGrounded()){
         _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown - 1 : 0);
     }
-    
+    if (_justGrewShrank) {
+        _framesJustGrewShrank++;
+        if (_framesJustGrewShrank >= 2) {
+            _justGrewShrank = false;
+            _framesJustGrewShrank = 0;
+        }
+    }
 	CapsuleObstacle::update(dt);
 }
 

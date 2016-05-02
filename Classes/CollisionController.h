@@ -30,6 +30,8 @@ protected:
 	LevelController* _levelCtrlr;
 	/** Mark set to handle more sophisticated collision callbacks */
 	unordered_set<b2Fixture*> _pSensorFixtures;
+    // -1 until initted
+    int _willSmallPrevFrame = -1;
 #pragma mark -
 #pragma mark Collision Handling
 

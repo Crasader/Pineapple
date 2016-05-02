@@ -19,7 +19,7 @@ using namespace cocos2d;
 
 /** Identifier to allow us to track the sensor in ContactListener */
 #define PINEAPPLE_SENSOR     "pineapple sensor"
-
+#define PINEAPPLE_BODY_SENSOR "pineapple body sensor"
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -60,6 +60,8 @@ protected:
 	bool _faceRight;
 	/** Whether Will is large or not */
 	bool _isSmall = false;
+    bool _justGrewShrank = false;
+    int _framesJustGrewShrank = 0;
 	/** Size object to store William's current size */
 	Size _normalSize = Size();
 	/** How long until we can jump again */
@@ -76,8 +78,11 @@ protected:
 	bool _reachedGoal;
 	/** Ground sensor to represent our feet */
 	b2Fixture*  _sensorFixture;
+    /** Sensor to represent our body, used for lever collisions */
+    b2Fixture*  _sensorBodyFixture;
 	/** Reference to the sensor name (since a constant cannot have a pointer) */
 	std::string _sensorName;
+    std::string _sensorBodyName;
 	/** The node for debugging the sensor */
 	WireNode* _sensorNode;
 	/** Filmstrip for walkcycle animation */
@@ -104,7 +109,9 @@ public:
 	/**
 	*	returns collision class
 	*/
-	int getCollisionClass() { return PINEAPPLE_C; };
+	int getCollisionClass() override { return PINEAPPLE_C; };
+    const b2Fixture* const getCore() { return _core; }
+    
 
 #pragma mark Static Constructors
 	/**
@@ -187,6 +194,8 @@ public:
      * Shrinks the pineapple, returns 1 if now small size, 0 if already small
      */
     int shrink();
+    
+    bool justGrewShrank() { return _justGrewShrank; }
 
 	/**
 	* Returns left/right movement of this character.
@@ -311,6 +320,8 @@ public:
 	* @return the name of the ground sensor
 	*/
 	std::string* getSensorName() { return &_sensorName; }
+    
+    std::string* getSensorBodyName() { return &_sensorBodyName; }
 
 	/**
 	* Returns true if this character is facing right
@@ -410,7 +421,9 @@ CC_CONSTRUCTOR_ACCESS:
 	PineappleModel() : CapsuleObstacle(),
     _isGrounded(true),
     _sensorFixture(nullptr),
+    _sensorBodyFixture(nullptr),
     _sensorName(PINEAPPLE_SENSOR),
+    _sensorBodyName(PINEAPPLE_BODY_SENSOR),
     _willWalkcycle(nullptr),
     _jumpCooldown(0){ }
 	~PineappleModel() { }
