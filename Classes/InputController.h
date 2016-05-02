@@ -32,6 +32,13 @@ using namespace cocos2d;
 #define PINCH                        -1
 #define SPREAD                       1
 
+/** The portion of the screen used for the left zone */
+#define LEFT_ZONE       0.15f
+/** The portion of the screen used for the right zone */
+#define RIGHT_ZONE      0.15f
+/** The portion of the screen used for the bottom zone */
+#define BOTTOM_ZONE     0.2f
+
 #pragma mark -
 #pragma mark Polled Input
 /**
@@ -313,6 +320,10 @@ public:
      * @return the amount of sideways movement.
      */
     float getHorizontal() const { return _horizontal; }
+    
+    Rect getLeftZone() { return _lzone; }
+    
+    Rect getRightZone() { return _rzone; }
     
     /** returns if the shrink button was pressed */
     bool didShrink() const { return _shrinkPressed; }

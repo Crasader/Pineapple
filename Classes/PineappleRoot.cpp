@@ -351,7 +351,7 @@ void PineappleRoot::update(float deltaTime) {
     //Do the updating
     _activeController->update(deltaTime);
     
-    if (_levelSelect && _gameplay && _levelSelect->isInitted()) {
+    if (_levelSelect && _gameplay && _gameplay->isInitted() && _levelSelect->isInitted()) {
         // Check if we beat a level and update the score if needed
         updateScore(_gameplay);
     }

@@ -62,6 +62,11 @@ protected:
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
     
+    /** Visual representation of left and right movement buttons, buttons don't have any function
+     *  Just used to easily change between two textures */
+    Button* _moveLeftView;
+    Button* _moveRightView;
+    
     /** The node that is the root of the lose splash screen */
     Node* _loseroot;
     /** Reference to the lose splash screen */
