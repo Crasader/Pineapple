@@ -79,6 +79,12 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     return init(root, input, levelIndex, levelKey, levelFile, SCREEN);
 }
 
+void configureMoveView(Button* button) {
+    button->setCascadeColorEnabled(true);
+    button->setSwallowTouches(false);
+    button->setTouchEnabled(true);
+}
+
 /**
  * Initializes the controller contents, and starts the game
  *
@@ -179,10 +185,8 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     float scale = 1.0f / (_moveLeftView->getContentSize().width / root->getContentSize().width);
     _moveLeftView->setScaleX(LEFT_ZONE * scale);
     _moveLeftView->setScaleY(root->getContentSize().height / _moveLeftView->getContentSize().height);
-    _moveLeftView->setPositionY(root->getContentSize().height * cscale/2.0f);
+    _moveLeftView->setPositionY(root->getContentSize().height /2.0f);
     _moveLeftView->setPositionX((_moveLeftView->getContentSize().width * _moveLeftView->getScaleX()/2.0f));
-    _moveLeftView->setCascadeColorEnabled(true);
-    _moveLeftView->setSwallowTouches(false);
     // set normal and pressed image
     _moveRightView = Button::create();
     _moveRightView->init(MOVE_RIGHT_UNPRESSED);
@@ -190,10 +194,8 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     scale = 1.0f / (_moveRightView->getContentSize().width / root->getContentSize().width);
     _moveRightView->setScaleX(RIGHT_ZONE * scale);
     _moveRightView->setScaleY(root->getContentSize().height / _moveRightView->getContentSize().height);
-    _moveRightView->setPositionY(root->getContentSize().height * cscale/2.0f);
+    _moveRightView->setPositionY(root->getContentSize().height /2.0f);
     _moveRightView->setPositionX(root->getContentSize().width * (1.0f - RIGHT_ZONE) + (_moveRightView->getContentSize().width * _moveRightView->getScaleX()/ 2.0f));
-    _moveRightView->setCascadeColorEnabled(true);
-    _moveRightView->setSwallowTouches(false);
     _rootnode->addChild(_moveLeftView, MOVEMENT_VIEW_Z);
     _moveLeftView->retain();
     _rootnode->addChild(_moveRightView, MOVEMENT_VIEW_Z);
@@ -459,8 +461,9 @@ void GameController::update(float dt) {
         PauseController::animate();
         return;
     }
-    _moveLeftView->setTouchEnabled(true);
-    _moveRightView->setTouchEnabled(true);
+    
+    configureMoveView(_moveLeftView);
+    configureMoveView(_moveRightView);
     
     if (_level->haveFailed() && ! _loseViewVisible) {
         setFailure(true);
