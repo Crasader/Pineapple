@@ -31,10 +31,11 @@
 using namespace cocos2d;
 //using namespace std;
 
-#define SPLAT_Z         5
-#define WIN_SPLASH_Z    7
-#define LOSE_SPLASH_Z   8
-#define GOAL_DOOR_Z		38
+#define SPLAT_Z             6
+#define TUTORIAL_SPLASH_Z   7
+#define WIN_SPLASH_Z        8
+#define LOSE_SPLASH_Z       9
+#define GOAL_DOOR_Z         38
 
 // global z order
 #define MOVEMENT_VIEW_Z 5
@@ -60,7 +61,8 @@ _collision(nullptr),
 _background(nullptr),
 _debug(false),
 _loseViewVisible(false),
-_winViewVisible(false){}
+_winViewVisible(false),
+_tutorialViewVisible(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -152,13 +154,6 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     
     PauseController::init(this, _worldnode, _assets, root, _input);
     HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
-
-    _winnode = Label::create();
-    _winnode->setTTFConfig(_assets->get<TTFont>(MESSAGE_FONT)->getTTF());
-    _winnode->setString(WIN_MESSAGE);
-    _winnode->setPosition(root->getContentSize().width/2.0f,
-                          root->getContentSize().height/2.0f);
-    _winnode->setColor(WIN_COLOR);
     
     _loseroot = Node::create();
     _loseroot->setContentSize(_rootnode->getContentSize());
@@ -169,6 +164,15 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _winroot->setContentSize(_rootnode->getContentSize());
     _winroot->retain();
     _winview = WinView::create(_winroot, _assets, _level->getDrawScale());
+    
+    _tutorialroot = Node::create();
+    _tutorialroot->setContentSize(_rootnode->getContentSize());
+    _tutorialroot->retain();
+    
+    _tutorialviews = _level->getTutorialViews();
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
+    }
     
     _collision->setLevel(_level);
     
@@ -213,10 +217,12 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     setComplete(false);
     setDebug(false);
     setFailure(false);
+    setTutorialVisible(nullptr);
     _isInitted = true;
     _isReloading = false;
     _loseViewVisible = false;
     _winViewVisible = false;
+    _tutorialViewVisible = false;
     return true;
 }
 
@@ -236,34 +242,63 @@ GameController::~GameController() {
 void GameController::dispose() {
     if (_level != nullptr) {
         _level->unload();
+        _level = nullptr;
     }
     if (_loseview != nullptr) {
         _loseview->dispose();
+        _loseview = nullptr;
     }
     if (_loseroot != nullptr) {
+        _loseroot->removeAllChildren();
         _loseroot->release();
         _loseroot = nullptr;
     }
     if (_winview != nullptr) {
         _winview->dispose();
+        _winview = nullptr;
     }
     if (_winroot != nullptr) {
+        _winroot->removeAllChildren();
         _winroot->release();
         _winroot = nullptr;
     }
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        (*it)->clearFromRoot();
+        (*it)->dispose();
+    }
+    _tutorialviews.clear();
+    
+    if (_tutorialroot != nullptr) {
+        _tutorialroot->removeAllChildren();
+        _tutorialroot->release();
+        _tutorialroot = nullptr;
+    }
+    
     _worldnode = nullptr;
     _background = nullptr;
     PauseController::release();
     _debugnode = nullptr;
-	_splatCycle->release();
-	_splatCycle = nullptr;
-	_fridgeDoor->release();
-	_fridgeDoor = nullptr;
-    _winnode = nullptr;
-    _moveRightView->release();
-    _moveRightView = nullptr;
-    _moveLeftView->release();
-    _moveLeftView = nullptr;
+    
+    if (_splatCycle != nullptr) {
+        _splatCycle->release();
+        _splatCycle = nullptr;
+    }
+    
+    if (_fridgeDoor != nullptr) {
+        _fridgeDoor->release();
+        _fridgeDoor = nullptr;
+    }
+    
+    if (_moveRightView != nullptr) {
+        _moveRightView->release();
+        _moveRightView = nullptr;
+    }
+    
+    if (_moveLeftView) {
+        _moveLeftView->release();
+        _moveLeftView = nullptr;
+    }
+
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
@@ -282,11 +317,24 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
+    setTutorialVisible(nullptr);
 	
     // clear state
     _collision->reset();
     
+    if (_fridgeDoor != nullptr) {
+        _fridgeDoor->release();
+        _fridgeDoor = nullptr;
+    }
+    
     // Unload the level but keep in memory temporarily
+    
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        (*it)->clearFromRoot();
+        (*it)->dispose();
+    }
+    _tutorialviews.clear();
+    
     _level->retain();
     _assets->unload<LevelModel>(_levelKey);
     
@@ -317,6 +365,13 @@ void GameController::onReset() {
     _debugnode = _level->getDebugNode();
     
     _collision->setLevel(_level);
+    
+    _tutorialroot->removeAllChildren();
+    _tutorialviews = _level->getTutorialViews();
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
+    }
+    
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collision->beginContact(contact);
@@ -333,14 +388,21 @@ void GameController::onReset() {
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
     
+    
+    
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background->reset(_worldnode);
     _isReloading = false;
 
-	_fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
-							 _level->getDrawScale().y*_level->getGoal()->getPosition().y);
+    _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
+    _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
+    _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+                             _level->getDrawScale().y*_level->getGoal()->getPosition().y);
+    _fridgeDoor->setVisible(true);
+    _fridgeDoor->retain();
+    _worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
 }
 
 /**
@@ -396,7 +458,28 @@ void GameController::setFailure(bool value){
         _loseViewVisible = false;
         HUDController::setEnabled(true);
     }
+}
+
+void GameController::setTutorialVisible(TutorialView* view) {
+    bool value = view != nullptr;
+    if (value == _tutorialViewVisible) return;
     
+    if (value) {
+        _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
+        view->addToRoot();
+        view->position();
+        _activeTutorialView = view;
+        HUDController::setEnabled(false);
+    } else {
+        _rootnode->removeChild(_tutorialroot);
+        if (_activeTutorialView != nullptr) {
+            _activeTutorialView->clearFromRoot();
+        }
+        _activeTutorialView = nullptr;
+        HUDController::setEnabled(true);
+    }
+    
+    _tutorialViewVisible = value;
 }
 
 float GameController::getBlenderVolScale() {
@@ -446,6 +529,19 @@ void GameController::update(float dt) {
     
     _input->update(dt);
     
+    // Process the toggled key commands
+    //if (_input->didPause()) {
+    //    if (!PauseController::isPaused()) {
+    //        PauseController::pause();
+    //        return;
+    //    } else {
+    //        PauseController::unPause();
+    //    }
+    //}
+    //if (_input->didDebug()) {
+    //    setDebug(!isDebug());
+        //setTutorialVisible(_tutorialview != nullptr && !_tutorialViewVisible);
+    //}
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) {
         reset();
@@ -465,6 +561,7 @@ void GameController::update(float dt) {
     configureMoveView(_moveLeftView);
     configureMoveView(_moveRightView);
     
+    // Check for failure
     if (_level->haveFailed() && ! _loseViewVisible) {
         setFailure(true);
     }
@@ -472,6 +569,16 @@ void GameController::update(float dt) {
     // Check for Victory
     if (checkForVictory() && ! _level->haveFailed() && ! _winViewVisible) {
         setComplete(true);
+    }
+    
+    // Check for tutorials
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        TutorialView* view = (*it);
+        if (! view->isDismissed() && _level->getPineapple() != nullptr &&
+            _level->getPineapple()->getPosition().x > view->getTriggerX()) {
+            setTutorialVisible(view);
+            break;
+        }
     }
     
     if (_loseViewVisible)  {
@@ -511,6 +618,14 @@ void GameController::update(float dt) {
             return;
 
         }
+    } else if (_tutorialViewVisible) {
+        _activeTutorialView->update(dt);
+        
+        if (_activeTutorialView->isDismissed()) {
+            _activeTutorialView->resetButtons();
+            setTutorialVisible(nullptr);
+            return;
+        }
     } else {
         // Process kids
         for(int i = 0; i < KID_COUNT; i++) {
@@ -541,7 +656,9 @@ void GameController::update(float dt) {
 										break;
 									case 3: key = PINEAPPLET4_DEATH_SOUND;
 										break;
-									default: key = "we gon crash if this happens, but it won't so it's chill.";
+									default:
+                                            key = "we gon crash if this happens, but it won't so it's chill.";
+                                            CC_ASSERT(false);
 									}
 									Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
 									SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);

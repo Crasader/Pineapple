@@ -27,7 +27,9 @@
 /** Epsilon on Kid Speed - if within this amount, just set to max speed */
 #define KID_SPEED_EPSILON       0.1f
 /** Anchor point that is in the center of the pineapple's mass */
-#define KID_ANCHOR_POINT   Vec2(0.5f, 0.25f)
+#define KID_ANCHOR_POINT   Vec2(0.5f, 0.20f)
+/** Hard coded kid size */
+#define KID_SIZE           Size(160, 160)
 
 
 #pragma mark -
@@ -402,8 +404,8 @@ void KidModel::resetSceneNode() {
         pnode->setScale(cscale * KID_SCALE);
         pnode->setFrame(0);
         
-        setDimension(pnode->getContentSize().width * KID_SCALE * KID_HSHRINK / _drawScale.x,
-                     pnode->getContentSize().height * KID_SCALE * KID_VSHRINK * (1 - KID_ANCHOR_POINT.y) / _drawScale.y);
+        setDimension(KID_SIZE.width * KID_SCALE * KID_HSHRINK / _drawScale.x,
+                     KID_SIZE.height * KID_SCALE * KID_VSHRINK * (1 - KID_ANCHOR_POINT.y) / _drawScale.y);
         
         pnode->setAnchorPoint(KID_ANCHOR_POINT);
         

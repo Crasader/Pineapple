@@ -94,6 +94,8 @@
 		4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* BlenderModel.cpp */; };
 		4072DFA91C9F68C500F7DAA4 /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
 		4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */; };
+		409043171CD664CC0062CE01 /* TutorialView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409043151CD664CC0062CE01 /* TutorialView.cpp */; };
+		409043181CD664CC0062CE01 /* TutorialView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409043151CD664CC0062CE01 /* TutorialView.cpp */; };
 		40C8F6EF1CB20F50000D9055 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
 		40C8F6F01CB20F50000D9055 /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
@@ -245,6 +247,9 @@
 		407625C51C8E13F2005A0651 /* BlenderModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlenderModel.cpp; sourceTree = "<group>"; };
 		4085B3961CB44EA900C7BD81 /* Levels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Levels.h; sourceTree = "<group>"; };
 		409043141CD6645C0062CE01 /* Sounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sounds.h; sourceTree = "<group>"; };
+		409043151CD664CC0062CE01 /* TutorialView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TutorialView.cpp; sourceTree = "<group>"; };
+		409043161CD664CC0062CE01 /* TutorialView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialView.h; sourceTree = "<group>"; };
+		4090431A1CD67C8B0062CE01 /* TutorialAnimationTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialAnimationTuple.h; sourceTree = "<group>"; };
 		40C8F6ED1CB20F50000D9055 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		40C8F6EE1CB20F50000D9055 /* tiledTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tiledTextures; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
@@ -452,6 +457,9 @@
 				40660A8C1CC495020064EBD9 /* ModalView.h */,
 				40660A931CC4A3C30064EBD9 /* WinView.cpp */,
 				40660A961CC4A3C90064EBD9 /* WinView.h */,
+				409043151CD664CC0062CE01 /* TutorialView.cpp */,
+				409043161CD664CC0062CE01 /* TutorialView.h */,
+				4090431A1CD67C8B0062CE01 /* TutorialAnimationTuple.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -500,13 +508,13 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				409043141CD6645C0062CE01 /* Sounds.h */,
-				4072DF871C9F44C900F7DAA4 /* Controller */,
-				4072DF851C9F44B800F7DAA4 /* Model */,
-				4072DF861C9F44BE00F7DAA4 /* View */,
 				406E53E91CA4ACA4001E2EBD /* Const.h */,
-				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4072DF871C9F44C900F7DAA4 /* Controller */,
 				4085B3961CB44EA900C7BD81 /* Levels.h */,
+				4072DF851C9F44B800F7DAA4 /* Model */,
+				409043141CD6645C0062CE01 /* Sounds.h */,
+				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4072DF861C9F44BE00F7DAA4 /* View */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -629,7 +637,7 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = BJ293T3427;
+						DevelopmentTeam = NK7Y3376G8;
 					};
 				};
 			};
@@ -764,6 +772,7 @@
 				403B05771CA37B5E003F47CB /* SpikeModel.cpp in Sources */,
 				4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				409043171CD664CC0062CE01 /* TutorialView.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
 				402F4EBE1CD17556009B36BA /* HomeScreenController.cpp in Sources */,
@@ -799,6 +808,7 @@
 				40660A951CC4A3C30064EBD9 /* WinView.cpp in Sources */,
 				404380BF1CC095F7003BE560 /* LevelSelectController.cpp in Sources */,
 				4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */,
+				409043181CD664CC0062CE01 /* TutorialView.cpp in Sources */,
 				4072DF951C9F68B300F7DAA4 /* GameController.cpp in Sources */,
 				40660A921CC49E280064EBD9 /* LoseView.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
@@ -854,7 +864,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = emk244.edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -892,7 +902,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = emk244.edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;

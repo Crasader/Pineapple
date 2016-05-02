@@ -20,12 +20,14 @@
 #define CUP_OBJECT_GROUP                "Cups"
 #define BUTTON_SWITCH_OBJECT_GROUP      "Switches"
 #define MOVEABLE_PLATFORMS_GROUP        "Bridges"
+#define TUTORIAL_IMAGES_GROUP           "Tutorial"
 
 /** Properties that Tiled Objects and maps posess */
 /** Level Properties */
 #define LAYERS_PROPERTY             "layers"
 #define LAYER_NAME_PROPERTY         "name"
 #define LAYER_OBJECTS_PROPERTY      "objects"
+
 #define BLENDER_START_X_PROPERTY    "BlenderStartX"
 #define BLENDER_Y_PROPERTY          "BlenderStartY"
 #define TILE_WIDTH_PROPERTY         "tilewidth"
@@ -51,6 +53,9 @@
 #define NUBBINS_VISIBLE         "nubbinsVisible"
 #define IS_OPEN_PROPERTY        "isOpen"
 #define IS_VERTICAL_PROPERTY    "isVertical"
+
+/** Tutorial image properties */
+#define TUTORIAL_ID             "id"
 
 /**
  *	Will replace this constructor with some kind of populate/build level via levelController
@@ -267,6 +272,15 @@ bool LevelModel::load() {
                     
                     reader.endObject();
                     addMoveablePlatform(position, length, isOpen, isVertical, nubbinsVisible, color);
+                } else if (layerName == TUTORIAL_IMAGES_GROUP) {
+                    reader.startObject(OBJECT_PROPERTIES_PROPERTY);
+
+                    int ID = cocos2d::stod(reader.getString(TUTORIAL_ID));
+                    addTutorialImage(ID, x);
+                    
+                    reader.endObject();
+                } else {
+                    cout << " Unknown layer name " << layerName;
                 }
                 
                 //End object in array
@@ -295,6 +309,7 @@ bool LevelModel::load() {
         //Start map properties
         reader.startObject(OBJECT_PROPERTIES_PROPERTY);
         
+        //BLENDER
         position[0] = cocos2d::stod(reader.getString(BLENDER_START_X_PROPERTY));
         position[1] = cocos2d::stod(reader.getString(BLENDER_Y_PROPERTY));
         addBlender(position);
@@ -314,8 +329,20 @@ bool LevelModel::load() {
         }
         addWall(position);
         
-        //End JSON object
+        //Add roof wall
+        position[0] = 0;
+        position[1] = DEFAULT_HEIGHT + 1;
+        position[2] = 0;
+        position[3] = DEFAULT_HEIGHT + 3;
+        position[4] = _length;
+        position[5] = DEFAULT_HEIGHT + 3;
+        position[6] = _length;
+        position[7] = DEFAULT_HEIGHT + 1;
+        addWall(position);
+        
         reader.endObject();
+        
+        reader.endJSON();
         
         _isLoaded = true;
     }
@@ -605,6 +632,11 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
+}
+
+void LevelModel::addTutorialImage(int ID, float x) {
+    TutorialView* view = TutorialView::create(ID, x);
+    _tutorialViews.push_back(view);
 }
 
 void LevelModel::setDrawScale(const Vec2& value) {

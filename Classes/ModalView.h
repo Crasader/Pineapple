@@ -57,7 +57,7 @@ protected:
 public:
     
     void initButton(Button* button, int fontSize, string text);
-    
+        
     bool shouldReset() { return _transferToReset; }
     
     bool shouldTransferToLevelSelect() { return _transferToLevelSelect; }

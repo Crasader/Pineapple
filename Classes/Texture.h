@@ -170,4 +170,33 @@
 #define WIN_SPLASH_CHILD_4  "win_splash_child_4"
 #define WIN_SPLASH_WILL     "win_splash_will"
 
+
+/** Tutorial messages */
+#define TUTORIAL_BLENDER_MESSAGE    "blender_message"
+#define TUTORIAL_FRIDGE_MESSAGE     "fridge_message"
+#define TUTORIAL_KNIVES_MESSAGE     "knives_message"
+#define TUTORIAL_GROW_MESSAGE       "grow_message"
+#define TUTORIAL_JUMP_MESSAGE       "jump_message"
+#define TUTORIAL_MOVE_MESSAGE       "move_message"
+#define TUTORIAL_SHRINK_MESSAGE     "shrink_message"
+#define TUTORIAL_SWITCH_MESSAGE     "switch_message"
+#define TUTORIAL_SMASH_MESSAGE      "smash_message"
+#define TUTORIAL_JUMP_SIZE_MESSAGE "jump_size_message"
+
+/** Tutorial images */
+#define TUTORIAL_SHRINK_IMAGE   "shrink_image"
+#define TUTORIAL_GROW_IMAGE     "grow_image"
+#define TUTORIAL_JUMP_IMAGE     "jump_image"
+#define TUTORIAL_DOOR_IMAGE     "door_image"
+#define TUTORIAL_SWITCH_IMAGE   "switch_image"
+#define TUTORIAL_POINTER_IMAGE  "pointer_image"
+#define TUTORIAL_SMASH_IMAGE    "smash_image"
+#define TUTORIAL_KNIVES_IMAGE   "knives_image"
+
+/** Tutorial buttons */
+#define TUTORIAL_BUTTON                 "tutorial_button"
+#define TUTORIAL_BUTTON_FILEPATH        "textures/tutorial/tutorial_button.png"
+#define TUTORIAL_BUTTON_ON              "tutorial_button_on"
+#define TUTORIAL_BUTTON_ON_FILEPATH    "textures/tutorial/tutorial_button_inverse.png"
+
 #endif /* Texture_h */

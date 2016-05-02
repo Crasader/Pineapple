@@ -18,6 +18,7 @@
 #include "MoveablePlatformModel.h"
 #include "Const.h"
 #include "Texture.h"
+#include "TutorialView.h"
 #include <cornell.h>
 #include <vector>
 
@@ -76,7 +77,6 @@ protected:
 
 	/** Length of the level in box2d units */
 	float _length;
-
     
     /** Reference to all the walls */
     std::vector<WallModel*> _walls;
@@ -91,6 +91,9 @@ protected:
     /** Reference to all of the moveable platforms */
     std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
+    /** The tutorial images for this level. May be empty if none */
+    std::vector<TutorialView*> _tutorialViews;
+    
 	/** The Box2D world */
 	WorldController* _world;
 	/** The world scale (computed from root node) */
@@ -226,6 +229,8 @@ public:
 			return _pineapple->getPosition().distance(_blender->getPosition());
 		}
     
+    vector<TutorialView*> getTutorialViews() { return _tutorialViews; }
+    
 #pragma mark -
 #pragma mark Allocation
     /**
@@ -269,6 +274,8 @@ public:
     void addButtonSwitch(float buttonSwitchPos[], bool isSwitch, Color color);
     
     void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color);
+    
+    void addTutorialImage(int ID, float x);
     
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
