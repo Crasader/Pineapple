@@ -4,6 +4,7 @@
 #include <cornell.h>
 #include "BackgroundView.h"
 #include "Texture.h"
+#include "Sounds.h"
 #include "LevelModel.h"
 #include "Levels.h"
 #include "AbsScreenController.h"

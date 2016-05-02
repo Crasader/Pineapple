@@ -1,4 +1,5 @@
 #include "LoadingScreenController.h"
+#include "LevelSelectController.h"
 
 #pragma mark -
 #pragma mark Asset Management
@@ -25,7 +26,8 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives2.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
-    tloader->loadAsync(GOAL_TEXTURE,      "textures/fridge.png");
+    tloader->loadAsync(GOAL_TEXTURE,      "textures/fridgeFull4.png");
+	tloader->loadAsync(GOAL_DOOR_TEXTURE, "textures/fridgeDoor.png");
     tloader->loadAsync(RED_CUP_TEXTURE,   "textures/cup_smash.png");
     tloader->loadAsync(BLUE_CUP_TEXTURE,  "textures/bluecup.png");
     tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
@@ -102,6 +104,28 @@ void loadSplashScreens(TextureLoader *tloader) {
     tloader->loadAsync(WIN_SPLASH_WILL, "textures/happy-will-spritesheet.png");
 }
 
+void loadTutorial(TextureLoader *tloader) {
+    tloader->loadAsync(TUTORIAL_MOVE_MESSAGE, "textures/tutorial/movement_message.png");
+    tloader->loadAsync(TUTORIAL_GROW_MESSAGE, "textures/tutorial/grow_message.png");
+    tloader->loadAsync(TUTORIAL_SHRINK_MESSAGE, "textures/tutorial/shrink_message.png");
+    tloader->loadAsync(TUTORIAL_JUMP_MESSAGE, "textures/tutorial/jump_message.png");
+    tloader->loadAsync(TUTORIAL_SWITCH_MESSAGE, "textures/tutorial/switch_message.png");
+    tloader->loadAsync(TUTORIAL_SMASH_MESSAGE, "textures/tutorial/cup_crush_message.png");
+    tloader->loadAsync(TUTORIAL_JUMP_SIZE_MESSAGE, "textures/tutorial/jump_size_message.png");
+    tloader->loadAsync(TUTORIAL_BLENDER_MESSAGE, "textures/tutorial/blender_message.png");
+    tloader->loadAsync(TUTORIAL_FRIDGE_MESSAGE, "textures/tutorial/fridge_message.png");
+    tloader->loadAsync(TUTORIAL_KNIVES_MESSAGE, "textures/tutorial/knives_message.png");
+    
+    tloader->loadAsync(TUTORIAL_SHRINK_IMAGE, "textures/tutorial/shrink_animation.png");
+    tloader->loadAsync(TUTORIAL_GROW_IMAGE, "textures/tutorial/grow_animation.png");
+    tloader->loadAsync(TUTORIAL_JUMP_IMAGE, "textures/tutorial/jumping_animation.png");
+    tloader->loadAsync(TUTORIAL_DOOR_IMAGE, "textures/tutorial/door_animation.png");
+    tloader->loadAsync(TUTORIAL_SWITCH_IMAGE, "textures/tutorial/switch_animation.png");
+    tloader->loadAsync(TUTORIAL_POINTER_IMAGE, "textures/tutorial/pointer.png");
+    tloader->loadAsync(TUTORIAL_SMASH_IMAGE, "textures/tutorial/smash_animation.png");
+    tloader->loadAsync(TUTORIAL_KNIVES_IMAGE, "textures/tutorial/knife_death_animation.png");
+}
+
 void loadLevelSelectScreen(TextureLoader *tloader) {
     tloader->loadAsync(LEVEL_SELECT_BACKGROUND, "textures/level_select_bg.png");
 }
@@ -112,15 +136,22 @@ void loadFonts(SceneManager* assets) {
 
 void loadSounds(SceneManager* assets) {
     assets->loadAsync<Sound>(GAME_BACKGROUND_SOUND, "sounds/background.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET1_DEATH_SOUND, "sounds/kid1_death.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET2_DEATH_SOUND, "sounds/kid2_death.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET3_DEATH_SOUND, "sounds/kid3_death.mp3");
+    assets->loadAsync<Sound>(PINEAPPLET4_DEATH_SOUND, "sounds/kid4_death.mp3");
+    assets->loadAsync<Sound>(WILL_DEATH_SOUND, "sounds/will_death.mp3");
+    assets->loadAsync<Sound>(SPLAT_SOUND, "sounds/splat.mp3");
+    assets->loadAsync<Sound>(JELLO_BOING, "sounds/boing.mp3");
+    assets->loadAsync<Sound>(CUP_CRUSH_SOUND, "sounds/cup_crush.mp3");
+    assets->loadAsync<Sound>(BLENDER_SOUND, "sounds/blender_sound.mp3");
     assets->loadAsync<Sound>(LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
 }
 
 void loadLevels(SceneManager* assets) {
-    assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_THREE_KEY, LEVEL_THREE_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_FOUR_KEY, LEVEL_FOUR_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_FIVE_KEY, LEVEL_FIVE_FILE);
+    for(int i = 0; i < LEVELS_CREATED; i++) {
+        assets->loadAsync<LevelModel>(LevelSelectController::LEVEL_KEYS[i], LevelSelectController::LEVEL_FILES[i]);
+    }
 }
 
 
@@ -139,6 +170,7 @@ void LoadingScreenController::preload() {
     loadHomeScreen(tloader);
     loadLevelSelectScreen(tloader);
     loadSplashScreens(tloader);
+    loadTutorial(tloader);
     
     loadSounds(assets);
     loadFonts(assets);

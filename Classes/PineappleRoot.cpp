@@ -126,6 +126,19 @@ void PineappleRoot::onFirstUpdate() {
     _activeController = _loadingScreen;
 }
 
+// Helper to update score after completing a level, didn't want to give gameplay controller access
+// to LevelSelectController so decided to put this up here.  Because of this we need to think about where
+// to call this.  Currently after beating a level you can transition to the next level, replay the current
+// level, or go to level select.  After each we call updateScore here.
+void updateScore(GameController* gameplay) {
+    const char *lvlKey = LevelSelectController::LEVEL_KEYS[gameplay->getLevelIndex()].c_str();
+    int prevScore = UserDefault::getInstance()->getIntegerForKey(lvlKey);
+    int thisScore = gameplay->getScore();
+    if (gameplay->isComplete() && thisScore > prevScore) {
+        UserDefault::getInstance()->setIntegerForKey(lvlKey, thisScore);
+    }
+}
+
 /** Helper method that transitions to home */
 void PineappleRoot::transitionToHomeScreen() {
     if (_activeController == _gameplay) {
@@ -192,7 +205,7 @@ void PineappleRoot::transitionToLevelSelect() {
         _levelSelect->init(_levelSelectRoot, &_inputController);
     }
     
-    // Updates to add a new button if new level was unlocked
+    // Updates to add a new button if new level was unlocked or update new high score
     _levelSelect->update();
     
     if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
@@ -207,6 +220,10 @@ void PineappleRoot::transitionToLevelSelect() {
         SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
     }
+
+		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::PLAYING) {
+			SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
+		}
     
     _homeScreen->setTransitionStatus(TRANSITION_NONE);
     _gameplay->setTransitionStatus(TRANSITION_NONE);
@@ -236,6 +253,15 @@ void PineappleRoot::transitionToGame(int levelIndex) {
         SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
     }
+
+		// Blender soundddd
+		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::INACTIVE) {
+			float volScale = _gameplay->getBlenderVolScale();
+			if (volScale >= 0) {
+				//Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+				//SoundEngine::getInstance()->playEffect(BLENDER_SOUND, source, true, EFFECT_VOLUME*volScale);
+			}
+		}
     
     if (_activeController == _homeScreen) {
         removeChild(_homeRoot);
@@ -301,6 +327,10 @@ void PineappleRoot::update(float deltaTime) {
         _levelSelect->clearSelectedLevel();
     }
     
+    if (_gameplay->getTransitionStatus() == TRANSITION_TO_RESET && _activeController == _gameplay) {
+        int levelIndex = _gameplay->getLevelIndex();
+        transitionToGame(levelIndex);
+    }
     if((_gameplay->getTransitionStatus() == TRANSITION_TO_NEXT_LEVEL && _activeController == _gameplay)) {
         int levelIndex = _gameplay->getLevelIndex() + 1;
         
@@ -310,9 +340,21 @@ void PineappleRoot::update(float deltaTime) {
             transitionToLevelSelect();
         }
     }
+
+		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::PLAYING) {
+			float volScale = _gameplay->getBlenderVolScale();
+			if (volScale >= 0) {
+				SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, volScale*EFFECT_VOLUME);
+			}
+		}
     
     //Do the updating
     _activeController->update(deltaTime);
+    
+    if (_levelSelect && _gameplay && _gameplay->isInitted() && _levelSelect->isInitted()) {
+        // Check if we beat a level and update the score if needed
+        updateScore(_gameplay);
+    }
     
     if (! _loadFinished) {
         if (!_loadStarted) {

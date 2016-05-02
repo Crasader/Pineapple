@@ -21,6 +21,8 @@
 #define PLATFORM_EDGE_RIGHT_TEXTURE   "platform_edge_right"
 /** The key for the win door texture in the asset manager */
 #define GOAL_TEXTURE     "goal"
+/** The key for the fridge door */
+#define GOAL_DOOR_TEXTURE "goalDoor"
 /** The key for the font for victory/failure messages in the asset manager */
 #define MESSAGE_FONT     "retro"
 
@@ -140,6 +142,19 @@
 /** The filepath for the level select button in its on state */
 #define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
 
+/** The filepaths for the different score textures, used in level select */
+#define LEVEL_SELECT_SCORE_FILEPATH_0 "textures/scores/0_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_1 "textures/scores/1_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_2 "textures/scores/2_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_3 "textures/scores/3_score.png"
+#define LEVEL_SELECT_SCORE_FILEPATH_4 "textures/scores/4_score.png"
+
+/** The filepaths for the different movement textures */
+#define MOVE_LEFT_PRESSED "textures/left_right_move_view/pressed_arrow_left.png"
+#define MOVE_LEFT_UNPRESSED "textures/left_right_move_view/unpressed_arrow_left.png"
+#define MOVE_RIGHT_PRESSED "textures/left_right_move_view/pressed_arrow_right.png"
+#define MOVE_RIGHT_UNPRESSED "textures/left_right_move_view/unpressed_arrow_right.png"
+
 /** The key for the lose splash screen */
 #define LOSE_SPLASH    "lose_splash"
 /** The key for the image of the juice cup for the lose splash screen */
@@ -154,5 +169,34 @@
 #define WIN_SPLASH_CHILD_3  "win_splash_child_3"
 #define WIN_SPLASH_CHILD_4  "win_splash_child_4"
 #define WIN_SPLASH_WILL     "win_splash_will"
+
+
+/** Tutorial messages */
+#define TUTORIAL_BLENDER_MESSAGE    "blender_message"
+#define TUTORIAL_FRIDGE_MESSAGE     "fridge_message"
+#define TUTORIAL_KNIVES_MESSAGE     "knives_message"
+#define TUTORIAL_GROW_MESSAGE       "grow_message"
+#define TUTORIAL_JUMP_MESSAGE       "jump_message"
+#define TUTORIAL_MOVE_MESSAGE       "move_message"
+#define TUTORIAL_SHRINK_MESSAGE     "shrink_message"
+#define TUTORIAL_SWITCH_MESSAGE     "switch_message"
+#define TUTORIAL_SMASH_MESSAGE      "smash_message"
+#define TUTORIAL_JUMP_SIZE_MESSAGE "jump_size_message"
+
+/** Tutorial images */
+#define TUTORIAL_SHRINK_IMAGE   "shrink_image"
+#define TUTORIAL_GROW_IMAGE     "grow_image"
+#define TUTORIAL_JUMP_IMAGE     "jump_image"
+#define TUTORIAL_DOOR_IMAGE     "door_image"
+#define TUTORIAL_SWITCH_IMAGE   "switch_image"
+#define TUTORIAL_POINTER_IMAGE  "pointer_image"
+#define TUTORIAL_SMASH_IMAGE    "smash_image"
+#define TUTORIAL_KNIVES_IMAGE   "knives_image"
+
+/** Tutorial buttons */
+#define TUTORIAL_BUTTON                 "tutorial_button"
+#define TUTORIAL_BUTTON_FILEPATH        "textures/tutorial/tutorial_button.png"
+#define TUTORIAL_BUTTON_ON              "tutorial_button_on"
+#define TUTORIAL_BUTTON_ON_FILEPATH    "textures/tutorial/tutorial_button_inverse.png"
 
 #endif /* Texture_h */

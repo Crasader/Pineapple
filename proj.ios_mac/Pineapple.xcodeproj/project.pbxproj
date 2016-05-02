@@ -52,12 +52,10 @@
 		4039B4E21CB34015001E8B6E /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
 		4039B4E31CB3401C001E8B6E /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 405CBEBF1C7D1CF7004AB5A0 /* sounds */; };
 		4039B4E41CB3401E001E8B6E /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
-		403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */; };
 		403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
 		403B056E1CA37B5E003F47CB /* JelloModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 400C68501C94E32800C141C3 /* JelloModel.cpp */; };
 		403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4070BDD71C7E7289008AE7AF /* KidModel.cpp */; };
 		403B05701CA37B5E003F47CB /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4016BAAB1CA3745100557450 /* LevelModel.cpp */; };
-		403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */; };
 		403B05721CA37B5E003F47CB /* BlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* BlenderModel.cpp */; };
 		403B05731CA37B5E003F47CB /* SpinnerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */; };
 		403B05741CA37B5E003F47CB /* PhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */; };
@@ -81,17 +79,13 @@
 		406E53E81CA4A72B001E2EBD /* BackgroundView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 406E53E51CA4A72B001E2EBD /* BackgroundView.cpp */; };
 		4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */; };
 		4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */; };
-		4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */; };
 		4072DF911C9F68B300F7DAA4 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */; };
 		4072DF921C9F68B300F7DAA4 /* LoadingScreenController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */; };
 		4072DF941C9F68B300F7DAA4 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		4072DF951C9F68B300F7DAA4 /* GameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA71C7D14DF004AB5A0 /* GameController.cpp */; };
 		4072DF961C9F68B300F7DAA4 /* PineappleRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB21C7D14DF004AB5A0 /* PineappleRoot.cpp */; };
 		4072DF971C9F68B300F7DAA4 /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEB01C7D14DF004AB5A0 /* InputController.cpp */; };
-		4072DF981C9F68B600F7DAA4 /* ProgressHUD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */; };
 		4072DF9F1C9F68C500F7DAA4 /* CrushableModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E256121C991AF0002FB07E /* CrushableModel.cpp */; };
-		4072DFA01C9F68C500F7DAA4 /* CollisionObjectModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */; };
-		4072DFA21C9F68C500F7DAA4 /* NonPhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */; };
 		4072DFA31C9F68C500F7DAA4 /* PhysicalObstacleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */; };
 		4072DFA41C9F68C500F7DAA4 /* PineappleModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */; };
 		4072DFA51C9F68C500F7DAA4 /* WallModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4072DF751C9F43F900F7DAA4 /* WallModel.cpp */; };
@@ -100,6 +94,8 @@
 		4072DFA81C9F68C500F7DAA4 /* BlenderModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407625C51C8E13F2005A0651 /* BlenderModel.cpp */; };
 		4072DFA91C9F68C500F7DAA4 /* SpikeModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 037D90E31C98FA0C001C332F /* SpikeModel.cpp */; };
 		4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 405CBEA91C7D14DF004AB5A0 /* SpinnerModel.cpp */; };
+		409043171CD664CC0062CE01 /* TutorialView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409043151CD664CC0062CE01 /* TutorialView.cpp */; };
+		409043181CD664CC0062CE01 /* TutorialView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409043151CD664CC0062CE01 /* TutorialView.cpp */; };
 		40C8F6EF1CB20F50000D9055 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6ED1CB20F50000D9055 /* levels */; };
 		40C8F6F01CB20F50000D9055 /* tiledTextures in Resources */ = {isa = PBXBuildFile; fileRef = 40C8F6EE1CB20F50000D9055 /* tiledTextures */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
@@ -208,8 +204,6 @@
 		400C684F1C94E32200C141C3 /* JelloModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JelloModel.h; sourceTree = "<group>"; };
 		400C68501C94E32800C141C3 /* JelloModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JelloModel.cpp; sourceTree = "<group>"; };
 		4016BA701CA36D9700557450 /* LevelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelModel.h; sourceTree = "<group>"; };
-		4016BA721CA36D9700557450 /* CollisionObjectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionObjectModel.h; sourceTree = "<group>"; };
-		4016BA771CA36D9700557450 /* NonPhysicalObstacleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonPhysicalObstacleModel.h; sourceTree = "<group>"; };
 		4016BAAB1CA3745100557450 /* LevelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelModel.cpp; sourceTree = "<group>"; };
 		402F4EBC1CD17556009B36BA /* HomeScreenController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HomeScreenController.cpp; sourceTree = "<group>"; };
 		402F4EBD1CD17556009B36BA /* HomeScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenController.h; sourceTree = "<group>"; };
@@ -241,21 +235,21 @@
 		4070BDD81C7E7289008AE7AF /* KidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KidModel.h; sourceTree = "<group>"; };
 		4072DF671C9F43F900F7DAA4 /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
 		4072DF681C9F43F900F7DAA4 /* CollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionController.h; sourceTree = "<group>"; };
-		4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionObjectModel.cpp; sourceTree = "<group>"; };
 		4072DF6D1C9F43F900F7DAA4 /* LoadingScreenController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScreenController.cpp; sourceTree = "<group>"; };
 		4072DF6E1C9F43F900F7DAA4 /* LoadingScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScreenController.h; sourceTree = "<group>"; };
-		4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NonPhysicalObstacleModel.cpp; sourceTree = "<group>"; };
 		4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicalObstacleModel.cpp; sourceTree = "<group>"; };
 		4072DF721C9F43F900F7DAA4 /* PhysicalObstacleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicalObstacleModel.h; sourceTree = "<group>"; };
 		4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PineappleModel.cpp; sourceTree = "<group>"; };
 		4072DF741C9F43F900F7DAA4 /* PineappleModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PineappleModel.h; sourceTree = "<group>"; };
 		4072DF751C9F43F900F7DAA4 /* WallModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WallModel.cpp; sourceTree = "<group>"; };
 		4072DF761C9F43F900F7DAA4 /* WallModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallModel.h; sourceTree = "<group>"; };
-		4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressHUD.cpp; sourceTree = "<group>"; };
-		4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
 		407625C41C8E13E6005A0651 /* BlenderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlenderModel.h; sourceTree = "<group>"; };
 		407625C51C8E13F2005A0651 /* BlenderModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlenderModel.cpp; sourceTree = "<group>"; };
 		4085B3961CB44EA900C7BD81 /* Levels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Levels.h; sourceTree = "<group>"; };
+		409043141CD6645C0062CE01 /* Sounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sounds.h; sourceTree = "<group>"; };
+		409043151CD664CC0062CE01 /* TutorialView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TutorialView.cpp; sourceTree = "<group>"; };
+		409043161CD664CC0062CE01 /* TutorialView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialView.h; sourceTree = "<group>"; };
+		4090431A1CD67C8B0062CE01 /* TutorialAnimationTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialAnimationTuple.h; sourceTree = "<group>"; };
 		40C8F6ED1CB20F50000D9055 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		40C8F6EE1CB20F50000D9055 /* tiledTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tiledTextures; sourceTree = "<group>"; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
@@ -426,8 +420,6 @@
 				407625C41C8E13E6005A0651 /* BlenderModel.h */,
 				0313B5E71CB3325000C9CD4C /* ButtonSwitchModel.cpp */,
 				0313B5E81CB3325000C9CD4C /* ButtonSwitchModel.h */,
-				4072DF691C9F43F900F7DAA4 /* CollisionObjectModel.cpp */,
-				4016BA721CA36D9700557450 /* CollisionObjectModel.h */,
 				03E256121C991AF0002FB07E /* CrushableModel.cpp */,
 				03E256131C991AF0002FB07E /* CrushableModel.h */,
 				4039B4DD1CB33B3E001E8B6E /* GoalModel.cpp */,
@@ -440,8 +432,6 @@
 				4016BA701CA36D9700557450 /* LevelModel.h */,
 				0313B5EB1CB336D500C9CD4C /* MoveablePlatformModel.cpp */,
 				0313B5EC1CB336D500C9CD4C /* MoveablePlatformModel.h */,
-				4072DF6F1C9F43F900F7DAA4 /* NonPhysicalObstacleModel.cpp */,
-				4016BA771CA36D9700557450 /* NonPhysicalObstacleModel.h */,
 				4072DF711C9F43F900F7DAA4 /* PhysicalObstacleModel.cpp */,
 				4072DF721C9F43F900F7DAA4 /* PhysicalObstacleModel.h */,
 				4072DF731C9F43F900F7DAA4 /* PineappleModel.cpp */,
@@ -465,10 +455,11 @@
 				40660A901CC49E280064EBD9 /* LoseView.h */,
 				40660A8B1CC495020064EBD9 /* ModalView.cpp */,
 				40660A8C1CC495020064EBD9 /* ModalView.h */,
-				4072DF771C9F43F900F7DAA4 /* ProgressHUD.cpp */,
-				4072DF781C9F43F900F7DAA4 /* ProgressHUD.h */,
 				40660A931CC4A3C30064EBD9 /* WinView.cpp */,
 				40660A961CC4A3C90064EBD9 /* WinView.h */,
+				409043151CD664CC0062CE01 /* TutorialView.cpp */,
+				409043161CD664CC0062CE01 /* TutorialView.h */,
+				4090431A1CD67C8B0062CE01 /* TutorialAnimationTuple.h */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -517,12 +508,13 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4072DF871C9F44C900F7DAA4 /* Controller */,
-				4072DF851C9F44B800F7DAA4 /* Model */,
-				4072DF861C9F44BE00F7DAA4 /* View */,
 				406E53E91CA4ACA4001E2EBD /* Const.h */,
-				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4072DF871C9F44C900F7DAA4 /* Controller */,
 				4085B3961CB44EA900C7BD81 /* Levels.h */,
+				4072DF851C9F44B800F7DAA4 /* Model */,
+				409043141CD6645C0062CE01 /* Sounds.h */,
+				406E53EA1CA4BA5F001E2EBD /* Texture.h */,
+				4072DF861C9F44BE00F7DAA4 /* View */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -645,7 +637,7 @@
 				LastUpgradeCheck = 0720;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = BJ293T3427;
+						DevelopmentTeam = NK7Y3376G8;
 					};
 				};
 			};
@@ -757,7 +749,6 @@
 			files = (
 				4039B4DE1CB33B3E001E8B6E /* GoalModel.cpp in Sources */,
 				40660A8D1CC495020064EBD9 /* ModalView.cpp in Sources */,
-				403B05711CA37B5E003F47CB /* NonPhysicalObstacleModel.cpp in Sources */,
 				405CBEB71C7D14DF004AB5A0 /* InputController.cpp in Sources */,
 				405CBEB81C7D14DF004AB5A0 /* PineappleRoot.cpp in Sources */,
 				40660A941CC4A3C30064EBD9 /* WinView.cpp in Sources */,
@@ -766,7 +757,6 @@
 				40660A911CC49E280064EBD9 /* LoseView.cpp in Sources */,
 				403B05701CA37B5E003F47CB /* LevelModel.cpp in Sources */,
 				4072DF7B1C9F43F900F7DAA4 /* CollisionController.cpp in Sources */,
-				4072DF831C9F43F900F7DAA4 /* ProgressHUD.cpp in Sources */,
 				403B056D1CA37B5E003F47CB /* CrushableModel.cpp in Sources */,
 				0373D6F01CBF205A00B00A7E /* PauseController.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
@@ -782,12 +772,12 @@
 				403B05771CA37B5E003F47CB /* SpikeModel.cpp in Sources */,
 				4072DF7E1C9F43F900F7DAA4 /* LoadingScreenController.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				409043171CD664CC0062CE01 /* TutorialView.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				403B056F1CA37B5E003F47CB /* KidModel.cpp in Sources */,
 				402F4EBE1CD17556009B36BA /* HomeScreenController.cpp in Sources */,
 				0313B5E91CB3325000C9CD4C /* ButtonSwitchModel.cpp in Sources */,
 				406E53E71CA4A72B001E2EBD /* BackgroundView.cpp in Sources */,
-				403B056C1CA37B5E003F47CB /* CollisionObjectModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -818,14 +808,12 @@
 				40660A951CC4A3C30064EBD9 /* WinView.cpp in Sources */,
 				404380BF1CC095F7003BE560 /* LevelSelectController.cpp in Sources */,
 				4072DFAA1C9F68C500F7DAA4 /* SpinnerModel.cpp in Sources */,
-				4072DFA01C9F68C500F7DAA4 /* CollisionObjectModel.cpp in Sources */,
-				4072DF981C9F68B600F7DAA4 /* ProgressHUD.cpp in Sources */,
+				409043181CD664CC0062CE01 /* TutorialView.cpp in Sources */,
 				4072DF951C9F68B300F7DAA4 /* GameController.cpp in Sources */,
 				40660A921CC49E280064EBD9 /* LoseView.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
 				4039B4DF1CB33B3E001E8B6E /* GoalModel.cpp in Sources */,
 				4072DF9F1C9F68C500F7DAA4 /* CrushableModel.cpp in Sources */,
-				4072DFA21C9F68C500F7DAA4 /* NonPhysicalObstacleModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -876,7 +864,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = emk244.edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -914,7 +902,7 @@
 					"$(_COCOS_LIB_IOS_BEGIN)",
 					"$(_COCOS_LIB_IOS_END)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = emk244.edu.cornell.cs.4152.Pineapple;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.cs.4152.Pineapple;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;

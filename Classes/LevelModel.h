@@ -18,6 +18,7 @@
 #include "MoveablePlatformModel.h"
 #include "Const.h"
 #include "Texture.h"
+#include "TutorialView.h"
 #include <cornell.h>
 #include <vector>
 
@@ -44,7 +45,7 @@
 #define KID_Z_INDEX                 30 //30...30+NUM_CHILDREN-1 used by Kids
 
 #define PINEAPPLE_Z_INDEX           35
-#define BLENDER_Z_INDEX             36
+#define BLENDER_Z_INDEX             40
 
 
 using namespace cocos2d;
@@ -55,7 +56,7 @@ protected:
     Size _tileSize;
     
 	/** Reference to the goalDoor (for collision detection) */
-	BoxObstacle*    _goalDoor;
+	GoalModel*    _goalDoor;
 	/** Reference to the player avatar */
 	PineappleModel*      _pineapple;
 	/** References to the kid avatars */
@@ -76,7 +77,6 @@ protected:
 
 	/** Length of the level in box2d units */
 	float _length;
-
     
     /** Reference to all the walls */
     std::vector<WallModel*> _walls;
@@ -91,6 +91,9 @@ protected:
     /** Reference to all of the moveable platforms */
     std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
+    /** The tutorial images for this level. May be empty if none */
+    std::vector<TutorialView*> _tutorialViews;
+    
 	/** The Box2D world */
 	WorldController* _world;
 	/** The world scale (computed from root node) */
@@ -122,7 +125,7 @@ public:
 	/**
 	 *
 	 */
-	BoxObstacle* getGoal() { return _goalDoor; }
+	GoalModel* getGoal() { return _goalDoor; }
 
 	/**
 	*
@@ -146,6 +149,8 @@ public:
         }
         return vec;
     }
+    
+    int getKidsRemaining() { return _kidsRemaining; }
     
 	/**
 	*
@@ -218,6 +223,13 @@ public:
     bool isActive() { return _isActive; }
     
     WorldController* getWorld() { return _world; }
+
+		float getBlenderPineappleDistance() {
+			if (_pineapple == nullptr) { return -1.0f; }
+			return _pineapple->getPosition().distance(_blender->getPosition());
+		}
+    
+    vector<TutorialView*> getTutorialViews() { return _tutorialViews; }
     
 #pragma mark -
 #pragma mark Allocation
@@ -262,6 +274,8 @@ public:
     void addButtonSwitch(float buttonSwitchPos[], bool isSwitch, Color color);
     
     void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color);
+    
+    void addTutorialImage(int ID, float x);
     
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */

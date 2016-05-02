@@ -26,8 +26,12 @@
 #include "ui/CocosGUI.h"
 
 #define NUM_LEVELS                  13
-#define LEVELS_CREATED              5
+#define LEVELS_CREATED              11
 #define NO_LEVEL_SELECTED           -1
+
+// V offset of a score from its corresponding button
+#define SCORE_V_OFFSET              -60
+#define SCORE_SCALE                 .45f
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -72,6 +76,10 @@ protected:
     
     // array of buttons
     Button* _buttons[NUM_LEVELS];
+    // array of score nodes
+    PolygonNode* _scoreNodes[NUM_LEVELS];
+    // array of scores, used to determine when a node is needed to be updated
+    int _scores[NUM_LEVELS];
     // The controller's local idea of the number of levels completed, this is updated upon new level
     // completion along with the extra button in update()
     int _levelsComplete;
@@ -111,6 +119,9 @@ public:
     /** Creates and returns a button for the given index */
     Button* initButton(Size dimen, int i);
     
+    /** Creates and returns score node and inits _score[i] value */
+    PolygonNode* initScore(Button* button, int i);
+    
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -145,7 +156,10 @@ public:
      */
     bool init(Node* root, InputController* input, const Rect& rect);
     
-    // called upon transition to the level select, adds new button if latest level has been completed
+    /** 
+     * Called upon transition to the level select
+     * adds new button and score if latest level has been completed 
+     */
     void update();
     
     

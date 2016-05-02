@@ -28,7 +28,7 @@
 /** The impulse for the character jump */
 #define PINEAPPLE_JUMP              10.0f
 /** Anchor point that is in the center of the pineapple's mass */
-#define PINEAPPLE_ANCHOR_POINT   Vec2(0.5f, 0.22f)
+#define PINEAPPLE_ANCHOR_POINT   Vec2(0.5f, 0.25f)
 
 #pragma mark -
 #pragma mark Static Constructors

@@ -102,6 +102,9 @@
     <ClCompile Include="..\Classes\LoseView.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\HomeScreenController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -204,6 +207,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LoseView.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HomeScreenController.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

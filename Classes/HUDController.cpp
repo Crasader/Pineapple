@@ -193,6 +193,8 @@ void HUDController::update(int childrenAlive, float blenderLoc, vector<KidModel*
                 (place * width/2.0f);
             }
             HUD_CONTROLLER->_children[i]->setPositionX(pos);
+        } else {
+            HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_children[i]);
         }
     }
     float willPos = 0.0f;
@@ -210,6 +212,8 @@ void HUDController::update(int childrenAlive, float blenderLoc, vector<KidModel*
             willPos = HUD_CONTROLLER->_progressBarLeftXPos + HUD_CONTROLLER->_progressBarWidth;
         }
         HUD_CONTROLLER->_will->setPositionX(willPos);
+    } else {
+        HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_will);
     }
 }
 
