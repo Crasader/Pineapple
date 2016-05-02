@@ -1,4 +1,5 @@
 #include "LoadingScreenController.h"
+#include "LevelSelectController.h"
 
 #pragma mark -
 #pragma mark Asset Management
@@ -148,13 +149,9 @@ void loadSounds(SceneManager* assets) {
 }
 
 void loadLevels(SceneManager* assets) {
-    assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_THREE_KEY, LEVEL_THREE_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_FOUR_KEY, LEVEL_FOUR_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_FIVE_KEY, LEVEL_FIVE_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_SIX_KEY, LEVEL_SIX_FILE);
-    assets->loadAsync<LevelModel>(LEVEL_SEVEN_KEY, LEVEL_SEVEN_FILE);
+    for(int i = 0; i < LEVELS_CREATED; i++) {
+        assets->loadAsync<LevelModel>(LevelSelectController::LEVEL_KEYS[i], LevelSelectController::LEVEL_FILES[i]);
+    }
 }
 
 
