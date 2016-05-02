@@ -41,6 +41,12 @@ using namespace cocos2d;
 #define MOVEMENT_VIEW_Z 5
 
 
+//Min levels for functionality
+#define MIN_JUMP_LEVEL      1
+#define MIN_SHRINK_LEVEL    2
+#define MIN_GROW_LEVEL      5
+
+
 #pragma mark -
 #pragma mark Initialization
 
@@ -487,12 +493,12 @@ float GameController::getBlenderVolScale() {
 		return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
 }
 
-void handleAvatarGrowth(float cscale, InputController* _input, PineappleModel* _avatar) {
+void handleAvatarGrowth(int levelIndex, float cscale, InputController* _input, PineappleModel* _avatar) {
     int size = 0;
     float scale = 1.0f;
-    if (_input->didGrow()) {
+    if (_input->didGrow() && levelIndex >= MIN_GROW_LEVEL) {
         size = _avatar->grow();
-    } else if (_input->didShrink()) {
+    } else if (_input->didShrink() && levelIndex >= MIN_SHRINK_LEVEL) {
         size = _avatar->shrink();
         if (size == 1)
             scale = PINEAPPLE_SHRINK_SCALE;
@@ -671,10 +677,10 @@ void GameController::update(float dt) {
         if (_level->getPineapple() != nullptr) {
             if (!_level->getPineapple()->getIsBlended()) {
                 _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
-                _level->getPineapple()->setJumping(_input->didJump());
+                _level->getPineapple()->setJumping(_input->didJump() && _levelIndex >= MIN_JUMP_LEVEL);
                 float cscale = Director::getInstance()->getContentScaleFactor();
                 
-                handleAvatarGrowth(cscale, _input, _level->getPineapple());
+                handleAvatarGrowth(_levelIndex, cscale, _input, _level->getPineapple());
                 
                 _level->getPineapple()->applyForce();
                 
