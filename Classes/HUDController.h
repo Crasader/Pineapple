@@ -25,7 +25,7 @@
 #define         SOUND_BUTTON_HORIZ_POS_RATIO     .85f
 #define         PAUSE_BUTTON_HORIZ_POS_RATIO     .94f
 #define         HUD_MIDDLE_Y_POS_RATIO           .9f
-#define         HUD_Z_ORDER                      5
+#define         HUD_Z_ORDER                      6
 #define         BUTTON_SCALE                     .15f
 #define         PROGRESS_BAR_SCALE_HORIZ         .6f
 #define         PROGRESS_BAR_SCALE_VERT          .5f
