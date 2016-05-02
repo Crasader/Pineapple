@@ -23,6 +23,9 @@ protected:
     /** The frame count for this animation */
     int _frameCount;
     
+    /** The total frames in the animation */
+    int _totalFramesAvailable;
+    
     /** The position of this animation node on the screen */
     Vec2 _position;
     
@@ -39,9 +42,10 @@ protected:
     AnimationNode* _node;
     
     /** Tuple constructor - assigns the fields. Keeps node null until it is later initialized */
-    TutorialAnimationTuple(string textureID, int frameCount, Vec2 position, float scale, float framerate) {
+    TutorialAnimationTuple(string textureID, int frameCount, int totalFramesAvailable, Vec2 position, float scale, float framerate) {
         _textureID = textureID;
         _frameCount = frameCount;
+        _totalFramesAvailable = totalFramesAvailable;
         _position = position;
         _scale = scale;
         _framerate = framerate;
@@ -67,7 +71,7 @@ public:
     /** Creates the animation node represented by this tuple. If called multiple times, just returns the created node */
     AnimationNode* createNode(SceneManager* assets) {
         if (_node == nullptr) {
-            _node = AnimationNode::create(assets->get<Texture2D>(_textureID), 1, _frameCount, _frameCount);
+            _node = AnimationNode::create(assets->get<Texture2D>(_textureID), 1, _totalFramesAvailable, _totalFramesAvailable);
             _node->retain();
         }
         return _node;
@@ -79,12 +83,18 @@ public:
     }
     
     static TutorialAnimationTuple* create(string textureID, Vec2 position, float scale) {
-        return create(textureID, 1, position, scale, 1);
+        return create(textureID, 1, 1, position, scale, 1);
     }
     
     /** Creates a tuple with the given arguments. */
     static TutorialAnimationTuple* create(string textureID, int frameCount, Vec2 position, float scale, float framerate) {
-        TutorialAnimationTuple* t = new (std::nothrow) TutorialAnimationTuple(textureID, frameCount, position, scale, framerate);
+        return create(textureID, frameCount, frameCount, position, scale, framerate);
+    }
+    
+    /** Creates a tuple with the given arguments. */
+    static TutorialAnimationTuple* create(string textureID, int frameCount, int totalFramesAvailable,
+                                          Vec2 position, float scale, float framerate) {
+        TutorialAnimationTuple* t = new (std::nothrow) TutorialAnimationTuple(textureID, frameCount, totalFramesAvailable, position, scale, framerate);
         
         return t;
     }

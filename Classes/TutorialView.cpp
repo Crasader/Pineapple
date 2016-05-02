@@ -40,7 +40,18 @@
 
 void createBlenderTutorial(TutorialView* t) {
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_BLENDER_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
-
+    
+    t->addAnimation(TutorialAnimationTuple::create(BLENDER_TEXTURE, 2, 10, Vec2(-1,-0.2), 1.0f, 0.5));
+    
+    float speed = 0.45f;
+    
+    t->addAnimation(TutorialAnimationTuple::create(PINEAPPLE_TEXTURE,   12, 26, Vec2(1.7f,-0.1), 0.7f, speed));
+    
+    float scale = 0.4f;
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_1,       12, Vec2(-0.2f,-0.2), scale, speed));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_2,       12, Vec2(0.15f,-0.2), scale, speed));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_3,       12, Vec2(0.5f,-0.15), scale, speed));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_4,       12, Vec2(1.0f,-0.22), scale, speed));
 }
 
 void createFridgeTutorial(TutorialView *t) {
@@ -234,6 +245,6 @@ void TutorialView::update(float dt) {
     for(auto it = _animations.begin(); it != _animations.end(); ++it) {
         TutorialAnimationTuple *t = (*it);
         AnimationNode* node = t->getNode();
-        node->setFrame((int)t->incAndGetFrame() % node->getSize());
+        node->setFrame((int)t->incAndGetFrame() % t->getFrameCount());
     }
 }
