@@ -279,6 +279,11 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     // clear state
     _collision->reset();
     
+    if (_fridgeDoor != nullptr) {
+        _fridgeDoor->release();
+        _fridgeDoor = nullptr;
+    }
+    
     // Unload the level but keep in memory temporarily
     
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
@@ -340,14 +345,21 @@ void GameController::onReset() {
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
     
+    
+    
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background->reset(_worldnode);
     _isReloading = false;
 
-	_fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
-							 _level->getDrawScale().y*_level->getGoal()->getPosition().y);
+    _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
+    _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
+    _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+                             _level->getDrawScale().y*_level->getGoal()->getPosition().y);
+    _fridgeDoor->setVisible(true);
+    _fridgeDoor->retain();
+    _worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
 }
 
 /**
