@@ -38,25 +38,47 @@
 #define TUTORIAL_SWITCH_DOOR_FRAMES     14
 #define TUTORIAL_SWITCH_DOOR_FRAMERATE  0.15f
 
+#define TUTORIAL_PINEAPPLE_SCALE        0.7f
+#define TUTORIAL_PINEAPPLE_TOTAL_FRAMES 26
+#define TUTORIAL_KID_SCALE              0.4f
+#define TUTORIAL_KID_PINEAPPLE_FRAMES   12
+#define TUTORIAL_KID_PINEAPPLE_SPEED    0.45f
+
 void createBlenderTutorial(TutorialView* t) {
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_BLENDER_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
     
     t->addAnimation(TutorialAnimationTuple::create(BLENDER_TEXTURE, 2, 10, Vec2(-1,-0.2), 1.0f, 0.5));
     
-    float speed = 0.45f;
     
-    t->addAnimation(TutorialAnimationTuple::create(PINEAPPLE_TEXTURE,   12, 26, Vec2(1.7f,-0.1), 0.7f, speed));
+    t->addAnimation(TutorialAnimationTuple::create(PINEAPPLE_TEXTURE, TUTORIAL_KID_PINEAPPLE_FRAMES, TUTORIAL_PINEAPPLE_TOTAL_FRAMES,
+                                                   Vec2(1.7f,-0.1), TUTORIAL_PINEAPPLE_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
     
-    float scale = 0.4f;
-    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_1,       12, Vec2(-0.2f,-0.2), scale, speed));
-    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_2,       12, Vec2(0.15f,-0.2), scale, speed));
-    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_3,       12, Vec2(0.5f,-0.15), scale, speed));
-    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_4,       12, Vec2(1.0f,-0.22), scale, speed));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_1, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(-0.2f,-0.2),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_2, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(0.15f,-0.2),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_3, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(0.5f,-0.15),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_4, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(1.0f,-0.22),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
 }
 
 void createFridgeTutorial(TutorialView *t) {
     t->addAnimation(TutorialAnimationTuple::create(TUTORIAL_FRIDGE_MESSAGE, TUTORIAL_MESSAGE_OFFSET, TUTORIAL_MESSAGE_SCALE));
 
+    t->addAnimation(TutorialAnimationTuple::create(PINEAPPLE_TEXTURE, TUTORIAL_KID_PINEAPPLE_FRAMES, TUTORIAL_PINEAPPLE_TOTAL_FRAMES,
+                                                   Vec2(1.7f,-0.1), TUTORIAL_PINEAPPLE_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_1, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(-0.2f,-0.2),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_2, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(0.15f,-0.2),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_3, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(0.5f,-0.15),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    t->addAnimation(TutorialAnimationTuple::create(KID_TEXTURE_4, TUTORIAL_KID_PINEAPPLE_FRAMES, Vec2(1.0f,-0.22),
+                                                   TUTORIAL_KID_SCALE, TUTORIAL_KID_PINEAPPLE_SPEED));
+    
+    t->addAnimation(TutorialAnimationTuple::create(GOAL_TEXTURE, 8, 9, Vec2(2.1f,0.0f),0.8f, 0.3));
 }
 
 void createKnivesTutorial(TutorialView *t) {
