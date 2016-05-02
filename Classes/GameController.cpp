@@ -36,6 +36,9 @@ using namespace cocos2d;
 #define LOSE_SPLASH_Z   8
 #define GOAL_DOOR_Z		38
 
+// global z order
+#define MOVEMENT_VIEW_Z 5
+
 
 #pragma mark -
 #pragma mark Initialization
@@ -74,6 +77,12 @@ _winViewVisible(false){}
  */
 bool GameController::init(Node* root, InputController* input, int levelIndex, string levelKey, string levelFile) {
     return init(root, input, levelIndex, levelKey, levelFile, SCREEN);
+}
+
+void configureMoveView(Button* button) {
+    button->setCascadeColorEnabled(true);
+    button->setSwallowTouches(false);
+    button->setTouchEnabled(true);
 }
 
 /**
@@ -168,6 +177,30 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _debugnode->setPositionX(0.0f);
     _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
     
+    // add left and right movement textures
+    _moveLeftView = Button::create();
+    _moveLeftView->init(MOVE_LEFT_UNPRESSED);
+    _moveLeftView->loadTexturePressed(MOVE_LEFT_PRESSED);
+    float cscale = Director::getInstance()->getContentScaleFactor();
+    float scale = 1.0f / (_moveLeftView->getContentSize().width / root->getContentSize().width);
+    _moveLeftView->setScaleX(LEFT_ZONE * scale);
+    _moveLeftView->setScaleY(root->getContentSize().height / _moveLeftView->getContentSize().height);
+    _moveLeftView->setPositionY(root->getContentSize().height /2.0f);
+    _moveLeftView->setPositionX((_moveLeftView->getContentSize().width * _moveLeftView->getScaleX()/2.0f));
+    // set normal and pressed image
+    _moveRightView = Button::create();
+    _moveRightView->init(MOVE_RIGHT_UNPRESSED);
+    _moveRightView->loadTexturePressed(MOVE_RIGHT_PRESSED);
+    scale = 1.0f / (_moveRightView->getContentSize().width / root->getContentSize().width);
+    _moveRightView->setScaleX(RIGHT_ZONE * scale);
+    _moveRightView->setScaleY(root->getContentSize().height / _moveRightView->getContentSize().height);
+    _moveRightView->setPositionY(root->getContentSize().height /2.0f);
+    _moveRightView->setPositionX(root->getContentSize().width * (1.0f - RIGHT_ZONE) + (_moveRightView->getContentSize().width * _moveRightView->getScaleX()/ 2.0f));
+    _rootnode->addChild(_moveLeftView, MOVEMENT_VIEW_Z);
+    _moveLeftView->retain();
+    _rootnode->addChild(_moveRightView, MOVEMENT_VIEW_Z);
+    _moveRightView->retain();
+    
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collision->beginContact(contact);
@@ -227,6 +260,10 @@ void GameController::dispose() {
 	_fridgeDoor->release();
 	_fridgeDoor = nullptr;
     _winnode = nullptr;
+    _moveRightView->release();
+    _moveRightView = nullptr;
+    _moveLeftView->release();
+    _moveLeftView = nullptr;
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
@@ -409,15 +446,6 @@ void GameController::update(float dt) {
     
     _input->update(dt);
     
-    // Process the toggled key commands
-    if (_input->didPause()) {
-        if (!PauseController::isPaused()) {
-            PauseController::pause();
-            return;
-        } else {
-            PauseController::unPause();
-        }
-    }
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) {
         reset();
@@ -428,9 +456,14 @@ void GameController::update(float dt) {
         return;
     }
     if (PauseController::isPaused()) {
+        _moveLeftView->setTouchEnabled(false);
+        _moveRightView->setTouchEnabled(false);
         PauseController::animate();
         return;
     }
+    
+    configureMoveView(_moveLeftView);
+    configureMoveView(_moveRightView);
     
     if (_level->haveFailed() && ! _loseViewVisible) {
         setFailure(true);
@@ -442,6 +475,8 @@ void GameController::update(float dt) {
     }
     
     if (_loseViewVisible)  {
+        _moveLeftView->setTouchEnabled(false);
+        _moveRightView->setTouchEnabled(false);
         _loseview->update(dt);
         
         if (_loseview->shouldReset()) {
@@ -456,6 +491,8 @@ void GameController::update(float dt) {
             return;
         }
     } else if (_winViewVisible) {
+        _moveLeftView->setTouchEnabled(false);
+        _moveRightView->setTouchEnabled(false);
         _winview->update(dt);
         
         if (_winview->shouldReset()) {

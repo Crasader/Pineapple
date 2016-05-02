@@ -52,14 +52,6 @@
 //
 // The meaning of any touch depends on the zone it begins in.
 
-/** The portion of the screen used for the left zone */
-#define LEFT_ZONE       0.15f
-/** The portion of the screen used for the right zone */
-#define RIGHT_ZONE      0.15f
-/** The portion of the screen used for the bottom zone */
-#define BOTTOM_ZONE     0.2f
-
-
 #pragma mark -
 #pragma mark Input Controller
 /**
