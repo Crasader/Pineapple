@@ -178,6 +178,7 @@ void HUDController::initPauseButton() {
     HUD_CONTROLLER->_hudNode->addChild(HUD_CONTROLLER->_pauseButton);
     HUD_CONTROLLER->_pauseButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
+            setEnabled(false);
             PauseController::pause();
         }
     });
