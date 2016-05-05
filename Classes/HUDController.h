@@ -70,6 +70,11 @@ public:
     static void setEnabled(bool enabled) {
         HUD_CONTROLLER->_pauseButton->setEnabled(enabled);
         HUD_CONTROLLER->_soundButton->setEnabled(enabled);
+        HUD_CONTROLLER->_fastForwardButton->setEnabled(enabled);
+    }
+    
+    static bool isFastForwarding() {
+        return HUD_CONTROLLER != nullptr && HUD_CONTROLLER->_fastForwardButton->isSelected();
     }
     
 private:
@@ -83,6 +88,8 @@ private:
     static void initPauseButton();
     
     static void initSoundButton();
+    
+    static void initFFButton();
     
     // if you have game units (game object location and goal location) this will return
     // relative units for the top progress bar, we're treating goalLoc as end of level.
@@ -102,6 +109,7 @@ private:
     Vec2 _screenSize;
     Button* _pauseButton = nullptr;
     CheckBox* _soundButton = nullptr;
+    CheckBox* _fastForwardButton = nullptr;
     SceneManager* _assets = nullptr;
     
     /** Reference to the game controller this is pausing for */

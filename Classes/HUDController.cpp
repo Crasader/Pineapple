@@ -8,6 +8,7 @@
 
 #define         CHILDREN_STATUS_HORIZ_POS_RATIO  .04f
 #define         PROGRESS_BAR_HORIZ_POS_RATIO     .10f
+#define         FF_BUTTON_HORIZ_POS_RATIO        .76f
 #define         SOUND_BUTTON_HORIZ_POS_RATIO     .85f
 #define         PAUSE_BUTTON_HORIZ_POS_RATIO     .94f
 #define         HUD_MIDDLE_Y_POS_RATIO           .9f
@@ -39,14 +40,13 @@ void HUDController::init(AbsScreenController* gameController, Node* worldNode, S
     HUD_CONTROLLER->_inputController = input;
     HUD_CONTROLLER->_screenSize = Vec2(root->getContentSize().width, root->getContentSize().height);
     HUD_CONTROLLER->_assets = assets;
-    // init children status
+
     initChildrenStatus(assets);
-    // init progress bar
     initProgressBar(assets);
-    // init sound button
     initSoundButton();
-    // init pause button
     initPauseButton();
+    initFFButton();
+    
     addHUD();
 }
 
@@ -126,13 +126,34 @@ void HUDController::initSoundButton() {
 
     HUD_CONTROLLER->_soundButton = CheckBox::create("textures/buttons/music_toggle_on.png", "textures/buttons/music_toggle_off.png");
     HUD_CONTROLLER->_soundButton->cocos2d::Node::setScale(cscale * BUTTON_SCALE);
-    float bheight = HUD_CONTROLLER->_soundButton->getContentSize().height;
-    float bwidth  = HUD_CONTROLLER->_soundButton->getContentSize().width;
     HUD_CONTROLLER->_soundButton->setPositionY(HUD_CONTROLLER->_screenSize.y * HUD_MIDDLE_Y_POS_RATIO);
     HUD_CONTROLLER->_soundButton->setPositionX(HUD_CONTROLLER->_screenSize.x * SOUND_BUTTON_HORIZ_POS_RATIO);
     HUD_CONTROLLER->_soundButton->retain();
     HUD_CONTROLLER->_hudNode->addChild(HUD_CONTROLLER->_soundButton);
     HUD_CONTROLLER->_soundButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            if (HUD_CONTROLLER->_soundButton->isSelected()) {
+                SoundEngine::getInstance()->stopMusic();
+                SoundEngine::getInstance()->stopAllEffects();
+            } else {
+                Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+                SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+                SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+            }
+        }
+    });
+}
+
+void HUDController::initFFButton() {
+    float cscale = Director::getInstance()->getContentScaleFactor();
+    
+    HUD_CONTROLLER->_fastForwardButton = CheckBox::create("textures/buttons/music_toggle_on.png", "textures/buttons/music_toggle_off.png");
+    HUD_CONTROLLER->_fastForwardButton->cocos2d::Node::setScale(cscale * BUTTON_SCALE);
+    HUD_CONTROLLER->_fastForwardButton->setPositionY(HUD_CONTROLLER->_screenSize.y * HUD_MIDDLE_Y_POS_RATIO);
+    HUD_CONTROLLER->_fastForwardButton->setPositionX(HUD_CONTROLLER->_screenSize.x * FF_BUTTON_HORIZ_POS_RATIO);
+    HUD_CONTROLLER->_fastForwardButton->retain();
+    HUD_CONTROLLER->_hudNode->addChild(HUD_CONTROLLER->_fastForwardButton);
+    HUD_CONTROLLER->_fastForwardButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
             if (HUD_CONTROLLER->_soundButton->isSelected()) {
                 SoundEngine::getInstance()->stopMusic();
@@ -153,8 +174,6 @@ void HUDController::initPauseButton() {
     HUD_CONTROLLER->_pauseButton->loadTextureNormal("textures/buttons/pauseButton.png");
     HUD_CONTROLLER->_pauseButton->loadTexturePressed("textures/buttons/pause_inverse.png");
     HUD_CONTROLLER->_pauseButton->cocos2d::Node::setScale(cscale * BUTTON_SCALE);
-    float bheight = HUD_CONTROLLER->_pauseButton->getContentSize().height;
-    float bwidth  = HUD_CONTROLLER->_pauseButton->getContentSize().width;
     HUD_CONTROLLER->_pauseButton->setPositionY(HUD_CONTROLLER->_screenSize.y * HUD_MIDDLE_Y_POS_RATIO);
     HUD_CONTROLLER->_pauseButton->setPositionX(HUD_CONTROLLER->_screenSize.x * PAUSE_BUTTON_HORIZ_POS_RATIO);
     HUD_CONTROLLER->_pauseButton->retain();
@@ -265,6 +284,10 @@ void HUDController::release() {
         HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_pauseButton);
         HUD_CONTROLLER->_pauseButton->release();
         HUD_CONTROLLER->_pauseButton = nullptr;
+        // release ff node
+        HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_fastForwardButton);
+        HUD_CONTROLLER->_fastForwardButton->release();
+        HUD_CONTROLLER->_fastForwardButton = nullptr;
         // release blender
         HUD_CONTROLLER->_hudNode->removeChild(HUD_CONTROLLER->_blender);
         HUD_CONTROLLER->_blender->release();

@@ -231,7 +231,6 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _loseViewVisible = false;
     _winViewVisible = false;
     _tutorialViewVisible = false;
-    _isFastForwarding = false;
     return true;
 }
 
@@ -405,7 +404,6 @@ void GameController::onReset() {
     _background->reset(_worldnode);
     
     _isReloading = false;
-    _isFastForwarding = false;
 
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
     _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
@@ -538,7 +536,7 @@ void GameController::update(float dt) {
         }
     }
     
-    float mult = _isFastForwarding ? FF_SPEED_MULT : 1;
+    float mult = isFastForwarding() ? FF_SPEED_MULT : 1;
     
     _input->update(dt * mult);
     

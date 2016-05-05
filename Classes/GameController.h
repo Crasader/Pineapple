@@ -132,8 +132,6 @@ protected:
     float _levelOffset;
     /** True if this is reloading */
     bool _isReloading;
-    /** True if the game is currently in fast forward mode, false otherwise */
-    bool _isFastForwarding;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
@@ -236,6 +234,11 @@ public:
      * @param value whether debug mode is active.
      */
     void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
+    
+    /** True if this is fastforwarding */
+    bool isFastForwarding() {
+        return HUDController::isFastForwarding();
+    }
     
     /**
      * Returns true if the level is completed.
