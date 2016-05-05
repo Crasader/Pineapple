@@ -47,6 +47,8 @@ using namespace cocos2d;
 #define MIN_GROW_LEVEL      5
 
 
+#define FF_SPEED_MULT       3
+
 #pragma mark -
 #pragma mark Initialization
 
@@ -140,26 +142,56 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     // Create the scene graph
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
-
-	_splatCycle = AnimationNode::create(_assets->get<Texture2D>(SPLAT_TEXTURE_1), 1, 14, 14);
-	_splatCycle->setFrame(0);
-	_splatCycle->setVisible(false);
-	_splatCycle->retain();
-	root->addChild(_splatCycle, SPLAT_Z);
-	_splatFrame = 0.0f;
-	_hasSplat = false;
-	_rootSize = root->getContentSize();
-
-	_fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
-	_fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
-	_fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x, 
-							 _level->getDrawScale().y*_level->getGoal()->getPosition().y);
-	_fridgeDoor->setVisible(true);
-	_fridgeDoor->retain();
-	_worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
     
-    PauseController::init(this, _worldnode, _assets, root, _input);
+    _splatCycle = AnimationNode::create(_assets->get<Texture2D>(SPLAT_TEXTURE_1), 1, 14, 14);
+    _splatCycle->setFrame(0);
+    _splatCycle->setVisible(false);
+    _splatCycle->retain();
+    root->addChild(_splatCycle, SPLAT_Z);
+    _splatFrame = 0.0f;
+    _hasSplat = false;
+    _rootSize = root->getContentSize();
+    
+    _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
+    _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
+    _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+                             _level->getDrawScale().y*_level->getGoal()->getPosition().y);
+    _fridgeDoor->setVisible(true);
+    _fridgeDoor->retain();
+    _worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
+    
+    PauseController::init(_worldnode, _assets, root, _input);
     HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
+    
+    //Set up pause controller buttons. Has to be done here because of cyclical dependency issues
+    Button** pauseControllerButtons = PauseController::getButtons();
+    pauseControllerButtons[0]->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            PauseController::unPause();
+            HUDController::setEnabled(true);
+        }
+    });
+    pauseControllerButtons[1]->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            _input->setReset();
+            PauseController::unPause();
+            HUDController::setEnabled(true);
+        }
+    });
+    pauseControllerButtons[2]->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            PauseController::unPause();
+            HUDController::setEnabled(true);
+            setTransitionStatus(TRANSITION_TO_LEVEL_SELECT);
+        }
+    });
+    pauseControllerButtons[3]->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
+        if (type == ui::Widget::TouchEventType::ENDED) {
+            PauseController::unPause();
+            HUDController::setEnabled(true);
+            setTransitionStatus(TRANSITION_TO_EXIT);
+        }
+    });
     
     _loseroot = Node::create();
     _loseroot->setContentSize(_rootnode->getContentSize());
@@ -304,7 +336,7 @@ void GameController::dispose() {
         _moveLeftView->release();
         _moveLeftView = nullptr;
     }
-
+    
     if (_rootnode != nullptr) {
         _rootnode->removeAllChildren();
         _rootnode->release();
@@ -324,7 +356,7 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
     setTutorialVisible(nullptr);
-	
+    
     // clear state
     _collision->reset();
     
@@ -348,7 +380,7 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     _levelIndex = levelIndex;
     _levelKey = levelKey;
     _levelFile = levelFile;
-
+    
     if (_assets->get<LevelModel>(_levelKey) == nullptr) {
         _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
         _isReloading = true;
@@ -386,10 +418,10 @@ void GameController::onReset() {
         _collision->endContact(contact);
     };
     
-	_splatCycle->setVisible(false);
-	_splatCycle->setFrame(0);
-	_splatFrame = 0.0f;
-	_hasSplat = false;
+    _splatCycle->setVisible(false);
+    _splatCycle->setFrame(0);
+    _splatFrame = 0.0f;
+    _hasSplat = false;
     
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
@@ -400,8 +432,9 @@ void GameController::onReset() {
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background->reset(_worldnode);
+    
     _isReloading = false;
-
+    
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
     _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
     _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
@@ -422,7 +455,7 @@ void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
         //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
-		_level->getGoal()->setClosed(true);
+        _level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
         _winview->position();
         _winViewVisible = true;
@@ -489,8 +522,8 @@ void GameController::setTutorialVisible(TutorialView* view) {
 }
 
 float GameController::getBlenderVolScale() {
-		float scale = NORMAL_BLENDER_DISTANCE / _level->getBlenderPineappleDistance();
-		return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
+    float scale = NORMAL_BLENDER_DISTANCE / _level->getBlenderPineappleDistance();
+    return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
 }
 
 void handleAvatarGrowth(int levelIndex, float cscale, InputController* _input, PineappleModel* _avatar) {
@@ -533,21 +566,14 @@ void GameController::update(float dt) {
         }
     }
     
-    _input->update(dt);
+    float mult = isFastForwarding() ? FF_SPEED_MULT : 1;
     
-    // Process the toggled key commands
-    //if (_input->didPause()) {
-    //    if (!PauseController::isPaused()) {
-    //        PauseController::pause();
-    //        return;
-    //    } else {
-    //        PauseController::unPause();
-    //    }
-    //}
-    //if (_input->didDebug()) {
-    //    setDebug(!isDebug());
-        //setTutorialVisible(_tutorialview != nullptr && !_tutorialViewVisible);
-    //}
+    _input->update(dt * mult);
+    
+    if (getTransitionStatus() != TRANSITION_NONE) {
+        return;
+    }
+    
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) {
         reset();
@@ -622,7 +648,7 @@ void GameController::update(float dt) {
             _winview->resetButtons();
             setTransitionStatus(TRANSITION_TO_NEXT_LEVEL);
             return;
-
+            
         }
     } else if (_tutorialViewVisible) {
         _activeTutorialView->update(dt);
@@ -652,23 +678,23 @@ void GameController::update(float dt) {
                 }
                 // check if off bounds death
                 if (_level->getKid(i) != nullptr && _level->getKid(i)->getPosition().y < 0) {
-									char* key;
-									switch (i) {
-									case 0: key = PINEAPPLET1_DEATH_SOUND;
-										break;
-									case 1: key = PINEAPPLET2_DEATH_SOUND;
-										break;
-									case 2: key = PINEAPPLET3_DEATH_SOUND;
-										break;
-									case 3: key = PINEAPPLET4_DEATH_SOUND;
-										break;
-									default:
-                                            key = "we gon crash if this happens, but it won't so it's chill.";
-                                            CC_ASSERT(false);
-									}
-									Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
-									SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
-                  _level->kill(_level->getKid(i));
+                    char* key;
+                    switch (i) {
+                        case 0: key = PINEAPPLET1_DEATH_SOUND;
+                            break;
+                        case 1: key = PINEAPPLET2_DEATH_SOUND;
+                            break;
+                        case 2: key = PINEAPPLET3_DEATH_SOUND;
+                            break;
+                        case 3: key = PINEAPPLET4_DEATH_SOUND;
+                            break;
+                        default:
+                            key = "we gon crash if this happens, but it won't so it's chill.";
+                            CC_ASSERT(false);
+                    }
+                    Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
+                    SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
+                    _level->kill(_level->getKid(i));
                 }
             }
         }
@@ -697,7 +723,7 @@ void GameController::update(float dt) {
                 
                 // Scroll the screen (with parallax) if necessary
                 handleScrolling();
-
+                
             } else {
                 _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
                 _level->getPineapple()->setFixedRotation(false);
@@ -715,45 +741,44 @@ void GameController::update(float dt) {
             JelloModel* jello = *it;
             jello->animate();
         }
-
-		// Animate the fridge
-		_level->getGoal()->animate();
-
-		// Animate cups if they're being smashed and remove them when they're done
-		std::vector<CrushableModel*> cups = _level->getCups();
-		for (auto it = cups.begin(); it != cups.end(); ++it) {
-			CrushableModel* cup = *it;
-			
-			cup->animate();
-			if (cup->getSmashed()) {
-				_level->removeObstacle(cup);
-				//cups.erase(it);
-			}
-		}
+        
+        // Animate the fridge
+        _level->getGoal()->animate();
+        
+        // Animate cups if they're being smashed and remove them when they're done
+        std::vector<CrushableModel*> cups = _level->getCups();
+        for (auto it = cups.begin(); it != cups.end(); ++it) {
+            CrushableModel* cup = *it;
+            
+            cup->animate();
+            if (cup->getSmashed()) {
+                _level->removeObstacle(cup);
+            }
+        }
         
         // Animate the blender
         _level->getBlender()->animate();
-
-		// Animate the splats
-		if (_hasSplat) {
-			_splatFrame += 0.25f;
-			int tmp = (int)rint(_splatFrame);
-			if (tmp < _splatCycle->getSize()) {
-				_splatCycle->setFrame(tmp);
-			} 
-			else {
-				_hasSplat = false;
-				_splatCycle->setVisible(false);
-			}
-		}
+        
+        // Animate the splats
+        if (_hasSplat) {
+            _splatFrame += 0.25f;
+            int tmp = (int)rint(_splatFrame);
+            if (tmp < _splatCycle->getSize()) {
+                _splatCycle->setFrame(tmp);
+            }
+            else {
+                _hasSplat = false;
+                _splatCycle->setVisible(false);
+            }
+        }
         
         HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
         
         // Update the background (move the clouds)
-        _background->update(dt);
+        _background->update(dt * mult);
         
         // Turn the physics engine crank
-        _world->update(dt);
+        _world->update(dt * mult);
     }
     
     // Since items may be deleted, garbage collect
@@ -795,22 +820,22 @@ void GameController::handleScrolling() {
 }
 
 /**
-* Activate the splat effect when shit hits the fan
-*/
+ * Activate the splat effect when shit hits the fan
+ */
 void GameController::activateSplat(Texture2D* image) {
-	_splatCycle->setTexture(image);
-	_splatCycle->setFrame(0);
-	_splatCycle->setScale(4.0f, 4.0f);
-	_splatCycle->setVisible(true);
-	_splatFrame = 0.0f;
-	_hasSplat = true;
-
-	// Randomize location of splat on screen 
-	int windowX = (int)rint(_rootSize.width / 2.0f);
-	int windowY = (int)rint(_rootSize.height / 2.0f);
-	float randX = (float)((rand() % windowX) + (_rootSize.width / 4.0f));
-	float randY = (float)((rand() % windowY) + (_rootSize.height / 4.0f));
-	_splatCycle->setPosition(randX, randY);
+    _splatCycle->setTexture(image);
+    _splatCycle->setFrame(0);
+    _splatCycle->setScale(4.0f, 4.0f);
+    _splatCycle->setVisible(true);
+    _splatFrame = 0.0f;
+    _hasSplat = true;
+    
+    // Randomize location of splat on screen
+    int windowX = (int)rint(_rootSize.width / 2.0f);
+    int windowY = (int)rint(_rootSize.height / 2.0f);
+    float randX = (float)((rand() % windowX) + (_rootSize.width / 4.0f));
+    float randY = (float)((rand() % windowY) + (_rootSize.height / 4.0f));
+    _splatCycle->setPosition(randX, randY);
 }
 
 #pragma mark -

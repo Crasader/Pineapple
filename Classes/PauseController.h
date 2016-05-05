@@ -17,7 +17,7 @@
 // global z order
 #define PAUSE_MENU_Z_ORDER     7
 
-#define NUM_BUTTONS            4
+#define PAUSE_CONTROLLER_NUM_BUTTONS            4
 #define BUTTON_Y_OFFSET        60.0f
 #define BUTTON_X_OFFSET        -20.0f
 #define BUTTON_HEIGHT          200.0f
@@ -63,7 +63,7 @@ public:
         return PAUSE_CONTROLLER->_isPaused;
     }
     
-    static void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input);
+    static void init(Node* worldNode, SceneManager* assets, Node* root, InputController* input);
     
     static bool isInitialized() {
         return PAUSE_CONTROLLER != nullptr;
@@ -84,11 +84,15 @@ public:
         PAUSE_CONTROLLER->_animationCycle += .2;
     }
     
+    static Button** getButtons() {
+        return PAUSE_CONTROLLER->_buttons;
+    }
+    
 private:
     PauseController() { }
     ~PauseController() {
         _backgroundOverlay->release();
-        for (int i = 0; i < NUM_BUTTONS; i++) {
+        for (int i = 0; i < PAUSE_CONTROLLER_NUM_BUTTONS; i++) {
             _buttons[i]->release();
         }
         _pauseNode->release();
@@ -105,7 +109,7 @@ private:
     Node* _pauseNode = nullptr;
     Vec2 _center;
     // array of buttons
-    Button* _buttons[NUM_BUTTONS];
+    Button* _buttons[PAUSE_CONTROLLER_NUM_BUTTONS];
     
     // background overlay
     PolygonNode* _backgroundOverlay = nullptr;
@@ -116,7 +120,7 @@ private:
     /** Reference to the game controller this is pausing for */
     AbsScreenController* _gameController;
     
-    const static string BUTTON_FILES[NUM_BUTTONS*2];
+    const static string BUTTON_FILES[PAUSE_CONTROLLER_NUM_BUTTONS*2];
 };
 
 #endif /* PauseController_h */
