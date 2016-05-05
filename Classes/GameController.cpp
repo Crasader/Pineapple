@@ -26,6 +26,7 @@
 #include "Texture.h"
 #include "Levels.h"
 #include "Sounds.h"
+#include <cmath>
 
 
 using namespace cocos2d;
@@ -522,8 +523,10 @@ void GameController::setTutorialVisible(TutorialView* view) {
 }
 
 float GameController::getBlenderVolScale() {
-    float scale = NORMAL_BLENDER_DISTANCE / _level->getBlenderPineappleDistance();
-    return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
+		float distBP = _level->getBlenderPineappleDistance();
+		float scale = (BLENDER_VOL_OFF_DISTANCE - distBP) / (BLENDER_VOL_OFF_DISTANCE - NORMAL_BLENDER_DISTANCE);
+		scale = pow(scale, 1.3);
+		return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
 }
 
 void handleAvatarGrowth(int levelIndex, float cscale, InputController* _input, PineappleModel* _avatar) {
