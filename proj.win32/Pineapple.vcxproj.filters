@@ -54,22 +54,10 @@
     <ClCompile Include="..\Classes\PineappleModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ProgressHUD.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\NonPhysicalObstacleModel.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\PhysicalObstacleModel.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\SpinnerModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ButtonSwitchModel.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\CollisionObjectModel.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GoalModel.cpp">
@@ -103,6 +91,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\HomeScreenController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TutorialView.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,22 +143,10 @@
     <ClInclude Include="..\Classes\PineappleModel.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ProgressHUD.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\NonPhysicalObstacleModel.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\PhysicalObstacleModel.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\SpinnerModel.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Texture.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\CollisionObjectModel.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ButtonSwitchModel.h">
@@ -210,6 +189,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\HomeScreenController.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Sounds.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialView.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TutorialAnimationTuple.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

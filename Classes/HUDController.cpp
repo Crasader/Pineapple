@@ -5,6 +5,7 @@
 //
 
 #include "HUDController.h"
+#include "Sounds.h"
 
 HUDController* HUDController::HUD_CONTROLLER = nullptr;
 
@@ -119,6 +120,8 @@ void HUDController::initSoundButton() {
                 Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
                 SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
                 SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+								sound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+								SoundEngine::getInstance()->playEffect(BLENDER_SOUND, sound, true, 0.0f);
             }
         }
     });
