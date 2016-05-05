@@ -74,7 +74,10 @@ protected:
 public:
     
     /** Returns the central texture used for this wall. Depends if floor or platform */ 
-    string getTextureID() { return isFloor() ? FLOOR_TEXTURE : PLATFORM_CENTER_TEXTURE; }
+    string getTextureID() {
+        return isFloor() ? FLOOR_TEXTURE :
+               isVerticalPlatform() ? PLATFORM_VERTICAL_CENTER_TEXTURE : PLATFORM_CENTER_TEXTURE ;
+    }
     
     /** 
      * Returns true if this wall represents a floor (is touching the bottom of the screen),
@@ -82,6 +85,12 @@ public:
      */
     bool isFloor() {
         return getY() - getHeight()/2 == 0;
+    }
+    
+    /**
+     * Returns true if this platform is vertical (taller than it is wide) */
+    bool isVerticalPlatform() {
+        return !isFloor() && (getHeight() > getWidth() || (getHeight() == getWidth() && getDrawScale().x < getDrawScale().y));
     }
     
     /** Returns the node that draws the top border of the wall */

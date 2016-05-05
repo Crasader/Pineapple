@@ -15,6 +15,8 @@
 #define FLOOR_TOP_TEXTURE "floor_top"
 /** The key for the platform texture in the asset manager */
 #define PLATFORM_CENTER_TEXTURE "platform"
+/** The key for the vertical platform texture in the asset manager */
+#define PLATFORM_VERTICAL_CENTER_TEXTURE    "platform_center"
 /** the key for the platform edge texture in the asset manager */
 #define PLATFORM_EDGE_LEFT_TEXTURE   "platform_edge_left"
 /** the key for the platform edge texture in the asset manager */
