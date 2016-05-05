@@ -49,7 +49,7 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define JELLO_SCALE			0.59f //0.39
+#define JELLO_SCALE			0.65f
 #define JELLO_H_SHRINK      0.8f
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
@@ -159,6 +159,9 @@ bool JelloModel::init(int x, int y, const Vec2& pos, const Vec2& scale) {
         // Gameplay attributes
 		_bouncing = false;
 		_tmp = false;
+		_smushing = false;
+		_isSmushed = false;
+		_tmp2 = false;
         return true;
     }
     return false;
@@ -208,12 +211,8 @@ void JelloModel::update(float dt) {
  * Animate the jello
  */
 void JelloModel::animate() {
-	if (!_bouncing) {
-		_jelloRestcycleFrame += 0.25f;
-		int tmp = (int)rint(_jelloRestcycleFrame);
-		_jelloRestcycle->setFrame(tmp % 16);
-	}
-	else {
+	// bouncing
+	if (_bouncing) {
 		if (!_tmp) {
 			_jelloRestcycleFrame = -0.25f;
 			_tmp = true;
@@ -226,8 +225,29 @@ void JelloModel::animate() {
 			_tmp = false;
 		}
 		else {
-			_jelloRestcycle->setFrame((tmp % 16) + 16);
+			_jelloRestcycle->setFrame(tmp + 16);
 		}
+	}
+	// smushing
+	else if (_smushing) {
+		if (!_tmp2) {
+			_jelloRestcycleFrame = -0.25f;
+			_tmp2 = true;
+		}
+		_jelloRestcycleFrame += 0.25f;
+		int tmp = (int)rint(_jelloRestcycleFrame);
+		if (tmp > 5) {
+			_isSmushed = true;
+		}
+		else {
+			_jelloRestcycle->setFrame(tmp + 31);
+		}
+	}
+	// resting
+	else {
+		_jelloRestcycleFrame += 0.25f;
+		int tmp = (int)rint(_jelloRestcycleFrame);
+		_jelloRestcycle->setFrame(tmp % 16);
 	}
 }
 

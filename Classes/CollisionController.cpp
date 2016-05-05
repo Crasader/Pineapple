@@ -208,7 +208,8 @@ void CollisionController::beginContact(b2Contact* contact) {
                 // set v to 0 because sometimes the sensor touches too early for the physics
                 // engine to do it
                 will->setVY(0);
-                _level->removeObstacle(bd1->getCollisionClass() == JELLO_C ? bd1 : bd2);
+				JelloModel* jello = bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2;
+				jello->setSmushing(true);
             }
         }
         // with cup

@@ -16,39 +16,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1152,
+                 "width":3200,
                  "x":0,
                  "y":640
-                }, 
-                {
-                 "height":128,
-                 "id":165,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":896,
-                 "x":1536,
-                 "y":640
-                }, 
-                {
-                 "height":64,
-                 "id":175,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":512,
-                 "x":1088,
-                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -203,7 +173,7 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":2176,
+                 "x":2944,
                  "y":448
                 }],
          "opacity":1,
@@ -229,24 +199,7 @@
          "draworder":"topdown",
          "height":0,
          "name":"Switches",
-         "objects":[
-                {
-                 "gid":41,
-                 "height":64,
-                 "id":171,
-                 "name":"",
-                 "properties":
-                    {
-                     "isSwitch":"true",
-                     "linkID":"1"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":1344,
-                 "y":448
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -258,26 +211,7 @@
          "draworder":"topdown",
          "height":0,
          "name":"Bridges",
-         "objects":[
-                {
-                 "gid":41,
-                 "height":64,
-                 "id":174,
-                 "name":"",
-                 "properties":
-                    {
-                     "isOpen":"true",
-                     "isVertical":"false",
-                     "linkID":"1",
-                     "nubbinsVisible":"true"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":384,
-                 "x":1152,
-                 "y":704
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -289,7 +223,55 @@
          "draworder":"topdown",
          "height":0,
          "name":"Tutorial",
-         "objects":[],
+         "objects":[
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":126,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"0"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":448,
+                 "y":64
+                }, 
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":136,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"7"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1216,
+                 "y":64
+                }, 
+                {
+                 "gid":22,
+                 "height":64,
+                 "id":138,
+                 "name":"",
+                 "properties":
+                    {
+                     "id":"8"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2112,
+                 "y":64
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -297,7 +279,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":176,
+ "nextobjectid":141,
  "orientation":"orthogonal",
  "properties":
     {
@@ -325,5 +307,5 @@
         }],
  "tilewidth":64,
  "version":1,
- "width":38
+ "width":50
 }

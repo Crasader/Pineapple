@@ -67,7 +67,7 @@ using namespace cocos2d;
 #define JELLO_HORIZONTAL_FORCE 5.0f
 
 /** Number of frames in the rest animation */
-#define JELLO_FRAME_COUNT	31
+#define JELLO_FRAME_COUNT	37
 
 
 #pragma mark -
@@ -102,6 +102,11 @@ protected:
 	/** Whether something is bouncing on the jello */
 	bool _bouncing;
 	bool _tmp;
+
+	/** Whether jello is being smushed */
+	bool _smushing;
+	bool _isSmushed;
+	bool _tmp2;
     
     /** Jello x coordinate in tiled level */
     int _tiledXCoord;
@@ -228,6 +233,16 @@ public:
 	* Sets whether something is bouncing on the jello
 	*/
 	void setBouncing(bool bounce) { _bouncing = bounce; }
+
+	/**
+	* Returns true if jello is being smushed
+	*/
+	bool getIsSmushed() { return _isSmushed; }
+
+	/**
+	* Sets whether jello is being smushed
+	*/
+	void setSmushing(bool smush) { _smushing = smush; }
 
     
 CC_CONSTRUCTOR_ACCESS:

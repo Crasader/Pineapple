@@ -16,13 +16,13 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1152,
+                 "width":1600,
                  "x":0,
                  "y":640
                 }, 
                 {
                  "height":128,
-                 "id":165,
+                 "id":57,
                  "name":"",
                  "properties":
                     {
@@ -31,13 +31,13 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":896,
-                 "x":1536,
+                 "width":960,
+                 "x":1792,
                  "y":640
                 }, 
                 {
                  "height":64,
-                 "id":175,
+                 "id":101,
                  "name":"",
                  "properties":
                     {
@@ -46,9 +46,54 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":512,
-                 "x":1088,
-                 "y":448
+                 "width":704,
+                 "x":64,
+                 "y":192
+                }, 
+                {
+                 "height":64,
+                 "id":104,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":64,
+                 "y":0
+                }, 
+                {
+                 "height":64,
+                 "id":105,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":128,
+                 "x":64,
+                 "y":64
+                }, 
+                {
+                 "height":64,
+                 "id":106,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":192,
+                 "x":64,
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -75,7 +120,7 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":512,
+                 "x":576,
                  "y":640
                 }],
          "opacity":1,
@@ -203,8 +248,8 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":2176,
-                 "y":448
+                 "x":2624,
+                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -217,7 +262,23 @@
          "draworder":"topdown",
          "height":0,
          "name":"Cups",
-         "objects":[],
+         "objects":[
+                {
+                 "gid":21,
+                 "height":64,
+                 "id":31,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":704,
+                 "y":640
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -233,19 +294,19 @@
                 {
                  "gid":41,
                  "height":64,
-                 "id":171,
+                 "id":37,
                  "name":"",
                  "properties":
                     {
                      "isSwitch":"true",
-                     "linkID":"1"
+                     "linkID":"2"
                     },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":1344,
-                 "y":448
+                 "x":1920,
+                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -260,22 +321,22 @@
          "name":"Bridges",
          "objects":[
                 {
-                 "gid":41,
+                 "gid":42,
                  "height":64,
-                 "id":174,
+                 "id":61,
                  "name":"",
                  "properties":
                     {
                      "isOpen":"true",
                      "isVertical":"false",
-                     "linkID":"1",
-                     "nubbinsVisible":"true"
+                     "linkID":"2",
+                     "nubbinsVisible":"false"
                     },
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":384,
-                 "x":1152,
+                 "width":192,
+                 "x":1600,
                  "y":704
                 }],
          "opacity":1,
@@ -284,20 +345,8 @@
          "width":0,
          "x":0,
          "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "height":0,
-         "name":"Tutorial",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "width":0,
-         "x":0,
-         "y":0
         }],
- "nextobjectid":176,
+ "nextobjectid":107,
  "orientation":"orthogonal",
  "properties":
     {
@@ -325,5 +374,5 @@
         }],
  "tilewidth":64,
  "version":1,
- "width":38
+ "width":43
 }

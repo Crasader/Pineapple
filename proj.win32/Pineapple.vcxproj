@@ -168,6 +168,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\PineappleRoot.cpp" />
     <ClCompile Include="..\Classes\SpikeModel.cpp" />
     <ClCompile Include="..\Classes\SpinnerModel.cpp" />
+    <ClCompile Include="..\Classes\TutorialView.cpp" />
     <ClCompile Include="..\Classes\WallModel.cpp" />
     <ClCompile Include="..\Classes\WinView.cpp" />
     <ClCompile Include="main.cpp" />
@@ -202,6 +203,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\SpikeModel.h" />
     <ClInclude Include="..\Classes\SpinnerModel.h" />
     <ClInclude Include="..\Classes\Texture.h" />
+    <ClInclude Include="..\Classes\TutorialAnimationTuple.h" />
+    <ClInclude Include="..\Classes\TutorialView.h" />
     <ClInclude Include="..\Classes\WallModel.h" />
     <ClInclude Include="..\Classes\WinView.h" />
     <ClInclude Include="main.h" />

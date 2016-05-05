@@ -16,14 +16,14 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1152,
+                 "width":960,
                  "x":0,
                  "y":640
                 }, 
                 {
                  "height":128,
-                 "id":165,
-                 "name":"",
+                 "id":208,
+                 "name":"wall",
                  "properties":
                     {
 
@@ -31,24 +31,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":896,
-                 "x":1536,
+                 "width":1152,
+                 "x":1280,
                  "y":640
-                }, 
-                {
-                 "height":64,
-                 "id":175,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":512,
-                 "x":1088,
-                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -217,7 +202,55 @@
          "draworder":"topdown",
          "height":0,
          "name":"Cups",
-         "objects":[],
+         "objects":[
+                {
+                 "gid":21,
+                 "height":64,
+                 "id":182,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1536,
+                 "y":640
+                }, 
+                {
+                 "gid":21,
+                 "height":64,
+                 "id":203,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1536,
+                 "y":512
+                }, 
+                {
+                 "gid":21,
+                 "height":64,
+                 "id":204,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1536,
+                 "y":576
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -233,19 +266,19 @@
                 {
                  "gid":41,
                  "height":64,
-                 "id":171,
+                 "id":200,
                  "name":"",
                  "properties":
                     {
                      "isSwitch":"true",
-                     "linkID":"1"
+                     "linkID":"3"
                     },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":1344,
-                 "y":448
+                 "x":832,
+                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -260,22 +293,22 @@
          "name":"Bridges",
          "objects":[
                 {
-                 "gid":41,
+                 "gid":42,
                  "height":64,
-                 "id":174,
+                 "id":199,
                  "name":"",
                  "properties":
                     {
-                     "isOpen":"true",
+                     "isOpen":"false",
                      "isVertical":"false",
-                     "linkID":"1",
+                     "linkID":"3",
                      "nubbinsVisible":"true"
                     },
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":384,
-                 "x":1152,
+                 "width":320,
+                 "x":960,
                  "y":704
                 }],
          "opacity":1,
@@ -297,7 +330,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":176,
+ "nextobjectid":209,
  "orientation":"orthogonal",
  "properties":
     {
