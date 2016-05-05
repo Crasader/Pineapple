@@ -134,7 +134,6 @@ bool WallModel::init(const Poly2& poly, const Vec2& anchor) {
         _leftNode = nullptr;
         _rightNode = nullptr;
         
-        
         return true;
     }
     
@@ -160,6 +159,8 @@ void WallModel::resetSceneNode() {
         // If you are using a device with a 3:2 aspect ratio, you will need to
         // completely redo the level layout.  We can help if this is an issue.
         
+        float radToDeg = 180.0f / M_PI;
+        
         if( _topNode != nullptr) {
             float yMin = min(_topPoints[0].y, _topPoints[1].y);
             float y = fabs(_topPoints[0].y - _topPoints[1].y);
@@ -170,7 +171,7 @@ void WallModel::resetSceneNode() {
             
             _topNode->setPosition(p);
             
-            float angle = atan((y*_drawScale.y)/(x*_drawScale.x)) * 180.0f / M_PI;
+            float angle = atan((y*_drawScale.y)/(x*_drawScale.x)) * radToDeg;
             
             if (_topPoints[0].y < _topPoints[1].y) {
                 angle = -angle;
@@ -180,19 +181,33 @@ void WallModel::resetSceneNode() {
             _topNode->setRotation(angle);
         }
         
-        if (_leftNode != nullptr) {
-            _leftNode->setScale(getSize().height * _drawScale.y /_leftNode->getContentSize().height);
-            _leftNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) -
-                                   Vec2(getSize().width * _drawScale.x/2 - _leftNode->getContentSize().width * _leftNode->getScale()/2, 0));
-        
-        }
-        
-        if (_rightNode != nullptr) {
-            _rightNode->setScale(getSize().height * _drawScale.y /_rightNode->getContentSize().height);
-            _rightNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) +
-                                        Vec2(getSize().width * _drawScale.x/2 - _rightNode->getContentSize().width * _rightNode->getScale()/2, 0));
+        if (isVerticalPlatform()) {
+            if (_leftNode != nullptr) {
+                _leftNode->setRotation(-90);
+                _leftNode->setScale(getSize().width * _drawScale.x /_leftNode->getContentSize().height);
+                _leftNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) -
+                                       Vec2(0, getSize().height * _drawScale.y/2 - _leftNode->getContentSize().width * _leftNode->getScale()/2));
                 
+            }
+            if (_rightNode != nullptr) {
+                _rightNode->setRotation(-90);
+                _rightNode->setScale(getSize().width * _drawScale.x /_rightNode->getContentSize().height);
+                _rightNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) +
+                                        Vec2(0, getSize().height * _drawScale.y/2 - _rightNode->getContentSize().width * _rightNode->getScale()/2));
+            }
 
+        } else {
+            if (_leftNode != nullptr) {
+                _leftNode->setScale(getSize().height * _drawScale.y /_leftNode->getContentSize().height);
+                _leftNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) -
+                                       Vec2(getSize().width * _drawScale.x/2 - _leftNode->getContentSize().width * _leftNode->getScale()/2, 0));
+                
+            }
+            if (_rightNode != nullptr) {
+                _rightNode->setScale(getSize().height * _drawScale.y /_rightNode->getContentSize().height);
+                _rightNode->setPosition(Vec2(getX() * _drawScale.x, getY() * _drawScale.y) +
+                                        Vec2(getSize().width * _drawScale.x/2 - _rightNode->getContentSize().width * _rightNode->getScale()/2, 0));
+            }
         }
     }
 }
