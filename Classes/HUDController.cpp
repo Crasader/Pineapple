@@ -147,7 +147,8 @@ void HUDController::initSoundButton() {
 void HUDController::initFFButton() {
     float cscale = Director::getInstance()->getContentScaleFactor();
     
-    HUD_CONTROLLER->_fastForwardButton = CheckBox::create("textures/buttons/music_toggle_on.png", "textures/buttons/music_toggle_off.png");
+    HUD_CONTROLLER->_fastForwardButton = CheckBox::create();
+    HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/ff_arrows.png");
     HUD_CONTROLLER->_fastForwardButton->cocos2d::Node::setScale(cscale * BUTTON_SCALE);
     HUD_CONTROLLER->_fastForwardButton->setPositionY(HUD_CONTROLLER->_screenSize.y * HUD_MIDDLE_Y_POS_RATIO);
     HUD_CONTROLLER->_fastForwardButton->setPositionX(HUD_CONTROLLER->_screenSize.x * FF_BUTTON_HORIZ_POS_RATIO);
@@ -155,13 +156,10 @@ void HUDController::initFFButton() {
     HUD_CONTROLLER->_hudNode->addChild(HUD_CONTROLLER->_fastForwardButton);
     HUD_CONTROLLER->_fastForwardButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
-            if (HUD_CONTROLLER->_soundButton->isSelected()) {
-                SoundEngine::getInstance()->stopMusic();
-                SoundEngine::getInstance()->stopAllEffects();
+            if (HUD_CONTROLLER->_fastForwardButton->isSelected()) {
+                HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/play.png");
             } else {
-                Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
-                SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
-                SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+                HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/ff_arrows.png");
             }
         }
     });
