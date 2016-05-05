@@ -211,8 +211,23 @@ void JelloModel::update(float dt) {
  * Animate the jello
  */
 void JelloModel::animate() {
+    // smushing
+    if (_smushing) {
+        if (!_tmp2) {
+            _jelloRestcycleFrame = -0.25f;
+            _tmp2 = true;
+        }
+        _jelloRestcycleFrame += 0.25f;
+        int tmp = (int)rint(_jelloRestcycleFrame);
+        if (tmp > 5) {
+            _isSmushed = true;
+        }
+        else {
+            _jelloRestcycle->setFrame(tmp + 31);
+        }
+    }
 	// bouncing
-	if (_bouncing) {
+	else if (_bouncing) {
 		if (!_tmp) {
 			_jelloRestcycleFrame = -0.25f;
 			_tmp = true;
@@ -228,21 +243,7 @@ void JelloModel::animate() {
 			_jelloRestcycle->setFrame(tmp + 16);
 		}
 	}
-	// smushing
-	else if (_smushing) {
-		if (!_tmp2) {
-			_jelloRestcycleFrame = -0.25f;
-			_tmp2 = true;
-		}
-		_jelloRestcycleFrame += 0.25f;
-		int tmp = (int)rint(_jelloRestcycleFrame);
-		if (tmp > 5) {
-			_isSmushed = true;
-		}
-		else {
-			_jelloRestcycle->setFrame(tmp + 31);
-		}
-	}
+
 	// resting
 	else {
 		_jelloRestcycleFrame += 0.25f;
