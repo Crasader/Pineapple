@@ -47,6 +47,8 @@ using namespace cocos2d;
 #define MIN_GROW_LEVEL      5
 
 
+#define FF_SPEED_MULT       3
+
 #pragma mark -
 #pragma mark Initialization
 
@@ -229,6 +231,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _loseViewVisible = false;
     _winViewVisible = false;
     _tutorialViewVisible = false;
+    _isFastForwarding = false;
     return true;
 }
 
@@ -400,7 +403,9 @@ void GameController::onReset() {
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _background->reset(_worldnode);
+    
     _isReloading = false;
+    _isFastForwarding = false;
 
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
     _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
@@ -533,21 +538,14 @@ void GameController::update(float dt) {
         }
     }
     
-    _input->update(dt);
+    float mult = _isFastForwarding ? FF_SPEED_MULT : 1;
     
-    // Process the toggled key commands
-    //if (_input->didPause()) {
-    //    if (!PauseController::isPaused()) {
-    //        PauseController::pause();
-    //        return;
-    //    } else {
-    //        PauseController::unPause();
-    //    }
-    //}
-    //if (_input->didDebug()) {
-    //    setDebug(!isDebug());
-        //setTutorialVisible(_tutorialview != nullptr && !_tutorialViewVisible);
-    //}
+    _input->update(dt * mult);
+    
+    if (getTransitionStatus() != TRANSITION_NONE) {
+        return;
+    }
+    
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) {
         reset();
@@ -727,7 +725,6 @@ void GameController::update(float dt) {
 			cup->animate();
 			if (cup->getSmashed()) {
 				_level->removeObstacle(cup);
-				//cups.erase(it);
 			}
 		}
         
@@ -750,10 +747,10 @@ void GameController::update(float dt) {
         HUDController::update(_level->numKidsRemaining(), _level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2.0f, _level->getKids(), _level->getPineapple(), _level->getGoal()->getPosition().x);
         
         // Update the background (move the clouds)
-        _background->update(dt);
+        _background->update(dt * mult);
         
         // Turn the physics engine crank
-        _world->update(dt);
+        _world->update(dt * mult);
     }
     
     // Since items may be deleted, garbage collect

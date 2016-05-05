@@ -6,6 +6,28 @@
 
 #include "HUDController.h"
 
+#define         CHILDREN_STATUS_HORIZ_POS_RATIO  .04f
+#define         PROGRESS_BAR_HORIZ_POS_RATIO     .10f
+#define         SOUND_BUTTON_HORIZ_POS_RATIO     .85f
+#define         PAUSE_BUTTON_HORIZ_POS_RATIO     .94f
+#define         HUD_MIDDLE_Y_POS_RATIO           .9f
+#define         BUTTON_SCALE                     .15f
+#define         PROGRESS_BAR_SCALE_HORIZ         .5f
+#define         PROGRESS_BAR_SCALE_VERT          .5f
+#define         PROGRESS_BAR_HORIZ_OFFSET        .9f
+// for mini blender etc
+#define         BLENDER_ICON_SCALE               .4f
+#define         KID_ICON_SCALE                   .8f
+#define         WILL_SCALE                       .9f
+#define         WILL_OFFSET_Y                    -10
+
+// local z order
+#define TOP_BAR_BACKGROUND_Z_ORDER  1
+#define TOP_BAR_FOREGROUND_Z_ORDER  2
+
+// 1 through 4 then slash
+#define STATUS_SCALE            .24f
+
 HUDController* HUDController::HUD_CONTROLLER = nullptr;
 
 void HUDController::init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input, float blenderPos) {
@@ -58,7 +80,7 @@ void HUDController::initProgressBar(SceneManager* assets) {
     topbar->retain();
     topbar->setScale(cscale * PROGRESS_BAR_SCALE_HORIZ, cscale * PROGRESS_BAR_SCALE_VERT);
     // progress bar is centered
-    topbar->setPosition(HUDController::HUD_CONTROLLER->_screenSize.x /2.0f,
+    topbar->setPosition(HUDController::HUD_CONTROLLER->_screenSize.x /2.0f * PROGRESS_BAR_HORIZ_OFFSET,
                         HUDController::HUD_CONTROLLER->_screenSize.y * HUD_MIDDLE_Y_POS_RATIO);
     HUD_CONTROLLER->_progressBarWidth = topbar->getContentSize().width * cscale * PROGRESS_BAR_SCALE_HORIZ;
     HUD_CONTROLLER->_progressBarLeftXPos = topbar->getPosition().x - HUD_CONTROLLER->_progressBarWidth / 2.0f;

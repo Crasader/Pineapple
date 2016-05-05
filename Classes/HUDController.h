@@ -20,28 +20,9 @@
 #include "PineappleModel.h"
 
 
-#define         CHILDREN_STATUS_HORIZ_POS_RATIO  .04f
-#define         PROGRESS_BAR_HORIZ_POS_RATIO     .15f
-#define         SOUND_BUTTON_HORIZ_POS_RATIO     .85f
-#define         PAUSE_BUTTON_HORIZ_POS_RATIO     .94f
-#define         HUD_MIDDLE_Y_POS_RATIO           .9f
-#define         HUD_Z_ORDER                      6
-#define         BUTTON_SCALE                     .15f
-#define         PROGRESS_BAR_SCALE_HORIZ         .6f
-#define         PROGRESS_BAR_SCALE_VERT          .5f
-// for mini blender etc
-#define         BLENDER_ICON_SCALE               .4f
-#define         KID_ICON_SCALE                   .8f
-#define         WILL_SCALE                       .9f
-#define         WILL_OFFSET_Y                    -10
+#define HUD_Z_ORDER         6
+#define NUM_STATUS_NODES    5
 
-// local z order
-#define TOP_BAR_BACKGROUND_Z_ORDER  1
-#define TOP_BAR_FOREGROUND_Z_ORDER  2
-
-// 1 through 4 then slash
-#define STATUS_SCALE            .24f
-#define NUM_STATUS_NODES        5
 
 // singleton class
 using namespace cocos2d;

@@ -132,6 +132,8 @@ protected:
     float _levelOffset;
     /** True if this is reloading */
     bool _isReloading;
+    /** True if the game is currently in fast forward mode, false otherwise */
+    bool _isFastForwarding;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
