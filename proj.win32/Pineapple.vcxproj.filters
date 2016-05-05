@@ -191,7 +191,9 @@
     <ClInclude Include="..\Classes\HomeScreenController.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Sounds.h" />
+    <ClInclude Include="..\Classes\Sounds.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\TutorialView.h">
       <Filter>src</Filter>
     </ClInclude>

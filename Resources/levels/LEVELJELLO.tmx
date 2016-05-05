@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="64" tileheight="64" nextobjectid="148">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="12" tilewidth="64" tileheight="64" nextobjectid="129">
  <properties>
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
  </properties>
- <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100" columns="10">
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="1" name="wall" x="0" y="640" width="1088" height="128"/>
-  <object id="142" x="1088" y="704" width="256" height="64"/>
-  <object id="143" x="1152" y="576" width="128" height="64"/>
-  <object id="146" x="2112" y="640" width="1088" height="128"/>
-  <object id="147" x="1344" y="768">
-   <polygon points="0,0 0,-64 768,-128 768,0"/>
-  </object>
+  <object id="1" name="wall" x="0" y="640" width="960" height="128"/>
+  <object id="89" x="1152" y="640" width="1408" height="128"/>
  </objectgroup>
  <objectgroup name="Will">
   <object id="10" name="will" gid="1" x="512" y="640" width="64" height="64"/>
@@ -26,18 +21,13 @@
   <object id="29" name="kid" gid="2" x="448" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Spikes"/>
- <objectgroup name="Jello"/>
+ <objectgroup name="Jello">
+  <object id="96" gid="11" x="896" y="640" width="64" height="64"/>
+ </objectgroup>
  <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="2944" y="448" width="64" height="64"/>
+  <object id="21" name="goal" gid="51" x="2304" y="448" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups"/>
  <objectgroup name="Switches"/>
  <objectgroup name="Bridges"/>
- <objectgroup name="Tutorial">
-  <object id="138" gid="22" x="960" y="64" width="64" height="64">
-   <properties>
-    <property name="id" value="1"/>
-   </properties>
-  </object>
- </objectgroup>
 </map>

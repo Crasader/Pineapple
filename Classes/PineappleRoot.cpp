@@ -258,8 +258,8 @@ void PineappleRoot::transitionToGame(int levelIndex) {
 		if (SoundEngine::getInstance()->getEffectState(BLENDER_SOUND) == SoundEngine::SoundState::INACTIVE) {
 			float volScale = _gameplay->getBlenderVolScale();
 			if (volScale >= 0) {
-				//Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
-				//SoundEngine::getInstance()->playEffect(BLENDER_SOUND, source, true, EFFECT_VOLUME*volScale);
+				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+				SoundEngine::getInstance()->playEffect(BLENDER_SOUND, source, true, EFFECT_VOLUME*volScale);
 			}
 		}
     

@@ -111,10 +111,12 @@
 #define VIBRATION_DURATION  1.0f
 
 // Max value for scaling blender sound based on distance
-#define MAX_VOL_SCALE						3.0f
+#define MAX_VOL_SCALE						1.3f
+// Distance at which the blender should be silent
+#define BLENDER_VOL_OFF_DISTANCE 32.0f
 
 // The distance value for which the blending sound will play at EFFECT_VOLUME
-#define NORMAL_BLENDER_DISTANCE 1.0f
+#define NORMAL_BLENDER_DISTANCE 2.0f
 
 
 #endif /* Const_h */

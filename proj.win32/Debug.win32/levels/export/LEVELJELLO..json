@@ -9,93 +9,23 @@
                  "height":128,
                  "id":1,
                  "name":"wall",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1088,
+                 "width":960,
                  "x":0,
                  "y":640
                 }, 
                 {
-                 "height":64,
-                 "id":142,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":256,
-                 "x":1088,
-                 "y":704
-                }, 
-                {
-                 "height":64,
-                 "id":143,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":128,
-                 "x":1152,
-                 "y":576
-                }, 
-                {
                  "height":128,
-                 "id":146,
+                 "id":89,
                  "name":"",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":1088,
-                 "x":2112,
+                 "width":1408,
+                 "x":1152,
                  "y":640
-                }, 
-                {
-                 "height":0,
-                 "id":147,
-                 "name":"",
-                 "polygon":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":0,
-                         "y":-64
-                        }, 
-                        {
-                         "x":768,
-                         "y":-128
-                        }, 
-                        {
-                         "x":768,
-                         "y":0
-                        }],
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1344,
-                 "y":768
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -114,10 +44,6 @@
                  "height":64,
                  "id":10,
                  "name":"will",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -142,10 +68,6 @@
                  "height":64,
                  "id":11,
                  "name":"kid",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -158,10 +80,6 @@
                  "height":64,
                  "id":27,
                  "name":"kid",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -174,10 +92,6 @@
                  "height":64,
                  "id":28,
                  "name":"kid",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -190,10 +104,6 @@
                  "height":64,
                  "id":29,
                  "name":"kid",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -224,7 +134,19 @@
          "draworder":"topdown",
          "height":0,
          "name":"Jello",
-         "objects":[],
+         "objects":[
+                {
+                 "gid":11,
+                 "height":64,
+                 "id":96,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":896,
+                 "y":640
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -242,15 +164,11 @@
                  "height":64,
                  "id":21,
                  "name":"goal",
-                 "properties":
-                    {
-
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":2944,
+                 "x":2304,
                  "y":448
                 }],
          "opacity":1,
@@ -295,56 +213,30 @@
          "width":0,
          "x":0,
          "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "height":0,
-         "name":"Tutorial",
-         "objects":[
-                {
-                 "gid":22,
-                 "height":64,
-                 "id":138,
-                 "name":"",
-                 "properties":
-                    {
-                     "id":"1"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":960,
-                 "y":64
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "width":0,
-         "x":0,
-         "y":0
         }],
- "nextobjectid":148,
+ "nextobjectid":129,
  "orientation":"orthogonal",
  "properties":
     {
      "BlenderStartX":"-20",
      "BlenderStartY":"6"
     },
+ "propertytypes":
+    {
+     "BlenderStartX":"string",
+     "BlenderStartY":"string"
+    },
  "renderorder":"right-down",
  "tileheight":64,
  "tilesets":[
         {
+         "columns":10,
          "firstgid":1,
          "image":"..\/..\/tiledTextures\/Sheet.png",
          "imageheight":640,
          "imagewidth":640,
          "margin":0,
          "name":"ImageSheet",
-         "properties":
-            {
-
-            },
          "spacing":0,
          "tilecount":100,
          "tileheight":64,
@@ -352,5 +244,5 @@
         }],
  "tilewidth":64,
  "version":1,
- "width":50
+ "width":40
 }

@@ -5,6 +5,7 @@
 //
 
 #include "HUDController.h"
+#include "Sounds.h"
 
 #define         CHILDREN_STATUS_HORIZ_POS_RATIO  .04f
 #define         PROGRESS_BAR_HORIZ_POS_RATIO     .10f
@@ -139,6 +140,8 @@ void HUDController::initSoundButton() {
                 Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
                 SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
                 SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+								sound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+								SoundEngine::getInstance()->playEffect(BLENDER_SOUND, sound, true, 0.0f);
             }
         }
     });
