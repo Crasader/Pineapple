@@ -235,6 +235,11 @@ public:
      */
     void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
     
+    /** True if this is fastforwarding */
+    bool isFastForwarding() {
+        return HUDController::isFastForwarding();
+    }
+    
     /**
      * Returns true if the level is completed.
      *
