@@ -719,9 +719,9 @@ void LevelModel::setRootNode(Node* node) {
     
     for(auto it = _walls.begin(); it != _walls.end(); ++it) {
         WallModel* wall = *it;
+        wall->setDrawScale(_scale.x , _scale.y);
         
         Texture2D* image = assets->get<Texture2D>(wall->getTextureID());
-        wall->setDrawScale(_scale.x , _scale.y);
         
         if (wall->isFloor()) {
             image->setTexParameters(params);
