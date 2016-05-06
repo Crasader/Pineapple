@@ -362,6 +362,7 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     _collision->reset();
 	
 	if (_splatCycle != nullptr) {
+        _rootnode->removeChild(_splatCycle);
 		_splatCycle->release();
 		_splatCycle = nullptr;
 	}
