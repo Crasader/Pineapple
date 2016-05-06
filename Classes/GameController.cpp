@@ -368,6 +368,7 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
 	}
 
     if (_fridgeDoor != nullptr) {
+        _worldnode->removeChild(_fridgeDoor);
         _fridgeDoor->release();
         _fridgeDoor = nullptr;
     }
