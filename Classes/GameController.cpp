@@ -360,7 +360,12 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     
     // clear state
     _collision->reset();
-    
+	
+	if (_splatCycle != nullptr) {
+		_splatCycle->release();
+		_splatCycle = nullptr;
+	}
+
     if (_fridgeDoor != nullptr) {
         _fridgeDoor->release();
         _fridgeDoor = nullptr;
@@ -418,17 +423,19 @@ void GameController::onReset() {
     _world->onEndContact = [this](b2Contact* contact) {
         _collision->endContact(contact);
     };
-    
-    _splatCycle->setVisible(false);
-    _splatCycle->setFrame(0);
-    _splatFrame = 0.0f;
-    _hasSplat = false;
+
+	_splatCycle = AnimationNode::create(_assets->get<Texture2D>(SPLAT_TEXTURE_1), 1, 14, 14);
+	_splatCycle->setFrame(0);
+	_splatCycle->setVisible(false);
+	_splatCycle->retain();
+	_rootnode->addChild(_splatCycle, SPLAT_Z);
+	_splatFrame = 0.0f;
+	_hasSplat = false;
+	_rootSize = _rootnode->getContentSize();
     
     //reset the hud
     HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
-    
-    
-    
+   
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
@@ -738,26 +745,28 @@ void GameController::update(float dt) {
             }
         }
         
-        // Animate the jello
+        // Animate the jello and remove them if they're smushed
         std::vector<JelloModel*> jellos = _level->getJellos();
         for (auto it = jellos.begin(); it != jellos.end(); ++it) {
             JelloModel* jello = *it;
             jello->animate();
+			if (jello->getIsSmushed()) {
+				_level->removeObstacle(jello);
+			}
         }
-        
-        // Animate the fridge
-        _level->getGoal()->animate();
-        
-        // Animate cups if they're being smashed and remove them when they're done
-        std::vector<CrushableModel*> cups = _level->getCups();
-        for (auto it = cups.begin(); it != cups.end(); ++it) {
-            CrushableModel* cup = *it;
-            
-            cup->animate();
-            if (cup->getSmashed()) {
-                _level->removeObstacle(cup);
-            }
-        }
+
+		// Animate the fridge
+		_level->getGoal()->animate();
+
+		// Animate cups if they're being smashed and remove them when they're done
+		std::vector<CrushableModel*> cups = _level->getCups();
+		for (auto it = cups.begin(); it != cups.end(); ++it) {
+			CrushableModel* cup = *it;
+			cup->animate();
+			if (cup->getSmashed()) {
+				_level->removeObstacle(cup);
+			}
+		}
         
         // Animate the blender
         _level->getBlender()->animate();

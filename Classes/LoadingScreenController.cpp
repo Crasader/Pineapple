@@ -18,12 +18,13 @@ void loadCharacters(TextureLoader* tloader) {
 void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(FLOOR_TEXTURE,      "textures/new_tile.png");
     tloader->loadAsync(FLOOR_TOP_TEXTURE, "textures/floor_top.png");
+
     tloader->loadAsync(PLATFORM_CENTER_TEXTURE,  "textures/platform-center.png");
     tloader->loadAsync(PLATFORM_VERTICAL_CENTER_TEXTURE, "textures/platform-center-vertical.png");
     tloader->loadAsync(PLATFORM_EDGE_RIGHT_TEXTURE,  "textures/platform-right.png");
     tloader->loadAsync(PLATFORM_EDGE_LEFT_TEXTURE,  "textures/platform-left.png");
     
-    tloader->loadAsync(JELLO_TEXTURE, "textures/jello_full.png");
+    tloader->loadAsync(JELLO_TEXTURE, "textures/jelloFull2.png");
     tloader->loadAsync(SPIKE_TEXTURE, "textures/bowl_o_knives2.png");
     
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
