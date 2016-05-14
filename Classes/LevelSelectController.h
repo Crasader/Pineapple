@@ -95,6 +95,9 @@ protected:
     /** The level button that is selected. -1 when none */
     int _levelSelected;
     
+    /** Fraction of a page in positioning, used in drawing */
+    float _currentPageFrac;
+    
     /** The current level page. Initially 0 */
     int _currentPage;
     

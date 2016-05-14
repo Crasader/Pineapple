@@ -68,7 +68,8 @@ _backgroundNode(nullptr),
 _world(nullptr),
 _levelSelected(NO_LEVEL_SELECTED),
 _debug(false),
-_currentPage(0){}
+_currentPage(0),
+_currentPageFrac(0.0f){}
 
 /** 
  * Returns the maximum level page - the maximum number of pages needed to
@@ -138,7 +139,9 @@ Button* LevelSelectController::initButton(int i) {
     
     button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
-            _levelSelected = ((Node*)sender)->getTag();
+            if (_currentPageFrac == 0.0f) {
+                _levelSelected = ((Node*)sender)->getTag();
+            }
         }
     });
 
@@ -148,7 +151,7 @@ Button* LevelSelectController::initButton(int i) {
 
 void LevelSelectController::fixPosition(Button *b, Node* score, int index) {
     float cscale = Director::getInstance()->getContentScaleFactor();
-    int difPage = getPage(index) - _currentPage;
+    float difPage = getPage(index) - _currentPage - _currentPageFrac;
     index = index % LEVELS_PER_PAGE;
     
     float row = index / BUTTONS_PER_ROW;
@@ -358,9 +361,7 @@ bool LevelSelectController::pageUp() {
     }
     
     _currentPage++;
-    for(int i = 0; i < NUM_LEVELS; i++) {
-        fixPosition(_buttons[i], _scoreNodes[i], i);
-    }
+    _currentPageFrac -= 1;
     
     _prevPageButton->setEnabled(_currentPage > 0);
     _nextPageButton->setEnabled(_currentPage < getMaxPage());
@@ -374,9 +375,7 @@ bool LevelSelectController::pageDown() {
     }
     
     _currentPage--;
-    for(int i = 0; i < NUM_LEVELS; i++) {
-        fixPosition(_buttons[i], _scoreNodes[i], i);
-    }
+    _currentPageFrac += 1;
     
     _prevPageButton->setEnabled(_currentPage > 0);
     _nextPageButton->setEnabled(_currentPage < getMaxPage());
@@ -396,6 +395,22 @@ bool LevelSelectController::pageDown() {
 void LevelSelectController::update(float dt) {
     
     _input->update(dt);
+    
+    if (_currentPageFrac != 0) {
+        float diff = 0.04f;
+        
+        if (fabs(_currentPageFrac) < diff) {
+            _currentPageFrac = 0.0f;
+        } else if (_currentPageFrac < 0.0f) {
+            _currentPageFrac += diff;
+        } else {
+            _currentPageFrac -= diff;
+        }
+        
+        for(int i = 0; i < NUM_LEVELS; i++) {
+            fixPosition(_buttons[i], _scoreNodes[i], i);
+        }
+    }
     
     if (_levelSelected != NO_LEVEL_SELECTED) {
         setTransitionStatus(TRANSITION_TO_GAME);
