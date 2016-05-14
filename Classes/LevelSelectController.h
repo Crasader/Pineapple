@@ -25,8 +25,8 @@
 #include "Levels.h"
 #include "ui/CocosGUI.h"
 
-#define NUM_LEVELS                  13
-#define LEVELS_CREATED              11
+#define NUM_LEVELS                  19
+#define LEVELS_CREATED              19
 #define NO_LEVEL_SELECTED           -1
 
 // V offset of a score from its corresponding button
@@ -74,6 +74,12 @@ protected:
     /** The node representing the background image drawn for this screen */
     Node* _backgroundNode;
     
+    /** Button moving back a page */
+    Button* _prevPageButton;
+    
+    /** Button moving forward a page */
+    Button* _nextPageButton;
+    
     // array of buttons
     Button* _buttons[NUM_LEVELS];
     // array of score nodes
@@ -88,6 +94,12 @@ protected:
     
     /** The level button that is selected. -1 when none */
     int _levelSelected;
+    
+    /** Fraction of a page in positioning, used in drawing */
+    float _currentPageFrac;
+    
+    /** The current level page. Initially 0 */
+    int _currentPage;
     
 #pragma mark Internal Object Management
     /**
@@ -117,7 +129,10 @@ public:
 #pragma mark -
 #pragma mark Initialization
     /** Creates and returns a button for the given index */
-    Button* initButton(Size dimen, int i);
+    Button* initButton(int i);
+    
+    /** Fixes the position for the given putton at the given index */
+    void fixPosition(Button* b, Node* score, int index);
     
     /** Creates and returns score node and inits _score[i] value */
     PolygonNode* initScore(Button* button, int i);
@@ -188,6 +203,21 @@ public:
      * @param value whether debug mode is active.
      */
     void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
+    
+    /** Return the page that button i goes on */
+    int getPage(int buttonIndex);
+    
+    /**
+     * Returns the maximum level page - the maximum number of pages needed to
+     * show all of the levels
+     */
+    int getMaxPage();
+    
+    /** Increases the page index, if possible. Return true if the page index changed */
+    bool pageUp();
+    
+    /** Decreases the page index, if possible. Return true if the page index changed */
+    bool pageDown();
     
 #pragma mark -
 #pragma mark Allocation
