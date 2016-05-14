@@ -714,7 +714,7 @@ void GameController::update(float dt) {
         // Process the movement
         if (_level->getPineapple() != nullptr) {
             if (!_level->getPineapple()->getIsBlended()) {
-                _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());
+                _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());                
                 _level->getPineapple()->setJumping(_input->didJump() && _levelIndex >= MIN_JUMP_LEVEL);
                 float cscale = Director::getInstance()->getContentScaleFactor();
                 

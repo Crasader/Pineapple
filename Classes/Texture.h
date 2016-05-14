@@ -144,6 +144,15 @@
 /** The filepath for the level select button in its on state */
 #define LEVEL_SELECT_BUTTON_ON_FILEPATH  "textures/buttons/level_button_inverse.png"
 
+/** The filepath for the level select button in its off state */
+#define LEVEL_SELECT_PREV_OFF_FILEPATH  "textures/buttons/next_left.png"
+/** The filepath for the level select button in its on state */
+#define LEVEL_SELECT_PREV_ON_FILEPATH  "textures/buttons/next_left_inverse.png"
+/** The filepath for the level select button in its off state */
+#define LEVEL_SELECT_NEXT_OFF_FILEPATH  "textures/buttons/next_right.png"
+/** The filepath for the level select button in its on state */
+#define LEVEL_SELECT_NEXT_ON_FILEPATH  "textures/buttons/next_right_inverse.png"
+
 /** The filepaths for the different score textures, used in level select */
 #define LEVEL_SELECT_SCORE_FILEPATH_0 "textures/scores/0_score.png"
 #define LEVEL_SELECT_SCORE_FILEPATH_1 "textures/scores/1_score.png"
