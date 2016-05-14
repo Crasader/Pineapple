@@ -25,8 +25,8 @@
 #include "Levels.h"
 #include "ui/CocosGUI.h"
 
-#define NUM_LEVELS                  15
-#define LEVELS_CREATED              15
+#define NUM_LEVELS                  19
+#define LEVELS_CREATED              19
 #define NO_LEVEL_SELECTED           -1
 
 // V offset of a score from its corresponding button
@@ -73,6 +73,12 @@ protected:
     
     /** The node representing the background image drawn for this screen */
     Node* _backgroundNode;
+    
+    /** Button moving back a page */
+    Button* _prevPageButton;
+    
+    /** Button moving forward a page */
+    Button* _nextPageButton;
     
     // array of buttons
     Button* _buttons[NUM_LEVELS];
