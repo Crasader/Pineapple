@@ -852,7 +852,7 @@ void LevelModel::setRootNode(Node* node) {
     
     for(auto it = _buttonSwitches.begin(); it != _buttonSwitches.end(); ++it) {
         ButtonSwitchModel* button = *it;
-        
+		button->setY(button->getY() - 0.1f);
         Texture2D* image = assets->get<Texture2D>(button->isSwitch() ? SWITCH_TEXTURE_RED : SWITCH_TEXTURE_RED); //TODO - replace when button is ready
         button->setDrawScale(_scale.x, _scale.y);
         poly = PolygonNode::createWithTexture(image);

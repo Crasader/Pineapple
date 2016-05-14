@@ -51,6 +51,7 @@
 
 #define JELLO_SCALE			0.65f
 #define JELLO_H_SHRINK      0.8f
+#define JELLO_V_SHRINK		0.7f
 
 /** Extra amount to shift the jello down to move the object to sync with the floor visually */
 #define JELLO_DOWN_SHIFT	0
@@ -280,7 +281,7 @@ void JelloModel::resetSceneNode() {
 		pnode->setFrame(0);
         
         setDimension(pnode->getContentSize().width * JELLO_SCALE * JELLO_H_SHRINK / _drawScale.x,
-                     pnode->getContentSize().height * JELLO_SCALE / _drawScale.y);
+                     pnode->getContentSize().height * JELLO_SCALE * JELLO_V_SHRINK / _drawScale.y);
 
 		_jelloRestcycleFrame = 0.0f;
 		_jelloRestcycle = pnode;
