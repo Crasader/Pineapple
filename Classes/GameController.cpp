@@ -35,8 +35,12 @@ using namespace cocos2d;
 #define SPLAT_Z             5
 #define TUTORIAL_SPLASH_Z   6
 #define MOVEMENT_VIEW_Z     7
-#define WIN_SPLASH_Z        8
-#define LOSE_SPLASH_Z       9
+
+//HUD - 8
+//PAUSE - 9
+
+#define WIN_SPLASH_Z        10
+#define LOSE_SPLASH_Z       11
 #define GOAL_DOOR_Z         38
 
 //Min levels for functionality
