@@ -32,15 +32,12 @@
 using namespace cocos2d;
 //using namespace std;
 
-#define SPLAT_Z             6
-#define TUTORIAL_SPLASH_Z   7
+#define SPLAT_Z             5
+#define TUTORIAL_SPLASH_Z   6
+#define MOVEMENT_VIEW_Z     7
 #define WIN_SPLASH_Z        8
 #define LOSE_SPLASH_Z       9
 #define GOAL_DOOR_Z         38
-
-// global z order
-#define MOVEMENT_VIEW_Z 5
-
 
 //Min levels for functionality
 #define MIN_JUMP_LEVEL      1
@@ -220,6 +217,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
+    _tutorialroot->setPositionX(0.0f);
     _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
     
     // add left and right movement textures
@@ -422,7 +420,6 @@ void GameController::onReset() {
         (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
         (*it)->addToRoot();
         (*it)->position();
-        _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
     }
     
     _world->activateCollisionCallbacks(true);
@@ -448,6 +445,7 @@ void GameController::onReset() {
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
+    _tutorialroot->setPositionX(0.0f);
     _background->reset(_worldnode);
     
     _isReloading = false;

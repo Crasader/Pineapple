@@ -276,7 +276,7 @@ bool LevelModel::load() {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
 
                     int ID = cocos2d::stod(reader.getString(TUTORIAL_ID));
-                    addTutorialImage(ID, x);
+                    addTutorialImage(ID, x, y);
                     
                     reader.endObject();
                 } else {
@@ -634,8 +634,8 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     _moveablePlatforms.push_back(platform);
 }
 
-void LevelModel::addTutorialImage(int ID, float x) {
-    TutorialView* view = TutorialView::create(ID, Vec2(x, 50));
+void LevelModel::addTutorialImage(int ID, float x, float y) {
+    TutorialView* view = TutorialView::create(ID, Vec2(x, y));
     _tutorialViews.push_back(view);
 }
 

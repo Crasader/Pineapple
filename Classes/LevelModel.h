@@ -275,7 +275,7 @@ public:
     
     void addMoveablePlatform(float platformPos[], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color);
     
-    void addTutorialImage(int ID, float x);
+    void addTutorialImage(int ID, float x, float y);
     
     /** Adds the given obstacle to the level. Should only be called on
      * an obstacle not in the above list, i.e. a jello or a cup */
