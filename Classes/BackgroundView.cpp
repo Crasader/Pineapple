@@ -30,6 +30,8 @@
 /** Cloud velocity */
 #define CLOUD_VELOCITY           0.12f
 
+#define BACK_OF_WORLD           -500
+
 BackgroundView* BackgroundView::createAndAddTo(Node* rootNode, Node* worldNode, SceneManager *assets) {
     BackgroundView* view = new (std::nothrow) BackgroundView();
     view->_hillsnode = Node::create();
@@ -96,8 +98,8 @@ void BackgroundView::init(Node* rootNode, Node* worldNode, SceneManager* assets)
     _frontBackground_2->setScale(cscale*FRONT_BACKGROUND_SCALE);
     _frontBackground_2->setPosition(FRONT_BACKGROUND_WIDTH*3/2 * cscale*FRONT_BACKGROUND_SCALE,
                                     FRONT_BACKGROUND_HEIGHT + FRONT_BACKGROUND_VERTICAL_OFFSET);
-    worldNode->addChild(_frontBackground_1);
-    worldNode->addChild(_frontBackground_2);
+    worldNode->addChild(_frontBackground_1, BACK_OF_WORLD);
+    worldNode->addChild(_frontBackground_2, BACK_OF_WORLD);
 }
 
 void BackgroundView::handleScrolling(float offset, float levelOffset, float oldLevelOffset, Vec2 scale) {    

@@ -276,7 +276,7 @@ bool LevelModel::load() {
                     reader.startObject(OBJECT_PROPERTIES_PROPERTY);
 
                     int ID = cocos2d::stod(reader.getString(TUTORIAL_ID));
-                    addTutorialImage(ID, x);
+                    addTutorialImage(ID, x, y);
                     
                     reader.endObject();
                 } else {
@@ -634,8 +634,8 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
     _moveablePlatforms.push_back(platform);
 }
 
-void LevelModel::addTutorialImage(int ID, float x) {
-    TutorialView* view = TutorialView::create(ID, x);
+void LevelModel::addTutorialImage(int ID, float x, float y) {
+    TutorialView* view = TutorialView::create(ID, Vec2(x, y));
     _tutorialViews.push_back(view);
 }
 
@@ -704,8 +704,8 @@ void LevelModel::setRootNode(Node* node) {
     // Create, but transfer ownership to root
     _worldnode = Node::create();
     _debugnode = Node::create();
-    _rootnode->addChild(_worldnode,2);
-    _rootnode->addChild(_debugnode,3);
+    _rootnode->addChild(_worldnode,WORLD_Z_INDEX);
+    _rootnode->addChild(_debugnode,DEBUG_Z_INDEX);
     
     // Add the individual elements
     PolygonNode* poly;

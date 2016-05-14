@@ -61,6 +61,8 @@ protected:
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
+    /** Reference to the background node */
+    Node* _backgroundnode;
     
     /** Visual representation of left and right movement buttons, buttons don't have any function
      *  Just used to easily change between two textures */
@@ -85,10 +87,6 @@ protected:
     Node* _tutorialroot;
     /** Reference to the tutorial splash screens */
     vector<TutorialView*> _tutorialviews;
-    /** Reference to the currently active tutorial view, if any */
-    TutorialView* _activeTutorialView;
-    /** True once a tutorialview is visible */
-    bool _tutorialViewVisible;
     
     /** The Box2D world */
     WorldController* _world;
@@ -275,10 +273,6 @@ public:
      * @param value whether the level is failed.
      */
     void setFailure(bool value);
-
-    /** Sets whether or not a tutorial view is visible. 
-      * takes the view to set visible. If null, removes all from visibility */
-    void setTutorialVisible(TutorialView* view);
     
     float getBlenderVolScale();
     

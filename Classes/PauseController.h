@@ -15,7 +15,7 @@
 #include "AbsScreenController.h"
 
 // global z order
-#define PAUSE_MENU_Z_ORDER     7
+#define PAUSE_MENU_Z_ORDER     10
 
 #define PAUSE_CONTROLLER_NUM_BUTTONS            4
 #define BUTTON_Y_OFFSET        60.0f

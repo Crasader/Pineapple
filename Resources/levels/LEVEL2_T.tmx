@@ -26,9 +26,7 @@
   <object id="29" name="kid" gid="2" x="448" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Spikes"/>
- <objectgroup name="Jello">
-  <object id="152" gid="11" x="832" y="640" width="64" height="64"/>
- </objectgroup>
+ <objectgroup name="Jello"/>
  <objectgroup name="Goal">
   <object id="21" name="goal" gid="51" x="2944" y="448" width="64" height="64"/>
  </objectgroup>
@@ -36,7 +34,7 @@
  <objectgroup name="Switches"/>
  <objectgroup name="Bridges"/>
  <objectgroup name="Tutorial">
-  <object id="138" gid="22" x="960" y="64" width="64" height="64">
+  <object id="138" gid="22" x="1024" y="384" width="64" height="64">
    <properties>
     <property name="id" value="1"/>
    </properties>

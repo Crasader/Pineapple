@@ -20,7 +20,7 @@
 #include "PineappleModel.h"
 
 
-#define HUD_Z_ORDER         6
+#define HUD_Z_ORDER         9
 #define NUM_STATUS_NODES    5
 
 
