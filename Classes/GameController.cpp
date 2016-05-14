@@ -70,8 +70,7 @@ _collision(nullptr),
 _background(nullptr),
 _debug(false),
 _loseViewVisible(false),
-_winViewVisible(false),
-_tutorialViewVisible(false){}
+_winViewVisible(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -209,8 +208,11 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _tutorialroot->retain();
     
     _tutorialviews = _level->getTutorialViews();
+    _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
         (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
+        (*it)->addToRoot();
+        (*it)->position();
     }
     
     _collision->setLevel(_level);
@@ -256,12 +258,10 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     setComplete(false);
     setDebug(false);
     setFailure(false);
-    setTutorialVisible(nullptr);
     _isInitted = true;
     _isReloading = false;
     _loseViewVisible = false;
     _winViewVisible = false;
-    _tutorialViewVisible = false;
     return true;
 }
 
@@ -356,7 +356,11 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
-    setTutorialVisible(nullptr);
+    
+    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+        (*it)->clearFromRoot();
+        (*it)->dispose();
+    }
     
     // clear state
     _collision->reset();
@@ -416,6 +420,9 @@ void GameController::onReset() {
     _tutorialviews = _level->getTutorialViews();
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
         (*it)->init(_tutorialroot, _assets, _level->getDrawScale());
+        (*it)->addToRoot();
+        (*it)->position();
+        _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
     }
     
     _world->activateCollisionCallbacks(true);
@@ -509,28 +516,6 @@ void GameController::setFailure(bool value){
     }
 }
 
-void GameController::setTutorialVisible(TutorialView* view) {
-    bool value = view != nullptr;
-    if (value == _tutorialViewVisible) return;
-    
-    if (value) {
-        _rootnode->addChild(_tutorialroot, TUTORIAL_SPLASH_Z);
-        view->addToRoot();
-        view->position();
-        _activeTutorialView = view;
-        HUDController::setEnabled(false);
-    } else {
-        _rootnode->removeChild(_tutorialroot);
-        if (_activeTutorialView != nullptr) {
-            _activeTutorialView->clearFromRoot();
-        }
-        _activeTutorialView = nullptr;
-        HUDController::setEnabled(true);
-    }
-    
-    _tutorialViewVisible = value;
-}
-
 float GameController::getBlenderVolScale() {
 		float distBP = _level->getBlenderPineappleDistance();
 		float scale = (BLENDER_VOL_OFF_DISTANCE - distBP) / (BLENDER_VOL_OFF_DISTANCE - NORMAL_BLENDER_DISTANCE);
@@ -615,16 +600,6 @@ void GameController::update(float dt) {
         setComplete(true);
     }
     
-    // Check for tutorials
-    for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
-        TutorialView* view = (*it);
-        if (! view->isDismissed() && _level->getPineapple() != nullptr &&
-            _level->getPineapple()->getPosition().x > view->getTriggerX()) {
-            setTutorialVisible(view);
-            break;
-        }
-    }
-    
     if (_loseViewVisible)  {
         _moveLeftView->setTouchEnabled(false);
         _moveRightView->setTouchEnabled(false);
@@ -662,15 +637,13 @@ void GameController::update(float dt) {
             return;
             
         }
-    } else if (_tutorialViewVisible) {
-        _activeTutorialView->update(dt);
-        
-        if (_activeTutorialView->isDismissed()) {
-            _activeTutorialView->resetButtons();
-            setTutorialVisible(nullptr);
-            return;
-        }
     } else {
+        
+        //Update tutorials
+        for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
+            (*it)->update(dt);
+        }
+        
         // Process kids
         for(int i = 0; i < KID_COUNT; i++) {
             if(_level->getKid(i) != nullptr) {
@@ -828,6 +801,7 @@ void GameController::handleScrolling() {
     // Move all the objects in _worldnode
     _worldnode->setPositionX(_worldnode->getPositionX() - (_level->getDrawScale().x*offset));
     _debugnode->setPositionX(_debugnode->getPositionX() - (_level->getDrawScale().x*offset));
+    _tutorialroot->setPositionX(_tutorialroot->getPositionX() - (_level->getDrawScale().x * offset));
     
     // Do parallax scrolling of the background
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());

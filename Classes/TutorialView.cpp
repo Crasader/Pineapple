@@ -154,7 +154,7 @@ void TutorialView::addAnimation(TutorialAnimationTuple *t) {
     _animations.push_back(t);
 }
 
-TutorialView* TutorialView::create(int id, float triggerX) {
+TutorialView* TutorialView::create(int id, Vec2 position) {
     TutorialView* t = new (std::nothrow) TutorialView();
     
     switch (id) {
@@ -193,37 +193,13 @@ TutorialView* TutorialView::create(int id, float triggerX) {
             break;
     }
     
-    t->_triggerX = triggerX;
-    t->_dismissed = false;
+    t->_loc = position;
     
     return t;
 }
 
 void TutorialView::init(Node *root, SceneManager *assets, Vec2 scale) {
     ModalView::init(root, assets, scale, "");
-    
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    
-    Texture2D* image = assets->get<Texture2D>(PAUSE_SCREEN_OVERLAY);
-    _backgroundOverlayTwo = PolygonNode::createWithTexture(image);
-    _backgroundOverlayTwo->setAnchorPoint(Vec2(0.5f, 0.5f));
-    _backgroundOverlayTwo->setScale(_root->getContentSize().width/image->getContentSize().width,
-                                 _root->getContentSize().height/image->getContentSize().height);
-    _backgroundOverlayTwo->retain();
-
-    _dismissButton = Button::create();
-    _dismissButton->retain();
-    _dismissButton->setScale(MODAL_MAIN_SCALE * TUTORIAL_BUTTON_SCALE * cscale);
-    initButton(_dismissButton, TUTORIAL_BUTTON_FONT, "");
-    _dismissButton->setAnchorPoint(Vec2(0.5, 0.5));
-    _dismissButton->loadTextureNormal(TUTORIAL_BUTTON_FILEPATH);
-    _dismissButton->loadTexturePressed(TUTORIAL_BUTTON_ON_FILEPATH);
-    
-    _dismissButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
-        if (type == ui::Widget::TouchEventType::ENDED) {
-            _dismissed = true;
-        }
-    });
 }
 
 void TutorialView::position() {
@@ -247,17 +223,6 @@ void TutorialView::position() {
         node->setScale(tuple->getScale() * cscale);
         node->setPosition(center + Vec2(w*dx, h*dy));
     }
-    
-    if (_backgroundOverlayTwo != nullptr) {
-        _backgroundOverlayTwo->setPosition(center);
-    }
-    
-    if (_dismissButton != nullptr) {
-        float w = _dismissButton->getContentSize().width;
-        float h = _dismissButton->getContentSize().height;
-        
-        _dismissButton->setPosition(center + Vec2(w * TUTORIAL_BUTTON_OFFSET.x * cscale, h*TUTORIAL_BUTTON_OFFSET.y*cscale));
-    }
 }
 
 void TutorialView::dispose() {
@@ -267,16 +232,6 @@ void TutorialView::dispose() {
         tuple->dispose();
     }
     _animations.clear();
-    
-    if (_backgroundOverlayTwo != nullptr) {
-        _backgroundOverlayTwo->release();
-        _backgroundOverlayTwo = nullptr;
-    }
-    
-    if (_dismissButton != nullptr) {
-        _dismissButton->release();
-        _dismissButton = nullptr;
-    }
 }
 
 void TutorialView::update(float dt) {

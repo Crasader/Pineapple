@@ -635,7 +635,7 @@ void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length
 }
 
 void LevelModel::addTutorialImage(int ID, float x) {
-    TutorialView* view = TutorialView::create(ID, x);
+    TutorialView* view = TutorialView::create(ID, Vec2(x, 50));
     _tutorialViews.push_back(view);
 }
 
