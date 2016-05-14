@@ -222,11 +222,9 @@ void InputController::update(float dt) {
     // Directional controls
     _horizontal = 0.0f;
     if (_keyRight) {
-        std::cout << "key right\n";
         _horizontal += 1.0f;
     }
     if (_keyLeft) {
-        std::cout << "key left]\n";
         _horizontal -= 1.0f;
     }
   
