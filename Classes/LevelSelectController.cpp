@@ -27,10 +27,12 @@
 
 const string LevelSelectController::LEVEL_FILES[NUM_LEVELS] = {LEVEL_ONE_FILE, LEVEL_TWO_FILE, LEVEL_THREE_FILE,
     LEVEL_FOUR_FILE, LEVEL_FIVE_FILE, LEVEL_SIX_FILE, LEVEL_SEVEN_FILE, LEVEL_EIGHT_FILE,
-    LEVEL_NINE_FILE, LEVEL_TEN_FILE, LEVEL_ELEVEN_FILE};
+    LEVEL_NINE_FILE, LEVEL_TEN_FILE, LEVEL_ELEVEN_FILE, LEVEL_TWELVE_FILE, LEVEL_THIRTEEN_FILE,
+    LEVEL_FOURTEEN_FILE, LEVEL_FIFTEEN_FILE};
 const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEVEL_TWO_KEY, LEVEL_THREE_KEY,
     LEVEL_FOUR_KEY, LEVEL_FIVE_KEY, LEVEL_SIX_KEY, LEVEL_SEVEN_KEY, LEVEL_EIGHT_KEY,
-    LEVEL_NINE_KEY,LEVEL_TEN_KEY, LEVEL_ELEVEN_KEY};
+    LEVEL_NINE_KEY,LEVEL_TEN_KEY, LEVEL_ELEVEN_KEY, LEVEL_TWELVE_KEY, LEVEL_THIRTEEN_KEY,
+    LEVEL_FOURTEEN_KEY, LEVEL_FIFTEEN_KEY};
 
 /** Level Select Z indexes */
 #define LEVEL_SELECT_BACKGROUND_Z   1
@@ -47,8 +49,7 @@ const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEV
 #define BUTTON_HEIGHT_MARGIN        0.3f //As a percentage of button width, distributed to both sides
 #define BUTTON_FONT_SIZE            38
 
-
-//using namespace std;
+#define LEVELS_PER_PAGE             13
 
 
 #pragma mark -
@@ -66,7 +67,21 @@ _debugnode(nullptr),
 _backgroundNode(nullptr),
 _world(nullptr),
 _levelSelected(NO_LEVEL_SELECTED),
-_debug(false){}
+_debug(false),
+_currentPage(0){}
+
+/** 
+ * Returns the maximum level page - the maximum number of pages needed to
+ * show all of the levels 
+ */
+int LevelSelectController::getMaxPage() {
+    return NUM_LEVELS / LEVELS_PER_PAGE;
+}
+
+/** Return the page that button i goes on */
+int LevelSelectController::getPage(int buttonIndex) {
+    return buttonIndex / LEVELS_PER_PAGE;
+}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -98,12 +113,13 @@ const string getScoreTexture(int score) {
             return LEVEL_SELECT_SCORE_FILEPATH_3;
         case 4:
             return LEVEL_SELECT_SCORE_FILEPATH_4;
+        default:
+            CC_ASSERT(false);
+            return "";
     }
 }
 
-Button* LevelSelectController::initButton(Size dimen, int i) {
-    float cscale = Director::getInstance()->getContentScaleFactor();
-    
+Button* LevelSelectController::initButton(int i) {
     Button* button = Button::create();
     button->loadTextureNormal(LEVEL_SELECT_BUTTON_OFF_FILEPATH);
     button->loadTexturePressed(LEVEL_SELECT_BUTTON_ON_FILEPATH);
@@ -111,23 +127,6 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     
     initButtonTextOps(button);
     
-    float row = i / BUTTONS_PER_ROW_TOP;
-    float col;
-    if (row == 0) {
-        col = i % BUTTONS_PER_ROW_TOP;
-    } else if (row == 1) {
-        col = (i - BUTTONS_PER_ROW_TOP) % BUTTONS_PER_ROW_MIDDLE;
-    } else {
-        col = ((i - BUTTONS_PER_ROW_TOP - BUTTONS_PER_ROW_MIDDLE) % BUTTONS_PER_ROW_BOTTOM) + 1;
-    }
-    
-    row += 0.5f;
-    col += 0.6f;
-    
-    int w = button->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN) * cscale;
-    int h = button->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN) * cscale;
-    
-    button->setPosition(Vec2(w * col ,dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
     button->setTag(i);
     
     button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
@@ -145,11 +144,35 @@ Button* LevelSelectController::initButton(Size dimen, int i) {
     return button;
 }
 
+void LevelSelectController::fixPosition(Button *b, Node* score, int index) {
+    float cscale = Director::getInstance()->getContentScaleFactor();
+    int difPage = getPage(index) - _currentPage;
+    index = index % LEVELS_PER_PAGE;
+    
+    float row = index / BUTTONS_PER_ROW_TOP;
+    float col = index % BUTTONS_PER_ROW_TOP;
+    if (row == 0) {
+        col = index % BUTTONS_PER_ROW_TOP;
+    } else if (row == 1) {
+        col = (index - BUTTONS_PER_ROW_TOP) % BUTTONS_PER_ROW_MIDDLE;
+    } else {
+        col = ((index - BUTTONS_PER_ROW_TOP - BUTTONS_PER_ROW_MIDDLE) % BUTTONS_PER_ROW_BOTTOM) + 1;
+    }
+    
+    row += 0.5f;
+    col += 0.6f;
+    
+    int w = b->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN) * cscale;
+    int h = b->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN) * cscale;
+    
+    b->setPosition(Vec2(_dimen.width * difPage + w * col,_dimen.height - (h * row + LEVEL_SELECT_TOP_MARGIN)));
+    score->setPosition(b->getPosition().x, b->getPosition().y + SCORE_V_OFFSET);
+}
+
 PolygonNode* LevelSelectController::initScore(Button* button, int i) {
     _scores[i] = UserDefault::getInstance()->getIntegerForKey(LevelSelectController::LEVEL_KEYS[i].c_str());
     PolygonNode* node = PolygonNode::createWithFile(getScoreTexture(_scores[i]));
     node->setTexture(getScoreTexture(_scores[i]));
-    node->setPosition(button->getPosition().x, button->getPosition().y + SCORE_V_OFFSET);
     node->setScale(Director::getInstance()->getContentScaleFactor() * SCORE_SCALE);
     
     node->retain();
@@ -209,8 +232,9 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
     _levelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
     //Lay out the buttons and scores
     for(int i = 0; i < NUM_LEVELS; i++) {
-        _buttons[i] = initButton(_dimen, i);
+        _buttons[i] = initButton(i);
         _scoreNodes[i] = initScore(_buttons[i], i);
+        fixPosition(_buttons[i], _scoreNodes[i], i);
         _rootnode->addChild(_scoreNodes[i], LEVEL_SELECT_BUTTON_Z);
         _rootnode->addChild(_buttons[i], LEVEL_SELECT_BUTTON_Z);
     }
@@ -223,13 +247,7 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
 
 void LevelSelectController::update() {
     int newLevelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
-    if (newLevelsComplete != _levelsComplete) {
-        _levelsComplete++;
-        if (_levelsComplete < NUM_LEVELS) {
-            _buttons[_levelsComplete] = initButton(_dimen, _levelsComplete);
-            _rootnode->addChild(_buttons[_levelsComplete], LEVEL_SELECT_BUTTON_Z);
-        }
-    }
+    _levelsComplete = newLevelsComplete;
     // update scores
     for(int i = 0; i < NUM_LEVELS; i++) {
         int newScore = UserDefault::getInstance()->getIntegerForKey(LEVEL_KEYS[i].c_str());
@@ -240,6 +258,7 @@ void LevelSelectController::update() {
             _scoreNodes[i]->release();
             _scoreNodes[i] = initScore(_buttons[i], i);
             _rootnode->addChild(_scoreNodes[i], LEVEL_SELECT_BUTTON_Z);
+            fixPosition(_buttons[i], _scoreNodes[i], i);
         }
     }
 }
@@ -281,6 +300,30 @@ void LevelSelectController::dispose() {
 #pragma mark -
 #pragma mark Gameplay Handling
 
+bool LevelSelectController::pageUp() {
+    if (_currentPage == getMaxPage()) {
+        return false;
+    }
+    
+    _currentPage++;
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        fixPosition(_buttons[i], _scoreNodes[i], i);
+    }
+    return true;
+}
+
+bool LevelSelectController::pageDown() {
+    if (_currentPage == 0) {
+        return false;
+    }
+    
+    _currentPage--;
+    for(int i = 0; i < NUM_LEVELS; i++) {
+        fixPosition(_buttons[i], _scoreNodes[i], i);
+    }
+    return true;
+}
+
 /**
  * Executes the core gameplay loop of this world.
  *
@@ -294,6 +337,13 @@ void LevelSelectController::dispose() {
 void LevelSelectController::update(float dt) {
     
     _input->update(dt);
+    
+    if (_input->didDebug()) {
+        pageUp();
+    }
+    if (_input->didReset()) {
+        pageDown();
+    }
     
     if (_levelSelected != NO_LEVEL_SELECTED) {
         setTransitionStatus(TRANSITION_TO_GAME);
