@@ -222,9 +222,11 @@ void InputController::update(float dt) {
     // Directional controls
     _horizontal = 0.0f;
     if (_keyRight) {
+        std::cout << "key right\n";
         _horizontal += 1.0f;
     }
     if (_keyLeft) {
+        std::cout << "key left]\n";
         _horizontal -= 1.0f;
     }
   
@@ -349,11 +351,7 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                 if (_ltouch.touchid == -1) {
                     _ltouch.position = pos;
                     _ltouch.touchid = t->getID();
-                    // Cannot do both.
-                    // only move if one finger down
-                    if (oneFingerDown()) {
-                        _keyLeft = _rtouch.touchid == -1;
-                    }
+                    _keyLeft = 1;
                 }
                 break;
             case Zone::RIGHT:
@@ -362,9 +360,7 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                 if (_rtouch.touchid == -1) {
                     _rtouch.position = pos;
                     _rtouch.touchid = t->getID();
-                    if (oneFingerDown()) {
-                        _keyRight = _ltouch.touchid == -1;
-                    }
+                    _keyRight = 1;
                 }
                 break;
             default:
