@@ -339,28 +339,9 @@ int InputController::checkSwipe(const Vec2& start, const Vec2& stop, timestamp_t
 bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t current) {
     for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
         Touch* t = *i;
-        if (_id1 != -1) {
-            // we already have a finger down, potential gesture
-            _touch2 = t->getLocation();
-            if (_touch2 > _touch1) {
-                _id2 = t->getID();
-                _time2 = current_time();
-            } else {
-                Vec2 temp = _touch1;
-                _touch1 = _touch2;
-                _touch2 = temp;
-                _id2 = _id1;
-                _id1 = t->getID();
-                _time1 = current_time();
-            }
-            _previousDelta = _touch1.distance(_touch2);
-            break;
-        }
-        _touch1 = t->getLocation();
-        _id1 = t->getID();
-        _time1 = current_time();
         Vec2 pos = t->getLocation();
         Zone zone = getZone(pos);
+        // handle side to side movement first regardless of potential gesture
         switch (zone) {
             case Zone::LEFT:
                 CCLOG("Zone left");
@@ -386,6 +367,30 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                     }
                 }
                 break;
+            default:
+                break;
+        }
+        if (_id1 != -1) {
+            // we already have a finger down, potential gesture
+            _touch2 = t->getLocation();
+            if (_touch2 > _touch1) {
+                _id2 = t->getID();
+                _time2 = current_time();
+            } else {
+                Vec2 temp = _touch1;
+                _touch1 = _touch2;
+                _touch2 = temp;
+                _id2 = _id1;
+                _id1 = t->getID();
+                _time1 = current_time();
+            }
+            _previousDelta = _touch1.distance(_touch2);
+            break;
+        }
+        _touch1 = t->getLocation();
+        _id1 = t->getID();
+        _time1 = current_time();
+        switch (zone) {
             case Zone::MAIN:
                 // Keep count of touches in Main zone.
                 if (_mtouch.touchid == -1) {
@@ -395,15 +400,12 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                 _mtouch.count++;
                 break;
             default:
-                CCASSERT(false, "Touch is out of bounds");
                 break;
         }
-        _swipetime = current;
     }
-    // tap should only be one finger.
-    if (touches.size() == 1) {
-        _dbtaptime = current;
-    }
+    // tap should only be one finger but we check if the tapped finger was part of a gesture
+    // later so we don't need to enforce one finger down.
+    _dbtaptime = current;
     return true;
 }
 
