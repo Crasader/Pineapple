@@ -704,8 +704,8 @@ void LevelModel::setRootNode(Node* node) {
     // Create, but transfer ownership to root
     _worldnode = Node::create();
     _debugnode = Node::create();
-    _rootnode->addChild(_worldnode,2);
-    _rootnode->addChild(_debugnode,3);
+    _rootnode->addChild(_worldnode,WORLD_Z_INDEX);
+    _rootnode->addChild(_debugnode,DEBUG_Z_INDEX);
     
     // Add the individual elements
     PolygonNode* poly;

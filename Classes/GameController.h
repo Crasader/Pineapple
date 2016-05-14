@@ -61,6 +61,8 @@ protected:
     Node* _worldnode;
     /** Reference to the debug root of the scene graph */
     Node* _debugnode;
+    /** Reference to the background node */
+    Node* _backgroundnode;
     
     /** Visual representation of left and right movement buttons, buttons don't have any function
      *  Just used to easily change between two textures */

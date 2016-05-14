@@ -22,6 +22,11 @@
 #include <cornell.h>
 #include <vector>
 
+
+/** Z indices in root */
+#define WORLD_Z_INDEX           4
+#define DEBUG_Z_INDEX           5
+
 /** 
  *          Z index table:
  * /------------------------------------\

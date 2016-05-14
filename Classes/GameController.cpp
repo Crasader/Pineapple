@@ -32,15 +32,17 @@
 using namespace cocos2d;
 //using namespace std;
 
-#define SPLAT_Z             5
-#define TUTORIAL_SPLASH_Z   6
-#define MOVEMENT_VIEW_Z     7
+#define BACKGROUND_Z        2
+#define TUTORIAL_SPLASH_Z   3
 
-//HUD - 8
-//PAUSE - 9
+#define SPLAT_Z             6
+#define MOVEMENT_VIEW_Z     8
 
-#define WIN_SPLASH_Z        10
-#define LOSE_SPLASH_Z       11
+//HUD - 9
+//PAUSE - 10
+
+#define WIN_SPLASH_Z        11
+#define LOSE_SPLASH_Z       12
 #define GOAL_DOOR_Z         38
 
 //Min levels for functionality
@@ -63,6 +65,7 @@ using namespace cocos2d;
 GameController::GameController() :
 _worldnode(nullptr),
 _debugnode(nullptr),
+_backgroundnode(nullptr),
 _splatCycle(nullptr),
 _fridgeDoor(nullptr),
 _world(nullptr),
@@ -143,6 +146,8 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     // Create the scene graph
     _worldnode = _level->getWorldNode();
     _debugnode = _level->getDebugNode();
+    _backgroundnode = Node::create();
+    _backgroundnode->setContentSize(root->getContentSize());
     
     _splatCycle = AnimationNode::create(_assets->get<Texture2D>(SPLAT_TEXTURE_1), 1, 14, 14);
     _splatCycle->setFrame(0);
@@ -222,7 +227,10 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _tutorialroot->setPositionX(0.0f);
-    _background = BackgroundView::createAndAddTo(_rootnode, _worldnode, _assets);
+    _backgroundnode->setPositionX(0.0f);
+    _background = BackgroundView::createAndAddTo(_rootnode, _backgroundnode, _assets);
+    
+    root->addChild(_backgroundnode, BACKGROUND_Z);
     
     // add left and right movement textures
     _moveLeftView = Button::create();
@@ -317,6 +325,7 @@ void GameController::dispose() {
     
     _worldnode = nullptr;
     _background = nullptr;
+    _backgroundnode = nullptr;
     PauseController::release();
     _debugnode = nullptr;
     
@@ -450,7 +459,8 @@ void GameController::onReset() {
     _worldnode->setPositionX(0.0f);
     _debugnode->setPositionX(0.0f);
     _tutorialroot->setPositionX(0.0f);
-    _background->reset(_worldnode);
+    _backgroundnode->setPositionX(0.0f);
+    _background->reset(_backgroundnode);
     
     _isReloading = false;
     
@@ -804,6 +814,7 @@ void GameController::handleScrolling() {
     _worldnode->setPositionX(_worldnode->getPositionX() - (_level->getDrawScale().x*offset));
     _debugnode->setPositionX(_debugnode->getPositionX() - (_level->getDrawScale().x*offset));
     _tutorialroot->setPositionX(_tutorialroot->getPositionX() - (_level->getDrawScale().x * offset));
+    _backgroundnode->setPositionX(_backgroundnode->getPositionX() - (_level->getDrawScale().x * offset));
     
     // Do parallax scrolling of the background
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
