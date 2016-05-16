@@ -10,9 +10,10 @@
 #define WALL_VERTS      8
 #define POS_COORDS      2
 
+#define GOAL_TILE_OFFSET    Vec2(-3,5)
+
 /** Layer groups used in Tiled Maps */
 #define WALL_OBJECT_GROUP               "Walls"
-#define GOAL_OBJECT_GROUP               "Goal"
 #define JELLO_OBJECT_GROUP              "Jello"
 #define SPIKES_OBJECT_GROUP             "Spikes"
 #define KIDS_OBJECT_GROUP               "Kids"
@@ -225,8 +226,6 @@ bool LevelModel::load() {
                         position[7] = y-h;
                     }
                     addWall(position);
-                } else if (layerName == GOAL_OBJECT_GROUP) {
-                    addGoal(position);
                 } else if (layerName == JELLO_OBJECT_GROUP) {
                     addJello(position, x, y);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
@@ -308,6 +307,11 @@ bool LevelModel::load() {
         
         //Start map properties
         reader.startObject(OBJECT_PROPERTIES_PROPERTY);
+        
+        //GOAL
+        position[0] = _length + GOAL_TILE_OFFSET.x;
+        position[1] = GOAL_TILE_OFFSET.y;
+        addGoal(position);
         
         //BLENDER
         position[0] = cocos2d::stod(reader.getString(BLENDER_START_X_PROPERTY));

@@ -11,7 +11,7 @@
 #pragma mark Physics Constants
 
 #define GOAL_SCALE		1.5f
-#define GOAL_H_SHRINK   0.79f
+#define GOAL_H_SHRINK   0.6f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -196,6 +196,7 @@ void GoalModel::resetSceneNode() {
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * GOAL_SCALE);
 		pnode->setFrame(0);
+        pnode->setAnchorPoint(Vec2(0.65,0.5));
 
 		setDimension(pnode->getContentSize().width * GOAL_SCALE * GOAL_H_SHRINK / _drawScale.x,
                      pnode->getContentSize().height * GOAL_SCALE / _drawScale.y);	

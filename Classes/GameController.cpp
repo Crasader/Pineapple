@@ -74,7 +74,8 @@ _background(nullptr),
 _debug(false),
 _loseViewVisible(false),
 _winViewVisible(false),
-_blenderSound(nullptr){}
+_blenderSound(nullptr),
+_autoFFOn(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -159,8 +160,10 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _rootSize = root->getContentSize();
     
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
-    _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
-    _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+    _fridgeDoor->setScale(1.5, 1.5); // GOAL_SCALE
+    
+    float fridgeX = _level->getGoal()->getPosition().x - 0.22 * _level->getGoal()->getWidth();
+    _fridgeDoor->setPosition(_level->getDrawScale().x*fridgeX,
                              _level->getDrawScale().y*_level->getGoal()->getPosition().y);
     _fridgeDoor->setVisible(true);
     _fridgeDoor->retain();
@@ -271,6 +274,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     setComplete(false);
     setDebug(false);
     setFailure(false);
+    setFF(false);
     _isInitted = true;
     _isReloading = false;
     _loseViewVisible = false;
@@ -375,6 +379,7 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
+    setFF(false);
     
     if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
         SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
@@ -478,7 +483,8 @@ void GameController::onReset() {
     
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
     _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
-    _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+    float fridgeX = _level->getGoal()->getPosition().x - 0.22 * _level->getGoal()->getWidth();
+    _fridgeDoor->setPosition(_level->getDrawScale().x*fridgeX,
                              _level->getDrawScale().y*_level->getGoal()->getPosition().y);
     _fridgeDoor->setVisible(true);
     _fridgeDoor->retain();
@@ -543,6 +549,13 @@ void GameController::setFailure(bool value){
         }
         _loseViewVisible = false;
         HUDController::setEnabled(true);
+    }
+}
+
+void GameController::setFF(bool value) {
+    _autoFFOn = value && !_complete;
+    if (HUDController::isFastForwarding() != _autoFFOn) {
+        HUDController::setFastForwarding(_autoFFOn);
     }
 }
 
@@ -720,7 +733,12 @@ void GameController::update(float dt) {
         
         // Process the movement
         if (_level->getPineapple() != nullptr) {
-            if (!_level->getPineapple()->getIsBlended()) {
+            if (_level->getPineapple()->hasReachedGoal()) {
+                if (! _autoFFOn) {
+                    setFF(true);
+                }
+                _level->getPineapple()->setVX(0);
+            } else if (!_level->getPineapple()->getIsBlended()) {
                 _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());                
                 _level->getPineapple()->setJumping(_input->didJump() && _levelIndex >= MIN_JUMP_LEVEL);
                 float cscale = Director::getInstance()->getContentScaleFactor();

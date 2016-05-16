@@ -31,9 +31,6 @@
   <object id="122" gid="11" x="2048" y="640" width="64" height="64"/>
   <object id="123" gid="11" x="2240" y="640" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="4544" y="640" width="64" height="64"/>
- </objectgroup>
  <objectgroup name="Cups">
   <object id="119" gid="21" x="1216" y="576" width="64" height="64"/>
   <object id="128" gid="21" x="1216" y="512" width="64" height="64"/>
