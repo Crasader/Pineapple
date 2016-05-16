@@ -159,8 +159,10 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _rootSize = root->getContentSize();
     
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
-    _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
-    _fridgeDoor->setPosition(_level->getDrawScale().x*_level->getGoal()->getPosition().x,
+    _fridgeDoor->setScale(1.5, 1.5); // GOAL_SCALE
+    
+    float fridgeX = _level->getGoal()->getPosition().x - 0.22 * _level->getGoal()->getWidth();
+    _fridgeDoor->setPosition(_level->getDrawScale().x*fridgeX,
                              _level->getDrawScale().y*_level->getGoal()->getPosition().y);
     _fridgeDoor->setVisible(true);
     _fridgeDoor->retain();

@@ -35,9 +35,6 @@
   <object id="96" gid="11" x="1920" y="640" width="64" height="64"/>
   <object id="114" gid="11" x="3072" y="640" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="3904" y="640" width="64" height="64"/>
- </objectgroup>
  <objectgroup name="Cups">
   <object id="115" gid="21" x="3200" y="640" width="64" height="64"/>
   <object id="117" gid="21" x="3200" y="576" width="64" height="64"/>
@@ -61,56 +58,5 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Tutorial">
-  <object id="126" gid="22" x="576" y="64" width="64" height="64">
-   <properties>
-    <property name="id" value="0"/>
-   </properties>
-  </object>
-  <object id="127" gid="22" x="576" y="128" width="64" height="64">
-   <properties>
-    <property name="id" value="1"/>
-   </properties>
-  </object>
-  <object id="128" gid="22" x="576" y="192" width="64" height="64">
-   <properties>
-    <property name="id" value="2"/>
-   </properties>
-  </object>
-  <object id="129" gid="22" x="576" y="256" width="64" height="64">
-   <properties>
-    <property name="id" value="3"/>
-   </properties>
-  </object>
-  <object id="130" gid="22" x="576" y="320" width="64" height="64">
-   <properties>
-    <property name="id" value="4"/>
-   </properties>
-  </object>
-  <object id="131" gid="22" x="576" y="384" width="64" height="64">
-   <properties>
-    <property name="id" value="5"/>
-   </properties>
-  </object>
-  <object id="132" gid="22" x="576" y="448" width="64" height="64">
-   <properties>
-    <property name="id" value="6"/>
-   </properties>
-  </object>
-  <object id="136" gid="22" x="576" y="512" width="64" height="64">
-   <properties>
-    <property name="id" value="7"/>
-   </properties>
-  </object>
-  <object id="137" gid="22" x="576" y="640" width="64" height="64">
-   <properties>
-    <property name="id" value="9"/>
-   </properties>
-  </object>
-  <object id="138" gid="22" x="576" y="576" width="64" height="64">
-   <properties>
-    <property name="id" value="8"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup name="Tutorial"/>
 </map>
