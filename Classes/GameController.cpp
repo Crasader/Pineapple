@@ -74,7 +74,8 @@ _background(nullptr),
 _debug(false),
 _loseViewVisible(false),
 _winViewVisible(false),
-_blenderSound(nullptr){}
+_blenderSound(nullptr),
+_autoFFOn(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -273,6 +274,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     setComplete(false);
     setDebug(false);
     setFailure(false);
+    setFF(false);
     _isInitted = true;
     _isReloading = false;
     _loseViewVisible = false;
@@ -377,6 +379,7 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
+    setFF(false);
     
     if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
         SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
@@ -544,6 +547,13 @@ void GameController::setFailure(bool value){
         }
         _loseViewVisible = false;
         HUDController::setEnabled(true);
+    }
+}
+
+void GameController::setFF(bool value) {
+    _autoFFOn = value && !_complete;
+    if (HUDController::isFastForwarding() != _autoFFOn) {
+        HUDController::setFastForwarding(_autoFFOn);
     }
 }
 
@@ -721,7 +731,10 @@ void GameController::update(float dt) {
         
         // Process the movement
         if (_level->getPineapple() != nullptr) {
-            if (!_level->getPineapple()->getIsBlended()) {
+            if (_level->getPineapple()->hasReachedGoal()) {
+                setFF(true);
+                _level->getPineapple()->setVX(0);
+            } else if (!_level->getPineapple()->getIsBlended()) {
                 _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());                
                 _level->getPineapple()->setJumping(_input->didJump() && _levelIndex >= MIN_JUMP_LEVEL);
                 float cscale = Director::getInstance()->getContentScaleFactor();

@@ -131,6 +131,8 @@ protected:
     float _levelOffset;
     /** True if this is reloading */
     bool _isReloading;
+    /** True once the autoFF feature has been applied */
+    bool _autoFFOn;
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
@@ -276,6 +278,13 @@ public:
      * @param value whether the level is failed.
      */
     void setFailure(bool value);
+    
+    /** Returns true if the autoFF feature is on */
+    bool isFF() const { return _autoFFOn; }
+    
+    /** Turns the auto fast forward feature on or off.
+     * Used when will gets to the fridge */
+    void setFF(bool value);
     
     float getBlenderVolScale();
     

@@ -73,6 +73,10 @@ public:
         HUD_CONTROLLER->_fastForwardButton->setEnabled(enabled);
     }
     
+    static void setFastForwarding(bool status) {
+        HUD_CONTROLLER->_fastForwardButton->setSelected(status);
+    }
+    
     static bool isFastForwarding() {
         return HUD_CONTROLLER != nullptr && HUD_CONTROLLER->_fastForwardButton->isSelected();
     }
