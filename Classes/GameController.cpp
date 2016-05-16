@@ -25,7 +25,6 @@
 #include "Const.h"
 #include "Texture.h"
 #include "Levels.h"
-#include "Sounds.h"
 #include <cmath>
 
 
@@ -74,7 +73,8 @@ _collision(nullptr),
 _background(nullptr),
 _debug(false),
 _loseViewVisible(false),
-_winViewVisible(false){}
+_winViewVisible(false),
+_blenderSound(nullptr){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -264,6 +264,9 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
         _collision->endContact(contact);
     };
     
+    _blenderSound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+    SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
+    
     _active = true;
     setComplete(false);
     setDebug(false);
@@ -353,6 +356,11 @@ void GameController::dispose() {
         _rootnode->removeAllChildren();
         _rootnode->release();
     }
+    
+    if (_blenderSound != nullptr) {
+        _blenderSound = nullptr;
+    }
+    
     _rootnode = nullptr;
 }
 
@@ -367,6 +375,10 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
+    
+    if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
+        SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
+    }
     
     for(auto it = _tutorialviews.begin(); it != _tutorialviews.end(); ++it) {
         (*it)->clearFromRoot();
@@ -471,6 +483,10 @@ void GameController::onReset() {
     _fridgeDoor->setVisible(true);
     _fridgeDoor->retain();
     _worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
+    
+    if (! SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
+        SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
+    }
 }
 
 /**
@@ -531,10 +547,12 @@ void GameController::setFailure(bool value){
 }
 
 float GameController::getBlenderVolScale() {
-		float distBP = _level->getBlenderPineappleDistance();
-		float scale = (BLENDER_VOL_OFF_DISTANCE - distBP) / (BLENDER_VOL_OFF_DISTANCE - NORMAL_BLENDER_DISTANCE);
-		scale = pow(scale, 1.3);
-		return scale > MAX_VOL_SCALE ? MAX_VOL_SCALE : scale;
+    float distBP = _level->getBlenderPineappleDistance();
+    float distBL = BLENDER_VOL_OFF_DISTANCE - (_level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2 - _levelOffset);
+    float dist = MIN(distBP, distBL);
+    float scale = MAX(0,(BLENDER_VOL_OFF_DISTANCE - dist) / (BLENDER_VOL_OFF_DISTANCE - NORMAL_BLENDER_DISTANCE));
+    scale = pow(scale,1.3);
+    return MIN(MAX_VOL_SCALE*EFFECT_VOLUME,scale);
 }
 
 void handleAvatarGrowth(int levelIndex, float cscale, InputController* _input, PineappleModel* _avatar) {
@@ -551,6 +569,8 @@ void handleAvatarGrowth(int levelIndex, float cscale, InputController* _input, P
         _avatar->getSceneNode()->setScale(cscale * PINEAPPLE_SCALE * scale);
     }
 }
+
+
 
 /**
  * Executes the core gameplay loop of this world.
@@ -820,6 +840,9 @@ void GameController::handleScrolling() {
     
     // Do parallax scrolling of the background
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
+    
+    //Update blender volume
+    SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, getBlenderVolScale() * EFFECT_VOLUME);
 }
 
 /**

@@ -29,6 +29,7 @@
 #include "LoseView.h"
 #include "WinView.h"
 #include "TutorialView.h"
+#include "Sounds.h"
 
 // We need a lot of forward references to the classes used by this controller
 // These forward declarations are in cocos2d namespace
@@ -133,7 +134,9 @@ protected:
     
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
-
+    
+    /** A reference to the blender sound */
+    Sound* _blenderSound;
     
 #pragma mark Internal Object Management
     /**
@@ -350,6 +353,14 @@ public:
 	* Activate the splat effect when shit hits the fan
 	*/
 	void activateSplat(Texture2D* image);
+    
+    /** Overridden version of setTransitionStatus */
+    void setTransitionStatus(int status) override {
+        AbsScreenController::setTransitionStatus(status);
+        if (status == TRANSITION_TO_EXIT || status == TRANSITION_TO_LEVEL_SELECT || status == TRANSITION_TO_HOME) {
+            SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
+        }
+    }
 
 };
 

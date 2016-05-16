@@ -69,7 +69,7 @@ public:
     
     int getTransitionStatus() { return _transitionStatus; }
     
-    void setTransitionStatus(int status) {_transitionStatus = status; }
+    virtual void setTransitionStatus(int status) {_transitionStatus = status; }
     
     bool isInitted() { return _isInitted; }
     
