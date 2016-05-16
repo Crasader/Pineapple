@@ -499,7 +499,8 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
+				SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
         _level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
         _winview->position();
@@ -530,7 +531,8 @@ void GameController::setComplete(bool value) {
 void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
-        //SoundEngine::getInstance()->playMusic(source,false,MUSIC_VOLUME);
+				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(LOSS_SOUND);
+				SoundEngine::getInstance()->playEffect(LOSS_SOUND, source, false, EFFECT_VOLUME);
         _rootnode->addChild(_loseroot, LOSE_SPLASH_Z);
         _loseview->position();
         _loseViewVisible = true;

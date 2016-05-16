@@ -16,10 +16,17 @@
 // Key for jello boing sound in asset manager
 #define JELLO_BOING							"boinggggggg"
 
+// Key for jello squish sound in asset manager
+#define JELLO_SQUISH_SOUND			"squishhhhhh"
+
 // Key for cup crushing sound in asset manager
 #define CUP_CRUSH_SOUND					"kkkkssshhhh"
 
 // Key for Blender constant vrring sound in asset manager
 #define BLENDER_SOUND						"vrrrrrrrrrr"
+
+// Keys for victory and loss sounds
+#define LOSS_SOUND							"boooohooooo"
+#define VICTORY_SOUND						"VICTORYYYYY"
 
 #endif // !__SOUNDS_H__ 

@@ -28,17 +28,17 @@
  <objectgroup name="Switches"/>
  <objectgroup name="Bridges"/>
  <objectgroup name="Tutorial">
-  <object id="126" gid="22" x="448" y="64" width="64" height="64">
+  <object id="126" gid="22" x="512" y="448" width="64" height="64">
    <properties>
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="136" gid="22" x="1216" y="64" width="64" height="64">
+  <object id="136" gid="22" x="1536" y="448" width="64" height="64">
    <properties>
     <property name="id" value="7"/>
    </properties>
   </object>
-  <object id="138" gid="22" x="2112" y="64" width="64" height="64">
+  <object id="138" gid="22" x="2304" y="448" width="64" height="64">
    <properties>
     <property name="id" value="8"/>
    </properties>
