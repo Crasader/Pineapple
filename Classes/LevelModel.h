@@ -229,10 +229,10 @@ public:
     
     WorldController* getWorld() { return _world; }
 
-		float getBlenderPineappleDistance() {
-			if (_pineapple == nullptr) { return -1.0f; }
-			return _pineapple->getPosition().distance(_blender->getPosition());
-		}
+    float getBlenderPineappleDistance() {
+        if (_pineapple == nullptr) { return -1.0f; }
+        return _pineapple->getPosition().distance(_blender->getPosition());
+    }
     
     vector<TutorialView*> getTutorialViews() { return _tutorialViews; }
     
