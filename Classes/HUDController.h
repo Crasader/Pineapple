@@ -75,6 +75,11 @@ public:
     
     static void setFastForwarding(bool status) {
         HUD_CONTROLLER->_fastForwardButton->setSelected(status);
+        if (HUD_CONTROLLER->_fastForwardButton->isSelected()) {
+            HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/play.png");
+        } else {
+            HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/ff_arrows.png");
+        }
     }
     
     static bool isFastForwarding() {

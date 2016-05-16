@@ -732,7 +732,9 @@ void GameController::update(float dt) {
         // Process the movement
         if (_level->getPineapple() != nullptr) {
             if (_level->getPineapple()->hasReachedGoal()) {
-                setFF(true);
+                if (! _autoFFOn) {
+                    setFF(true);
+                }
                 _level->getPineapple()->setVX(0);
             } else if (!_level->getPineapple()->getIsBlended()) {
                 _level->getPineapple()->setMovement(_input->getHorizontal()*_level->getPineapple()->getForce());                
