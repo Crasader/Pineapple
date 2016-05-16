@@ -145,9 +145,12 @@ void loadSounds(SceneManager* assets) {
     assets->loadAsync<Sound>(WILL_DEATH_SOUND, "sounds/will_death.mp3");
     assets->loadAsync<Sound>(SPLAT_SOUND, "sounds/splat.mp3");
     assets->loadAsync<Sound>(JELLO_BOING, "sounds/boing.mp3");
+		assets->loadAsync<Sound>(JELLO_SQUISH_SOUND, "sounds/squish.mp3");
     assets->loadAsync<Sound>(CUP_CRUSH_SOUND, "sounds/cup_crush.mp3");
     assets->loadAsync<Sound>(BLENDER_SOUND, "sounds/blender_sound.mp3");
     assets->loadAsync<Sound>(LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND, "sounds/levelSelectBackground.mp3");
+		assets->loadAsync<Sound>(VICTORY_SOUND, "sounds/victory.mp3");
+		assets->loadAsync<Sound>(LOSS_SOUND, "sounds/loss.mp3");
 }
 
 void loadLevels(SceneManager* assets) {

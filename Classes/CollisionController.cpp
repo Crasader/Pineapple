@@ -31,13 +31,21 @@ void CollisionController::setLevel(LevelModel* level) {
 #pragma mark -
 #pragma mark Collision Sound Playing
 
-void playSoundEffect(char* key, float volume) {
+void playSoundEffect(char* key, float volume, bool force) {
 	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
-	SoundEngine::getInstance()->playEffect(key, source, false, volume);
+	SoundEngine::getInstance()->playEffect(key, source, false, volume, force);
+}
+
+void playSoundEffect(char* key, float volume) {
+	playSoundEffect(key, volume, false);
+}
+
+void playSoundEffect(char* key, bool force) {
+	playSoundEffect(key, EFFECT_VOLUME, force);
 }
 
 void playSoundEffect(char* key) {
-	playSoundEffect(key, EFFECT_VOLUME);
+	playSoundEffect(key, false);
 }
 
 #pragma mark -
@@ -98,7 +106,7 @@ void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello)
 		kid->setVY(10);
 		kid->setVX(KID_WALKSPEED + 4);
 		kid->setCollidingWithJello(true);
-		playSoundEffect(JELLO_BOING);
+		playSoundEffect(JELLO_BOING, true);
 	}
 }
 
@@ -142,7 +150,7 @@ void CollisionController::handleSpikeCollision(KidModel* kid) {
 }
 
 void CollisionController::handleCupCollision(PineappleModel* will, CrushableModel* cup) {
-	playSoundEffect(CUP_CRUSH_SOUND);
+	playSoundEffect(CUP_CRUSH_SOUND, true);
 	will->setVY(4);
 	cup->setSmashing(true);
 	/*if (isBelowChar(cup, will)) {
@@ -210,6 +218,7 @@ void CollisionController::beginContact(b2Contact* contact) {
                 will->setVY(0);
 				JelloModel* jello = bd1->getCollisionClass() == JELLO_C ? (JelloModel*)bd1 : (JelloModel*)bd2;
 				jello->setSmushing(true);
+				playSoundEffect(JELLO_SQUISH_SOUND, true);
             }
         }
         // with cup
