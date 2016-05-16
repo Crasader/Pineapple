@@ -289,7 +289,12 @@ bool LevelSelectController::init(Node* root, InputController* input, const Rect&
 
 void LevelSelectController::update() {
     int newLevelsComplete = UserDefault::getInstance()->getIntegerForKey(LEVELS_COMPLETED_KEY);
-    _levelsComplete = newLevelsComplete;
+    if (newLevelsComplete != _levelsComplete) {
+        for (int i = _levelsComplete + 1; i <= newLevelsComplete && i < NUM_LEVELS; i++) {
+            _buttons[i]->setEnabled(true);
+        }
+        _levelsComplete = newLevelsComplete;
+    }
     // update scores
     for(int i = 0; i < NUM_LEVELS; i++) {
         int newScore = UserDefault::getInstance()->getIntegerForKey(LEVEL_KEYS[i].c_str());
