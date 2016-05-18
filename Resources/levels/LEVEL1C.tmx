@@ -34,8 +34,8 @@
  <objectgroup name="Jello">
   <object id="96" gid="11" x="1152" y="640" width="64" height="64"/>
   <object id="135" gid="11" x="1408" y="512" width="64" height="64"/>
-  <object id="137" gid="11" x="2208" y="512" width="64" height="64"/>
-  <object id="140" gid="11" x="2592" y="512" width="64" height="64"/>
+  <object id="137" gid="11" x="2176" y="512" width="64" height="64"/>
+  <object id="140" gid="11" x="2560" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups">
   <object id="138" gid="21" x="2176" y="448" width="64" height="64"/>

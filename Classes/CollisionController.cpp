@@ -116,7 +116,6 @@ void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello)
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(WILL_DEATH_SOUND);
-	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, source, false, EFFECT_VOLUME);
 	will->setIsBlended(true);
     b2Filter b = will->getFilterData();
     b.maskBits = 0x0;
