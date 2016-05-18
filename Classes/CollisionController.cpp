@@ -57,20 +57,24 @@ void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstac
 }
 
 void CollisionController::playKidScream(KidModel* kid) {
-	char* key;
 	int i = kid->getIndex();
 	switch (i) {
-	case 0: key = PINEAPPLET1_DEATH_SOUND;
-		break;
-	case 1: key = PINEAPPLET2_DEATH_SOUND;
-		break;
-	case 2: key = PINEAPPLET3_DEATH_SOUND;
-		break;
-	case 3: key = PINEAPPLET4_DEATH_SOUND;
-		break;
-	default: key = "we gon crash if this happens, but it won't so it's chill.";
-	}
-	playSoundEffect(key);
+        case 0:
+            playSoundEffect(PINEAPPLET1_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        case 1:
+            playSoundEffect(PINEAPPLET2_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        case 2:
+            playSoundEffect(PINEAPPLET3_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        case 3:
+            playSoundEffect(PINEAPPLET4_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        default:
+            CC_ASSERT(false);
+            return;
+    }
 }
 
 /**
@@ -140,7 +144,6 @@ void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
 	_level->spikeAndKill(will);
-	playSoundEffect(WILL_DEATH_SOUND);
 	//_pSensorFixtures.clear();
 }
 

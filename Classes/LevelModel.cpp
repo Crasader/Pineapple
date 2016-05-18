@@ -227,6 +227,7 @@ bool LevelModel::load() {
                     }
                     addWall(position);
                 } else if (layerName == JELLO_OBJECT_GROUP) {
+                    position[0] += 0.5;
                     addJello(position, x, y);
                 } else if (layerName == SPIKES_OBJECT_GROUP) {
                     position[0] += 0.5;

@@ -55,10 +55,10 @@
 #define LEVEL_FIFTEEN_FILE "levels/export/LEVEL15.json"
 
 #define LEVEL_SIXTEEN_KEY "level_sixteen"
-#define LEVEL_SIXTEEN_FILE "levels/export/LEVEL1C.json"
+#define LEVEL_SIXTEEN_FILE "levels/export/LEVEL16.json"
 
 #define LEVEL_SEVENTEEN_KEY "level_seventeen"
-#define LEVEL_SEVENTEEN_FILE "levels/export/LEVEL15.json"
+#define LEVEL_SEVENTEEN_FILE "levels/export/LEVEL1C.json"
 
 #define LEVEL_EIGHTEEN_KEY "level_eighteen"
 #define LEVEL_EIGHTEEN_FILE "levels/export/LEVEL15.json"

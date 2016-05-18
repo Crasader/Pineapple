@@ -560,6 +560,8 @@ void GameController::setFF(bool value) {
 }
 
 float GameController::getBlenderVolScale() {
+    if (_level->getPineapple() == nullptr) return 0;
+    
     float distBP = _level->getBlenderPineappleDistance();
     float distBL = BLENDER_VOL_OFF_DISTANCE - (_level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2 - _levelOffset);
     float dist = MIN(distBP, distBL);
@@ -725,8 +727,7 @@ void GameController::update(float dt) {
                             key = "we gon crash if this happens, but it won't so it's chill.";
                             CC_ASSERT(false);
                     }
-//                    Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
-//                    SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
+                    _collision->playKidScream(_level->getKid(i));
                     _level->kill(_level->getKid(i));
                 }
             }

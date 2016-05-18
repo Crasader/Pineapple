@@ -8,7 +8,7 @@
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="1" name="wall" x="0" y="640" width="1088" height="128"/>
+  <object id="1" name="wall" x="0" y="640" width="1024" height="128"/>
   <object id="110" x="1728" y="512" width="320" height="64"/>
   <object id="112" name="wall" x="1536" y="640" width="1216" height="128"/>
   <object id="113" name="wall" x="1088" y="512" width="448" height="256"/>
@@ -28,7 +28,7 @@
   <object id="111" gid="12" x="1856" y="512" width="128" height="128"/>
  </objectgroup>
  <objectgroup name="Jello">
-  <object id="108" gid="11" x="960" y="640" width="64" height="64"/>
+  <object id="108" gid="11" x="896" y="640" width="64" height="64"/>
   <object id="109" gid="11" x="1600" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups">

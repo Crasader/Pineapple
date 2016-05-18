@@ -10,8 +10,8 @@
  <objectgroup name="Walls">
   <object id="1" name="wall" x="0" y="640" width="1024" height="128"/>
   <object id="57" x="1984" y="640" width="832" height="128"/>
-  <object id="129" x="1088" y="512" width="128" height="256"/>
-  <object id="130" x="1344" y="320" width="128" height="448"/>
+  <object id="129" x="1152" y="512" width="64" height="256"/>
+  <object id="130" x="1408" y="320" width="64" height="448"/>
   <object id="134" x="1600" y="128" width="128" height="64"/>
   <object id="135" x="1600" y="320" width="64" height="128"/>
   <object id="136" x="1472" y="704" width="256" height="64"/>
