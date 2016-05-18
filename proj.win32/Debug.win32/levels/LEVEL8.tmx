@@ -22,9 +22,6 @@
  </objectgroup>
  <objectgroup name="Spikes"/>
  <objectgroup name="Jello"/>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="2176" y="448" width="64" height="64"/>
- </objectgroup>
  <objectgroup name="Cups">
   <object id="182" gid="21" x="1536" y="640" width="64" height="64"/>
   <object id="203" gid="21" x="1536" y="512" width="64" height="64"/>

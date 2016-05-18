@@ -24,9 +24,6 @@
   <object id="209" gid="12" x="1280" y="448" width="128" height="128"/>
  </objectgroup>
  <objectgroup name="Jello"/>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="2176" y="448" width="64" height="64"/>
- </objectgroup>
  <objectgroup name="Cups"/>
  <objectgroup name="Switches">
   <object id="200" gid="41" x="1664" y="448" width="64" height="64">
