@@ -818,7 +818,22 @@ void GameController::update(float dt) {
         _background->update(dt * mult);
         
         // Turn the physics engine crank
-        _world->update(dt * mult);
+        _world->update(dt);
+        
+        while(mult > 1) {
+            
+            //Make sure kid arc stays the same even if ff is on
+            for(int i = 0; i < KID_COUNT; i++) {
+                if( _level->getKid(i) != nullptr && _level->getKid(i)->getIsBlended()) {
+                    _level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                    _level->getKid(i)->setFixedRotation(false);
+                    _level->getKid(i)->setAngularVelocity(6.0f);
+                }
+            }
+            
+            _world->update(dt);
+            mult--;
+        }
     }
     
     // Since items may be deleted, garbage collect
