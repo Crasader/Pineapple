@@ -381,6 +381,8 @@ void LevelModel::unload() {
                 _world->removeObstacle(_blender);
                 _worldnode->removeChild(_blender->getSceneNode());
                 _debugnode->removeChild(_blender->getDebugNode());
+                _worldnode->removeChild(_blender->getSensor());
+                _debugnode->removeChild(_blender->getSensor());
             }
             _blender->release();
             _blender = nullptr;

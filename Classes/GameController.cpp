@@ -704,6 +704,7 @@ void GameController::update(float dt) {
                     _level->getKid(i)->setAngularVelocity(6.0f);
                     if (_level->getKid(i)->getIsDead()) {
                         activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)));
+                        _collision->playKidScream(_level->getKid(i));
                         _level->kill(_level->getKid(i));
                         _level->getBlender()->setIsBlending(true);
                     }
@@ -724,8 +725,8 @@ void GameController::update(float dt) {
                             key = "we gon crash if this happens, but it won't so it's chill.";
                             CC_ASSERT(false);
                     }
-                    Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
-                    SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
+//                    Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
+//                    SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
                     _level->kill(_level->getKid(i));
                 }
             }

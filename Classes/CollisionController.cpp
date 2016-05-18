@@ -56,7 +56,7 @@ void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstac
     _pSensorFixtures.emplace(fix);
 }
 
-void playKidScream(KidModel* kid) {
+void CollisionController::playKidScream(KidModel* kid) {
 	char* key;
 	int i = kid->getIndex();
 	switch (i) {
@@ -115,15 +115,14 @@ void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, source, false, EFFECT_VOLUME);
 	will->setIsBlended(true);
     b2Filter b = will->getFilterData();
-    b.maskBits = BLENDER_MASK;
+    b.maskBits = 0x0;
     will->setFilterData(b);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
-	playKidScream(kid);
 	kid->setIsBlended(true);
     b2Filter b = kid->getFilterData();
-    b.maskBits = BLENDER_MASK;
+    b.maskBits = 0x0;
     kid->setFilterData(b);
 }
 
@@ -135,6 +134,7 @@ void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
 
 void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
 	_level->kill(kid);
+    playKidScream(kid);
 	playSoundEffect(SPLAT_SOUND);
 }
 
