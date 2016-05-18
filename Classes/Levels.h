@@ -37,10 +37,10 @@
 #define LEVEL_NINE_FILE "levels/export/LEVEL9_T.json"
 
 #define LEVEL_TEN_KEY "level_ten"
-#define LEVEL_TEN_FILE "levels/export/LEVEL14.json"
+#define LEVEL_TEN_FILE "levels/export/LEVEL10.json"
 
 #define LEVEL_ELEVEN_KEY "level_eleven"
-#define LEVEL_ELEVEN_FILE "levels/export/LEVEL15.json"
+#define LEVEL_ELEVEN_FILE "levels/export/LEVEL14.json"
 
 #define LEVEL_TWELVE_KEY "level_twelve"
 #define LEVEL_TWELVE_FILE "levels/export/LEVEL15.json"
