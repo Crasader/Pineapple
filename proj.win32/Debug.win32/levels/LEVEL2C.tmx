@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="64" tileheight="64" nextobjectid="113">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="56" height="12" tilewidth="64" tileheight="64" nextobjectid="129">
  <properties>
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
@@ -8,41 +8,37 @@
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="89" x="0" y="640" width="1024" height="128"/>
-  <object id="97" x="960" y="448" width="1216" height="64"/>
-  <object id="103" x="2240" y="704" width="128" height="64"/>
-  <object id="106" x="1920" y="576" width="128" height="64"/>
-  <object id="107" x="1728" y="704" width="128" height="64"/>
-  <object id="108" x="2432" y="448" width="768" height="320"/>
-  <object id="109" x="1344" y="704" width="256" height="64"/>
-  <object id="110" x="1472" y="576" width="128" height="64"/>
-  <object id="111" x="1024" y="640" width="128" height="64"/>
+  <object id="89" x="0" y="512" width="1024" height="256"/>
+  <object id="97" x="960" y="320" width="1280" height="64"/>
+  <object id="103" x="2240" y="640" width="128" height="64"/>
+  <object id="106" x="1802" y="512" width="128" height="64"/>
+  <object id="109" x="1375" y="640" width="192" height="64"/>
+  <object id="110" x="1497" y="384" width="64" height="192"/>
+  <object id="111" x="1024" y="512" width="128" height="64"/>
+  <object id="124" x="2944" y="576" width="640" height="192"/>
+  <object id="128" x="2432" y="320">
+   <polygon points="0,0 0,448 512,448 512,256 128,0"/>
+  </object>
  </objectgroup>
  <objectgroup name="Will">
-  <object id="10" name="will" gid="1" x="512" y="640" width="64" height="64"/>
+  <object id="10" name="will" gid="1" x="576" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Kids">
-  <object id="11" name="kid" gid="2" x="64" y="640" width="64" height="64"/>
-  <object id="27" name="kid" gid="2" x="192" y="640" width="64" height="64"/>
-  <object id="28" name="kid" gid="2" x="320" y="640" width="64" height="64"/>
-  <object id="29" name="kid" gid="2" x="448" y="640" width="64" height="64"/>
+  <object id="11" name="kid" gid="2" x="64" y="512" width="64" height="64"/>
+  <object id="27" name="kid" gid="2" x="192" y="512" width="64" height="64"/>
+  <object id="28" name="kid" gid="2" x="320" y="512" width="64" height="64"/>
+  <object id="29" name="kid" gid="2" x="448" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Spikes"/>
  <objectgroup name="Jello">
-  <object id="99" gid="11" x="768" y="640" width="64" height="64"/>
+  <object id="99" gid="11" x="768" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="2944" y="384" width="64" height="64"/>
+  <object id="21" name="goal" gid="51" x="3328" y="448" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups"/>
  <objectgroup name="Switches">
-  <object id="32" gid="41" x="1536" y="576" width="64" height="64">
-   <properties>
-    <property name="isSwitch" value="true"/>
-    <property name="linkID" value="1"/>
-   </properties>
-  </object>
-  <object id="112" gid="41" x="1088" y="640" width="64" height="64">
+  <object id="112" gid="41" x="1078" y="512" width="64" height="64">
    <properties>
     <property name="isSwitch" value="true"/>
     <property name="linkID" value="1"/>
@@ -50,7 +46,7 @@
   </object>
  </objectgroup>
  <objectgroup name="Bridges">
-  <object id="33" gid="42" x="960" y="640" width="64" height="128">
+  <object id="33" gid="42" x="960" y="512" width="64" height="128">
    <properties>
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="true"/>
@@ -58,7 +54,7 @@
     <property name="nubbinsVisible" value="false"/>
    </properties>
   </object>
-  <object id="105" gid="42" x="2176" y="512" width="256" height="64">
+  <object id="105" gid="42" x="2240" y="384" width="192" height="64">
    <properties>
     <property name="isOpen" value="true"/>
     <property name="isVertical" value="false"/>
