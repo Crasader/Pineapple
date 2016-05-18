@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="44" height="12" tilewidth="64" tileheight="64" nextobjectid="169">
+ <properties>
+  <property name="BlenderStartX" value="-20"/>
+  <property name="BlenderStartY" value="6"/>
+ </properties>
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
+  <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
+ </tileset>
+ <objectgroup name="Walls">
+  <object id="1" name="wall" x="0" y="192" width="1024" height="64"/>
+  <object id="149" x="1152" y="192" width="576" height="64"/>
+  <object id="153" x="1024" y="576" width="768" height="64"/>
+  <object id="154" x="960" y="704" width="1024" height="64"/>
+  <object id="157" x="1280" y="256" width="64" height="320"/>
+  <object id="159" x="768" y="512" width="128" height="64"/>
+  <object id="160" x="384" y="512" width="192" height="64"/>
+  <object id="168" x="2048" y="576" width="768" height="192"/>
+ </objectgroup>
+ <objectgroup name="Will">
+  <object id="10" name="will" gid="1" x="640" y="192" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Kids">
+  <object id="11" name="kid" gid="2" x="64" y="192" width="64" height="64"/>
+  <object id="27" name="kid" gid="2" x="192" y="192" width="64" height="64"/>
+  <object id="28" name="kid" gid="2" x="320" y="192" width="64" height="64"/>
+  <object id="29" name="kid" gid="2" x="448" y="192" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Spikes">
+  <object id="156" gid="12" x="1152" y="576" width="128" height="128"/>
+  <object id="167" gid="12" x="1472" y="576" width="128" height="128"/>
+ </objectgroup>
+ <objectgroup name="Jello"/>
+ <objectgroup name="Cups"/>
+ <objectgroup name="Switches">
+  <object id="150" gid="41" x="448" y="512" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="1"/>
+   </properties>
+  </object>
+  <object id="165" gid="41" x="1088" y="704" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="2"/>
+   </properties>
+  </object>
+  <object id="166" gid="41" x="1344" y="576" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Bridges">
+  <object id="148" gid="42" x="1024" y="256" width="128" height="64">
+   <properties>
+    <property name="isOpen" value="true"/>
+    <property name="isVertical" value="false"/>
+    <property name="linkID" value="1"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+  <object id="161" gid="42" x="1344" y="192" width="64" height="192">
+   <properties>
+    <property name="isOpen" value="false"/>
+    <property name="isVertical" value="true"/>
+    <property name="linkID" value="2"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+  <object id="162" gid="42" x="1792" y="640" width="256" height="64">
+   <properties>
+    <property name="isOpen" value="true"/>
+    <property name="isVertical" value="false"/>
+    <property name="linkID" value="3"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
