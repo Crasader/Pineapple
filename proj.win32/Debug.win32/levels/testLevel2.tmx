@@ -23,9 +23,6 @@
  <objectgroup name="Jello">
   <object id="59" gid="11" x="704" y="640" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="1216" y="640" width="64" height="64"/>
- </objectgroup>
  <objectgroup name="Cups">
   <object id="60" gid="21" x="1024" y="640" width="64" height="64"/>
   <object id="61" gid="21" x="320" y="320" width="64" height="64"/>
