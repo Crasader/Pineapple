@@ -517,10 +517,15 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
-				SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
+        Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
+        SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
         _level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
+        
+        for(int i = 0; i < KID_COUNT; i++) {
+            _winview->setKidVisible(i, _level->getKid(i) != nullptr && ! _level->getKid(i)->getIsDead() && ! _level->getKid(i)->getIsBlended());
+        }
+        
         _winview->position();
         _winViewVisible = true;
         HUDController::setEnabled(false);

@@ -96,6 +96,9 @@ protected:
     /** Reference to all of the moveable platforms */
     std::vector<MoveablePlatformModel*> _moveablePlatforms;
 
+    /** Next texture to use for crushable */
+    int _nextCrushableTexture;
+    
     /** The tutorial images for this level. May be empty if none */
     std::vector<TutorialView*> _tutorialViews;
     
