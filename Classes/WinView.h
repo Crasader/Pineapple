@@ -28,15 +28,17 @@ protected:
     /** The animation for will.*/
     AnimationNode* _willAnimation;
     
-    /** The animations for the kids. 
-      * May contain null entries if that kid is not present */
+    /** The animations for the kids */
     AnimationNode* _kidAnimations[KID_COUNT];
     
     /** The current frame of will */
     float _willFrame;
     
-    /** The current frame for each kid. */
+    /** The current frame for each kid */
     float _kidFrames[KID_COUNT];
+    
+    /** True iff kid i is visible */
+    bool _kidVisible[KID_COUNT];
     
 public:
     static WinView* create(Node* root, SceneManager* assets, Vec2 scale);
@@ -46,6 +48,10 @@ public:
     void dispose();
     
     void update(float dt);
+    
+    void setKidVisible(int i, bool visible) {
+        _kidVisible[i] = visible;
+    }
     
 private:
     void init(Node* root, SceneManager* assets, Vec2 scale);

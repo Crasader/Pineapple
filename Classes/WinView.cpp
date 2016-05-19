@@ -110,6 +110,7 @@ void WinView::init(Node *root, SceneManager *assets, Vec2 scale){
     _willFrame = 0;
     for (int i = 0; i < KID_COUNT; i++) {
         _kidFrames[i] = 0;
+        _kidVisible[i] = true;
     }
 }
 
@@ -132,7 +133,11 @@ void WinView::position() {
     
     for (int i = 0; i < KID_COUNT; i++) {
         if (_kidAnimations[i] != nullptr) {
-            _kidAnimations[i]->setPosition(center.x - HORIZONTAL_MARGIN - _willAnimation->getContentSize().width*MODAL_MAIN_SCALE*cscale/2.5f + _kidAnimations[i]->getContentSize().width*cscale*i * KID_SPACING, center.y+VERTICAL_MARGIN);
+            if (_kidVisible[i]) {
+                _kidAnimations[i]->setPosition(center.x - HORIZONTAL_MARGIN - _willAnimation->getContentSize().width*MODAL_MAIN_SCALE*cscale/2.5f + _kidAnimations[i]->getContentSize().width*cscale*i * KID_SPACING, center.y+VERTICAL_MARGIN);
+            } else {
+                _kidAnimations[i]->setPosition(-100,-100);
+            }
         }
     }
     
