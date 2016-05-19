@@ -34,7 +34,7 @@ protected:
     int _willSmallPrevFrame = -1;
 #pragma mark -
 #pragma mark Collision Handling
-
+    
 	/**
 	 * grounds will for jump enabling
 	 */
@@ -99,6 +99,9 @@ protected:
 	bool isBelowChar(BoxObstacle * obj, CapsuleObstacle * character);
 
 public:
+    
+    void playKidScream(KidModel* kid);
+    
 	/**
 	* Processes the start of a collision
 	*
