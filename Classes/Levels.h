@@ -28,7 +28,7 @@
 #define LEVEL_SIX_FILE "levels/export/LEVEL6_T.json"
 
 #define LEVEL_SEVEN_KEY "level_seven"
-#define LEVEL_SEVEN_FILE "levels/export/LEVEL7.json"
+#define LEVEL_SEVEN_FILE "levels/export/LEVEL5C.json"
 
 #define LEVEL_EIGHT_KEY "level_eight"
 #define LEVEL_EIGHT_FILE "levels/export/LEVEL8.json"
