@@ -204,6 +204,9 @@ bool KidModel::init(const Vec2& pos, const Vec2& scale, int idx) {
 		_isBlended = false;
 		_isDead = false;
 		_kidWalkcycleFrame = 0.0f;
+		_isImpaled = false;
+		_isDead2 = false;
+		_tmp = false;
         return true;
     }
     return false;
@@ -346,6 +349,27 @@ void KidModel::animate() {
 	else {
 		_kidWalkcycleFrame = 0.0f;
 		_kidWalkcycle->setFrame(_kidWalkcycleFrame);
+	}
+}
+
+/**
+* Animate death by knives
+*/
+void KidModel::animate2() {
+	if (!_tmp) {
+		_tmp = true;
+		_kidWalkcycleFrame = 12.0f;
+		_kidWalkcycle->setFrame(12);
+	}
+	else {
+		_kidWalkcycleFrame += 0.25f;
+		int tmp = (int)rint(_kidWalkcycleFrame);
+		if (tmp < 16) {
+			_kidWalkcycle->setFrame(tmp);
+		}
+		else {
+			_isDead2 = true;
+		}
 	}
 }
 

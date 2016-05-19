@@ -75,7 +75,10 @@ _debug(false),
 _loseViewVisible(false),
 _winViewVisible(false),
 _blenderSound(nullptr),
-_autoFFOn(false){}
+_autoFFOn(false),
+_resetInProgress(false),
+_muteWasOn(false),
+_ffWasOn(false){}
 
 /**
  * Initializes the controller contents, and starts the game
@@ -170,7 +173,7 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
     
     PauseController::init(_worldnode, _assets, root, _input);
-    HUDController::init(this, _worldnode, _assets, root, _input, _level->getBlender()->getPosition().x);
+    HUDController::init(this, _worldnode, _assets, root, _input);
     
     //Set up pause controller buttons. Has to be done here because of cyclical dependency issues
     Button** pauseControllerButtons = PauseController::getButtons();
@@ -377,9 +380,10 @@ void GameController::dispose() {
  * This method disposes of the world and creates a new one.
  */
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
+    CC_ASSERT(! _resetInProgress);
+    
     setFailure(false);
     setComplete(false);
-    setFF(false);
     
     if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
         SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
@@ -421,6 +425,10 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     _levelKey = levelKey;
     _levelFile = levelFile;
     
+    _resetInProgress = true;
+    _muteWasOn = HUDController::isMuted();
+    _ffWasOn = HUDController::isFastForwarding();
+    
     if (_assets->get<LevelModel>(_levelKey) == nullptr) {
         _assets->loadAsync<LevelModel>(_levelKey,_levelFile);
         _isReloading = true;
@@ -431,6 +439,10 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
 
 /** Called after the loadAsync for the level finishes */
 void GameController::onReset() {
+    CC_ASSERT(_resetInProgress);
+    
+    _resetInProgress = false;
+    
     // Release the old level permanently
     _level->release();
     
@@ -470,7 +482,7 @@ void GameController::onReset() {
 	_rootSize = _rootnode->getContentSize();
     
     //reset the hud
-    HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _level->getBlender()->getPosition().x);
+    HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _muteWasOn, _ffWasOn);
    
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
@@ -505,10 +517,15 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
-				SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
+        Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
+        SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
         _level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
+        
+        for(int i = 0; i < KID_COUNT; i++) {
+            _winview->setKidVisible(i, _level->getKid(i) != nullptr && ! _level->getKid(i)->getIsDead() && ! _level->getKid(i)->getIsBlended());
+        }
+        
         _winview->position();
         _winViewVisible = true;
         HUDController::setEnabled(false);
@@ -703,7 +720,15 @@ void GameController::update(float dt) {
         // Process kids
         for(int i = 0; i < KID_COUNT; i++) {
             if(_level->getKid(i) != nullptr) {
-                if (!_level->getKid(i)->getIsBlended()) {
+				if (_level->getKid(i)->getIsImpaled()) {
+					_level->getKid(i)->setVX(0.0f);
+					_level->getKid(i)->setVY(0.0f);
+					_level->getKid(i)->animate2();
+					if (_level->getKid(i)->getIsDead2()) {
+						_level->kill(_level->getKid(i));
+					}
+				}
+                else if (!_level->getKid(i)->getIsBlended()) {
                     _level->getKid(i)->dampTowardsWalkspeed();
                     _level->getKid(i)->animate();
                 }
@@ -836,6 +861,17 @@ void GameController::update(float dt) {
                 }
             }
             
+            //Make sure will's arc is the same even if ff is on
+            if (_level->getPineapple() != nullptr && _level->getPineapple()->getIsBlended()) {
+                _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                _level->getPineapple()->setFixedRotation(false);
+                _level->getPineapple()->setAngularVelocity(6.0f);
+                if (_level->getPineapple()->getIsDead()) {
+                    _level->kill(_level->getPineapple());
+                    _level->getBlender()->setIsBlending(true);
+                }
+            }
+
             _world->update(dt);
             mult--;
         }

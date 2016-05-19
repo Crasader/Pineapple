@@ -4,16 +4,15 @@
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
  </properties>
- <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
   <object id="89" x="0" y="512" width="1024" height="256"/>
   <object id="97" x="960" y="320" width="1280" height="64"/>
   <object id="103" x="2240" y="640" width="128" height="64"/>
-  <object id="106" x="1802" y="512" width="128" height="64"/>
-  <object id="109" x="1375" y="640" width="192" height="64"/>
-  <object id="110" x="1497" y="384" width="64" height="192"/>
+  <object id="106" x="1792" y="576" width="256" height="64"/>
+  <object id="109" x="1280" y="640" width="320" height="64"/>
   <object id="111" x="1024" y="512" width="128" height="64"/>
   <object id="124" x="2944" y="576" width="640" height="192"/>
   <object id="128" x="2432" y="320">
@@ -32,9 +31,6 @@
  <objectgroup name="Spikes"/>
  <objectgroup name="Jello">
   <object id="99" gid="11" x="768" y="512" width="64" height="64"/>
- </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="3328" y="448" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups"/>
  <objectgroup name="Switches">

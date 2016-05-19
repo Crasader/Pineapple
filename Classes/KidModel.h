@@ -29,7 +29,7 @@ using namespace cocos2d;
 /** The kid walking speed */
 #define KID_WALKSPEED			1.5f
 /** The number of frames in the kids animation strip */
-#define KID_ANIMATION_FRAMES	12
+#define KID_ANIMATION_FRAMES	16
 
 #define KID_MASK				0x0004
 #define KID_COLLIDES_WITH		0xFFFD //All but 0x0002
@@ -71,7 +71,12 @@ protected:
 	bool _isBlended;
 	/** Whether kid has been blended */
 	bool _isDead;
-    bool _isGrounded = false;
+    /** Whether kid is falling into knives */
+	bool _isImpaled;
+	/** Whether kid has been impaled */
+	bool _isDead2;
+	bool _tmp;
+	bool _isGrounded = false;
     
     /**
      * Redraws the outline of the physics fixtures to the debug node
@@ -266,9 +271,24 @@ public:
 	void setIsDead(bool dead) { _isDead = dead; }
 
 	/**
-	* Returns true if the kid is dead
+	* Returns true if the kid is dead (from blender)
 	*/
 	bool getIsDead() { return _isDead; }
+
+	/**
+	* Sets whether the kid is being impaled
+	*/
+	void setIsImpaled(bool impale) { _isImpaled = impale; }
+
+	/**
+	* Returns true if the kid is being impaled
+	*/
+	bool getIsImpaled() { return _isImpaled; }
+
+	/**
+	* Returns true if the kid is dead (from knives)
+	*/
+	bool getIsDead2() { return _isDead2; }
     
     
 #pragma mark Physics Methods
@@ -310,6 +330,11 @@ public:
 	* Animate the kid if they're moving
 	*/
 	void animate();
+
+	/**
+	* Animate death by knives
+	*/
+	void animate2();
 
 	/**
 	* Make the kid spiral towards blender blades
