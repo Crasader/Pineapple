@@ -28,6 +28,7 @@ using namespace cocos2d;
 #define BLENDER_FRAME_COUNT	10
 
 #define BLENDER_MASK            0x0008
+#define BLENDER_SENSOR_MASK     0x0010
 #define BLENDER_COLLIDES_WITH   0x006 //Only kid and pineapple
 
 #pragma mark -
@@ -152,6 +153,10 @@ public:
 	* Sets whether something is being blended
 	*/
 	void setIsBlending(bool blending) { _isBlending = blending; }
+    
+    Node* getSensor() {
+        return _sensorNode;
+    }
     
     
 #pragma mark Physics Methods

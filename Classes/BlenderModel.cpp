@@ -243,7 +243,7 @@ void BlenderModel::resetDebugNode() {
 	}
 
 	_sensorNode = WireNode::createWithPoly(poly);
-	_sensorNode->setPosition(Vec2(0.35f*_debug->getContentSize().width, 0.5f*_debug->getContentSize().height));
+	_sensorNode->setPosition(Vec2(0.85f*_debug->getContentSize().width, 0.5f*_debug->getContentSize().height));
 	_sensorNode->setColor(DEBUG_COLOR);
 	_debug->addChild(_sensorNode);
 }
