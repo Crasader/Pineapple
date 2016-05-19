@@ -278,7 +278,7 @@ void PineappleModel::applyForce() {
     }
         
     // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f) {
+    if (getMovement() == 0.0f || SIGNUM(getMovement()) != SIGNUM(getVX()) ) {
         b2Vec2 force(-getDamping()*getVX(), 0);
         _body->ApplyForce(force, _body->GetPosition(), true);
     }
