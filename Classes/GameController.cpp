@@ -560,13 +560,16 @@ void GameController::setFF(bool value) {
 }
 
 float GameController::getBlenderVolScale() {
-    if (_level->getPineapple() == nullptr) return 0;
+    if (_level->getPineapple() == nullptr || _winViewVisible || _loseViewVisible) return 0;
     
     float distBP = _level->getBlenderPineappleDistance();
     float distBL = BLENDER_VOL_OFF_DISTANCE - (_level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2 - _levelOffset);
     float dist = MIN(distBP, distBL);
     float scale = MAX(0,(BLENDER_VOL_OFF_DISTANCE - dist) / (BLENDER_VOL_OFF_DISTANCE - NORMAL_BLENDER_DISTANCE));
     scale = pow(scale,1.3);
+    
+    if (PauseController::isPaused()) scale = scale/2;
+    
     return MIN(MAX_VOL_SCALE*EFFECT_VOLUME,scale);
 }
 
@@ -629,6 +632,10 @@ void GameController::update(float dt) {
         setTransitionStatus(TRANSITION_TO_EXIT);
         return;
     }
+    
+    // Scroll the screen (with parallax) if necessary
+    handleScrolling();
+    
     if (PauseController::isPaused()) {
         _moveLeftView->setTouchEnabled(false);
         _moveRightView->setTouchEnabled(false);
@@ -759,9 +766,6 @@ void GameController::update(float dt) {
                 if (_level->getPineapple()->getPosition().y < 0) {
                     _level->kill(_level->getPineapple());
                 }
-                
-                // Scroll the screen (with parallax) if necessary
-                handleScrolling();
                 
             } else {
                 _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
