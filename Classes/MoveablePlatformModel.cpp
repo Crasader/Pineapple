@@ -11,7 +11,7 @@
 #include <cornell/CUSceneManager.h>
 #include <cornell/CUPolygonNode.h>
 
-#define MOVEABLE_PLATFORM_SCALE 0.125
+#define MOVEABLE_PLATFORM_SCALE 0.19
 
 MoveablePlatformModel* MoveablePlatformModel::create(const Vec2& pos, float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color) {
     MoveablePlatformModel* platform = new (std::nothrow) MoveablePlatformModel();

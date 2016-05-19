@@ -4,6 +4,7 @@
 #include <cornell/CUWireNode.h>
 #include <cornell/CUAnimationNode.h>
 #include "Const.h"
+#include "Texture.h"
 
 using namespace cocos2d;
 
@@ -39,6 +40,7 @@ private:
 	CC_DISALLOW_COPY_AND_ASSIGN(CrushableModel);
 
 protected:
+    
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
 	*
@@ -68,6 +70,15 @@ protected:
 
 
 public:
+    static const char* getNextTexture(int index) {
+        switch(index%3){
+            case 0: return RED_CUP_TEXTURE;
+            case 1: return BLUE_CUP_TEXTURE;
+            case 2: return GREEN_CUP_TEXTURE;
+            default: CC_ASSERT(false); return "";
+        }
+    }
+    
 	/**
 	*	returns collision class
 	*/

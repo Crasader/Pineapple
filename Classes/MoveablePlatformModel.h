@@ -30,7 +30,7 @@ using namespace cocos2d;
 #define MIN_X_STRETCH                 0.01f
 #define X_STRETCH_INC_PER_SEC         1.0f
 
-#define MOVEABLE_PLATFORM_WIDTH       1.0f
+#define MOVEABLE_PLATFORM_WIDTH       1.35f
 
 enum Color {blue = 1, red = 2, green = 3};
 
