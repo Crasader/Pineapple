@@ -387,6 +387,10 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     setFailure(false);
     setComplete(false);
     
+    // makes the arrows non-bright
+    _moveLeftView->setEnabled(true);
+    _moveRightView->setEnabled(true);
+    
     if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
         SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
     }
