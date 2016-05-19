@@ -382,6 +382,8 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     CC_ASSERT(! _resetInProgress);
     
+    setFF(false);
+    PauseController::unPause();
     setFailure(false);
     setComplete(false);
     
@@ -653,13 +655,6 @@ void GameController::update(float dt) {
     // Scroll the screen (with parallax) if necessary
     handleScrolling();
     
-    if (PauseController::isPaused()) {
-        _moveLeftView->setTouchEnabled(false);
-        _moveRightView->setTouchEnabled(false);
-        PauseController::animate();
-        return;
-    }
-    
     configureMoveView(_moveLeftView);
     configureMoveView(_moveRightView);
     
@@ -710,6 +705,11 @@ void GameController::update(float dt) {
             return;
             
         }
+    } else if (PauseController::isPaused()) {
+        _moveLeftView->setTouchEnabled(false);
+        _moveRightView->setTouchEnabled(false);
+        PauseController::animate();
+        return;
     } else {
         
         //Update tutorials
