@@ -32,7 +32,7 @@
 
 HUDController* HUDController::HUD_CONTROLLER = nullptr;
 
-void HUDController::init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input, float blenderPos) {
+void HUDController::init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input) {
     CCASSERT(HUD_CONTROLLER != nullptr, "NULL HUD CONTROLLER INITIALIZED");
     HUD_CONTROLLER->_gameController = gameController;
     HUD_CONTROLLER->_rootNode = root;
@@ -140,8 +140,8 @@ void HUDController::initSoundButton() {
                 Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
                 SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
                 SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
-								sound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
-								SoundEngine::getInstance()->playEffect(BLENDER_SOUND, sound, true, 0.0f);
+                sound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
+                SoundEngine::getInstance()->playEffect(BLENDER_SOUND, sound, true, 0.0f);
             }
         }
     });
@@ -159,11 +159,7 @@ void HUDController::initFFButton() {
     HUD_CONTROLLER->_hudNode->addChild(HUD_CONTROLLER->_fastForwardButton);
     HUD_CONTROLLER->_fastForwardButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
-            if (HUD_CONTROLLER->_fastForwardButton->isSelected()) {
-                HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/play.png");
-            } else {
-                HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/ff_arrows.png");
-            }
+            HUD_CONTROLLER->setFastForwarding(! HUD_CONTROLLER->_isFF);
         }
     });
 }

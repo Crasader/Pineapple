@@ -137,6 +137,13 @@ protected:
     /** Mark set to handle more sophisticated collision callbacks */
     unordered_set<b2Fixture*> _sensorFixtures;
     
+    /** True when a reset function finishes, false at the end of OnReset() */
+    bool _resetInProgress;
+    /** True if the mute button was on before a reset */
+    bool _muteWasOn;
+    /** True if the ff button was on before a reset */
+    bool _ffWasOn;
+    
     /** A reference to the blender sound */
     Sound* _blenderSound;
     
