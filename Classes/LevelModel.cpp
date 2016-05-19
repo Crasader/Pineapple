@@ -74,7 +74,8 @@ _rootnode(nullptr),
 _debugnode(nullptr),
 _worldnode(nullptr),
 _isLoaded(false),
-_isUnloaded(false){}
+_isUnloaded(false),
+_nextCrushableTexture(0){}
 
 /**
  * Creates a new game level with no source file.
@@ -87,7 +88,7 @@ _isUnloaded(false){}
 LevelModel* LevelModel::create() {
     LevelModel* level = new (std::nothrow) LevelModel();
     if (level && level->init()) {
-        level->autorelease();
+        level->retain();
         return level;
     }
     CC_SAFE_DELETE(level);
@@ -106,7 +107,7 @@ LevelModel* LevelModel::create() {
 LevelModel* LevelModel::create(std::string file) {
     LevelModel* level = new (std::nothrow) LevelModel();
     if (level && level->init(file)) {
-        level->autorelease();
+        level->retain();
         return level;
     }
     CC_SAFE_DELETE(level);
@@ -589,7 +590,8 @@ void LevelModel::addJello(float jelloPos[POS_COORDS], int x, int y) {
 }
 
 void LevelModel::addCup(float cupPos[POS_COORDS], int x, int y) {
-    CrushableModel* cup = CrushableModel::create(RED_CUP_TEXTURE, x, y, cupPos);
+    CrushableModel* cup = CrushableModel::create(CrushableModel::getNextTexture(_nextCrushableTexture), x, y, cupPos);
+    _nextCrushableTexture++;
     initPhysicalObstacle(cup);
     cup->setName(CUP_NAME);
     _crushables.push_back(cup);

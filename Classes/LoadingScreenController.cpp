@@ -188,7 +188,7 @@ void LoadingScreenController::init(Node* root) {
     _loadingLabel = nullptr;
     _rootnode = root;
     _isInitted = true;
-    
+        
     Size size = _rootnode->getContentSize();
     Vec2 center(size.width/2.0f,size.height/2.0f);
     
