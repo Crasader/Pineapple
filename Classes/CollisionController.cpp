@@ -83,7 +83,7 @@ void CollisionController::playKidScream(KidModel* kid) {
 * to trigger upward momentum, and a jello quiver animation
 */
 void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel* jello) {
-	if (!will->isCollidingWithJello()) {
+	if (!will->isCollidingWithJello() && !jello->getSmushing()) {
 		jello->setBouncing(true);
 		will->setCollidingWithJello(true);
 		if (will->isSmall()) {
@@ -105,7 +105,7 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 */
 void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello) {
 	//Jump!
-	if (!kid->isCollidingWithJello()) {
+	if (!kid->isCollidingWithJello() && !jello->getSmushing()) {
 		jello->setBouncing(true);
 		kid->setVY(10);
 		kid->setVX(KID_WALKSPEED + 4);

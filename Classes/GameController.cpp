@@ -382,8 +382,14 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     CC_ASSERT(! _resetInProgress);
     
+    setFF(false);
+    PauseController::unPause();
     setFailure(false);
     setComplete(false);
+    
+    // makes the arrows non-bright
+    _moveLeftView->setEnabled(true);
+    _moveRightView->setEnabled(true);
     
     if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
         SoundEngine::getInstance()->stopEffect(BLENDER_SOUND);
@@ -653,13 +659,6 @@ void GameController::update(float dt) {
     // Scroll the screen (with parallax) if necessary
     handleScrolling();
     
-    if (PauseController::isPaused()) {
-        _moveLeftView->setTouchEnabled(false);
-        _moveRightView->setTouchEnabled(false);
-        PauseController::animate();
-        return;
-    }
-    
     configureMoveView(_moveLeftView);
     configureMoveView(_moveRightView);
     
@@ -710,6 +709,11 @@ void GameController::update(float dt) {
             return;
             
         }
+    } else if (PauseController::isPaused()) {
+        _moveLeftView->setTouchEnabled(false);
+        _moveRightView->setTouchEnabled(false);
+        PauseController::animate();
+        return;
     } else {
         
         //Update tutorials

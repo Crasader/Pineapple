@@ -243,6 +243,8 @@ public:
 	* Sets whether jello is being smushed
 	*/
 	void setSmushing(bool smush) { _smushing = smush; }
+    
+    bool getSmushing() { return _smushing; }
 
     
 CC_CONSTRUCTOR_ACCESS:
