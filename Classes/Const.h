@@ -103,9 +103,12 @@
 #define LEVELS_COMPLETED_KEY    "levels_completed"
 
 /** The volume for the music */
-#define MUSIC_VOLUME    0.7f
+#define MUSIC_VOLUME    0.8f
 /** The volume for sound effects */
-#define EFFECT_VOLUME   1.0f
+#define EFFECT_VOLUME   0.9f
+/** The volume for kid screams */
+#define KID_SCREAM_VOLUME   1.0f
+
 
 /** The duration of the vibration when a kid / you are blended */
 #define VIBRATION_DURATION  1.0f

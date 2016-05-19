@@ -560,11 +560,16 @@ void GameController::setFF(bool value) {
 }
 
 float GameController::getBlenderVolScale() {
+    if (_level->getPineapple() == nullptr || _winViewVisible || _loseViewVisible) return 0;
+    
     float distBP = _level->getBlenderPineappleDistance();
     float distBL = BLENDER_VOL_OFF_DISTANCE - (_level->getBlender()->getPosition().x + _level->getBlender()->getWidth()/2 - _levelOffset);
     float dist = MIN(distBP, distBL);
     float scale = MAX(0,(BLENDER_VOL_OFF_DISTANCE - dist) / (BLENDER_VOL_OFF_DISTANCE - NORMAL_BLENDER_DISTANCE));
     scale = pow(scale,1.3);
+    
+    if (PauseController::isPaused()) scale = scale/2;
+    
     return MIN(MAX_VOL_SCALE*EFFECT_VOLUME,scale);
 }
 
@@ -627,6 +632,10 @@ void GameController::update(float dt) {
         setTransitionStatus(TRANSITION_TO_EXIT);
         return;
     }
+    
+    // Scroll the screen (with parallax) if necessary
+    handleScrolling();
+    
     if (PauseController::isPaused()) {
         _moveLeftView->setTouchEnabled(false);
         _moveRightView->setTouchEnabled(false);
@@ -712,6 +721,7 @@ void GameController::update(float dt) {
                     _level->getKid(i)->setAngularVelocity(6.0f);
                     if (_level->getKid(i)->getIsDead()) {
                         activateSplat(_assets->get<Texture2D>(_level->getKid(i)->getSplatTexture(i)));
+                        _collision->playKidScream(_level->getKid(i));
                         _level->kill(_level->getKid(i));
                         _level->getBlender()->setIsBlending(true);
                     }
@@ -732,8 +742,7 @@ void GameController::update(float dt) {
                             key = "we gon crash if this happens, but it won't so it's chill.";
                             CC_ASSERT(false);
                     }
-                    Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(key);
-                    SoundEngine::getInstance()->playEffect(key, source, false, EFFECT_VOLUME);
+                    _collision->playKidScream(_level->getKid(i));
                     _level->kill(_level->getKid(i));
                 }
             }
@@ -765,9 +774,6 @@ void GameController::update(float dt) {
                 if (_level->getPineapple()->getPosition().y < 0) {
                     _level->kill(_level->getPineapple());
                 }
-                
-                // Scroll the screen (with parallax) if necessary
-                handleScrolling();
                 
             } else {
                 _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
@@ -825,7 +831,22 @@ void GameController::update(float dt) {
         _background->update(dt * mult);
         
         // Turn the physics engine crank
-        _world->update(dt * mult);
+        _world->update(dt);
+        
+        while(mult > 1) {
+            
+            //Make sure kid arc stays the same even if ff is on
+            for(int i = 0; i < KID_COUNT; i++) {
+                if( _level->getKid(i) != nullptr && _level->getKid(i)->getIsBlended()) {
+                    _level->getKid(i)->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                    _level->getKid(i)->setFixedRotation(false);
+                    _level->getKid(i)->setAngularVelocity(6.0f);
+                }
+            }
+            
+            _world->update(dt);
+            mult--;
+        }
     }
     
     // Since items may be deleted, garbage collect
@@ -868,7 +889,9 @@ void GameController::handleScrolling() {
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
     
     //Update blender volume
-    SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, getBlenderVolScale() * EFFECT_VOLUME);
+    if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
+        SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, getBlenderVolScale() * EFFECT_VOLUME);
+    }
 }
 
 /**
