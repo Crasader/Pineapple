@@ -10,7 +10,9 @@
 #pragma mark -
 #pragma mark Physics Constants
 
-#define SPIKE_SCALE 0.65
+#define SPIKE_SCALE 0.5
+#define SPIKE_H_SCALE .87f
+#define SPIKE_V_SCALE .55f
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -179,8 +181,8 @@ void SpikeModel::resetSceneNode() {
         pnode->setPolygon(bounds);
         pnode->setScale(cscale * SPIKE_SCALE);
         
-        setDimension(pnode->getContentSize().width * SPIKE_SCALE / _drawScale.x,
-                     pnode->getContentSize().height * SPIKE_SCALE / _drawScale.y);
+        setDimension(pnode->getContentSize().width * SPIKE_H_SCALE * SPIKE_SCALE / _drawScale.x,
+                     pnode->getContentSize().height * SPIKE_V_SCALE * SPIKE_SCALE / _drawScale.y);
     }
 }
 
