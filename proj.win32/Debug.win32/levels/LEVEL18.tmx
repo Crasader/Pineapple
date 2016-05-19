@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="64" tileheight="64" nextobjectid="315">
+ <properties>
+  <property name="BlenderStartX" value="-20"/>
+  <property name="BlenderStartY" value="6"/>
+ </properties>
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
+  <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
+ </tileset>
+ <objectgroup name="Walls">
+  <object id="1" name="wall" x="0" y="448" width="576" height="320"/>
+  <object id="234" x="576" y="448" width="384" height="64"/>
+  <object id="251" x="2368" y="704" width="832" height="64"/>
+ </objectgroup>
+ <objectgroup name="Will">
+  <object id="10" name="will" gid="1" x="576" y="448" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Kids">
+  <object id="11" name="kid" gid="2" x="64" y="448" width="64" height="64"/>
+  <object id="27" name="kid" gid="2" x="192" y="448" width="64" height="64"/>
+  <object id="28" name="kid" gid="2" x="320" y="448" width="64" height="64"/>
+  <object id="29" name="kid" gid="2" x="448" y="448" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Spikes"/>
+ <objectgroup name="Jello"/>
+ <objectgroup name="Cups">
+  <object id="274" gid="21" x="832" y="768" width="128" height="128"/>
+  <object id="275" gid="21" x="960" y="768" width="128" height="128"/>
+  <object id="276" gid="21" x="1088" y="768" width="128" height="128"/>
+  <object id="277" gid="21" x="1216" y="768" width="128" height="128"/>
+  <object id="278" gid="21" x="1344" y="768" width="128" height="128"/>
+  <object id="279" gid="21" x="1472" y="768" width="128" height="128"/>
+  <object id="280" gid="21" x="1600" y="768" width="128" height="128"/>
+  <object id="281" gid="21" x="1728" y="768" width="128" height="128"/>
+  <object id="282" gid="21" x="1856" y="768" width="128" height="128"/>
+  <object id="283" gid="21" x="1984" y="768" width="128" height="128"/>
+  <object id="284" gid="21" x="2112" y="768" width="128" height="128"/>
+  <object id="285" gid="21" x="2240" y="768" width="128" height="128"/>
+  <object id="286" gid="21" x="1472" y="704" width="128" height="128"/>
+  <object id="287" gid="21" x="1472" y="640" width="128" height="128"/>
+  <object id="288" gid="21" x="960" y="704" width="128" height="128"/>
+  <object id="289" gid="21" x="960" y="640" width="128" height="128"/>
+  <object id="290" gid="21" x="960" y="576" width="128" height="128"/>
+  <object id="294" gid="21" x="704" y="768" width="128" height="128"/>
+  <object id="295" gid="21" x="576" y="768" width="128" height="128"/>
+  <object id="292" gid="21" x="1600" y="704" width="128" height="128"/>
+  <object id="291" gid="21" x="1600" y="640" width="128" height="128"/>
+  <object id="297" gid="21" x="1088" y="704" width="128" height="128"/>
+  <object id="298" gid="21" x="1088" y="640" width="128" height="128"/>
+  <object id="299" gid="21" x="1088" y="576" width="128" height="128"/>
+  <object id="300" gid="21" x="1472" y="576" width="128" height="128"/>
+  <object id="301" gid="21" x="1600" y="576" width="128" height="128"/>
+  <object id="302" gid="21" x="1600" y="512" width="128" height="128"/>
+  <object id="303" gid="21" x="1600" y="448" width="128" height="128"/>
+  <object id="304" gid="21" x="1856" y="704" width="128" height="128"/>
+  <object id="305" gid="21" x="1856" y="640" width="128" height="128"/>
+  <object id="306" gid="21" x="2112" y="704" width="128" height="128"/>
+  <object id="307" gid="21" x="2112" y="640" width="128" height="128"/>
+  <object id="308" gid="21" x="2112" y="576" width="128" height="128"/>
+  <object id="309" gid="21" x="2112" y="512" width="128" height="128"/>
+  <object id="310" gid="21" x="2112" y="448" width="128" height="128"/>
+  <object id="311" gid="21" x="2112" y="384" width="128" height="128"/>
+  <object id="313" gid="21" x="1088" y="512" width="128" height="128"/>
+  <object id="314" gid="21" x="1088" y="448" width="128" height="128"/>
+ </objectgroup>
+ <objectgroup name="Switches"/>
+ <objectgroup name="Bridges"/>
+</map>

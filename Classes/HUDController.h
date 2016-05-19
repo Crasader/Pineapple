@@ -48,7 +48,7 @@ public:
         HUD_CONTROLLER->_rootNode->removeChild(HUD_CONTROLLER->_hudNode);
     }
     
-    static void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input, float blenderPos);
+    static void init(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input);
     
     // update number of alive children icon and progress bar, blenderLoc should be right most x position
     static void update(int childrenAlive, float blenderLoc, vector<KidModel*> children, PineappleModel* will, float goalLoc);
@@ -61,10 +61,14 @@ public:
     
     static void release();
     
-    static void reset(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input, float blenderPos) {
+    static void reset(AbsScreenController* gameController, Node* worldNode, SceneManager* assets, Node* root, InputController* input,
+                      bool isMuted, bool isFF) {
         HUDController::release();
         HUDController::create();
-        HUDController::init(gameController, worldNode, assets, root, input, blenderPos);
+        HUDController::init(gameController, worldNode, assets, root, input);
+        
+        HUD_CONTROLLER->setFastForwarding(isFF);
+        HUD_CONTROLLER->_soundButton->setSelected(isMuted);
     }
     
     static void setEnabled(bool enabled) {
@@ -74,16 +78,20 @@ public:
     }
     
     static void setFastForwarding(bool status) {
-        HUD_CONTROLLER->_fastForwardButton->setSelected(status);
-        if (HUD_CONTROLLER->_fastForwardButton->isSelected()) {
+        HUD_CONTROLLER->_isFF = status;
+        if (HUD_CONTROLLER->_isFF) {
             HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/play.png");
         } else {
             HUD_CONTROLLER->_fastForwardButton->loadTextureBackGround("textures/buttons/ff_arrows.png");
         }
     }
     
+    static bool isMuted() {
+        return HUD_CONTROLLER != nullptr && HUD_CONTROLLER->_soundButton->isSelected();
+    }
+    
     static bool isFastForwarding() {
-        return HUD_CONTROLLER != nullptr && HUD_CONTROLLER->_fastForwardButton->isSelected();
+        return HUD_CONTROLLER != nullptr && HUD_CONTROLLER->_isFF;
     }
     
 private:
@@ -119,6 +127,7 @@ private:
     Button* _pauseButton = nullptr;
     CheckBox* _soundButton = nullptr;
     CheckBox* _fastForwardButton = nullptr;
+    bool _isFF = false;
     SceneManager* _assets = nullptr;
     
     /** Reference to the game controller this is pausing for */
