@@ -694,7 +694,15 @@ void GameController::update(float dt) {
         // Process kids
         for(int i = 0; i < KID_COUNT; i++) {
             if(_level->getKid(i) != nullptr) {
-                if (!_level->getKid(i)->getIsBlended()) {
+				if (_level->getKid(i)->getIsImpaled()) {
+					_level->getKid(i)->setVX(0.0f);
+					_level->getKid(i)->setVY(0.0f);
+					_level->getKid(i)->animate2();
+					if (_level->getKid(i)->getIsDead2()) {
+						_level->kill(_level->getKid(i));
+					}
+				}
+                else if (!_level->getKid(i)->getIsBlended()) {
                     _level->getKid(i)->dampTowardsWalkspeed();
                     _level->getKid(i)->animate();
                 }
