@@ -632,11 +632,6 @@ void LevelModel::addButtonSwitch(float buttonSwitchPos[POS_COORDS], bool isSwitc
 void LevelModel::addMoveablePlatform(float platformPos[POS_COORDS], float length, bool isOpen, bool vertical, bool nubbinsVisible, Color color) {
     MoveablePlatformModel* platform = MoveablePlatformModel::create(platformPos, length, isOpen, vertical, nubbinsVisible, color);
     
-    
-    for(int ii = 0; ii < platform->getBodies().size(); ii++) {
-        initPhysicalObstacle(platform->getBodies()[ii]);
-    }
-    
     platform->setName(MOVEABLE_PLATFORM_NAME);
     _moveablePlatforms.push_back(platform);
 }
@@ -876,6 +871,9 @@ void LevelModel::setRootNode(Node* node) {
         platform->setDrawScale(_scale);
         poly = PolygonNode::create();
         platform->setSceneNode(poly);
+        for(int ii = 0; ii < platform->getBodies().size(); ii++) {
+            initPhysicalObstacle(platform->getBodies()[ii]);
+        }
         initDebugProperties(platform);
         
         addAnonymousObstacle(platform, MOVEABLE_PLATFORM_Z_INDEX);

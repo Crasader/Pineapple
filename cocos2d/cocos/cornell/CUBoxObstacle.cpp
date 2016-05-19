@@ -26,7 +26,7 @@ NS_CC_BEGIN
 BoxObstacle* BoxObstacle::create() {
     BoxObstacle* obstacle = new (std::nothrow) BoxObstacle();
     if (obstacle && obstacle->init()) {
-        obstacle->autorelease();
+        obstacle->retain();
         return obstacle;
     }
     CC_SAFE_DELETE(obstacle);
@@ -48,7 +48,7 @@ BoxObstacle* BoxObstacle::create() {
 BoxObstacle* BoxObstacle::create(const Vec2& pos) {
     BoxObstacle* obstacle = new (std::nothrow) BoxObstacle();
     if (obstacle && obstacle->init(pos)) {
-        obstacle->autorelease();
+        obstacle->retain();
         return obstacle;
     }
     CC_SAFE_DELETE(obstacle);
@@ -71,7 +71,7 @@ BoxObstacle* BoxObstacle::create(const Vec2& pos) {
 BoxObstacle* BoxObstacle::create(const Vec2& pos, const Size& size) {
     BoxObstacle* obstacle = new (std::nothrow) BoxObstacle();
     if (obstacle && obstacle->init(pos,size)) {
-        obstacle->autorelease();
+        obstacle->retain();
         return obstacle;
     }
     CC_SAFE_DELETE(obstacle);
