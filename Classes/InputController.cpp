@@ -364,11 +364,16 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
             default:
                 break;
         }
-        if (_id1 != -1) {
-            // we already have a finger down, potential gesture
-            _touch2 = t->getLocation();
-            if (_touch2 > _touch1) {
+        // we already have a finger down, potential gesture
+        if (_id1 != -1 || _id2 != -1) {
+            if (_id1 != -1) {
+                _touch2 = t->getLocation();
                 _id2 = t->getID();
+            } else {
+                _touch1 = t->getLocation();
+                _id1 = t->getID();
+            }
+            if (_touch2 > _touch1) {
                 _time2 = current_time();
             } else {
                 Vec2 temp = _touch1;
@@ -379,22 +384,10 @@ bool InputController::touchesBeganCB(std::vector<Touch*> touches, timestamp_t cu
                 _time1 = current_time();
             }
             _previousDelta = _touch1.distance(_touch2);
-            break;
-        }
-        _touch1 = t->getLocation();
-        _id1 = t->getID();
-        _time1 = current_time();
-        switch (zone) {
-            case Zone::MAIN:
-                // Keep count of touches in Main zone.
-                if (_mtouch.touchid == -1) {
-                    _mtouch.position = pos;
-                    _mtouch.touchid = t->getID();
-                }
-                _mtouch.count++;
-                break;
-            default:
-                break;
+        } else {
+            _touch1 = t->getLocation();
+            _id1 = t->getID();
+            _time1 = current_time();
         }
     }
     // tap should only be one finger but we check if the tapped finger was part of a gesture
@@ -416,24 +409,19 @@ void InputController::touchesEndedCB(std::vector<Touch*> touches, timestamp_t cu
         if (getZone(t->getLocation()) == Zone::MAIN &&
             elapsed_millis(_dbtaptime,current) <= EVENT_TAP) {
             // if this touch did no gesture during its time, jump
-            if (!didGesture(t))
+            if (!didGesture(t)) {
                 _keyJump = true;
             }
+        }
         // reset didGestures to false because they are no longer down
         if (t->getID() == _id1) {
             _id1didGesture = false;
+            _id1 = -1;
+            _previousDelta = 0;
         } else if (t->getID() == _id2) {
+            _id2 = -1;
+            _previousDelta = 0;
             _id2didGesture = false;
-        }
-        // update _id1 and _id2 references
-        if (t->getID() == _id1) {
-            _id1 = _id2;
-            _touch1 = _touch2;
-            _id2 = -1;
-            _previousDelta = 0;
-        } else if (t->getID() == _id2) {
-            _id2 = -1;
-            _previousDelta = 0;
         }
         // Reset all keys that might have been set
         if (_ltouch.touchid == t->getID()) {
@@ -479,15 +467,10 @@ void InputController::touchesMovedCB(std::vector<Touch*> touches, timestamp_t cu
             _keyGrow = true;
         }
     }
-    for (std::vector<Touch*>::iterator i = touches.begin(); i != touches.end(); i++) {
-        Touch *t = *i;
-        if (_keyShrink || _keyGrow) {
-            if (t->getID() == _id1) {
-                _id1didGesture = true;
-            } else if (t->getID() == _id2) {
-                _id2didGesture = true;
-            }
-        }
+    // if we gestured, set didGesture for both gesture touches
+    if (_keyShrink || _keyGrow) {
+        _id1didGesture = true;
+        _id2didGesture = true;
     }
     _previousDelta = _touch1.distance(_touch2);
 }
