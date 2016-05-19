@@ -37,10 +37,10 @@
   <object id="163" gid="12" x="2240" y="192" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Jello">
-  <object id="99" gid="11" x="1152" y="384" width="64" height="64"/>
-  <object id="122" gid="11" x="960" y="576" width="64" height="64"/>
-  <object id="134" gid="11" x="1344" y="576" width="64" height="64"/>
-  <object id="154" gid="11" x="2048" y="384" width="64" height="64"/>
+  <object id="99" gid="11" x="1120" y="384" width="64" height="64"/>
+  <object id="122" gid="11" x="928" y="576" width="64" height="64"/>
+  <object id="134" gid="11" x="1312" y="576" width="64" height="64"/>
+  <object id="154" gid="11" x="2016" y="384" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Goal">
   <object id="21" name="goal" gid="51" x="2944" y="384" width="64" height="64"/>
