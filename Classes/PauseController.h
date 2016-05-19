@@ -42,18 +42,16 @@ class PauseController {
 public:
     // adds the pause screen overlay and buttons to the world
     static void pause() {
-        if (PAUSE_CONTROLLER) {
-            if (!PAUSE_CONTROLLER->_isPaused) {
-                // is pause while holding down movement don't want it to be down when unpause
-                PAUSE_CONTROLLER->_inputController->clear();
-                PAUSE_CONTROLLER->_isPaused = true;
-                PAUSE_CONTROLLER->_rootNode->addChild(PAUSE_CONTROLLER->_pauseNode, PAUSE_MENU_Z_ORDER);
-            }
+        if (PAUSE_CONTROLLER && !PAUSE_CONTROLLER->_isPaused) {
+            // is pause while holding down movement don't want it to be down when unpause
+            PAUSE_CONTROLLER->_inputController->clear();
+            PAUSE_CONTROLLER->_isPaused = true;
+            PAUSE_CONTROLLER->_rootNode->addChild(PAUSE_CONTROLLER->_pauseNode, PAUSE_MENU_Z_ORDER);
         }
     }
     
     static void unPause() {
-        if (PAUSE_CONTROLLER) {
+        if (PAUSE_CONTROLLER && PAUSE_CONTROLLER->isPaused()) {
             PAUSE_CONTROLLER->_isPaused = false;
             PAUSE_CONTROLLER->_rootNode->removeChild(PAUSE_CONTROLLER->_pauseNode);
         }
