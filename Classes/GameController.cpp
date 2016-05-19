@@ -848,6 +848,17 @@ void GameController::update(float dt) {
                 }
             }
             
+            //Make sure will's arc is the same even if ff is on
+            if (_level->getPineapple() != nullptr && _level->getPineapple()->getIsBlended()) {
+                _level->getPineapple()->spiral(_level->getBlender()->getPosition().x - 4.0f, _level->getBlender()->getPosition().y);
+                _level->getPineapple()->setFixedRotation(false);
+                _level->getPineapple()->setAngularVelocity(6.0f);
+                if (_level->getPineapple()->getIsDead()) {
+                    _level->kill(_level->getPineapple());
+                    _level->getBlender()->setIsBlending(true);
+                }
+            }
+
             _world->update(dt);
             mult--;
         }
