@@ -67,6 +67,9 @@
 #define LEVEL_NINTEEN_FILE "levels/export/LEVEL19.json"
 
 #define LEVEL_TWENTY_KEY "level_twenty"
-#define LEVEL_TWENTY_FILE "levels/export/LEVEL3C.json"
+#define LEVEL_TWENTY_FILE "levels/export/LEVEL20.json"
+
+#define LEVEL_TWENTYONE_KEY "level_twentyone"
+#define LEVEL_TWENTYONE_FILE "levels/export/LEVEL21.json"
 
 #endif /* Level_h */

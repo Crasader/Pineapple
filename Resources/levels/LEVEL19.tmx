@@ -83,14 +83,6 @@
     <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
-  <object id="319" gid="42" x="1280" y="192" width="64" height="128">
-   <properties>
-    <property name="isOpen" value="false"/>
-    <property name="isVertical" value="true"/>
-    <property name="linkID" value="2"/>
-    <property name="nubbinsVisible" value="true"/>
-   </properties>
-  </object>
   <object id="348" gid="42" x="2112" y="192" width="64" height="128">
    <properties>
     <property name="isOpen" value="true"/>
@@ -107,7 +99,7 @@
     <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
-  <object id="352" gid="42" x="1280" y="384" width="64" height="128">
+  <object id="352" gid="42" x="1280" y="384" width="64" height="384">
    <properties>
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="true"/>
