@@ -362,7 +362,7 @@ void KidModel::animate2() {
 		_kidWalkcycle->setFrame(12);
 	}
 	else {
-		_kidWalkcycleFrame += 0.5f;
+		_kidWalkcycleFrame += 0.25f;
 		int tmp = (int)rint(_kidWalkcycleFrame);
 		if (tmp < 16) {
 			_kidWalkcycle->setFrame(tmp);
