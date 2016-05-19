@@ -63,7 +63,7 @@
                 {
                  "gid":2,
                  "height":64,
-                 "id":11,
+                 "id":29,
                  "name":"kid",
                  "properties":
                     {
@@ -73,29 +73,13 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":64,
+                 "x":448,
                  "y":640
                 }, 
                 {
                  "gid":2,
                  "height":64,
-                 "id":27,
-                 "name":"kid",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":192,
-                 "y":640
-                }, 
-                {
-                 "gid":2,
-                 "height":64,
-                 "id":28,
+                 "id":239,
                  "name":"kid",
                  "properties":
                     {
@@ -111,7 +95,7 @@
                 {
                  "gid":2,
                  "height":64,
-                 "id":29,
+                 "id":240,
                  "name":"kid",
                  "properties":
                     {
@@ -121,7 +105,23 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":448,
+                 "x":192,
+                 "y":640
+                }, 
+                {
+                 "gid":2,
+                 "height":64,
+                 "id":241,
+                 "name":"kid",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":64,
                  "y":640
                 }],
          "opacity":1,
@@ -251,7 +251,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":182,
+ "nextobjectid":242,
  "orientation":"orthogonal",
  "properties":
     {
