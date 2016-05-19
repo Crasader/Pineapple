@@ -16,13 +16,13 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":640,
+                 "width":1088,
                  "x":0,
                  "y":640
                 }, 
                 {
-                 "height":128,
-                 "id":57,
+                 "height":256,
+                 "id":211,
                  "name":"",
                  "properties":
                     {
@@ -31,14 +31,29 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":2688,
-                 "x":1600,
+                 "width":640,
+                 "x":1152,
+                 "y":512
+                }, 
+                {
+                 "height":128,
+                 "id":213,
+                 "name":"wall",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":192,
+                 "x":1792,
                  "y":640
                 }, 
                 {
-                 "height":64,
-                 "id":99,
-                 "name":"",
+                 "height":128,
+                 "id":214,
+                 "name":"wall",
                  "properties":
                     {
 
@@ -47,13 +62,13 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":1984,
-                 "y":512
+                 "x":2048,
+                 "y":448
                 }, 
                 {
-                 "height":64,
-                 "id":104,
-                 "name":"",
+                 "height":128,
+                 "id":219,
+                 "name":"wall",
                  "properties":
                     {
 
@@ -61,31 +76,14 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":128,
-                 "x":2304,
-                 "y":512
+                 "width":256,
+                 "x":2240,
+                 "y":640
                 }, 
                 {
-                 "height":0,
-                 "id":122,
-                 "name":"",
-                 "polygon":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":0,
-                         "y":-128
-                        }, 
-                        {
-                         "x":576,
-                         "y":-192
-                        }, 
-                        {
-                         "x":576,
-                         "y":0
-                        }],
+                 "height":128,
+                 "id":222,
+                 "name":"wall",
                  "properties":
                     {
 
@@ -93,41 +91,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":0,
-                 "x":640,
-                 "y":768
-                }, 
-                {
-                 "height":0,
-                 "id":124,
-                 "name":"",
-                 "polygon":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":0,
-                         "y":192
-                        }, 
-                        {
-                         "x":384,
-                         "y":192
-                        }, 
-                        {
-                         "x":384,
-                         "y":64
-                        }],
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1216,
-                 "y":576
+                 "width":832,
+                 "x":2688,
+                 "y":640
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -154,7 +120,7 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":512,
+                 "x":576,
                  "y":640
                 }],
          "opacity":1,
@@ -244,23 +210,7 @@
          "draworder":"topdown",
          "height":0,
          "name":"Spikes",
-         "objects":[
-                {
-                 "gid":12,
-                 "height":64,
-                 "id":112,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":2176,
-                 "y":640
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -276,7 +226,7 @@
                 {
                  "gid":11,
                  "height":64,
-                 "id":96,
+                 "id":210,
                  "name":"",
                  "properties":
                     {
@@ -286,13 +236,13 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":1920,
+                 "x":960,
                  "y":640
                 }, 
                 {
                  "gid":11,
                  "height":64,
-                 "id":114,
+                 "id":212,
                  "name":"",
                  "properties":
                     {
@@ -302,7 +252,23 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":3072,
+                 "x":1856,
+                 "y":640
+                }, 
+                {
+                 "gid":11,
+                 "height":64,
+                 "id":218,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2304,
                  "y":640
                 }],
          "opacity":1,
@@ -320,7 +286,7 @@
                 {
                  "gid":21,
                  "height":64,
-                 "id":115,
+                 "id":209,
                  "name":"",
                  "properties":
                     {
@@ -330,29 +296,13 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":3200,
-                 "y":640
-                }, 
-                {
-                 "gid":21,
-                 "height":64,
-                 "id":117,
-                 "name":"",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":3200,
+                 "x":1856,
                  "y":576
                 }, 
                 {
                  "gid":21,
                  "height":64,
-                 "id":118,
+                 "id":220,
                  "name":"",
                  "properties":
                     {
@@ -362,8 +312,8 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":3200,
-                 "y":512
+                 "x":2304,
+                 "y":576
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -376,24 +326,7 @@
          "draworder":"topdown",
          "height":0,
          "name":"Switches",
-         "objects":[
-                {
-                 "gid":41,
-                 "height":64,
-                 "id":111,
-                 "name":"",
-                 "properties":
-                    {
-                     "isSwitch":"true",
-                     "linkID":"3"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":2496,
-                 "y":640
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -405,37 +338,6 @@
          "draworder":"topdown",
          "height":0,
          "name":"Bridges",
-         "objects":[
-                {
-                 "gid":42,
-                 "height":64,
-                 "id":119,
-                 "name":"",
-                 "properties":
-                    {
-                     "isOpen":"true",
-                     "isVertical":"false",
-                     "linkID":"3",
-                     "nubbinsVisible":"false"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":192,
-                 "x":2112,
-                 "y":576
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "width":0,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "height":0,
-         "name":"Tutorial",
          "objects":[],
          "opacity":1,
          "type":"objectgroup",
@@ -444,7 +346,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":139,
+ "nextobjectid":223,
  "orientation":"orthogonal",
  "properties":
     {
@@ -472,5 +374,5 @@
         }],
  "tilewidth":64,
  "version":1,
- "width":67
+ "width":55
 }

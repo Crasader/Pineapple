@@ -9,6 +9,10 @@
                  "height":256,
                  "id":89,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -20,6 +24,10 @@
                  "height":64,
                  "id":97,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -31,6 +39,10 @@
                  "height":64,
                  "id":103,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -42,39 +54,40 @@
                  "height":64,
                  "id":106,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":128,
-                 "x":1802,
-                 "y":512
+                 "width":256,
+                 "x":1792,
+                 "y":576
                 }, 
                 {
                  "height":64,
                  "id":109,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":192,
-                 "x":1375,
+                 "width":320,
+                 "x":1280,
                  "y":640
-                }, 
-                {
-                 "height":192,
-                 "id":110,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":1497,
-                 "y":384
                 }, 
                 {
                  "height":64,
                  "id":111,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -86,6 +99,10 @@
                  "height":192,
                  "id":124,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -118,6 +135,10 @@
                          "x":128,
                          "y":0
                         }],
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -142,6 +163,10 @@
                  "height":64,
                  "id":10,
                  "name":"will",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -166,6 +191,10 @@
                  "height":64,
                  "id":11,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -178,6 +207,10 @@
                  "height":64,
                  "id":27,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -190,6 +223,10 @@
                  "height":64,
                  "id":28,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -202,6 +239,10 @@
                  "height":64,
                  "id":29,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -238,36 +279,16 @@
                  "height":64,
                  "id":99,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
                  "x":768,
                  "y":512
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "width":0,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "height":0,
-         "name":"Goal",
-         "objects":[
-                {
-                 "gid":51,
-                 "height":64,
-                 "id":21,
-                 "name":"goal",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":3328,
-                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -303,11 +324,6 @@
                      "isSwitch":"true",
                      "linkID":"1"
                     },
-                 "propertytypes":
-                    {
-                     "isSwitch":"string",
-                     "linkID":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -339,13 +355,6 @@
                      "linkID":"1",
                      "nubbinsVisible":"false"
                     },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -364,13 +373,6 @@
                      "isVertical":"false",
                      "linkID":"1",
                      "nubbinsVisible":"false"
-                    },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -393,22 +395,20 @@
      "BlenderStartX":"-20",
      "BlenderStartY":"6"
     },
- "propertytypes":
-    {
-     "BlenderStartX":"string",
-     "BlenderStartY":"string"
-    },
  "renderorder":"right-down",
  "tileheight":64,
  "tilesets":[
         {
-         "columns":10,
          "firstgid":1,
          "image":"..\/..\/tiledTextures\/Sheet.png",
          "imageheight":640,
          "imagewidth":640,
          "margin":0,
          "name":"ImageSheet",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":100,
          "tileheight":64,
