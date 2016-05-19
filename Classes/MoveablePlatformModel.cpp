@@ -44,24 +44,20 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
     _nubbin1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
     _nubbin1->setFilterData(b);
     _nubbin1->setName(NUBBIN_NAME);
-    _nubbin1->retain();
     _bodies.push_back(_nubbin1);
     
     _nubbin2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
     _nubbin2->setFilterData(b);
     _nubbin2->setName(NUBBIN_NAME);
-    _nubbin2->retain();
     _bodies.push_back(_nubbin2);
     
     _box1 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
     _box1->setName(BOX_NAME);
-    _box1->retain();
     _box1->setFixedRotation(true);
     _bodies.push_back(_box1);
     
     _box2 = BoxObstacle::create(Vec2::ZERO, SIZE_ONE);
     _box2->setName(BOX_NAME);
-    _box2->retain();
     _box2->setFixedRotation(true);
     _bodies.push_back(_box2);
     
@@ -69,6 +65,7 @@ bool MoveablePlatformModel::init(const Vec2& pos, float length, bool isOpen, boo
 }
 
 void MoveablePlatformModel::resetSceneNode() {
+    
     SceneManager* scene = AssetManager::getInstance()->getCurrent();
     
     Texture2D* leftNubbin;

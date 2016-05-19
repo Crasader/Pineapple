@@ -56,21 +56,25 @@ void CollisionController::ground(PineappleModel* will, b2Fixture* fix, BoxObstac
     _pSensorFixtures.emplace(fix);
 }
 
-void playKidScream(KidModel* kid) {
-	char* key;
+void CollisionController::playKidScream(KidModel* kid) {
 	int i = kid->getIndex();
 	switch (i) {
-	case 0: key = PINEAPPLET1_DEATH_SOUND;
-		break;
-	case 1: key = PINEAPPLET2_DEATH_SOUND;
-		break;
-	case 2: key = PINEAPPLET3_DEATH_SOUND;
-		break;
-	case 3: key = PINEAPPLET4_DEATH_SOUND;
-		break;
-	default: key = "we gon crash if this happens, but it won't so it's chill.";
-	}
-	playSoundEffect(key);
+        case 0:
+            playSoundEffect(PINEAPPLET1_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        case 1:
+            playSoundEffect(PINEAPPLET2_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        case 2:
+            playSoundEffect(PINEAPPLET3_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        case 3:
+            playSoundEffect(PINEAPPLET4_DEATH_SOUND, KID_SCREAM_VOLUME);
+            return;
+        default:
+            CC_ASSERT(false);
+            return;
+    }
 }
 
 /**
@@ -112,18 +116,16 @@ void CollisionController::handleJelloCollision(KidModel* kid, JelloModel* jello)
 
 void CollisionController::handleBlenderCollision(PineappleModel* will) {
 	Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(WILL_DEATH_SOUND);
-	SoundEngine::getInstance()->playEffect(WILL_DEATH_SOUND, source, false, EFFECT_VOLUME);
 	will->setIsBlended(true);
     b2Filter b = will->getFilterData();
-    b.maskBits = BLENDER_MASK;
+    b.maskBits = 0x0;
     will->setFilterData(b);
 }
 
 void CollisionController::handleBlenderCollision(KidModel* kid) {
-	playKidScream(kid);
 	kid->setIsBlended(true);
     b2Filter b = kid->getFilterData();
-    b.maskBits = BLENDER_MASK;
+    b.maskBits = 0x0;
     kid->setFilterData(b);
 }
 
@@ -135,12 +137,12 @@ void CollisionController::handleBlenderBladeCollision(PineappleModel* will) {
 
 void CollisionController::handleBlenderBladeCollision(KidModel* kid) {
 	_level->kill(kid);
+    playKidScream(kid);
 	playSoundEffect(SPLAT_SOUND);
 }
 
 void CollisionController::handleSpikeCollision(PineappleModel* will) {
 	_level->spikeAndKill(will);
-	playSoundEffect(WILL_DEATH_SOUND);
 	//_pSensorFixtures.clear();
 }
 

@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="56" height="12" tilewidth="64" tileheight="64" nextobjectid="153">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="56" height="12" tilewidth="64" tileheight="64" nextobjectid="159">
  <properties>
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
  </properties>
- <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="1" name="wall" x="-64" y="640" width="1792" height="128"/>
-  <object id="89" x="1984" y="512" width="352" height="64"/>
+  <object id="1" name="wall" x="-64" y="640" width="1280" height="128"/>
+  <object id="89" x="1984" y="512" width="320" height="64"/>
   <object id="134" x="1600" y="512" width="128" height="64"/>
   <object id="144" x="1344" y="512" width="128" height="64"/>
-  <object id="145" x="2688" y="512" width="896" height="256"/>
-  <object id="147" x="2384" y="640" width="128" height="64"/>
-  <object id="148" x="2304" y="192" width="208" height="64"/>
+  <object id="145" x="2944" y="512" width="640" height="256"/>
+  <object id="148" x="2304" y="192" width="192" height="64"/>
   <object id="152" x="2560" y="512" width="128" height="64"/>
+  <object id="153" x="2496" y="0" width="64" height="256"/>
+  <object id="156" x="1216" y="640">
+   <polygon points="0,0 192,64 192,128 0,128"/>
+  </object>
+  <object id="157" x="1408" y="704" width="320" height="64"/>
  </objectgroup>
  <objectgroup name="Will">
   <object id="10" name="will" gid="1" x="512" y="640" width="64" height="64"/>
@@ -26,18 +30,12 @@
   <object id="28" name="kid" gid="2" x="320" y="640" width="64" height="64"/>
   <object id="29" name="kid" gid="2" x="448" y="640" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="Spikes">
-  <object id="141" gid="12" x="2859" y="512" width="64" height="64"/>
- </objectgroup>
+ <objectgroup name="Spikes"/>
  <objectgroup name="Jello">
   <object id="96" gid="11" x="1152" y="640" width="64" height="64"/>
   <object id="135" gid="11" x="1408" y="512" width="64" height="64"/>
-  <object id="137" gid="11" x="2208" y="512" width="64" height="64"/>
-  <object id="140" gid="11" x="2592" y="512" width="64" height="64"/>
-  <object id="142" gid="11" x="2732" y="512" width="64" height="64"/>
- </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="3328" y="448" width="64" height="64"/>
+  <object id="137" gid="11" x="2176" y="512" width="64" height="64"/>
+  <object id="140" gid="11" x="2560" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups">
   <object id="138" gid="21" x="2176" y="448" width="64" height="64"/>
@@ -50,7 +48,7 @@
     <property name="linkID" value="1"/>
    </properties>
   </object>
-  <object id="149" gid="41" x="2448" y="192" width="64" height="64">
+  <object id="149" gid="41" x="2368" y="192" width="64" height="64">
    <properties>
     <property name="isSwitch" value="true"/>
     <property name="linkID" value="2"/>
@@ -63,7 +61,7 @@
     <property name="isOpen" value="true"/>
     <property name="isVertical" value="false"/>
     <property name="linkID" value="1"/>
-    <property name="nubbinsVisible" value="false"/>
+    <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
   <object id="146" gid="42" x="2432" y="640" width="64" height="384">
@@ -71,15 +69,15 @@
     <property name="isOpen" value="false"/>
     <property name="isVertical" value="true"/>
     <property name="linkID" value="2"/>
-    <property name="nubbinsVisible" value="false"/>
+    <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
-  <object id="151" gid="42" x="2368" y="192" width="64" height="192">
+  <object id="158" gid="42" x="1408" y="704" width="64" height="128">
    <properties>
     <property name="isOpen" value="true"/>
     <property name="isVertical" value="true"/>
-    <property name="linkID" value="2"/>
-    <property name="nubbinsVisible" value="false"/>
+    <property name="linkID" value="1"/>
+    <property name="nubbinsVisible" value="true"/>
    </properties>
   </object>
  </objectgroup>
