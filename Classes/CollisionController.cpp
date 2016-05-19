@@ -148,7 +148,8 @@ void CollisionController::handleSpikeCollision(PineappleModel* will) {
 
 void CollisionController::handleSpikeCollision(KidModel* kid) {
 	playKidScream(kid);
-	_level->spikeAndKill(kid);
+	//_level->spikeAndKill(kid);
+	kid->setIsImpaled(true);
 }
 
 void CollisionController::handleCupCollision(PineappleModel* will, CrushableModel* cup) {
