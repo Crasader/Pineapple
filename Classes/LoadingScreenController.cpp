@@ -7,11 +7,9 @@
 void loadCharacters(TextureLoader* tloader) {
     tloader->loadAsync(PINEAPPLE_TEXTURE, "textures/will_walkcycle_reduced.png");
     
-    tloader->loadAsync(KID_TEXTURE_1, "textures/child_bow_walkcycle_reduced.png");
-//    tloader->loadAsync(KID_TEXTURE_2, "textures/child_glasses_walkcycle_reduced.png");
+    tloader->loadAsync(KID_TEXTURE_1, "textures/death_bow.png");
 	tloader->loadAsync(KID_TEXTURE_2, "textures/death_glasses.png");
-    tloader->loadAsync(KID_TEXTURE_3, "textures/child_hat_walkcycle_reduced.png");
-    //tloader->loadAsync(KID_TEXTURE_4, "textures/child_pirate_walkcycle_reduced.png");
+    tloader->loadAsync(KID_TEXTURE_3, "textures/death_hat.png");
 	tloader->loadAsync(KID_TEXTURE_4, "textures/death_pirate.png");
     
     tloader->loadAsync(BLENDER_TEXTURE, "textures/blender_blendCycle2.png");
