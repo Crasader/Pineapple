@@ -42,16 +42,16 @@ const string LevelSelectController::LEVEL_KEYS[NUM_LEVELS] = {LEVEL_ONE_KEY, LEV
 #define LEVEL_SELECT_TEXT_Z         3
 #define LEVEL_SELECT_PAGINATION_Z   4
 
-/** Graphics scaling constants for button layout */
-#define BUTTONS_PER_ROW             5
-
 #define LEVEL_SELECT_TOP_MARGIN     100
-#define BUTTON_WIDTH_MARGIN         0.05f //As a percentage of button width, distributed to both sides
+#define BUTTON_WIDTH_MARGIN         0.1f //As a percentage of button width, distributed to both sides
 #define BUTTON_HEIGHT_MARGIN        0.3f //As a percentage of button width, distributed to both sides
-#define BUTTON_SCALE                0.8f
+#define BUTTON_SCALE                0.9f
 #define BUTTON_FONT_SIZE            38
 
-#define LEVELS_PER_PAGE             15
+/** Graphics scaling constants for button layout */
+#define BUTTONS_PER_ROW             4
+
+#define LEVELS_PER_PAGE             12
 
 
 #pragma mark -
@@ -160,6 +160,7 @@ void LevelSelectController::fixPosition(Button *b, Node* score, int index) {
     float col = index % BUTTONS_PER_ROW;
     
     row += 0.5f;
+    col += 0.5f;
     
     int w = b->getContentSize().width * (1 + BUTTON_WIDTH_MARGIN) * cscale;
     int h = b->getContentSize().height * (1 + BUTTON_HEIGHT_MARGIN) * cscale;

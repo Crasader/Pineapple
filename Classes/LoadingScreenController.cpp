@@ -43,9 +43,9 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_BLUE, "textures/right-door-blue.png");
     tloader->loadAsync(MIDDLE_TEXTURE_BLUE,   "textures/center-door-blue.png");
     
-    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_GREEN,  "textures/left-door.png");
-    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_GREEN, "textures/right-door.png");
-    tloader->loadAsync(MIDDLE_TEXTURE_GREEN,   "textures/center-door.png");
+    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_GREEN,  "textures/left-door-green.png");
+    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_GREEN, "textures/right-door-green.png");
+    tloader->loadAsync(MIDDLE_TEXTURE_GREEN,   "textures/center-door-green.png");
     
     tloader->loadAsync(SWITCH_TEXTURE_RED,  "textures/lever-red2.png");
     tloader->loadAsync(SWITCH_TEXTURE_GREEN, "textures/lever-green2.png");
