@@ -30,7 +30,7 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(SPINNER_TEXTURE,   "textures/barrier.png");
     tloader->loadAsync(GOAL_TEXTURE,      "textures/fridgeFull4.png");
 	tloader->loadAsync(GOAL_DOOR_TEXTURE, "textures/fridgeDoor.png");
-    tloader->loadAsync(RED_CUP_TEXTURE,   "textures/cup_smash.png");
+    tloader->loadAsync(RED_CUP_TEXTURE,   "textures/redcup.png");
     tloader->loadAsync(BLUE_CUP_TEXTURE,  "textures/bluecup.png");
     tloader->loadAsync(GREEN_CUP_TEXTURE, "textures/greencup.png");
     tloader->loadAsync(CUPSTACK_TEXTURE,  "textures/stackedcups.png");
@@ -43,9 +43,9 @@ void loadObstacles(TextureLoader* tloader) {
     tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_BLUE, "textures/right-door-blue.png");
     tloader->loadAsync(MIDDLE_TEXTURE_BLUE,   "textures/center-door-blue.png");
     
-    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_GREEN,  "textures/left-door.png");
-    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_GREEN, "textures/right-door.png");
-    tloader->loadAsync(MIDDLE_TEXTURE_GREEN,   "textures/center-door.png");
+    tloader->loadAsync(LEFT_NUBBIN_TEXTURE_GREEN,  "textures/left-door-green.png");
+    tloader->loadAsync(RIGHT_NUBBIN_TEXTURE_GREEN, "textures/right-door-green.png");
+    tloader->loadAsync(MIDDLE_TEXTURE_GREEN,   "textures/center-door-green.png");
     
     tloader->loadAsync(SWITCH_TEXTURE_RED,  "textures/lever-red2.png");
     tloader->loadAsync(SWITCH_TEXTURE_GREEN, "textures/lever-green2.png");
@@ -188,7 +188,7 @@ void LoadingScreenController::init(Node* root) {
     _loadingLabel = nullptr;
     _rootnode = root;
     _isInitted = true;
-    
+        
     Size size = _rootnode->getContentSize();
     Vec2 center(size.width/2.0f,size.height/2.0f);
     

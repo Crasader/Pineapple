@@ -301,22 +301,16 @@ void KidModel::dampTowardsWalkspeed() {
             } else if (getVX() > getWalkingSpeed()) {
                 b2Vec2 force(-KID_FORCE,0);
                 _body->ApplyForce(force,_body->GetPosition(),true);
-            }
-            else if (getVX() < getWalkingSpeed()) {
+            } else if (getVX() < getWalkingSpeed()) {
+                if (getVX() < 0.2) {
+                    b2Vec2 force(0,6);
+                    _body->ApplyForce(force,_body->GetPosition(),true);
+                }
                 b2Vec2 force(KID_FORCE,0);
                 _body->ApplyForce(force,_body->GetPosition(),true);
-                setVX(getVX() + 0.1);
             }
         }
     }
-    
-//    // Velocity too high, clamp it
-//    if (fabs(getVX()) >= getMaxWalkingSpeed() && _isGrounded) {
-//        setVX(SIGNUM(getVX())*getMaxWalkingSpeed());
-//    } else {
-//        b2Vec2 force(getMovement(),0);
-//        _body->ApplyForce(force,_body->GetPosition(),true);
-//    }
 }
 
 /**
