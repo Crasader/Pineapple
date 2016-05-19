@@ -881,7 +881,9 @@ void GameController::handleScrolling() {
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
     
     //Update blender volume
-    SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, getBlenderVolScale() * EFFECT_VOLUME);
+    if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
+        SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, getBlenderVolScale() * EFFECT_VOLUME);
+    }
 }
 
 /**
