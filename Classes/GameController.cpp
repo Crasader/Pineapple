@@ -382,6 +382,7 @@ void GameController::dispose() {
 void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     CC_ASSERT(! _resetInProgress);
     
+    setFF(false);
     setFailure(false);
     setComplete(false);
     
