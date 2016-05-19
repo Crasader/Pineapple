@@ -32,7 +32,7 @@
   <object id="109" gid="11" x="1600" y="640" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups">
-  <object id="115" gid="21" x="1280" y="512" width="64" height="64"/>
+  <object id="115" gid="21" x="1408" y="512" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Switches"/>
  <objectgroup name="Bridges"/>

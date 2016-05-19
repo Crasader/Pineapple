@@ -11,7 +11,7 @@
   <object id="1" name="wall" x="-64" y="640" width="1280" height="128"/>
   <object id="89" x="1984" y="512" width="320" height="64"/>
   <object id="134" x="1600" y="512" width="128" height="64"/>
-  <object id="144" x="1344" y="512" width="128" height="64"/>
+  <object id="144" x="1344" y="512" width="192" height="64"/>
   <object id="145" x="2944" y="512" width="640" height="256"/>
   <object id="148" x="2304" y="192" width="192" height="64"/>
   <object id="152" x="2560" y="512" width="128" height="64"/>
