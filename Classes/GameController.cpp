@@ -52,6 +52,8 @@ using namespace cocos2d;
 
 #define FF_SPEED_MULT       3
 
+#define FRIDGE_SCALE        .264f
+
 #pragma mark -
 #pragma mark Initialization
 
@@ -164,8 +166,9 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
     _fridgeDoor->setScale(1.5, 1.5); // GOAL_SCALE
-    
-    float fridgeX = _level->getGoal()->getPosition().x - 0.22 * _level->getGoal()->getWidth();
+    float cscale = Director::getInstance()->getContentScaleFactor();
+
+    float fridgeX = _level->getGoal()->getPosition().x - cscale * FRIDGE_SCALE * _level->getGoal()->getWidth();
     _fridgeDoor->setPosition(_level->getDrawScale().x*fridgeX,
                              _level->getDrawScale().y*_level->getGoal()->getPosition().y);
     _fridgeDoor->setVisible(true);
@@ -242,7 +245,6 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _moveLeftView = Button::create();
     _moveLeftView->init(MOVE_LEFT_UNPRESSED);
     _moveLeftView->loadTexturePressed(MOVE_LEFT_PRESSED);
-    float cscale = Director::getInstance()->getContentScaleFactor();
     float scale = 1.0f / (_moveLeftView->getContentSize().width / root->getContentSize().width);
     _moveLeftView->setScaleX(LEFT_ZONE * scale);
     _moveLeftView->setScaleY(root->getContentSize().height / _moveLeftView->getContentSize().height);
@@ -499,9 +501,10 @@ void GameController::onReset() {
     
     _isReloading = false;
     
+    float cscale = Director::getInstance()->getContentScaleFactor();
     _fridgeDoor = PolygonNode::createWithTexture(_assets->get<Texture2D>(GOAL_DOOR_TEXTURE));
     _fridgeDoor->setScale(1.5f, 1.5f); // GOAL_SCALE
-    float fridgeX = _level->getGoal()->getPosition().x - 0.22 * _level->getGoal()->getWidth();
+    float fridgeX = _level->getGoal()->getPosition().x - FRIDGE_SCALE * cscale * _level->getGoal()->getWidth();
     _fridgeDoor->setPosition(_level->getDrawScale().x*fridgeX,
                              _level->getDrawScale().y*_level->getGoal()->getPosition().y);
     _fridgeDoor->setVisible(true);
