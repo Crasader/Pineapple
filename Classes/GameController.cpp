@@ -271,9 +271,11 @@ bool GameController::init(Node* root, InputController* input, int levelIndex, st
     _world->onEndContact = [this](b2Contact* contact) {
         _collision->endContact(contact);
     };
-    
     _blenderSound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
-    SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
+    
+    if (! HUDController::isMuted()) {
+        SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
+    }
     
     _active = true;
     setComplete(false);
@@ -511,7 +513,7 @@ void GameController::onReset() {
     _fridgeDoor->retain();
     _worldnode->addChild(_fridgeDoor, GOAL_DOOR_Z);
     
-    if (! SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
+    if (! SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND) && ! HUDController::isMuted()) {
         SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
     }
 }
@@ -526,8 +528,10 @@ void GameController::onReset() {
 void GameController::setComplete(bool value) {
     _complete = value;
     if (value) {
-        Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
-        SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
+        if (! HUDController::isMuted()) {
+            Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(VICTORY_SOUND);
+            SoundEngine::getInstance()->playEffect(VICTORY_SOUND, source, false, EFFECT_VOLUME);
+        }
         _level->getGoal()->setClosed(true);
         _rootnode->addChild(_winroot, WIN_SPLASH_Z);
         
@@ -563,8 +567,10 @@ void GameController::setComplete(bool value) {
 void GameController::setFailure(bool value){
     _level->setFailure(value && !_complete);
     if (value) {
-				Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(LOSS_SOUND);
-				SoundEngine::getInstance()->playEffect(LOSS_SOUND, source, false, EFFECT_VOLUME);
+        if (! HUDController::isMuted()) {
+            Sound* source = AssetManager::getInstance()->getCurrent()->get<Sound>(LOSS_SOUND);
+            SoundEngine::getInstance()->playEffect(LOSS_SOUND, source, false, EFFECT_VOLUME);
+        }
         _rootnode->addChild(_loseroot, LOSE_SPLASH_Z);
         _loseview->position();
         _loseViewVisible = true;
@@ -937,7 +943,7 @@ void GameController::handleScrolling() {
     _background->handleScrolling(offset, _levelOffset, oldLevelOffset, _level->getDrawScale());
     
     //Update blender volume
-    if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND)) {
+    if (SoundEngine::getInstance()->isActiveEffect(BLENDER_SOUND) && ! HUDController::isMuted()) {
         SoundEngine::getInstance()->setEffectVolume(BLENDER_SOUND, getBlenderVolScale() * EFFECT_VOLUME);
     }
 }
