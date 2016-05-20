@@ -659,6 +659,19 @@ void GameController::update(float dt) {
         return;
     }
     
+    //Check the muting
+    if (!_muteWasOn && HUDController::isMuted()) {
+        SoundEngine::getInstance()->stopMusic();
+        SoundEngine::getInstance()->stopAllEffects();
+        _muteWasOn = true;
+    } else if (_muteWasOn && ! HUDController::isMuted()){
+        Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
+        SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
+        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
+        _muteWasOn = false;
+    }
+    
     // Scroll the screen (with parallax) if necessary
     handleScrolling();
     
