@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="64" tileheight="64" nextobjectid="315">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="64" tileheight="64" nextobjectid="378">
  <properties>
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
@@ -8,61 +8,68 @@
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
-  <object id="1" name="wall" x="0" y="448" width="576" height="320"/>
-  <object id="234" x="576" y="448" width="384" height="64"/>
-  <object id="251" x="2368" y="704" width="832" height="64"/>
+  <object id="343" x="0" y="704" width="3200" height="64"/>
+  <object id="359" x="1792" y="320" width="128" height="320"/>
+  <object id="360" x="1216" y="320" width="128" height="384"/>
+  <object id="375" x="1408" y="320" width="64" height="256"/>
+  <object id="376" x="1536" y="320" width="64" height="256"/>
+  <object id="377" x="1664" y="320" width="64" height="256"/>
  </objectgroup>
  <objectgroup name="Will">
-  <object id="10" name="will" gid="1" x="576" y="448" width="64" height="64"/>
+  <object id="10" name="will" gid="1" x="64" y="704" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Kids">
-  <object id="11" name="kid" gid="2" x="64" y="448" width="64" height="64"/>
-  <object id="27" name="kid" gid="2" x="192" y="448" width="64" height="64"/>
-  <object id="28" name="kid" gid="2" x="320" y="448" width="64" height="64"/>
-  <object id="29" name="kid" gid="2" x="448" y="448" width="64" height="64"/>
+  <object id="11" name="kid" gid="2" x="1344" y="384" width="64" height="64"/>
+  <object id="27" name="kid" gid="2" x="1472" y="384" width="64" height="64"/>
+  <object id="28" name="kid" gid="2" x="1600" y="384" width="64" height="64"/>
+  <object id="29" name="kid" gid="2" x="1728" y="384" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Spikes"/>
  <objectgroup name="Jello"/>
  <objectgroup name="Cups">
-  <object id="274" gid="21" x="832" y="768" width="128" height="128"/>
-  <object id="275" gid="21" x="960" y="768" width="128" height="128"/>
-  <object id="276" gid="21" x="1088" y="768" width="128" height="128"/>
-  <object id="277" gid="21" x="1216" y="768" width="128" height="128"/>
-  <object id="278" gid="21" x="1344" y="768" width="128" height="128"/>
-  <object id="279" gid="21" x="1472" y="768" width="128" height="128"/>
-  <object id="280" gid="21" x="1600" y="768" width="128" height="128"/>
-  <object id="281" gid="21" x="1728" y="768" width="128" height="128"/>
-  <object id="282" gid="21" x="1856" y="768" width="128" height="128"/>
-  <object id="283" gid="21" x="1984" y="768" width="128" height="128"/>
-  <object id="284" gid="21" x="2112" y="768" width="128" height="128"/>
-  <object id="285" gid="21" x="2240" y="768" width="128" height="128"/>
-  <object id="286" gid="21" x="1472" y="704" width="128" height="128"/>
-  <object id="287" gid="21" x="1472" y="640" width="128" height="128"/>
-  <object id="288" gid="21" x="960" y="704" width="128" height="128"/>
-  <object id="289" gid="21" x="960" y="640" width="128" height="128"/>
-  <object id="290" gid="21" x="960" y="576" width="128" height="128"/>
-  <object id="294" gid="21" x="704" y="768" width="128" height="128"/>
-  <object id="295" gid="21" x="576" y="768" width="128" height="128"/>
-  <object id="292" gid="21" x="1600" y="704" width="128" height="128"/>
-  <object id="291" gid="21" x="1600" y="640" width="128" height="128"/>
-  <object id="297" gid="21" x="1088" y="704" width="128" height="128"/>
-  <object id="298" gid="21" x="1088" y="640" width="128" height="128"/>
-  <object id="299" gid="21" x="1088" y="576" width="128" height="128"/>
-  <object id="300" gid="21" x="1472" y="576" width="128" height="128"/>
-  <object id="301" gid="21" x="1600" y="576" width="128" height="128"/>
-  <object id="302" gid="21" x="1600" y="512" width="128" height="128"/>
-  <object id="303" gid="21" x="1600" y="448" width="128" height="128"/>
-  <object id="304" gid="21" x="1856" y="704" width="128" height="128"/>
-  <object id="305" gid="21" x="1856" y="640" width="128" height="128"/>
-  <object id="306" gid="21" x="2112" y="704" width="128" height="128"/>
-  <object id="307" gid="21" x="2112" y="640" width="128" height="128"/>
-  <object id="308" gid="21" x="2112" y="576" width="128" height="128"/>
-  <object id="309" gid="21" x="2112" y="512" width="128" height="128"/>
-  <object id="310" gid="21" x="2112" y="448" width="128" height="128"/>
-  <object id="311" gid="21" x="2112" y="384" width="128" height="128"/>
-  <object id="313" gid="21" x="1088" y="512" width="128" height="128"/>
-  <object id="314" gid="21" x="1088" y="448" width="128" height="128"/>
+  <object id="361" gid="21" x="768" y="704" width="128" height="128"/>
+  <object id="362" gid="21" x="768" y="640" width="128" height="128"/>
+  <object id="363" gid="21" x="896" y="640" width="128" height="128"/>
+  <object id="364" gid="21" x="1024" y="704" width="128" height="128"/>
+  <object id="365" gid="21" x="1024" y="640" width="128" height="128"/>
+  <object id="366" gid="21" x="2112" y="640" width="128" height="128"/>
+  <object id="367" gid="21" x="2240" y="704" width="128" height="128"/>
+  <object id="368" gid="21" x="2240" y="640" width="128" height="128"/>
+  <object id="369" gid="21" x="1984" y="640" width="128" height="128"/>
+  <object id="370" gid="21" x="1984" y="704" width="128" height="128"/>
+  <object id="371" gid="21" x="1024" y="576" width="128" height="128"/>
+  <object id="372" gid="21" x="1984" y="576" width="128" height="128"/>
  </objectgroup>
- <objectgroup name="Switches"/>
- <objectgroup name="Bridges"/>
+ <objectgroup name="Switches">
+  <object id="322" gid="41" x="2143.93" y="704" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="1"/>
+   </properties>
+  </object>
+  <object id="332" gid="41" x="931.621" y="704" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Bridges">
+  <object id="316" gid="42" x="1344" y="512" width="448" height="64">
+   <properties>
+    <property name="isOpen" value="false"/>
+    <property name="isVertical" value="false"/>
+    <property name="linkID" value="1"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+  <object id="352" gid="42" x="1344" y="448" width="448" height="64">
+   <properties>
+    <property name="isOpen" value="false"/>
+    <property name="isVertical" value="false"/>
+    <property name="linkID" value="2"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

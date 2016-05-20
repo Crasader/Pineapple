@@ -72,4 +72,31 @@
 #define LEVEL_TWENTYONE_KEY "level_twentyone"
 #define LEVEL_TWENTYONE_FILE "levels/export/LEVEL21.json"
 
+#define LEVEL_TWENTYTWO_KEY "level_twentytwo"
+#define LEVEL_TWENTYTWO_FILE "levels/export/LEVEL22.json"
+
+#define LEVEL_TWENTYTHREE_KEY "level_twentythree"
+#define LEVEL_TWENTYTHREE_FILE "levels/export/LEVEL23.json"
+
+#define LEVEL_TWENTYFOUR_KEY "level_twentyfour"
+#define LEVEL_TWENTYFOUR_FILE "levels/export/LEVEL24.json"
+
+#define LEVEL_TWENTYFIVE_KEY "level_twentyfive"
+#define LEVEL_TWENTYFIVE_FILE "levels/export/LEVEL25.json"
+
+#define LEVEL_TWENTYSIX_KEY "level_twentysix"
+#define LEVEL_TWENTYSIX_FILE "levels/export/LEVEL26.json"
+
+#define LEVEL_TWENTYSEVEN_KEY "level_twentyseven"
+#define LEVEL_TWENTYSEVEN_FILE "levels/export/LEVEL27.json"
+
+#define LEVEL_TWENTYEIGHT_KEY "level_twentyeight"
+#define LEVEL_TWENTYEIGHT_FILE "levels/export/LEVEL28.json"
+
+#define LEVEL_TWENTYNINE_KEY "level_twentynine"
+#define LEVEL_TWENTYNINE_FILE "levels/export/LEVEL29.json"
+
+#define LEVEL_THIRTY_KEY "level_thirty"
+#define LEVEL_THIRTY_FILE "levels/export/LEVEL30.json"
+
 #endif /* Level_h */
