@@ -51,6 +51,9 @@ protected:
     /** True once this has been initted */
     bool _isInitted = false;
     
+    /** True if the game should be muted */
+    bool _isMuted = false;
+    
 public:
     void initButtonTextOps(Button* button) {
         button->setVisible(true);
@@ -74,6 +77,10 @@ public:
     bool isInitted() { return _isInitted; }
     
     virtual void update(float dt) {};
+    
+    bool getIsMuted() { return _isMuted; }
+    
+    void setIsMuted(bool value) { _isMuted = value; }
     
 };
 

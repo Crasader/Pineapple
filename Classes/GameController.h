@@ -139,8 +139,6 @@ protected:
     
     /** True when a reset function finishes, false at the end of OnReset() */
     bool _resetInProgress;
-    /** True if the mute button was on before a reset */
-    bool _muteWasOn;
     /** True if the ff button was on before a reset */
     bool _ffWasOn;
     

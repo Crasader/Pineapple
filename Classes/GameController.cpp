@@ -79,7 +79,6 @@ _winViewVisible(false),
 _blenderSound(nullptr),
 _autoFFOn(false),
 _resetInProgress(false),
-_muteWasOn(false),
 _ffWasOn(false){}
 
 /**
@@ -436,7 +435,7 @@ void GameController::reset(int levelIndex, string levelKey, string levelFile) {
     _levelFile = levelFile;
     
     _resetInProgress = true;
-    _muteWasOn = HUDController::isMuted();
+    setIsMuted(HUDController::isMuted());
     _ffWasOn = HUDController::isFastForwarding();
     
     if (_assets->get<LevelModel>(_levelKey) == nullptr) {
@@ -492,7 +491,7 @@ void GameController::onReset() {
 	_rootSize = _rootnode->getContentSize();
     
     //reset the hud
-    HUDController::reset(this, _worldnode, _assets, _rootnode, _input, _muteWasOn, _ffWasOn);
+    HUDController::reset(this, _worldnode, _assets, _rootnode, _input, getIsMuted(), _ffWasOn);
    
     _levelOffset = 0.0f;
     _worldnode->setPositionX(0.0f);
@@ -666,16 +665,16 @@ void GameController::update(float dt) {
     }
     
     //Check the muting
-    if (!_muteWasOn && HUDController::isMuted()) {
+    if (!getIsMuted() && HUDController::isMuted()) {
         SoundEngine::getInstance()->stopMusic();
         SoundEngine::getInstance()->stopAllEffects();
-        _muteWasOn = true;
-    } else if (_muteWasOn && ! HUDController::isMuted()){
+        setIsMuted(true);
+    } else if (getIsMuted() && ! HUDController::isMuted()){
         Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
         SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
         SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
         SoundEngine::getInstance()->playEffect(BLENDER_SOUND, _blenderSound, true, 0.0f);
-        _muteWasOn = false;
+        setIsMuted(false);
     }
     
     // Scroll the screen (with parallax) if necessary

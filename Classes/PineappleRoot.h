@@ -76,6 +76,9 @@ protected:
     bool _loadStarted;
     bool _loadFinished;
     
+    /** True if the game is muted */
+    bool _isMuted;
+    
     /**
      * Builds the scene graph for the loading screen.
      *
@@ -133,6 +136,9 @@ private:
     
     /** A helper method that transitions to gameplay on the given level */
     void transitionToGame(int levelIndex);
+    
+    /** Updates muting status based on active controller */
+    void updateMutedStatus();
 };
 
 #endif /* defined(__PF_GAME_ROOT_H__) */
