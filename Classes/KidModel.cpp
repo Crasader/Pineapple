@@ -304,7 +304,7 @@ void KidModel::dampTowardsWalkspeed() {
                 _body->ApplyForce(force,_body->GetPosition(),true);
                 _gotPush = false;
             } else if (getVX() < getWalkingSpeed()) {
-                if (getVX() < 0.1) {
+                if (getVX() < 0.5) {
                     if (! _gotPush) {
                         setY(getY() + getHeight()/3);
                         b2Vec2 force(KID_FORCE,0);
