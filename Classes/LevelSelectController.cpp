@@ -141,7 +141,7 @@ Button* LevelSelectController::initButton(int i) {
     button->setTitleText("Lvl " + cocos2d::to_string(i + 1));
     button->setTitleFontSize(BUTTON_FONT_SIZE);
     
-    button->setEnabled(i < LEVELS_CREATED && i <= _levelsComplete);
+    button->setEnabled(i < LEVELS_CREATED); // && i <= _levelsComplete
     
     button->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
         if (type == ui::Widget::TouchEventType::ENDED) {
