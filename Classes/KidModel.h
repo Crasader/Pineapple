@@ -78,6 +78,8 @@ protected:
 	bool _tmp;
 	bool _isGrounded = false;
     
+    bool _gotPush = true;
+    
     /**
      * Redraws the outline of the physics fixtures to the debug node
      *
