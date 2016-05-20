@@ -93,7 +93,7 @@ void CollisionController::handleJelloCollision(PineappleModel* will, JelloModel*
 			body->ApplyLinearImpulse(b2Vec2(0, JELLO_BOUNCE_FORCE), body->GetPosition(), true);
 			will->setJumping(true);
 			will->setGrounded(false);
-			playSoundEffect(JELLO_BOING);
+			playSoundEffect(JELLO_BOING, true);
 		}
 	}
 }
