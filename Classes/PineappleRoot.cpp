@@ -67,6 +67,7 @@ void PineappleRoot::start() {
     _backgroundSound = nullptr;
     _loadStarted = false;
     _loadFinished = false;
+    _isMuted = false;
     
     RootLayer::start(); // YOU MUST END with call to parent
 }
@@ -163,7 +164,7 @@ void PineappleRoot::transitionToHomeScreen() {
     }
     
     if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
-        if (_backgroundSound != nullptr) {
+        if (_backgroundSound != nullptr && ! _isMuted) {
             if (SoundEngine::getInstance()->getMusicState() == SoundEngine::SoundState::PLAYING) {
                 SoundEngine::getInstance()->stopMusic();
             }
@@ -171,8 +172,11 @@ void PineappleRoot::transitionToHomeScreen() {
         
         _backgroundSoundKey = LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND;
         _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
-        SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
-        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        
+        if (! _isMuted) {
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        }
     }
     
     _homeScreen->setTransitionStatus(TRANSITION_NONE);
@@ -208,7 +212,7 @@ void PineappleRoot::transitionToLevelSelect() {
     _levelSelect->update();
     
     if (_backgroundSoundKey != LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND) {
-        if (_backgroundSound != nullptr) {
+        if (_backgroundSound != nullptr && ! _isMuted) {
             if (SoundEngine::getInstance()->getMusicState() == SoundEngine::SoundState::PLAYING) {
                 SoundEngine::getInstance()->stopMusic();
             }
@@ -216,8 +220,11 @@ void PineappleRoot::transitionToLevelSelect() {
         
         _backgroundSoundKey = LEVEL_SELECT_HOME_SCREEN_BACKGROUND_SOUND;
         _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
-        SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
-        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        
+        if (! _isMuted) {
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        }
     }
     
     _homeScreen->setTransitionStatus(TRANSITION_NONE);
@@ -239,14 +246,17 @@ void PineappleRoot::transitionToGame(int levelIndex) {
     }
     
     if (_backgroundSoundKey != GAME_BACKGROUND_SOUND) {
-        if (_backgroundSound != nullptr) {
+        if (_backgroundSound != nullptr && ! _isMuted) {
             SoundEngine::getInstance()->stopMusic();
         }
         
         _backgroundSoundKey = GAME_BACKGROUND_SOUND;
         _backgroundSound = _assets->get<Sound>(_backgroundSoundKey);
-        SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
-        SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        
+        if (! _isMuted) {
+            SoundEngine::getInstance()->playMusic(_backgroundSound, true, MUSIC_VOLUME);
+            SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
+        }
     }
     
     if (_activeController == _homeScreen) {
@@ -270,6 +280,16 @@ void PineappleRoot::transitionToGame(int levelIndex) {
     _gameplay->setTransitionStatus(TRANSITION_NONE);
     _loadingScreen->setTransitionStatus(TRANSITION_NONE);
     _levelSelect->setTransitionStatus(TRANSITION_NONE);
+}
+
+/** Updates muting status based on active controller */
+void PineappleRoot::updateMutedStatus() {
+    _isMuted = _activeController->getIsMuted();
+    
+    _homeScreen->setIsMuted(_isMuted);
+    _gameplay->setIsMuted(_isMuted);
+    _loadingScreen->setIsMuted(_isMuted);
+    _levelSelect->setIsMuted(_isMuted);
 }
 
 /**
@@ -329,6 +349,8 @@ void PineappleRoot::update(float deltaTime) {
     
     //Do the updating
     _activeController->update(deltaTime);
+    
+    updateMutedStatus();
     
     if (_levelSelect && _gameplay && _gameplay->isInitted() && _levelSelect->isInitted()) {
         // Check if we beat a level and update the score if needed

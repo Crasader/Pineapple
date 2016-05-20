@@ -131,20 +131,6 @@ void HUDController::initSoundButton() {
     HUD_CONTROLLER->_soundButton->setPositionX(HUD_CONTROLLER->_screenSize.x * SOUND_BUTTON_HORIZ_POS_RATIO);
     HUD_CONTROLLER->_soundButton->retain();
     HUD_CONTROLLER->_hudNode->addChild(HUD_CONTROLLER->_soundButton);
-    HUD_CONTROLLER->_soundButton->addTouchEventListener([&](Ref* sender, Widget::TouchEventType type){
-        if (type == ui::Widget::TouchEventType::ENDED) {
-            if (HUD_CONTROLLER->_soundButton->isSelected()) {
-                SoundEngine::getInstance()->stopMusic();
-                SoundEngine::getInstance()->stopAllEffects();
-            } else {
-                Sound* sound = AssetManager::getInstance()->getCurrent()->get<Sound>(GAME_BACKGROUND_SOUND);
-                SoundEngine::getInstance()->playMusic(sound, true, MUSIC_VOLUME);
-                SoundEngine::getInstance()->setMusicVolume(MUSIC_VOLUME);
-                sound = AssetManager::getInstance()->getCurrent()->get<Sound>(BLENDER_SOUND);
-                SoundEngine::getInstance()->playEffect(BLENDER_SOUND, sound, true, 0.0f);
-            }
-        }
-    });
 }
 
 void HUDController::initFFButton() {

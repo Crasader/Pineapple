@@ -9,6 +9,10 @@
                  "height":128,
                  "id":89,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -20,6 +24,10 @@
                  "height":64,
                  "id":113,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -31,6 +39,10 @@
                  "height":64,
                  "id":123,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -42,6 +54,10 @@
                  "height":64,
                  "id":127,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -53,6 +69,10 @@
                  "height":64,
                  "id":131,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -64,6 +84,10 @@
                  "height":64,
                  "id":138,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -88,6 +112,10 @@
                  "height":64,
                  "id":10,
                  "name":"will",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -112,6 +140,10 @@
                  "height":64,
                  "id":11,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -124,6 +156,10 @@
                  "height":64,
                  "id":27,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -136,6 +172,10 @@
                  "height":64,
                  "id":28,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -148,6 +188,10 @@
                  "height":64,
                  "id":29,
                  "name":"kid",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -172,6 +216,10 @@
                  "height":64,
                  "id":132,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -184,6 +232,10 @@
                  "height":64,
                  "id":139,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -196,6 +248,10 @@
                  "height":64,
                  "id":140,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -220,6 +276,10 @@
                  "height":64,
                  "id":99,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -232,6 +292,10 @@
                  "height":64,
                  "id":122,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -244,6 +308,10 @@
                  "height":64,
                  "id":137,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -256,36 +324,16 @@
                  "height":64,
                  "id":134,
                  "name":"",
+                 "properties":
+                    {
+
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
                  "x":2080,
                  "y":320
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "width":0,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "height":0,
-         "name":"Goal",
-         "objects":[
-                {
-                 "gid":51,
-                 "height":64,
-                 "id":21,
-                 "name":"goal",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":2944,
-                 "y":384
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -321,11 +369,6 @@
                      "isSwitch":"true",
                      "linkID":"1"
                     },
-                 "propertytypes":
-                    {
-                     "isSwitch":"string",
-                     "linkID":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -342,11 +385,6 @@
                     {
                      "isSwitch":"true",
                      "linkID":"2"
-                    },
-                 "propertytypes":
-                    {
-                     "isSwitch":"string",
-                     "linkID":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -379,13 +417,6 @@
                      "linkID":"1",
                      "nubbinsVisible":"true"
                     },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -404,13 +435,6 @@
                      "isVertical":"false",
                      "linkID":"1",
                      "nubbinsVisible":"true"
-                    },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -431,13 +455,6 @@
                      "linkID":"2",
                      "nubbinsVisible":"true"
                     },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -457,18 +474,11 @@
                      "linkID":"2",
                      "nubbinsVisible":"true"
                     },
-                 "propertytypes":
-                    {
-                     "isOpen":"string",
-                     "isVertical":"string",
-                     "linkID":"string",
-                     "nubbinsVisible":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":2112,
+                 "x":2048,
                  "y":640
                 }],
          "opacity":1,
@@ -485,22 +495,20 @@
      "BlenderStartX":"-20",
      "BlenderStartY":"6"
     },
- "propertytypes":
-    {
-     "BlenderStartX":"string",
-     "BlenderStartY":"string"
-    },
  "renderorder":"right-down",
  "tileheight":64,
  "tilesets":[
         {
-         "columns":10,
          "firstgid":1,
          "image":"..\/..\/tiledTextures\/Sheet.png",
          "imageheight":640,
          "imagewidth":640,
          "margin":0,
          "name":"ImageSheet",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":100,
          "tileheight":64,
