@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="67" height="12" tilewidth="64" tileheight="64" nextobjectid="212">
+ <properties>
+  <property name="BlenderStartX" value="-20"/>
+  <property name="BlenderStartY" value="6"/>
+ </properties>
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
+  <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
+ </tileset>
+ <objectgroup name="Walls">
+  <object id="1" name="wall" x="0" y="640" width="640" height="128"/>
+  <object id="128" x="0" y="384" width="768" height="64"/>
+  <object id="133" x="3008" y="640" width="1280" height="128"/>
+  <object id="134" x="768" y="256" width="512" height="64"/>
+  <object id="137" x="3136" y="256" width="576" height="64"/>
+  <object id="151" x="1408" y="128" width="64" height="64"/>
+  <object id="152" x="1408" y="256" width="256" height="64"/>
+  <object id="153" x="1408" y="384" width="64" height="64"/>
+  <object id="154" x="1280" y="512" width="448" height="64"/>
+  <object id="157" x="1728" y="448" width="320" height="64"/>
+  <object id="162" x="1408" y="0" width="64" height="64"/>
+  <object id="163" x="1792" y="128" width="256" height="64"/>
+  <object id="184" x="2048" y="512" width="640" height="64"/>
+  <object id="195" x="2688" y="320" width="128" height="64"/>
+  <object id="202" x="2880" y="256" width="128" height="64"/>
+  <object id="203" x="1472" y="192" width="64" height="64"/>
+  <object id="204" x="1472" y="64" width="64" height="64"/>
+  <object id="209" x="1984" y="192" width="64" height="256"/>
+  <object id="210" x="2560" y="-64" width="64" height="448"/>
+  <object id="211" x="2688" y="384" width="64" height="128"/>
+ </objectgroup>
+ <objectgroup name="Will">
+  <object id="10" name="will" gid="1" x="64" y="384" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Kids">
+  <object id="11" name="kid" gid="2" x="64" y="640" width="64" height="64"/>
+  <object id="27" name="kid" gid="2" x="192" y="640" width="64" height="64"/>
+  <object id="28" name="kid" gid="2" x="320" y="640" width="64" height="64"/>
+  <object id="29" name="kid" gid="2" x="448" y="640" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Spikes"/>
+ <objectgroup name="Jello"/>
+ <objectgroup name="Cups">
+  <object id="164" gid="21" x="2112" y="256" width="64" height="64"/>
+  <object id="165" gid="21" x="2112" y="320" width="64" height="64"/>
+  <object id="166" gid="21" x="2112" y="384" width="64" height="64"/>
+  <object id="169" gid="21" x="2240" y="320" width="64" height="64"/>
+  <object id="170" gid="21" x="2240" y="384" width="64" height="64"/>
+  <object id="173" gid="21" x="2240" y="448" width="64" height="64"/>
+  <object id="174" gid="21" x="2112" y="448" width="64" height="64"/>
+  <object id="175" gid="21" x="2368" y="384" width="64" height="64"/>
+  <object id="176" gid="21" x="2368" y="448" width="64" height="64"/>
+  <object id="177" gid="21" x="2496" y="448" width="64" height="64"/>
+  <object id="178" gid="21" x="2240" y="256" width="64" height="64"/>
+  <object id="179" gid="21" x="2368" y="256" width="64" height="64"/>
+  <object id="180" gid="21" x="2368" y="320" width="64" height="64"/>
+  <object id="181" gid="21" x="2496" y="256" width="64" height="64"/>
+  <object id="182" gid="21" x="2496" y="320" width="64" height="64"/>
+  <object id="183" gid="21" x="2496" y="384" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="Switches">
+  <object id="111" gid="41" x="256" y="384" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="138" gid="41" x="704" y="384" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="139" gid="41" x="3328" y="256" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="140" gid="41" x="960" y="256" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="148" gid="41" x="1408" y="128" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="149" gid="41" x="1408" y="256" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="150" gid="41" x="1408" y="384" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="156" gid="41" x="1280" y="512" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="185" gid="41" x="2112" y="512" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="189" gid="41" x="2496" y="512" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="188" gid="41" x="2368" y="512" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+  <object id="187" gid="41" x="2240" y="512" width="64" height="64">
+   <properties>
+    <property name="isSwitch" value="true"/>
+    <property name="linkID" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Bridges">
+  <object id="119" gid="42" x="640" y="704" width="2368" height="64">
+   <properties>
+    <property name="isOpen" value="false"/>
+    <property name="isVertical" value="false"/>
+    <property name="linkID" value="3"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+  <object id="136" gid="42" x="3584" y="640" width="64" height="320">
+   <properties>
+    <property name="isOpen" value="false"/>
+    <property name="isVertical" value="true"/>
+    <property name="linkID" value="3"/>
+    <property name="nubbinsVisible" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
