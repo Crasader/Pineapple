@@ -35,9 +35,6 @@
   <object id="137" gid="11" x="2272" y="640" width="64" height="64"/>
   <object id="134" gid="11" x="2080" y="320" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="2944" y="384" width="64" height="64"/>
- </objectgroup>
  <objectgroup name="Cups"/>
  <objectgroup name="Switches">
   <object id="32" gid="41" x="1749" y="512" width="64" height="64">

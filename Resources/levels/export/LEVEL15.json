@@ -248,34 +248,6 @@
         {
          "draworder":"topdown",
          "height":0,
-         "name":"Goal",
-         "objects":[
-                {
-                 "gid":51,
-                 "height":64,
-                 "id":21,
-                 "name":"goal",
-                 "properties":
-                    {
-
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":2944,
-                 "y":384
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "width":0,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "height":0,
          "name":"Cups",
          "objects":[],
          "opacity":1,

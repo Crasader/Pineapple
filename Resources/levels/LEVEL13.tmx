@@ -4,7 +4,7 @@
   <property name="BlenderStartX" value="-20"/>
   <property name="BlenderStartY" value="6"/>
  </properties>
- <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100" columns="10">
+ <tileset firstgid="1" name="ImageSheet" tilewidth="64" tileheight="64" tilecount="100">
   <image source="../tiledTextures/Sheet.png" width="640" height="640"/>
  </tileset>
  <objectgroup name="Walls">
@@ -37,9 +37,6 @@
   <object id="99" gid="11" x="2272" y="256" width="64" height="64"/>
   <object id="122" gid="11" x="2208" y="640" width="64" height="64"/>
   <object id="134" gid="11" x="2400" y="448" width="64" height="64"/>
- </objectgroup>
- <objectgroup name="Goal">
-  <object id="21" name="goal" gid="51" x="3200" y="384" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="Cups"/>
  <objectgroup name="Switches">
